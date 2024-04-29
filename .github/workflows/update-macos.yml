@@ -27,6 +27,21 @@ jobs:
               with:
                 fallback: latest
 
+            - name: Install Python 2.7
+              run: |
+                brew install sashkab/python/python@2.7
+                brew link --overwrite python@2.7 --force         
+              
+            - name: Get Python 2.7 Path
+              id: python-path
+              run: |
+                echo "::set-output name=path::$(brew --prefix python@2.7)/bin/python2.7"
+  
+            - name: Verify Python Path
+              run: |
+                echo "Python 2.7 Path: ${{ steps.python-path.outputs.path }}"
+                ${{ steps.python-path.outputs.path }} --version
+
             - name: Show All Xcode version
               run: ls /Applications | grep Xcode
             
@@ -88,9 +103,9 @@ jobs:
                 
             - name: Show mac build files
               run: ls -a packages/app/build/mac/
-
+            
             - name: Build dmg
-              run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin/python quasar build -m electron -T mac
+              run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=${{ steps.python-path.outputs.path }} quasar build -m electron -T mac
 
             - name: Show
               run: ls -a packages/app/dist/electron/Packaged/
