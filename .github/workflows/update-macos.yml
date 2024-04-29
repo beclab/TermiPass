@@ -87,7 +87,7 @@ jobs:
                 cp $PlanetaMacDev ${{ github.workspace }}/packages/app/build/mac/
                 
             - name: Show mac build files
-              run: ls -a packages/packages/app/build/mac/
+              run: ls -a packages/app/build/mac/
 
             - name: Build dmg
               run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin/python quasar build -m electron -T mac
