@@ -1,0 +1,120 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace "com.terminus.planeta"
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.terminus.planeta"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs{
+        debug{
+            file("keystore.properties").with {
+                if (it.canRead()){
+                    Properties keystoreProperties = new Properties()
+                    keystoreProperties.load(new FileInputStream(it))
+                    storeFile file(keystoreProperties['storeFile'])
+                    storePassword keystoreProperties['storePassword']
+                    keyAlias keystoreProperties['keyAlias']
+                    keyPassword keystoreProperties['keyPassword']
+                    v1SigningEnabled true       //对JAR签名
+                    v2SigningEnabled true       //对APK签名
+                }else {
+                    println 'Unable to read keystore.properties'
+                }
+            }
+        }
+    }
+    buildTypes {
+        debug{
+            applicationIdSuffix ".debug"
+            minifyEnabled false
+            resValue "string", "app_name", "TermiPass Debug"
+            signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled false
+            resValue "string", "app_name", "TermiPass"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        buildConfig = true
+        viewBinding true
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                if (variant.buildType.name == 'debug' || variant.buildType.name == 'release') {
+                    outputFileName = "TermiPass_${variant.buildType.name}_v${variant.versionCode}_${buildTime()}.apk"
+                }
+            }
+        }
+    }
+}
+
+static def buildTime() {
+    return new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone("GMT+8",))
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+    implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.tencent:mmkv-static:1.2.10'
+    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    implementation 'androidx.core:core-ktx:1.6.0'
+
+    implementation 'com.github.kevinsawicki:http-request:6.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.3'
+    implementation 'com.madgag.spongycastle:core:1.54.0.0'
+    implementation 'com.madgag.spongycastle:prov:1.54.0.0'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.greenrobot:eventbus:3.3.1'
+    implementation 'com.google.guava:guava:27.0.1-android'
+
+
+    implementation "androidx.browser:browser:1.2.0"
+    implementation "androidx.security:security-crypto:1.1.0-alpha03"
+    implementation "androidx.work:work-runtime:2.7.0"
+    implementation ':ipn@aar'
+}
+
+apply from: 'capacitor.build.gradle'
+apply plugin: 'org.jetbrains.kotlin.android'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

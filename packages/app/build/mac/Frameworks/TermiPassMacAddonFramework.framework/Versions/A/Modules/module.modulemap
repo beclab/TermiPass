@@ -1,0 +1,4 @@
+framework module TermiPassMacAddonFramework {
+  header "TermiPassMacAddonFramework-Swift.h"
+  requires objc
+}

@@ -1,0 +1,64 @@
+import { UserItem } from '@didvault/sdk/src/core';
+import { app, setSenderUrl } from '../../../../globals';
+import { useUserStore } from '../../../../stores/user';
+import { BusinessAsyncCallback } from '../Callback';
+import { sendUnlock } from '../../../../utils/bexFront';
+import { PASSWORD_RULE } from '../../../../utils/constants';
+import { i18n } from '../../../../boot/i18n';
+
+export async function savePassword(
+	password: string,
+	callback: BusinessAsyncCallback
+) {
+	try {
+		if (!password) {
+			throw new Error(i18n.global.t('password_not_empty'));
+		}
+
+		const allRule = new RegExp(PASSWORD_RULE.ALL_RULE);
+
+		if (!allRule.test(password)) {
+			throw new Error(i18n.global.t('password_not_meet_rules'));
+		}
+
+		const userStore = useUserStore();
+		await userStore.create(password);
+		userStore.password = password;
+		sendUnlock();
+		callback.onSuccess(password);
+	} catch (e) {
+		console.log(e);
+		callback.onFailure(e.message);
+	}
+}
+
+export async function unlockByPwd(
+	password: string,
+	callback: BusinessAsyncCallback
+) {
+	try {
+		if (!password) {
+			throw new Error(i18n.global.t('password_not_empty'));
+		}
+		const userStore = useUserStore();
+
+		await userStore.users!.unlock(password);
+		userStore.password = password;
+
+		if (userStore.current_id) {
+			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+			if (user.setup_finished) {
+				setSenderUrl({
+					url: user.vault_url
+				});
+			}
+
+			await app.load(userStore.current_id!);
+			await app.unlock(user.mnemonic);
+		}
+
+		await callback.onSuccess(userStore.current_id);
+	} catch (error) {
+		callback.onFailure(i18n.global.t('password_error'));
+	}
+}

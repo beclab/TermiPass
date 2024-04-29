@@ -1,0 +1,118 @@
+/* root */
+:root {
+	--animate-duration: 0.3s;
+	--animate-delay: 0.3s;
+	--animate-repeat: 1;
+}
+
+:root {
+	--q-primary: #1976d2;
+	--q-secondary: #26a69a;
+	--q-accent: #9c27b0;
+	--q-positive: #21ba45;
+	--q-negative: #c10015;
+	--q-info: #31ccec;
+	--q-warning: #f2c037;
+	--q-dark: #1d1d1d;
+	--q-dark-page: #121212;
+}
+
+:root {
+	--q-size-xs: 0;
+	--q-size-sm: 600px;
+	--q-size-md: 1024px;
+	--q-size-lg: 1440px;
+	--q-size-xl: 1920px;
+}
+
+:root {
+	--q-transition-duration: 0.3s;
+}
+
+/* dialog */
+.q-dialog.absolute-full,
+.q-dialog.fixed-full,
+.q-dialog.fullscreen {
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+}
+
+.q-dialog.fullscreen {
+	border-radius: 0 !important;
+	max-height: 100vh;
+	max-width: 100vw;
+	z-index: 6000;
+}
+
+.q-dialog.fixed,
+.q-dialog.fixed-bottom,
+.q-dialog.fixed-bottom-left,
+.q-dialog.fixed-bottom-right,
+.q-dialog.fixed-center,
+.q-dialog.fixed-full,
+.q-dialog.fixed-left,
+.q-dialog.fixed-right,
+.q-dialog.fixed-top,
+.q-dialog.fixed-top-left,
+.q-dialog.fixed-top-right,
+.q-dialog.fullscreen {
+	position: fixed;
+}
+
+.q-dialog.no-pointer-events,
+.q-dialog.no-pointer-events--children,
+.q-dialog.no-pointer-events--children * {
+	pointer-events: none !important;
+}
+
+/* nofity */
+#q-notify .q-notifications__list {
+	left: calc(100vw - 450px) !important;
+	bottom: 10px;
+	pointer-events: none;
+	position: fixed;
+	right: 0;
+	z-index: 9500;
+}
+
+/* menu */
+.q-menu {
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 1px 5px #0003, 0 2px 2px rgba(0, 0, 0, 0.141),
+		0 3px 1px -2px rgba(0, 0, 0, 0.122);
+	display: inline-block;
+	max-height: 65vh;
+	max-width: 95vw;
+	outline: 0;
+	overflow-x: hidden;
+	overflow-y: auto;
+	position: fixed !important;
+	z-index: 6000;
+}
+.q-menu.q-position-engine {
+	margin-left: var(--q-pe-left, 0) !important;
+	margin-top: var(--q-pe-top, 0) !important;
+	visibility: collapse;
+	will-change: auto;
+}
+.q-menu.scroll,
+.q-menu.body.mobile .scroll--mobile {
+	overflow: auto;
+}
+
+.q-menu.scroll,
+.q-menu.scroll-x,
+.q-menu.scroll-y {
+	-webkit-overflow-scrolling: touch;
+	will-change: scroll-position;
+}
+.q-menu.q-menu--square {
+	border-radius: 0;
+}
+.q-menu.q-menu--dark {
+	box-shadow: 0 1px 5px #fff3, 0 2px 2px hsla(0, 0%, 100%, 0.141),
+		0 3px 1px -2px hsla(0, 0%, 100%, 0.122);
+}

@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="custom_url_scheme">com.terminus.planeta</string>
+    <string name="facebook_app_id">549140590110570</string>
+    <string name="facebook_client_token">82fca90b3fa47e9083aa7dba75744ee0</string>
+    <string name="accessibility_service_description">It can be difficult and insecure for users to switch between apps to copy/paste username and password information from their TermiPass secret.\n\nUsing this accessibility service allows TermiPass to detect and read input fields on your device\'s screen.Whenever TermiPass detects a password field on the screen a notification will appear that allows you to quickly access your TermiPass secret and automatically fill(auto-fill) the correct login information into the necessary fields.</string>
+    <string name="server_client_id">343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com</string>
+
+
+    <string name="above_quota">Above Quota</string>
+    <string name="days_ago">%d days ago</string>
+    <string name="hours_ago">%d hours ago</string>
+    <string name="minutes_ago">%d minutes ago</string>
+    <string name="seconds_ago">%d seconds ago</string>
+    <string name="just_now">Just now</string>
+
+    <string name="Upload_completed">Last sync finished at</string>
+    <string name="is_scanning">Scanning</string>
+    <string name="is_uploading">Uploading</string>
+    <string name="network_unavailable">Network unavailable</string>
+    <string name="folder_backup_waiting_state">Done</string>
+
+    <string name="create_new_repo">Create a new library</string>
+    <string name="create_new_repo_success">Successfully created library %s</string>
+    <string name="create_new_folder_success">Successfully created folder %s</string>
+    <string name="create_new_file_success">Successfully created file %s</string>
+    <string name="create_new_file">Create a new file</string>
+    <string name="create_files">Create files</string>
+    <string name="create_new_dir">Create a new folder</string>
+    <string name="camera">Take a photo here</string>
+    <string name="download">Download</string>
+    <string name="open">Open</string>
+    <string name="last_modified">last modified</string>
+    <string name="file_modified">modified</string>
+    <string name="file_size">file size</string>
+    <string name="library_not_found">The library has been deleted.</string>
+    <string name="file_not_found">The file \"%s\" has been deleted</string>
+    <string name="export_file">Export this file</string>
+    <string name="no_upload_tasks">No upload tasks yet</string>
+    <string name="no_download_tasks">No download tasks yet</string>
+    <string name="seahub_url_hint">Note: Server address should contain the port. For example, www.example.com:8000</string>
+    <string name="copy_link">Copy link</string>
+    <string name="share_link_no_permission">You do not have permission to perform this action.</string>
+    <string name="share_file_link">Share a link to this file</string>
+    <string name="share_dir_link">Share a link to this folder</string>
+    <string name="share_input_password">input share password</string>
+    <string name="generating_link">Generating link…</string>
+    <string name="link_ready_to_be_pasted">The link is ready to be pasted.</string>
+    <string name="rename_repo">Rename library</string>
+    <string name="rename_file">Rename file</string>
+    <string name="rename_dir">Rename folder</string>
+    <string name="rename_successful">Renamed successfully.</string>
+
+    <string name="delete_repo">Are you sure you want to delete this library?</string>
+    <string name="delete_file">Are you sure you want to delete this file or folder?</string>
+    <string name="delete_successful">Successfully deleted</string>
+    <string name="delete_repo_title">Delete library</string>
+    <string name="delete_file_f">Delete file</string>
+    <string name="recover_library">Recover library</string>
+    <string name="recover_file">Recover file</string>
+    <string name="move_file">Move file</string>
+    <string name="update_file">Update file</string>
+    <string name="recover_folder">Recover folder</string>
+    <string name="move_folder">Move folder</string>
+    <string name="delete_dir">Delete folder</string>
+    <string name="edit">Edit</string>
+    <string name="create_draft">Create draft</string>
+    <string name="rename_draft">Rename draft</string>
+    <string name="del_draft">Delete draft</string>
+    <string name="update_draft">Update draft</string>
+    <string name="release_draft">Release draft</string>
+
+    <string name="lockscreen_access_pattern_hint">Please draw Gesture Lock Pattern</string>
+    <string name="lockscreen_access_pattern_start">Start to draw</string>
+    <string name="lockscreen_access_pattern_cleared">Pattern cleared</string>
+    <string name="lockscreen_access_pattern_cell_added">Pattern cell added</string>
+    <string name="lockscreen_access_pattern_detected">Pattern detected</string>
+    <string name="lockscreen_access_pattern_passwd_forget">Forgot password</string>
+    <string name="lockscreen_access_pattern_failure">Failed 5 times, please wait 30 seconds before trying again</string>
+
+    <string name="notification_upload_started_title">Uploading files…</string>
+    <string name="notification_download_started_title">Downloading files…</string>
+    <string name="notification_upload_completed">Upload completed</string>
+    <string name="notification_download_completed">Download completed</string>
+    <plurals name="notification_download_info">
+        <item quantity="one">Downloading %1$d file (%2$d%%)</item>
+        <item quantity="other">Downloading %1$d files (%2$d%%)</item>
+    </plurals>
+    <plurals name="notification_upload_info">
+        <item quantity="one">Uploading %1$d file (%2$d%%)</item>
+        <item quantity="other">Uploading %1$d files (%2$d%%)</item>
+    </plurals>
+
+    <string name="storage_manager_primary_storage">Primary storage</string>
+    <string name="storage_manager_secondary_storage">Secondary storage</string>
+    <string name="storage_manager_storage_description">%1$s (%2$s free/%3$s total)</string>
+    <string name="storage_manager_storage_description_not_available">%1$s (unavailable)</string>
+
+    <string name="pull_to_refresh_last_update">Last update: </string>
+    <string name="pull_to_refresh_last_update_seconds_ago">%d seconds ago</string>
+    <string name="pull_to_refresh_last_update_minutes_ago">%d minutes ago</string>
+    <string name="pull_to_refresh_last_update_hours_ago">%d hours ago</string>
+
+    <string name="navdrawer_description_a11y" translatable="false">Navigation Drawer used to switch between major
+        features of the application</string>
+
+    <string name="transfer_tasks">Transfer List</string>
+    <string name="transfer_list_cancel_all">Cancel all tasks</string>
+    <string name="transfer_list_clear_all_tasks">Clear all tasks</string>
+
+    <string name="transfer_tabs_downloads">Download List</string>
+    <string name="transfer_tabs_uploads">Upload List</string>
+
+    <string name="download_failed">Download failed</string>
+    <string name="download_waiting">Download waiting</string>
+    <string name="download_finished">Download finished</string>
+    <string name="download_cancelled">Download cancelled</string>
+    <string name="upload_waiting">Upload waiting</string>
+    <string name="upload_finished">Upload finished</string>
+    <string name="upload_cancelled">Upload cancelled</string>
+    <string name="upload_failed">Upload failed</string>
+    <string name="action_mode_no_items_selected">No items were selected</string>
+
+    <plurals name="transfer_list_items_selected">
+        <item quantity="one">%d item selected</item>
+        <item quantity="other">%d items selected</item>
+    </plurals>
+
+    <string name="transfer_list_select_all">Select all</string>
+    <string name="file_action_delete">Delete</string>
+    <string name="transfer_list_restart_all">Restart</string>
+
+    <string name="saf_write_diretory_exception">Can\`t open directory for reading/writing.</string>
+    <string name="saf_file_exist">That file already exists</string>
+    <string name="saf_bad_mime_type">Bad request type</string>
+    <string name="tabs_starred">Starred</string>
+
+    <string name="transfer_download_no_task">All files have been downloaded</string>
+    <plurals name="transfer_download_started">
+        <item quantity="one">Starting to download %1$d file</item>
+        <item quantity="other">Starting to download %1$d files</item>
+    </plurals>
+    <string name="transfer_list_network_error">Network connection error, please try again later!</string>
+    <string name="network_down">No network connection</string>
+
+    <string name="choose_file">Choose a file</string>
+    <string name="saf_upload_path_not_available">Unable to upload, no path available</string>
+    <string name="added_to_upload_tasks">Uploading started</string>
+    <string name="cancel">Cancel</string>
+    <string name="upload_keep_both">Keep Both</string>
+    <string name="upload_file_exist">File already exists</string>
+    <string name="upload_duplicate_found">An item named \"%s\" already exist in this location.\n Do you want to replace it with the one you\`re uploading?</string>
+    <string name="upload_replace">Replace</string>
+
+    <string name="uploaded">Uploaded</string>
+    <string name="updated">Updated</string>
+    <string name="op_exception_suitable_app_not_found">Could not find suitable app for mime type %s</string>
+    <string name="ok">OK</string>
+    <string name="overwrite_existing_file_title">Replace existing file</string>
+    <string name="overwrite_existing_file_msg">The file already exists, do you want to replace it?</string>
+    <string name="overwrite_existing_file_exist">The file already exists</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="upload_started">Upload is started</string>
+    <string name="not_supported_share">This type of share is not supported</string>
+
+    <string name="refresh">Refresh</string>
+    <string name="no_repo">You have no libraries yet</string>
+    <string name="choose_a_library">Choose a library</string>
+    <string name="dir_empty">This folder is empty</string>
+    <string name="load_libraries_fail">Failed to load libraries</string>
+    <string name="load_dir_fail">Failed to load contents of this folder</string>
+    <string name="op_exception_folder_deleted">The folder \"%s\" was deleted</string>
+    <string name="library_read_only">This library is read-only</string>
+
+    <string name="required_password">Password is required.</string>
+    <string name="weak_password">Password is too weak.</string>
+    <string name="dir_name_empty">Please enter the name of the folder</string>
+    <string name="choose_a_folder">Choose a folder</string>
+
+
+</resources>

@@ -1,0 +1,1644 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		17007862295E9C4400CE8118 /* EchoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17007861295E9C4400CE8118 /* EchoPlugin.swift */; };
+		17007865295E9C7300CE8118 /* EchoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17007864295E9C7300CE8118 /* EchoPlugin.m */; };
+		1700786A295E9DFE00CE8118 /* ScanPhotoQRPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17007869295E9DFE00CE8118 /* ScanPhotoQRPlugin.swift */; };
+		1700786C295EA42900CE8118 /* ScanPhotoQRPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1700786B295EA42900CE8118 /* ScanPhotoQRPlugin.m */; };
+		17050C1A29EEDAE9001CCC17 /* AppNativeInfoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17050C1929EEDAE9001CCC17 /* AppNativeInfoPlugin.swift */; };
+		17050C1C29EF8C28001CCC17 /* AppNativeInfoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17050C1B29EF8C28001CCC17 /* AppNativeInfoPlugin.m */; };
+		17050DE1299E5C17002DA5FF /* AutofillItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17050DE0299E5C17002DA5FF /* AutofillItemCell.swift */; };
+		171058752BD0F3E100ADFD5C /* splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058722BD0F3E100ADFD5C /* splash@2x.png */; };
+		171058762BD0F3E100ADFD5C /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058732BD0F3E100ADFD5C /* splash.png */; };
+		171058772BD0F3E100ADFD5C /* splash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058742BD0F3E100ADFD5C /* splash@3x.png */; };
+		171F160029B1CD61002C94C5 /* StorageUseriOSPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171F15FF29B1CD61002C94C5 /* StorageUseriOSPlugin.swift */; };
+		171F160229B1CDA3002C94C5 /* StorageUseriOSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 171F160129B1CDA3002C94C5 /* StorageUseriOSPlugin.m */; };
+		1728094629F9171500F0755A /* AutofilliOSPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728094529F9171500F0755A /* AutofilliOSPlugin.swift */; };
+		1728094829F917F200F0755A /* AutofilliOSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1728094729F917F200F0755A /* AutofilliOSPlugin.m */; };
+		1728096729FA44D700F0755A /* UnlockController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728096529FA44D700F0755A /* UnlockController.swift */; };
+		1728096829FA44D700F0755A /* UnlockSuccessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728096629FA44D700F0755A /* UnlockSuccessController.swift */; };
+		1728096A29FA4D9500F0755A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
+		1728096E29FA9D8B00F0755A /* AutofillItemEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728096D29FA9D8B00F0755A /* AutofillItemEmptyCell.swift */; };
+		17334E902A8483D000057588 /* DownloadFilePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17334E8F2A8483D000057588 /* DownloadFilePlugin.m */; };
+		17334E922A8483DE00057588 /* DownloadFilePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17334E912A8483DE00057588 /* DownloadFilePlugin.swift */; };
+		1735074B2B0F1CBB00F36ECA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
+		174981B72BDF526B007AB366 /* TermiPassLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981AE2BDF526B007AB366 /* TermiPassLogger.swift */; };
+		174981B82BDF526B007AB366 /* TermiPassDarwinNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 174981B12BDF526B007AB366 /* TermiPassDarwinNotificationManager.m */; };
+		174981B92BDF526B007AB366 /* TermiPassVpnConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B22BDF526B007AB366 /* TermiPassVpnConfig.swift */; };
+		174981BA2BDF526B007AB366 /* TermiPassVpnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B32BDF526B007AB366 /* TermiPassVpnManager.swift */; };
+		174981BB2BDF526B007AB366 /* TermiPassVPNTemporaryKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B42BDF526B007AB366 /* TermiPassVPNTemporaryKey.swift */; };
+		174981BC2BDF526B007AB366 /* TermiPassVPNUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B52BDF526B007AB366 /* TermiPassVPNUserDefaults.swift */; };
+		174981C52BDF549D007AB366 /* DNSServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981BD2BDF549D007AB366 /* DNSServer.swift */; };
+		174981C62BDF549D007AB366 /* InterfaceConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981BE2BDF549D007AB366 /* InterfaceConfiguration.swift */; };
+		174981C72BDF549D007AB366 /* IPAddressRange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981BF2BDF549D007AB366 /* IPAddressRange.swift */; };
+		174981C82BDF549D007AB366 /* LocalVpnSDKManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981C02BDF549D007AB366 /* LocalVpnSDKManager.swift */; };
+		174981C92BDF549D007AB366 /* PacketTunnelSettingsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981C12BDF549D007AB366 /* PacketTunnelSettingsGenerator.swift */; };
+		174981CA2BDF549D007AB366 /* TunnelConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981C22BDF549D007AB366 /* TunnelConfiguration.swift */; };
+		174981CB2BDF576A007AB366 /* TermiPassDarwinNotificationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 174981B12BDF526B007AB366 /* TermiPassDarwinNotificationManager.m */; };
+		174981CC2BDF576A007AB366 /* TermiPassVpnConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B22BDF526B007AB366 /* TermiPassVpnConfig.swift */; };
+		174981CD2BDF576A007AB366 /* TermiPassVpnManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B32BDF526B007AB366 /* TermiPassVpnManager.swift */; };
+		174981CE2BDF576A007AB366 /* TermiPassVPNTemporaryKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B42BDF526B007AB366 /* TermiPassVPNTemporaryKey.swift */; };
+		174981CF2BDF576A007AB366 /* TermiPassVPNUserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174981B52BDF526B007AB366 /* TermiPassVPNUserDefaults.swift */; };
+		1751AC472A861D5A0020F6FD /* UniformTypeIdentifiers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1751AC1C2A861BCF0020F6FD /* UniformTypeIdentifiers.framework */; };
+		1751AC4A2A861D5A0020F6FD /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1751AC492A861D5A0020F6FD /* Media.xcassets */; };
+		1751AC4D2A861D5A0020F6FD /* ActionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1751AC4C2A861D5A0020F6FD /* ActionViewController.m */; };
+		1751AC502A861D5A0020F6FD /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1751AC4E2A861D5A0020F6FD /* MainInterface.storyboard */; };
+		1751AC542A861D5A0020F6FD /* TermiPassAction.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 1751AC462A861D5A0020F6FD /* TermiPassAction.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1751AD272A8B65C80020F6FD /* BundleResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 1751AD262A8B65C80020F6FD /* BundleResources.bundle */; };
+		175A381229AC9B0C000147E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 175A381129AC9B0C000147E6 /* GoogleService-Info.plist */; };
+		1768B6F72A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1768B6F62A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift */; };
+		1768B6F92A39E83F00B7CE20 /* HookHttpRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1768B6F82A39E83F00B7CE20 /* HookHttpRequestHandler.swift */; };
+		1768B6FB2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1768B6FA2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m */; };
+		176D42CF2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176D42CE2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift */; };
+		17812C842A8CCB1C00DBFD54 /* SeafShareFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17812C802A8CCB1C00DBFD54 /* SeafShareFileViewController.m */; };
+		17812C852A8CCB1C00DBFD54 /* SeafShareDirViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17812C822A8CCB1C00DBFD54 /* SeafShareDirViewController.m */; };
+		17812C892A8CCC0900DBFD54 /* VaultBaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; };
+		17812C8A2A8CCC0900DBFD54 /* VaultBaseFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		1795A8032AB8839A0066335E /* LocalVpnSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1795A8012AB883900066335E /* LocalVpnSDK.xcframework */; };
+		179A7B5D2AA6FA0000676225 /* TailScalePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 179A7B5C2AA6FA0000676225 /* TailScalePlugin.m */; };
+		179A7B5F2AA6FA5900676225 /* TailScalePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179A7B5E2AA6FA5900676225 /* TailScalePlugin.swift */; };
+		179A7B9B2AA6FE5000676225 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 179A7B4E2AA6F89D00676225 /* NetworkExtension.framework */; };
+		179A7B9E2AA6FE5000676225 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179A7B9D2AA6FE5000676225 /* PacketTunnelProvider.swift */; };
+		179A7BFF2AA733B900676225 /* TermiPassVPN.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 179A7B9A2AA6FE5000676225 /* TermiPassVPN.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		17CF84CF2A83671100A89F88 /* TermiPassShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17CF84CE2A83671100A89F88 /* TermiPassShareViewController.m */; };
+		17CF84D22A83671100A89F88 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17CF84D02A83671100A89F88 /* MainInterface.storyboard */; };
+		17CF84DC2A836ABC00A89F88 /* TermiPassNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17CF84DB2A836ABC00A89F88 /* TermiPassNavigationController.m */; };
+		17D58DBD29938FB500730594 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17001EBB298A56C1000A2848 /* AuthenticationServices.framework */; };
+		17D58DC029938FB500730594 /* CredentialProviderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DBF29938FB500730594 /* CredentialProviderViewController.swift */; };
+		17D58DC329938FB500730594 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17D58DC129938FB500730594 /* MainInterface.storyboard */; };
+		17D58DC829938FB500730594 /* autofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 17D58DBC29938FB500730594 /* autofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		17D58DD42993C07300730594 /* AutoFillResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DD32993C07300730594 /* AutoFillResponse.m */; };
+		17D58DD92993C4D900730594 /* AppSettingsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DD82993C4D900730594 /* AppSettingsPlugin.m */; };
+		17D58DDB2993C51500730594 /* AppSettingsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DDA2993C51500730594 /* AppSettingsPlugin.swift */; };
+		17D58DE22993E43500730594 /* AutofillListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DE12993E43500730594 /* AutofillListController.swift */; };
+		17D58DE72994CF3E00730594 /* StorageiOSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DE62994CF3E00730594 /* StorageiOSPlugin.m */; };
+		17D58DE92994CF8C00730594 /* StorageiOSPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DE82994CF8C00730594 /* StorageiOSPlugin.swift */; };
+		17DBC421299D0FFB001ACC9C /* VaultBaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; };
+		17DBC427299D1372001ACC9C /* VaultBaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; };
+		17DBC428299D1372001ACC9C /* VaultBaseFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		17F3DE24299E01A500694AFD /* AppOrWebIdentifyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3DE23299E01A500694AFD /* AppOrWebIdentifyModel.swift */; };
+		17F436D529670D8E00A0B89F /* TwitterLoginPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F436D429670D8E00A0B89F /* TwitterLoginPlugin.swift */; };
+		17F436D729670EFB00A0B89F /* TwitterOauthLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F436D629670EFB00A0B89F /* TwitterOauthLoginController.swift */; };
+		17F436D92967D55700A0B89F /* TwitterLoginPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17F436D82967D55700A0B89F /* TwitterLoginPlugin.m */; };
+		17FE23FF29E94695008A46C8 /* ExtensionWebviewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FE23FE29E94695008A46C8 /* ExtensionWebviewPlugin.m */; };
+		17FE240129E946F0008A46C8 /* ExtensionWebviewPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FE240029E946F0008A46C8 /* ExtensionWebviewPlugin.swift */; };
+		17FE30392A8500E200137F37 /* ProxyInfoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FE30382A8500E200137F37 /* ProxyInfoPlugin.swift */; };
+		17FE303B2A85010500137F37 /* ProxyInfoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FE303A2A85010500137F37 /* ProxyInfoPlugin.m */; };
+		2FAD9763203C412B000D30F8 /* config.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2FAD9762203C412B000D30F8 /* config.xml */; };
+		50379B232058CBB4000EE86E /* capacitor.config.json in Resources */ = {isa = PBXBuildFile; fileRef = 50379B222058CBB4000EE86E /* capacitor.config.json */; };
+		504EC3081FED79650016851F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504EC3071FED79650016851F /* AppDelegate.swift */; };
+		504EC30D1FED79650016851F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30B1FED79650016851F /* Main.storyboard */; };
+		504EC30F1FED79650016851F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
+		504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 504EC3101FED79650016851F /* LaunchScreen.storyboard */; };
+		50B271D11FEDC1A000F3C39B /* public in Resources */ = {isa = PBXBuildFile; fileRef = 50B271D01FEDC1A000F3C39B /* public */; };
+		A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */; };
+		D72EE444F05659129AEFD008 /* Pods_autofill.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81596FD19C23B94EB4A365B6 /* Pods_autofill.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1751AC522A861D5A0020F6FD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1751AC452A861D5A0020F6FD;
+			remoteInfo = TermiPassAction;
+		};
+		179A7C002AA733B900676225 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 179A7B992AA6FE5000676225;
+			remoteInfo = TermiPassVPN;
+		};
+		17D58DC629938FB500730594 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 504EC2FC1FED79650016851F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 17D58DBB29938FB500730594;
+			remoteInfo = autofill;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		17001EC8298A56C1000A2848 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				17D58DC829938FB500730594 /* autofill.appex in Embed Foundation Extensions */,
+				1751AC542A861D5A0020F6FD /* TermiPassAction.appex in Embed Foundation Extensions */,
+				179A7BFF2AA733B900676225 /* TermiPassVPN.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17812C8B2A8CCC0900DBFD54 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				17812C8A2A8CCC0900DBFD54 /* VaultBaseFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17DBC429299D1372001ACC9C /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				17DBC428299D1372001ACC9C /* VaultBaseFramework.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		17001EBB298A56C1000A2848 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
+		17001ECC298A599E000A2848 /* AppRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppRelease.entitlements; sourceTree = "<group>"; };
+		17007861295E9C4400CE8118 /* EchoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EchoPlugin.swift; sourceTree = "<group>"; };
+		17007863295E9C7200CE8118 /* App-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "App-Bridging-Header.h"; sourceTree = "<group>"; };
+		17007864295E9C7300CE8118 /* EchoPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EchoPlugin.m; sourceTree = "<group>"; };
+		17007869295E9DFE00CE8118 /* ScanPhotoQRPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanPhotoQRPlugin.swift; sourceTree = "<group>"; };
+		1700786B295EA42900CE8118 /* ScanPhotoQRPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScanPhotoQRPlugin.m; sourceTree = "<group>"; };
+		17050C1929EEDAE9001CCC17 /* AppNativeInfoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNativeInfoPlugin.swift; sourceTree = "<group>"; };
+		17050C1B29EF8C28001CCC17 /* AppNativeInfoPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppNativeInfoPlugin.m; sourceTree = "<group>"; };
+		17050DE0299E5C17002DA5FF /* AutofillItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AutofillItemCell.swift; path = Autofill/UI/AutofillItemCell.swift; sourceTree = SOURCE_ROOT; };
+		170EE7042BD2623D0023C79A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		170EE7052BD263910023C79A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		171058722BD0F3E100ADFD5C /* splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash@2x.png"; sourceTree = "<group>"; };
+		171058732BD0F3E100ADFD5C /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
+		171058742BD0F3E100ADFD5C /* splash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash@3x.png"; sourceTree = "<group>"; };
+		171F15FF29B1CD61002C94C5 /* StorageUseriOSPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUseriOSPlugin.swift; sourceTree = "<group>"; };
+		171F160129B1CDA3002C94C5 /* StorageUseriOSPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StorageUseriOSPlugin.m; sourceTree = "<group>"; };
+		1728094529F9171500F0755A /* AutofilliOSPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofilliOSPlugin.swift; sourceTree = "<group>"; };
+		1728094729F917F200F0755A /* AutofilliOSPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutofilliOSPlugin.m; sourceTree = "<group>"; };
+		1728096529FA44D700F0755A /* UnlockController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnlockController.swift; path = Autofill/UI/UnlockController.swift; sourceTree = SOURCE_ROOT; };
+		1728096629FA44D700F0755A /* UnlockSuccessController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnlockSuccessController.swift; path = Autofill/UI/UnlockSuccessController.swift; sourceTree = SOURCE_ROOT; };
+		1728096D29FA9D8B00F0755A /* AutofillItemEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AutofillItemEmptyCell.swift; path = Autofill/UI/AutofillItemEmptyCell.swift; sourceTree = SOURCE_ROOT; };
+		17334E8F2A8483D000057588 /* DownloadFilePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadFilePlugin.m; sourceTree = "<group>"; };
+		17334E912A8483DE00057588 /* DownloadFilePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadFilePlugin.swift; sourceTree = "<group>"; };
+		174981AE2BDF526B007AB366 /* TermiPassLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermiPassLogger.swift; sourceTree = "<group>"; };
+		174981B02BDF526B007AB366 /* TermiPassDarwinNotificationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TermiPassDarwinNotificationManager.h; sourceTree = "<group>"; };
+		174981B12BDF526B007AB366 /* TermiPassDarwinNotificationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TermiPassDarwinNotificationManager.m; sourceTree = "<group>"; };
+		174981B22BDF526B007AB366 /* TermiPassVpnConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermiPassVpnConfig.swift; sourceTree = "<group>"; };
+		174981B32BDF526B007AB366 /* TermiPassVpnManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermiPassVpnManager.swift; sourceTree = "<group>"; };
+		174981B42BDF526B007AB366 /* TermiPassVPNTemporaryKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermiPassVPNTemporaryKey.swift; sourceTree = "<group>"; };
+		174981B52BDF526B007AB366 /* TermiPassVPNUserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermiPassVPNUserDefaults.swift; sourceTree = "<group>"; };
+		174981BD2BDF549D007AB366 /* DNSServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DNSServer.swift; sourceTree = "<group>"; };
+		174981BE2BDF549D007AB366 /* InterfaceConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InterfaceConfiguration.swift; sourceTree = "<group>"; };
+		174981BF2BDF549D007AB366 /* IPAddressRange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPAddressRange.swift; sourceTree = "<group>"; };
+		174981C02BDF549D007AB366 /* LocalVpnSDKManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalVpnSDKManager.swift; sourceTree = "<group>"; };
+		174981C12BDF549D007AB366 /* PacketTunnelSettingsGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PacketTunnelSettingsGenerator.swift; sourceTree = "<group>"; };
+		174981C22BDF549D007AB366 /* TunnelConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TunnelConfiguration.swift; sourceTree = "<group>"; };
+		174981C32BDF549D007AB366 /* VpnConfigC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VpnConfigC.h; sourceTree = "<group>"; };
+		1751AC1C2A861BCF0020F6FD /* UniformTypeIdentifiers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UniformTypeIdentifiers.framework; path = System/Library/Frameworks/UniformTypeIdentifiers.framework; sourceTree = SDKROOT; };
+		1751AC462A861D5A0020F6FD /* TermiPassAction.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermiPassAction.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		1751AC492A861D5A0020F6FD /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		1751AC4B2A861D5A0020F6FD /* ActionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ActionViewController.h; sourceTree = "<group>"; };
+		1751AC4C2A861D5A0020F6FD /* ActionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ActionViewController.m; sourceTree = "<group>"; };
+		1751AC4F2A861D5A0020F6FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		1751AC512A861D5A0020F6FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1751AD262A8B65C80020F6FD /* BundleResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = BundleResources.bundle; sourceTree = "<group>"; };
+		175A381129AC9B0C000147E6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		176440C52ABC440800CE264E /* TermiPassAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TermiPassAction.entitlements; sourceTree = "<group>"; };
+		1768B6F62A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookCapacitorHttpPlugin.swift; sourceTree = "<group>"; };
+		1768B6F82A39E83F00B7CE20 /* HookHttpRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookHttpRequestHandler.swift; sourceTree = "<group>"; };
+		1768B6FA2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookCapacitorHttpPlugin.m; sourceTree = "<group>"; };
+		176D42CD2B0EFADA00CC1DD3 /* TermipassShare-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TermipassShare-Bridging-Header.h"; sourceTree = "<group>"; };
+		176D42CE2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermiPassShareRootController.swift; sourceTree = "<group>"; };
+		17812C802A8CCB1C00DBFD54 /* SeafShareFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeafShareFileViewController.m; sourceTree = "<group>"; };
+		17812C812A8CCB1C00DBFD54 /* SeafShareDirViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeafShareDirViewController.h; sourceTree = "<group>"; };
+		17812C822A8CCB1C00DBFD54 /* SeafShareDirViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeafShareDirViewController.m; sourceTree = "<group>"; };
+		17812C832A8CCB1C00DBFD54 /* SeafShareFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeafShareFileViewController.h; sourceTree = "<group>"; };
+		1782957A2B158D4700C7D94C /* TermipassShare.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = TermipassShare.entitlements; sourceTree = "<group>"; };
+		1783AFF72AA873700086B2F1 /* SDKHeaderMock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDKHeaderMock.h; sourceTree = "<group>"; };
+		1795A8012AB883900066335E /* LocalVpnSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = LocalVpnSDK.xcframework; sourceTree = "<group>"; };
+		179A7B4E2AA6F89D00676225 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
+		179A7B5C2AA6FA0000676225 /* TailScalePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TailScalePlugin.m; sourceTree = "<group>"; };
+		179A7B5E2AA6FA5900676225 /* TailScalePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailScalePlugin.swift; sourceTree = "<group>"; };
+		179A7B9A2AA6FE5000676225 /* TermiPassVPN.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermiPassVPN.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		179A7B9D2AA6FE5000676225 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
+		179A7B9F2AA6FE5000676225 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		179A7BA02AA6FE5000676225 /* TermiPassVPN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TermiPassVPN.entitlements; sourceTree = "<group>"; };
+		179A7BBA2AA701C900676225 /* TermiPassVPN-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TermiPassVPN-Bridging-Header.h"; sourceTree = "<group>"; };
+		17CF84CB2A83671000A89F88 /* TermipassShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermipassShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		17CF84CD2A83671100A89F88 /* TermiPassShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TermiPassShareViewController.h; sourceTree = "<group>"; };
+		17CF84CE2A83671100A89F88 /* TermiPassShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TermiPassShareViewController.m; sourceTree = "<group>"; };
+		17CF84D12A83671100A89F88 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		17CF84D32A83671100A89F88 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		17CF84DA2A836ABC00A89F88 /* TermiPassNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TermiPassNavigationController.h; sourceTree = "<group>"; };
+		17CF84DB2A836ABC00A89F88 /* TermiPassNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TermiPassNavigationController.m; sourceTree = "<group>"; };
+		17D58DBC29938FB500730594 /* autofill.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = autofill.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		17D58DBF29938FB500730594 /* CredentialProviderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CredentialProviderViewController.swift; sourceTree = "<group>"; };
+		17D58DC229938FB500730594 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		17D58DC429938FB500730594 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		17D58DC529938FB500730594 /* autofill.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = autofill.entitlements; sourceTree = "<group>"; };
+		17D58DCC2993905D00730594 /* autofillRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = autofillRelease.entitlements; sourceTree = "<group>"; };
+		17D58DD12993C07200730594 /* autofill-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "autofill-Bridging-Header.h"; sourceTree = "<group>"; };
+		17D58DD22993C07300730594 /* AutoFillResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AutoFillResponse.h; path = Autofill/AutoFillResponse.h; sourceTree = SOURCE_ROOT; };
+		17D58DD32993C07300730594 /* AutoFillResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AutoFillResponse.m; path = Autofill/AutoFillResponse.m; sourceTree = SOURCE_ROOT; };
+		17D58DD82993C4D900730594 /* AppSettingsPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppSettingsPlugin.m; sourceTree = "<group>"; };
+		17D58DDA2993C51500730594 /* AppSettingsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsPlugin.swift; sourceTree = "<group>"; };
+		17D58DE12993E43500730594 /* AutofillListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AutofillListController.swift; path = autofill/UI/AutofillListController.swift; sourceTree = SOURCE_ROOT; };
+		17D58DE62994CF3E00730594 /* StorageiOSPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StorageiOSPlugin.m; sourceTree = "<group>"; };
+		17D58DE82994CF8C00730594 /* StorageiOSPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageiOSPlugin.swift; sourceTree = "<group>"; };
+		17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VaultBaseFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		17F3DE23299E01A500694AFD /* AppOrWebIdentifyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppOrWebIdentifyModel.swift; path = Autofill/Model/AppOrWebIdentifyModel.swift; sourceTree = SOURCE_ROOT; };
+		17F436D229669EFB00A0B89F /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
+		17F436D429670D8E00A0B89F /* TwitterLoginPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterLoginPlugin.swift; sourceTree = "<group>"; };
+		17F436D629670EFB00A0B89F /* TwitterOauthLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterOauthLoginController.swift; sourceTree = "<group>"; };
+		17F436D82967D55700A0B89F /* TwitterLoginPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwitterLoginPlugin.m; sourceTree = "<group>"; };
+		17FE23FE29E94695008A46C8 /* ExtensionWebviewPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionWebviewPlugin.m; sourceTree = "<group>"; };
+		17FE240029E946F0008A46C8 /* ExtensionWebviewPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionWebviewPlugin.swift; sourceTree = "<group>"; };
+		17FE30382A8500E200137F37 /* ProxyInfoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyInfoPlugin.swift; sourceTree = "<group>"; };
+		17FE303A2A85010500137F37 /* ProxyInfoPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProxyInfoPlugin.m; sourceTree = "<group>"; };
+		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
+		44288DFA4C963E07AEAE38F9 /* Pods-autofill.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-autofill.release.xcconfig"; path = "Pods/Target Support Files/Pods-autofill/Pods-autofill.release.xcconfig"; sourceTree = "<group>"; };
+		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
+		504EC3041FED79650016851F /* App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = App.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		504EC3071FED79650016851F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		504EC30C1FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		504EC30E1FED79650016851F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		504EC3111FED79650016851F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		504EC3131FED79650016851F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		50B271D01FEDC1A000F3C39B /* public */ = {isa = PBXFileReference; lastKnownFileType = folder; path = public; sourceTree = "<group>"; };
+		6E4986BBACB1C88AB6A805E8 /* Pods-autofill.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-autofill.debug.xcconfig"; path = "Pods/Target Support Files/Pods-autofill/Pods-autofill.debug.xcconfig"; sourceTree = "<group>"; };
+		81596FD19C23B94EB4A365B6 /* Pods_autofill.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_autofill.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.release.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.release.xcconfig"; sourceTree = "<group>"; };
+		FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-App.debug.xcconfig"; path = "Pods/Target Support Files/Pods-App/Pods-App.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1751AC432A861D5A0020F6FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1751AC472A861D5A0020F6FD /* UniformTypeIdentifiers.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		179A7B972AA6FE5000676225 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				179A7B9B2AA6FE5000676225 /* NetworkExtension.framework in Frameworks */,
+				1795A8032AB8839A0066335E /* LocalVpnSDK.xcframework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17CF84C82A83671000A89F88 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17812C892A8CCC0900DBFD54 /* VaultBaseFramework.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17D58DB929938FB500730594 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17D58DBD29938FB500730594 /* AuthenticationServices.framework in Frameworks */,
+				17DBC421299D0FFB001ACC9C /* VaultBaseFramework.framework in Frameworks */,
+				D72EE444F05659129AEFD008 /* Pods_autofill.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		504EC3011FED79650016851F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A084ECDBA7D38E1E42DFC39D /* Pods_App.framework in Frameworks */,
+				17DBC427299D1372001ACC9C /* VaultBaseFramework.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		17007866295E9D8300CE8118 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				1750C77C2A9387290058FB41 /* VPN */,
+				17FE30372A8500CC00137F37 /* ProxyInfo */,
+				17334E8E2A84837600057588 /* DownloadFile */,
+				1768B6F52A39E7B700B7CE20 /* HookCapacitorHttp */,
+				1728094429F916E800F0755A /* AutofilliOS */,
+				17050C1829EEDAD4001CCC17 /* AppVersion */,
+				17FE23FD29E94650008A46C8 /* ExtensionWebview */,
+				17D58DE52994CF1500730594 /* StorageiOS */,
+				17D58DD72993C48400730594 /* AppSettings */,
+				17F436D329670D3700A0B89F /* TwitterLogin */,
+				17007868295E9DC300CE8118 /* ScanPhotoQR */,
+				17007867295E9D8D00CE8118 /* Echo */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		17007867295E9D8D00CE8118 /* Echo */ = {
+			isa = PBXGroup;
+			children = (
+				17007861295E9C4400CE8118 /* EchoPlugin.swift */,
+				17007864295E9C7300CE8118 /* EchoPlugin.m */,
+			);
+			path = Echo;
+			sourceTree = "<group>";
+		};
+		17007868295E9DC300CE8118 /* ScanPhotoQR */ = {
+			isa = PBXGroup;
+			children = (
+				17007869295E9DFE00CE8118 /* ScanPhotoQRPlugin.swift */,
+				1700786B295EA42900CE8118 /* ScanPhotoQRPlugin.m */,
+			);
+			path = ScanPhotoQR;
+			sourceTree = "<group>";
+		};
+		17050C1829EEDAD4001CCC17 /* AppVersion */ = {
+			isa = PBXGroup;
+			children = (
+				17050C1929EEDAE9001CCC17 /* AppNativeInfoPlugin.swift */,
+				17050C1B29EF8C28001CCC17 /* AppNativeInfoPlugin.m */,
+			);
+			path = AppVersion;
+			sourceTree = "<group>";
+		};
+		17050DDF299E5BD9002DA5FF /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				1728096529FA44D700F0755A /* UnlockController.swift */,
+				1728096629FA44D700F0755A /* UnlockSuccessController.swift */,
+				17050DE0299E5C17002DA5FF /* AutofillItemCell.swift */,
+				17D58DE12993E43500730594 /* AutofillListController.swift */,
+				1728096D29FA9D8B00F0755A /* AutofillItemEmptyCell.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		1728094429F916E800F0755A /* AutofilliOS */ = {
+			isa = PBXGroup;
+			children = (
+				1728094529F9171500F0755A /* AutofilliOSPlugin.swift */,
+				1728094729F917F200F0755A /* AutofilliOSPlugin.m */,
+			);
+			path = AutofilliOS;
+			sourceTree = "<group>";
+		};
+		1728097029FAA85B00F0755A /* images */ = {
+			isa = PBXGroup;
+			children = (
+				171058732BD0F3E100ADFD5C /* splash.png */,
+				171058722BD0F3E100ADFD5C /* splash@2x.png */,
+				171058742BD0F3E100ADFD5C /* splash@3x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		17334E8E2A84837600057588 /* DownloadFile */ = {
+			isa = PBXGroup;
+			children = (
+				17334E8F2A8483D000057588 /* DownloadFilePlugin.m */,
+				17334E912A8483DE00057588 /* DownloadFilePlugin.swift */,
+			);
+			path = DownloadFile;
+			sourceTree = "<group>";
+		};
+		174981AF2BDF526B007AB366 /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				174981AE2BDF526B007AB366 /* TermiPassLogger.swift */,
+			);
+			name = Logging;
+			path = appleCommon/Logging;
+			sourceTree = "<group>";
+		};
+		174981B62BDF526B007AB366 /* VpnConfig */ = {
+			isa = PBXGroup;
+			children = (
+				174981B02BDF526B007AB366 /* TermiPassDarwinNotificationManager.h */,
+				174981B12BDF526B007AB366 /* TermiPassDarwinNotificationManager.m */,
+				174981B22BDF526B007AB366 /* TermiPassVpnConfig.swift */,
+				174981B32BDF526B007AB366 /* TermiPassVpnManager.swift */,
+				174981B42BDF526B007AB366 /* TermiPassVPNTemporaryKey.swift */,
+				174981B52BDF526B007AB366 /* TermiPassVPNUserDefaults.swift */,
+			);
+			name = VpnConfig;
+			path = appleCommon/VpnConfig;
+			sourceTree = "<group>";
+		};
+		174981C42BDF549D007AB366 /* VpnExtension */ = {
+			isa = PBXGroup;
+			children = (
+				174981BD2BDF549D007AB366 /* DNSServer.swift */,
+				174981BE2BDF549D007AB366 /* InterfaceConfiguration.swift */,
+				174981BF2BDF549D007AB366 /* IPAddressRange.swift */,
+				174981C02BDF549D007AB366 /* LocalVpnSDKManager.swift */,
+				174981C12BDF549D007AB366 /* PacketTunnelSettingsGenerator.swift */,
+				174981C22BDF549D007AB366 /* TunnelConfiguration.swift */,
+				174981C32BDF549D007AB366 /* VpnConfigC.h */,
+			);
+			name = VpnExtension;
+			path = appleCommon/VpnExtension;
+			sourceTree = SOURCE_ROOT;
+		};
+		1750C77C2A9387290058FB41 /* VPN */ = {
+			isa = PBXGroup;
+			children = (
+				179A7B5C2AA6FA0000676225 /* TailScalePlugin.m */,
+				179A7B5E2AA6FA5900676225 /* TailScalePlugin.swift */,
+			);
+			path = VPN;
+			sourceTree = "<group>";
+		};
+		1751AC482A861D5A0020F6FD /* TermiPassAction */ = {
+			isa = PBXGroup;
+			children = (
+				176440C52ABC440800CE264E /* TermiPassAction.entitlements */,
+				1751AC492A861D5A0020F6FD /* Media.xcassets */,
+				1751AC4B2A861D5A0020F6FD /* ActionViewController.h */,
+				1751AC4C2A861D5A0020F6FD /* ActionViewController.m */,
+				1751AC4E2A861D5A0020F6FD /* MainInterface.storyboard */,
+				1751AC512A861D5A0020F6FD /* Info.plist */,
+			);
+			path = TermiPassAction;
+			sourceTree = "<group>";
+		};
+		1751AD252A8B65C80020F6FD /* bundles */ = {
+			isa = PBXGroup;
+			children = (
+				1751AD262A8B65C80020F6FD /* BundleResources.bundle */,
+			);
+			path = bundles;
+			sourceTree = "<group>";
+		};
+		1768B6F52A39E7B700B7CE20 /* HookCapacitorHttp */ = {
+			isa = PBXGroup;
+			children = (
+				1768B6F62A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift */,
+				1768B6F82A39E83F00B7CE20 /* HookHttpRequestHandler.swift */,
+				1768B6FA2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m */,
+			);
+			path = HookCapacitorHttp;
+			sourceTree = "<group>";
+		};
+		179A7B9C2AA6FE5000676225 /* TermiPassVPN */ = {
+			isa = PBXGroup;
+			children = (
+				174981C42BDF549D007AB366 /* VpnExtension */,
+				179A7B9D2AA6FE5000676225 /* PacketTunnelProvider.swift */,
+				179A7B9F2AA6FE5000676225 /* Info.plist */,
+				179A7BA02AA6FE5000676225 /* TermiPassVPN.entitlements */,
+				179A7BBA2AA701C900676225 /* TermiPassVPN-Bridging-Header.h */,
+				1783AFF72AA873700086B2F1 /* SDKHeaderMock.h */,
+				170EE7052BD263910023C79A /* PrivacyInfo.xcprivacy */,
+			);
+			path = TermiPassVPN;
+			sourceTree = "<group>";
+		};
+		17CF84CC2A83671100A89F88 /* TermipassShare */ = {
+			isa = PBXGroup;
+			children = (
+				1782957A2B158D4700C7D94C /* TermipassShare.entitlements */,
+				17812C812A8CCB1C00DBFD54 /* SeafShareDirViewController.h */,
+				17812C822A8CCB1C00DBFD54 /* SeafShareDirViewController.m */,
+				17812C832A8CCB1C00DBFD54 /* SeafShareFileViewController.h */,
+				17812C802A8CCB1C00DBFD54 /* SeafShareFileViewController.m */,
+				17CF84CD2A83671100A89F88 /* TermiPassShareViewController.h */,
+				17CF84CE2A83671100A89F88 /* TermiPassShareViewController.m */,
+				17CF84D02A83671100A89F88 /* MainInterface.storyboard */,
+				17CF84D32A83671100A89F88 /* Info.plist */,
+				17CF84DA2A836ABC00A89F88 /* TermiPassNavigationController.h */,
+				17CF84DB2A836ABC00A89F88 /* TermiPassNavigationController.m */,
+				176D42CE2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift */,
+				176D42CD2B0EFADA00CC1DD3 /* TermipassShare-Bridging-Header.h */,
+			);
+			path = TermipassShare;
+			sourceTree = "<group>";
+		};
+		17D58DBE29938FB500730594 /* autofill */ = {
+			isa = PBXGroup;
+			children = (
+				17050DDF299E5BD9002DA5FF /* UI */,
+				17F3DE22299E017D00694AFD /* Model */,
+				17D58DCC2993905D00730594 /* autofillRelease.entitlements */,
+				17D58DBF29938FB500730594 /* CredentialProviderViewController.swift */,
+				17D58DC129938FB500730594 /* MainInterface.storyboard */,
+				17D58DC429938FB500730594 /* Info.plist */,
+				17D58DC529938FB500730594 /* autofill.entitlements */,
+				17D58DD22993C07300730594 /* AutoFillResponse.h */,
+				17D58DD32993C07300730594 /* AutoFillResponse.m */,
+				17D58DD12993C07200730594 /* autofill-Bridging-Header.h */,
+			);
+			path = autofill;
+			sourceTree = "<group>";
+		};
+		17D58DD72993C48400730594 /* AppSettings */ = {
+			isa = PBXGroup;
+			children = (
+				17D58DD82993C4D900730594 /* AppSettingsPlugin.m */,
+				17D58DDA2993C51500730594 /* AppSettingsPlugin.swift */,
+			);
+			path = AppSettings;
+			sourceTree = "<group>";
+		};
+		17D58DE52994CF1500730594 /* StorageiOS */ = {
+			isa = PBXGroup;
+			children = (
+				17D58DE62994CF3E00730594 /* StorageiOSPlugin.m */,
+				17D58DE82994CF8C00730594 /* StorageiOSPlugin.swift */,
+				171F160129B1CDA3002C94C5 /* StorageUseriOSPlugin.m */,
+				171F15FF29B1CD61002C94C5 /* StorageUseriOSPlugin.swift */,
+			);
+			path = StorageiOS;
+			sourceTree = "<group>";
+		};
+		17F3DE22299E017D00694AFD /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				17F3DE23299E01A500694AFD /* AppOrWebIdentifyModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		17F436D329670D3700A0B89F /* TwitterLogin */ = {
+			isa = PBXGroup;
+			children = (
+				17F436D429670D8E00A0B89F /* TwitterLoginPlugin.swift */,
+				17F436D629670EFB00A0B89F /* TwitterOauthLoginController.swift */,
+				17F436D82967D55700A0B89F /* TwitterLoginPlugin.m */,
+			);
+			path = TwitterLogin;
+			sourceTree = "<group>";
+		};
+		17FE23FD29E94650008A46C8 /* ExtensionWebview */ = {
+			isa = PBXGroup;
+			children = (
+				17FE240029E946F0008A46C8 /* ExtensionWebviewPlugin.swift */,
+				17FE23FE29E94695008A46C8 /* ExtensionWebviewPlugin.m */,
+			);
+			path = ExtensionWebview;
+			sourceTree = "<group>";
+		};
+		17FE30372A8500CC00137F37 /* ProxyInfo */ = {
+			isa = PBXGroup;
+			children = (
+				17FE30382A8500E200137F37 /* ProxyInfoPlugin.swift */,
+				17FE303A2A85010500137F37 /* ProxyInfoPlugin.m */,
+			);
+			path = ProxyInfo;
+			sourceTree = "<group>";
+		};
+		27E2DDA53C4D2A4D1A88CE4A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */,
+				AF277DCFFFF123FFC6DF26C7 /* Pods_App.framework */,
+				17001EBB298A56C1000A2848 /* AuthenticationServices.framework */,
+				81596FD19C23B94EB4A365B6 /* Pods_autofill.framework */,
+				1751AC1C2A861BCF0020F6FD /* UniformTypeIdentifiers.framework */,
+				179A7B4E2AA6F89D00676225 /* NetworkExtension.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		504EC2FB1FED79650016851F = {
+			isa = PBXGroup;
+			children = (
+				174981AF2BDF526B007AB366 /* Logging */,
+				174981B62BDF526B007AB366 /* VpnConfig */,
+				1795A8012AB883900066335E /* LocalVpnSDK.xcframework */,
+				504EC3061FED79650016851F /* App */,
+				17D58DBE29938FB500730594 /* autofill */,
+				17CF84CC2A83671100A89F88 /* TermipassShare */,
+				1751AC482A861D5A0020F6FD /* TermiPassAction */,
+				179A7B9C2AA6FE5000676225 /* TermiPassVPN */,
+				504EC3051FED79650016851F /* Products */,
+				7F8756D8B27F46E3366F6CEA /* Pods */,
+				27E2DDA53C4D2A4D1A88CE4A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		504EC3051FED79650016851F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				504EC3041FED79650016851F /* App.app */,
+				17D58DBC29938FB500730594 /* autofill.appex */,
+				17CF84CB2A83671000A89F88 /* TermipassShare.appex */,
+				1751AC462A861D5A0020F6FD /* TermiPassAction.appex */,
+				179A7B9A2AA6FE5000676225 /* TermiPassVPN.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		504EC3061FED79650016851F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				1751AD252A8B65C80020F6FD /* bundles */,
+				1728097029FAA85B00F0755A /* images */,
+				175A381129AC9B0C000147E6 /* GoogleService-Info.plist */,
+				17001ECC298A599E000A2848 /* AppRelease.entitlements */,
+				17F436D229669EFB00A0B89F /* App.entitlements */,
+				17007866295E9D8300CE8118 /* Plugins */,
+				50379B222058CBB4000EE86E /* capacitor.config.json */,
+				504EC3071FED79650016851F /* AppDelegate.swift */,
+				504EC30B1FED79650016851F /* Main.storyboard */,
+				504EC30E1FED79650016851F /* Assets.xcassets */,
+				504EC3101FED79650016851F /* LaunchScreen.storyboard */,
+				504EC3131FED79650016851F /* Info.plist */,
+				2FAD9762203C412B000D30F8 /* config.xml */,
+				50B271D01FEDC1A000F3C39B /* public */,
+				17007863295E9C7200CE8118 /* App-Bridging-Header.h */,
+				170EE7042BD2623D0023C79A /* PrivacyInfo.xcprivacy */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7F8756D8B27F46E3366F6CEA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */,
+				AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */,
+				6E4986BBACB1C88AB6A805E8 /* Pods-autofill.debug.xcconfig */,
+				44288DFA4C963E07AEAE38F9 /* Pods-autofill.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1751AC452A861D5A0020F6FD /* TermiPassAction */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1751AC552A861D5A0020F6FD /* Build configuration list for PBXNativeTarget "TermiPassAction" */;
+			buildPhases = (
+				1751AC422A861D5A0020F6FD /* Sources */,
+				1751AC432A861D5A0020F6FD /* Frameworks */,
+				1751AC442A861D5A0020F6FD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TermiPassAction;
+			productName = TermiPassAction;
+			productReference = 1751AC462A861D5A0020F6FD /* TermiPassAction.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		179A7B992AA6FE5000676225 /* TermiPassVPN */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 179A7BA42AA6FE5100676225 /* Build configuration list for PBXNativeTarget "TermiPassVPN" */;
+			buildPhases = (
+				179A7B962AA6FE5000676225 /* Sources */,
+				179A7B972AA6FE5000676225 /* Frameworks */,
+				179A7B982AA6FE5000676225 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TermiPassVPN;
+			productName = TermiPassVPN;
+			productReference = 179A7B9A2AA6FE5000676225 /* TermiPassVPN.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		17CF84CA2A83671000A89F88 /* TermipassShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17CF84D92A83671100A89F88 /* Build configuration list for PBXNativeTarget "TermipassShare" */;
+			buildPhases = (
+				17CF84C72A83671000A89F88 /* Sources */,
+				17CF84C82A83671000A89F88 /* Frameworks */,
+				17CF84C92A83671000A89F88 /* Resources */,
+				17812C8B2A8CCC0900DBFD54 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TermipassShare;
+			productName = TermipassShare;
+			productReference = 17CF84CB2A83671000A89F88 /* TermipassShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		17D58DBB29938FB500730594 /* autofill */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 17D58DC929938FB500730594 /* Build configuration list for PBXNativeTarget "autofill" */;
+			buildPhases = (
+				B6DE27DFDAFE0A800A1FFE5D /* [CP] Check Pods Manifest.lock */,
+				17D58DB829938FB500730594 /* Sources */,
+				17D58DB929938FB500730594 /* Frameworks */,
+				17D58DBA29938FB500730594 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = autofill;
+			productName = autofill;
+			productReference = 17D58DBC29938FB500730594 /* autofill.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		504EC3031FED79650016851F /* App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */;
+			buildPhases = (
+				6634F4EFEBD30273BCE97C65 /* [CP] Check Pods Manifest.lock */,
+				504EC3001FED79650016851F /* Sources */,
+				504EC3011FED79650016851F /* Frameworks */,
+				504EC3021FED79650016851F /* Resources */,
+				9592DBEFFC6D2A0C8D5DEB22 /* [CP] Embed Pods Frameworks */,
+				17001EC8298A56C1000A2848 /* Embed Foundation Extensions */,
+				17DBC429299D1372001ACC9C /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				17D58DC729938FB500730594 /* PBXTargetDependency */,
+				1751AC532A861D5A0020F6FD /* PBXTargetDependency */,
+				179A7C012AA733B900676225 /* PBXTargetDependency */,
+			);
+			name = App;
+			productName = App;
+			productReference = 504EC3041FED79650016851F /* App.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		504EC2FC1FED79650016851F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 0920;
+				TargetAttributes = {
+					1751AC452A861D5A0020F6FD = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					179A7B992AA6FE5000676225 = {
+						CreatedOnToolsVersion = 14.3.1;
+					};
+					17CF84CA2A83671000A89F88 = {
+						CreatedOnToolsVersion = 14.3;
+						LastSwiftMigration = 1500;
+					};
+					17D58DBB29938FB500730594 = {
+						CreatedOnToolsVersion = 14.2;
+						LastSwiftMigration = 1420;
+					};
+					504EC3031FED79650016851F = {
+						CreatedOnToolsVersion = 9.2;
+						LastSwiftMigration = 1420;
+					};
+				};
+			};
+			buildConfigurationList = 504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 504EC2FB1FED79650016851F;
+			productRefGroup = 504EC3051FED79650016851F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				504EC3031FED79650016851F /* App */,
+				17D58DBB29938FB500730594 /* autofill */,
+				17CF84CA2A83671000A89F88 /* TermipassShare */,
+				1751AC452A861D5A0020F6FD /* TermiPassAction */,
+				179A7B992AA6FE5000676225 /* TermiPassVPN */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1751AC442A861D5A0020F6FD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1751AC4A2A861D5A0020F6FD /* Media.xcassets in Resources */,
+				1751AC502A861D5A0020F6FD /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		179A7B982AA6FE5000676225 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17CF84C92A83671000A89F88 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1735074B2B0F1CBB00F36ECA /* Assets.xcassets in Resources */,
+				17CF84D22A83671100A89F88 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17D58DBA29938FB500730594 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1728096A29FA4D9500F0755A /* Assets.xcassets in Resources */,
+				17D58DC329938FB500730594 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		504EC3021FED79650016851F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				504EC3121FED79650016851F /* LaunchScreen.storyboard in Resources */,
+				50B271D11FEDC1A000F3C39B /* public in Resources */,
+				1751AD272A8B65C80020F6FD /* BundleResources.bundle in Resources */,
+				171058752BD0F3E100ADFD5C /* splash@2x.png in Resources */,
+				504EC30F1FED79650016851F /* Assets.xcassets in Resources */,
+				50379B232058CBB4000EE86E /* capacitor.config.json in Resources */,
+				504EC30D1FED79650016851F /* Main.storyboard in Resources */,
+				2FAD9763203C412B000D30F8 /* config.xml in Resources */,
+				175A381229AC9B0C000147E6 /* GoogleService-Info.plist in Resources */,
+				171058762BD0F3E100ADFD5C /* splash.png in Resources */,
+				171058772BD0F3E100ADFD5C /* splash@3x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6634F4EFEBD30273BCE97C65 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-App-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9592DBEFFC6D2A0C8D5DEB22 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-App/Pods-App-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B6DE27DFDAFE0A800A1FFE5D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-autofill-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1751AC422A861D5A0020F6FD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1751AC4D2A861D5A0020F6FD /* ActionViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		179A7B962AA6FE5000676225 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				174981B82BDF526B007AB366 /* TermiPassDarwinNotificationManager.m in Sources */,
+				174981B92BDF526B007AB366 /* TermiPassVpnConfig.swift in Sources */,
+				174981C92BDF549D007AB366 /* PacketTunnelSettingsGenerator.swift in Sources */,
+				174981B72BDF526B007AB366 /* TermiPassLogger.swift in Sources */,
+				174981C52BDF549D007AB366 /* DNSServer.swift in Sources */,
+				174981BC2BDF526B007AB366 /* TermiPassVPNUserDefaults.swift in Sources */,
+				174981C62BDF549D007AB366 /* InterfaceConfiguration.swift in Sources */,
+				174981C82BDF549D007AB366 /* LocalVpnSDKManager.swift in Sources */,
+				174981C72BDF549D007AB366 /* IPAddressRange.swift in Sources */,
+				174981BB2BDF526B007AB366 /* TermiPassVPNTemporaryKey.swift in Sources */,
+				179A7B9E2AA6FE5000676225 /* PacketTunnelProvider.swift in Sources */,
+				174981CA2BDF549D007AB366 /* TunnelConfiguration.swift in Sources */,
+				174981BA2BDF526B007AB366 /* TermiPassVpnManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17CF84C72A83671000A89F88 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				176D42CF2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift in Sources */,
+				17CF84DC2A836ABC00A89F88 /* TermiPassNavigationController.m in Sources */,
+				17CF84CF2A83671100A89F88 /* TermiPassShareViewController.m in Sources */,
+				17812C842A8CCB1C00DBFD54 /* SeafShareFileViewController.m in Sources */,
+				17812C852A8CCB1C00DBFD54 /* SeafShareDirViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		17D58DB829938FB500730594 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				17050DE1299E5C17002DA5FF /* AutofillItemCell.swift in Sources */,
+				1728096729FA44D700F0755A /* UnlockController.swift in Sources */,
+				17D58DD42993C07300730594 /* AutoFillResponse.m in Sources */,
+				17D58DC029938FB500730594 /* CredentialProviderViewController.swift in Sources */,
+				1728096E29FA9D8B00F0755A /* AutofillItemEmptyCell.swift in Sources */,
+				17F3DE24299E01A500694AFD /* AppOrWebIdentifyModel.swift in Sources */,
+				17D58DE22993E43500730594 /* AutofillListController.swift in Sources */,
+				1728096829FA44D700F0755A /* UnlockSuccessController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		504EC3001FED79650016851F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				174981CB2BDF576A007AB366 /* TermiPassDarwinNotificationManager.m in Sources */,
+				174981CC2BDF576A007AB366 /* TermiPassVpnConfig.swift in Sources */,
+				174981CD2BDF576A007AB366 /* TermiPassVpnManager.swift in Sources */,
+				174981CE2BDF576A007AB366 /* TermiPassVPNTemporaryKey.swift in Sources */,
+				174981CF2BDF576A007AB366 /* TermiPassVPNUserDefaults.swift in Sources */,
+				171F160229B1CDA3002C94C5 /* StorageUseriOSPlugin.m in Sources */,
+				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
+				17334E902A8483D000057588 /* DownloadFilePlugin.m in Sources */,
+				17050C1C29EF8C28001CCC17 /* AppNativeInfoPlugin.m in Sources */,
+				17FE23FF29E94695008A46C8 /* ExtensionWebviewPlugin.m in Sources */,
+				17007862295E9C4400CE8118 /* EchoPlugin.swift in Sources */,
+				1768B6F72A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift in Sources */,
+				179A7B5D2AA6FA0000676225 /* TailScalePlugin.m in Sources */,
+				179A7B5F2AA6FA5900676225 /* TailScalePlugin.swift in Sources */,
+				17F436D92967D55700A0B89F /* TwitterLoginPlugin.m in Sources */,
+				1768B6F92A39E83F00B7CE20 /* HookHttpRequestHandler.swift in Sources */,
+				1700786A295E9DFE00CE8118 /* ScanPhotoQRPlugin.swift in Sources */,
+				171F160029B1CD61002C94C5 /* StorageUseriOSPlugin.swift in Sources */,
+				17D58DD92993C4D900730594 /* AppSettingsPlugin.m in Sources */,
+				17D58DE72994CF3E00730594 /* StorageiOSPlugin.m in Sources */,
+				1700786C295EA42900CE8118 /* ScanPhotoQRPlugin.m in Sources */,
+				1728094629F9171500F0755A /* AutofilliOSPlugin.swift in Sources */,
+				17050C1A29EEDAE9001CCC17 /* AppNativeInfoPlugin.swift in Sources */,
+				17D58DE92994CF8C00730594 /* StorageiOSPlugin.swift in Sources */,
+				17F436D729670EFB00A0B89F /* TwitterOauthLoginController.swift in Sources */,
+				17D58DDB2993C51500730594 /* AppSettingsPlugin.swift in Sources */,
+				1768B6FB2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m in Sources */,
+				1728094829F917F200F0755A /* AutofilliOSPlugin.m in Sources */,
+				17FE30392A8500E200137F37 /* ProxyInfoPlugin.swift in Sources */,
+				17F436D529670D8E00A0B89F /* TwitterLoginPlugin.swift in Sources */,
+				17334E922A8483DE00057588 /* DownloadFilePlugin.swift in Sources */,
+				17007865295E9C7300CE8118 /* EchoPlugin.m in Sources */,
+				17FE240129E946F0008A46C8 /* ExtensionWebviewPlugin.swift in Sources */,
+				17FE303B2A85010500137F37 /* ProxyInfoPlugin.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1751AC532A861D5A0020F6FD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1751AC452A861D5A0020F6FD /* TermiPassAction */;
+			targetProxy = 1751AC522A861D5A0020F6FD /* PBXContainerItemProxy */;
+		};
+		179A7C012AA733B900676225 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 179A7B992AA6FE5000676225 /* TermiPassVPN */;
+			targetProxy = 179A7C002AA733B900676225 /* PBXContainerItemProxy */;
+		};
+		17D58DC729938FB500730594 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 17D58DBB29938FB500730594 /* autofill */;
+			targetProxy = 17D58DC629938FB500730594 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1751AC4E2A861D5A0020F6FD /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1751AC4F2A861D5A0020F6FD /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		17CF84D02A83671100A89F88 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				17CF84D12A83671100A89F88 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		17D58DC129938FB500730594 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				17D58DC229938FB500730594 /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+		504EC30B1FED79650016851F /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				504EC30C1FED79650016851F /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		504EC3101FED79650016851F /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				504EC3111FED79650016851F /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1751AC562A861D5A0020F6FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = TermiPassAction/TermiPassAction.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermiPassAction/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPassAction;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.TermiPassAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1751AC572A861D5A0020F6FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = TermiPassAction/TermiPassAction.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermiPassAction/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPassAction;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.TermiPassAction;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		179A7BA52AA6FE5100676225 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = TermiPassVPN/TermiPassVPN.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermiPassVPN/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPassVPN;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.TermiPassVPN;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TermiPassVPN/TermiPassVPN-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		179A7BA62AA6FE5100676225 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = TermiPassVPN/TermiPassVPN.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermiPassVPN/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPassVPN;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.TermiPassVPN;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TermiPassVPN/TermiPassVPN-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		17CF84D72A83671100A89F88 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = TermipassShare/TermipassShare.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermipassShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermipassShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.TermipassShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TermipassShare/TermipassShare-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		17CF84D82A83671100A89F88 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = TermipassShare/TermipassShare.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TermipassShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermipassShare;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.TermipassShare;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "TermipassShare/TermipassShare-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		17D58DCA29938FB500730594 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6E4986BBACB1C88AB6A805E8 /* Pods-autofill.debug.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = autofill/autofill.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = autofill/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPass;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.autofill;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "autofill/autofill-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		17D58DCB29938FB500730594 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 44288DFA4C963E07AEAE38F9 /* Pods-autofill.release.xcconfig */;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CODE_SIGN_ENTITLEMENTS = autofill/autofillRelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 12;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = autofill/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPass;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.1.7;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta.autofill;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "autofill/autofill-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		504EC3141FED79650016851F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		504EC3151FED79650016851F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		504EC3171FED79650016851F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FC68EB0AF532CFC21C3344DD /* Pods-App.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = App/App.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPass;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.1;
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" \"-DDEBUG\"";
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		504EC3181FED79650016851F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = AF51FD2D460BCFE21FA515B2 /* Pods-App.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = App/AppRelease.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 14;
+				DEVELOPMENT_TEAM = GBAD4ZL25F;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
+				INFOPLIST_FILE = App/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TermiPass;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.2.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.terminus.planeta;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "App/App-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1751AC552A861D5A0020F6FD /* Build configuration list for PBXNativeTarget "TermiPassAction" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1751AC562A861D5A0020F6FD /* Debug */,
+				1751AC572A861D5A0020F6FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		179A7BA42AA6FE5100676225 /* Build configuration list for PBXNativeTarget "TermiPassVPN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				179A7BA52AA6FE5100676225 /* Debug */,
+				179A7BA62AA6FE5100676225 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		17CF84D92A83671100A89F88 /* Build configuration list for PBXNativeTarget "TermipassShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17CF84D72A83671100A89F88 /* Debug */,
+				17CF84D82A83671100A89F88 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		17D58DC929938FB500730594 /* Build configuration list for PBXNativeTarget "autofill" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				17D58DCA29938FB500730594 /* Debug */,
+				17D58DCB29938FB500730594 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		504EC2FF1FED79650016851F /* Build configuration list for PBXProject "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				504EC3141FED79650016851F /* Debug */,
+				504EC3151FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		504EC3161FED79650016851F /* Build configuration list for PBXNativeTarget "App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				504EC3171FED79650016851F /* Debug */,
+				504EC3181FED79650016851F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 504EC2FC1FED79650016851F /* Project object */;
+}

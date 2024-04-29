@@ -1,0 +1,51 @@
+FROM node:16.13.1-alpine as server_dist
+
+WORKDIR /server_dist
+
+# Only copy over the packages files of all required packages.
+# This will ensure that we don't have to install all dependencies
+# again if any source files change.
+COPY package*.json lerna.json tsconfig.json ./
+COPY packages/sign2/package*.json ./packages/sign/
+COPY packages/sdk/package*.json ./packages/sdk/
+# Install dependencies and bootstrap packages
+RUN npm ci --unsafe-perm
+
+# Now copy over source files and assets
+COPY packages/sign2/src ./packages/sign/src
+COPY packages/sdk/src ./packages/sdk/src
+COPY packages/sign2/tsconfig.json ./packages/sign/
+COPY packages/sdk/tsconfig.json ./packages/sdk/
+COPY assets/ ./assets
+COPY packages/sign2/webpack.config.js ./packages/sign/webpack.config.js
+
+RUN npm run sign:build
+
+
+
+FROM node:16.13.1 as server_dist2
+
+WORKDIR /server_dist2/packages/sign
+
+COPY --from=server_dist /server_dist/packages/sign/dist/package*.json .
+
+RUN npm install
+
+COPY --from=server_dist /server_dist/packages/sign/dist/ .
+
+
+
+FROM node:16.13.1-buster-slim
+
+EXPOSE 5020
+ENV PL_ASSETS_DIR=/assets
+#ENV PL_ATTACHMENTS_DIR=/attachments
+ENV PL_SERVER_CLIENT_URL=http://localhost
+
+WORKDIR /padloc/packages/sign
+
+COPY --from=server_dist2 /server_dist2/packages/sign/ .
+
+ENTRYPOINT ["npm", "run"]
+
+CMD [ "server"]

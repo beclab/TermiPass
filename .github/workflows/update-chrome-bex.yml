@@ -1,0 +1,71 @@
+name: Update Chrome Extension
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches:
+            - "build/release"
+        tags:
+          - 'v*'
+
+jobs:
+    update_chrome_extension:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out the repo
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v1
+              with:
+                node-version: '16.13'
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v1
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+            
+            - name: get latest tag
+              uses: "WyriHaximus/github-action-get-previous-tag@v1"
+              id: get-latest-tag
+              with:
+                fallback: latest
+
+            - name: Cache
+              uses: actions/cache@v1
+              with:
+                path: ~/.npm
+                key: ${{ runner.os }}-node-${{ hashFiles('**/packagge-lock.json')}}
+                restore-keys: |
+                    ${{ runner.os }}-node-
+
+            - name: Install
+              run: npm i -g @quasar/cli
+            - run: npm install
+
+            - name: Build
+              run: cd packages/app/;PLATFORM=BEX quasar build -m bex
+
+            - name: Show path
+              run: ls -a packages/app/dist/bex/Packaged/chrome/
+
+            - name: Release Chrome extension app
+              uses: djnicholson/release-action@v2.11
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                release-name: TermiPass(chrome).zip Release
+                tag-name: ${{ steps.get-latest-tag.outputs.tag }}
+                asset-name: TermiPass(chrome).zip
+                file: packages/app/dist/bex/Packaged/chrome/vault.zip
+
+#            - name: Release firefox extension app
+#              uses: djnicholson/release-action@v2.11
+#              with:
+#                token: ${{ secrets.GITHUB_TOKEN }}
+#                release-name: TermiPass(fireFox).zip
+#                tag-name: ${{ steps.get-latest-tag.outputs.tag }}
+#                asset-name: TermiPass(fireFox).zip
+#                file: packages/app/dist/bex/Packaged/firefox/vault.zip

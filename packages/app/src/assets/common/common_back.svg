@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>返回@2x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="web_插件" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="资产详情" transform="translate(-14.000000, -25.000000)" fill-rule="nonzero">
+            <g id="tou">
+                <g id="返回" transform="translate(14.000000, 15.000000)">
+                    <g transform="translate(0.000000, 10.000000)">
+                        <rect id="矩形" fill="#000000" opacity="0" x="0" y="0" width="24" height="24"></rect>
+                        <polygon id="路径" fill="#18214F" points="22.0003125 12.9932812 21.9996094 10.9933594 5.701875 10.9994531 9.73101562 6.68226562 8.26898437 5.31773437 2.03203125 12 8.26898438 18.6822656 9.73101563 17.3177344 5.70070313 12.999375"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

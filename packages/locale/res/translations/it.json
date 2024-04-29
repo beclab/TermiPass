@@ -1,0 +1,2478 @@
+[
+  [
+    "OK",
+    "OK"
+  ],
+  [
+    "o f f l i n e",
+    "o f f l i n e"
+  ],
+  [
+    "It looks like the app cannot connect to the {0} servers right now, probably due to a missing internet connection. You can still access your vaults and even create or edit Vault Items but your changes won't be synchronized until you're back online.",
+    "Sembra che l'applicazione non riesca a connettersi ai server {0} al momento, probabilmente a causa della mancanza di connessione di rete. Puoi ancora accedere ai tuoi archivi ed anche creare o modificare elementi ma le tue modifiche non saranno sincronizzate fino a che non tornerai online."
+  ],
+  [
+    "You're Offline",
+    "Sei offline"
+  ],
+  [
+    "Biometric unlock is not supported on this device.",
+    "Il riconoscimento biometrico non è supportato su questo dispositivo"
+  ],
+  [
+    "Device Not Supported",
+    "Dispositivo Non Supportato"
+  ],
+  [
+    "Do you want to enable biometric unlock for this device?",
+    "Vuoi attivare il riconoscimento biometrico su questo dispositivo?"
+  ],
+  [
+    "Setup",
+    "Installazione"
+  ],
+  [
+    "Cancel",
+    "Annulla"
+  ],
+  [
+    "Biometric Unlock",
+    "Riconoscimento biometrico"
+  ],
+  [
+    "Biometric authentication failed! Canceling Setup. (Reason: {0})",
+    "Autenticazione biometrica fallita! Annullamento Installazione. (Motivo: {0})"
+  ],
+  [
+    "Setup Failed",
+    "Installazione fallita"
+  ],
+  [
+    "Please enter your master password!",
+    "Per favore inserisci la tua password Principale!"
+  ],
+  [
+    "Enter Master Password",
+    "Inserisci password Principale"
+  ],
+  [
+    "Wrong password! Please try again!",
+    "Credenziali errate! Riprova ancora!"
+  ],
+  [
+    "Biometric unlock activated successfully!",
+    "Riconoscimento biometrico eseguito con successo!"
+  ],
+  [
+    "Are you sure you want to delete this attachment?",
+    "Sei sicuro di voler eliminare questo allegato?"
+  ],
+  [
+    "Delete",
+    "Cancella"
+  ],
+  [
+    "Delete Attachment",
+    "Cancella allegato"
+  ],
+  [
+    "Download failed!",
+    "Download fallito!"
+  ],
+  [
+    "Do you want to save this file to your disk? WARNING: Doing this will leave the file exposed and unprotected on your harddrive!",
+    "Vuoi salvare questo file sul tuo disco? ATTENZIONE: in questo modo il file rimarrà sospeso e non protetto sul tuo hard disk!"
+  ],
+  [
+    "Save",
+    "Salva"
+  ],
+  [
+    "Save To Disk",
+    "Salva su disco"
+  ],
+  [
+    "Edit Name",
+    "Modifica nome"
+  ],
+  [
+    "Attachment Name",
+    "Nome allegato"
+  ],
+  [
+    "Please enter an attachment name!",
+    "Inserisci un nome per l'allegato!"
+  ],
+  [
+    "Unknown File Type",
+    "Tipo file non supportato"
+  ],
+  [
+    "downloading... {0}/{1}",
+    "download in corso... {0}/{1}"
+  ],
+  [
+    "No preview available.",
+    "Anteprima non disponibile"
+  ],
+  [
+    "Enter Attachment Name",
+    "Inserisci Nome Allegato"
+  ],
+  [
+    "Unnamed",
+    "Senza nome"
+  ],
+  [
+    "View",
+    "Visualizza"
+  ],
+  [
+    "Download",
+    "Download"
+  ],
+  [
+    "Email Address",
+    "Indirizzo Email"
+  ],
+  [
+    "Continue",
+    "Continua"
+  ],
+  [
+    "Authentication Failed",
+    "Autenticazione Fallita"
+  ],
+  [
+    "Try Again",
+    "Prova ancora"
+  ],
+  [
+    "Try Another Method",
+    "Prova un Altro Metodo"
+  ],
+  [
+    "Please enter a valid email address!",
+    "Inserisci un indirizzo email valido!"
+  ],
+  [
+    "Copied To Clipboard",
+    "Copiato negli Appunti"
+  ],
+  [
+    "More",
+    "Altro"
+  ],
+  [
+    "Please enter at least one email address!",
+    "Inserisci almeno un indirizzo email!"
+  ],
+  [
+    "You have entered too many email addresses! Please delete some before submitting!",
+    "Hai inserito troppi indirizzi e-mail! Si prega di eliminarne qualcuno prima di continuare!"
+  ],
+  [
+    "Some of the emails you entered appear to be invalid!",
+    "Alcune delle email che hai inserito sembrano non valide!"
+  ],
+  [
+    "Something went wrong! Please try again later!",
+    "Qualcosa è andato storto! Si prega di riprovare più tardi!"
+  ],
+  [
+    "Invite New Members",
+    "Invita nuovi membri"
+  ],
+  [
+    "Please enter up to {0} email addresses of the persons you would like to invite, separated by spaces or commas!",
+    "Inserisci fino a {0} indirizzi email delle persone che desideri invitare, separati da spazi o virgole!"
+  ],
+  [
+    "Enter Email Address",
+    "Inserisci l'indirizzo email"
+  ],
+  [
+    "Submit",
+    "Invia"
+  ],
+  [
+    "New Vault Item",
+    "Nuovo elemento"
+  ],
+  [
+    "Select Vault",
+    "Seleziona Archivio"
+  ],
+  [
+    "What kind of item you would like to add?",
+    "Che tipo di elementi vuoi aggiungere"
+  ],
+  [
+    "Create",
+    "Crea"
+  ],
+  [
+    "Current Tab",
+    "Scheda Corrente"
+  ],
+  [
+    "Username",
+    "Username"
+  ],
+  [
+    "Password",
+    "Password"
+  ],
+  [
+    "URL",
+    "URL"
+  ],
+  [
+    "Please enter an organization name!",
+    "Inserisci il nome di un'organizzazione!"
+  ],
+  [
+    "Something went wrong. Please try again later!",
+    "Qualcosa è andato storto. Riprova più tardi!"
+  ],
+  [
+    "Create Organization",
+    "Creare Organizzazione"
+  ],
+  [
+    "Organization Name",
+    "Nome dell'organizzazione"
+  ],
+  [
+    "All Vaults",
+    "Tutti gli Archivi"
+  ],
+  [
+    "Export Data",
+    "Esporta dati"
+  ],
+  [
+    "Target Vault",
+    "Archivio Selezionato"
+  ],
+  [
+    "Format",
+    "Formatta"
+  ],
+  [
+    "WARNING: Exporting to CSV format will save your data without encryption of any kind which means it can be read by anyone. We strongly recommend exporting your data as a secure, encrypted file, instead!",
+    ""
+  ],
+  [
+    "Export {0} Items",
+    "Esporta {0} Elementi"
+  ],
+  [
+    "Please choose a password to protect this backup with!",
+    "Si prega di scegliere una password per proteggere questo backup!"
+  ],
+  [
+    "Choose Password",
+    "Scegli una password"
+  ],
+  [
+    "Please choose a password!",
+    "Si prega di scegliere una password!"
+  ],
+  [
+    "Please repeat the password!",
+    "Si prega di ripetere la password!"
+  ],
+  [
+    "Password not repeated correctly!",
+    "Password non ripetuta correttamente!"
+  ],
+  [
+    "Choose A Field Type",
+    "Scegli un tipo di campo"
+  ],
+  [
+    "What kind of field you would like to add?",
+    "Che tipo di campo vorresti aggiungere?"
+  ],
+  [
+    "Expand",
+    "Espandi"
+  ],
+  [
+    "Copy",
+    "Copia"
+  ],
+  [
+    "Edit",
+    "Modifica"
+  ],
+  [
+    "empty",
+    "vuoto"
+  ],
+  [
+    "Enter Secret",
+    "Inserisci chiave"
+  ],
+  [
+    "Scan QR Code",
+    "Scansiona codice QR"
+  ],
+  [
+    "Enter Password",
+    "Inserisci password"
+  ],
+  [
+    "Enter Value Here",
+    "Inserisci valore qui"
+  ],
+  [
+    "Enter Field Name",
+    "Inserisci nome campo"
+  ],
+  [
+    "Generate Password",
+    "Genera Password"
+  ],
+  [
+    "Use",
+    "Usa"
+  ],
+  [
+    "Discard",
+    "Scarta"
+  ],
+  [
+    "Password Generator",
+    "Generatore Password"
+  ],
+  [
+    "Dash",
+    "Trattino"
+  ],
+  [
+    "Underscore",
+    "Underscore"
+  ],
+  [
+    "Slash",
+    "Slash"
+  ],
+  [
+    "Space",
+    "Spazio"
+  ],
+  [
+    "passphrase",
+    "passphrase"
+  ],
+  [
+    "random string",
+    "stringa casuale"
+  ],
+  [
+    "Word Separator",
+    "Separatore di caratteri"
+  ],
+  [
+    "Language",
+    "Lingua"
+  ],
+  [
+    "words",
+    "parole"
+  ],
+  [
+    "length",
+    "lunghezza"
+  ],
+  [
+    "Please enter a Group name!",
+    "Si prega di inserire un nome per il gruppo!"
+  ],
+  [
+    "Group name required!",
+    "Nome gruppo obbligatorio!"
+  ],
+  [
+    "Are you sure you want to remove this group from this organization?",
+    "Sei sicuro di voler rimuovere questo gruppo da questa organizzazione?"
+  ],
+  [
+    "Remove",
+    "Rimuovi"
+  ],
+  [
+    "Remove Group",
+    "Rimuovi Gruppo"
+  ],
+  [
+    "No group selected.",
+    "Nessun gruppo selezionato."
+  ],
+  [
+    "Duplicate",
+    "Duplica"
+  ],
+  [
+    "Members",
+    "Membri"
+  ],
+  [
+    "No more Members available",
+    "Nessun membro disponibile"
+  ],
+  [
+    "Remove Member",
+    "Rimuovi Membro"
+  ],
+  [
+    "This group does not have any members yet.",
+    "Questo gruppo non ha ancora membri."
+  ],
+  [
+    "Vaults",
+    "Archivi"
+  ],
+  [
+    "No more Vaults available",
+    "Nessun altro archivio disponibile"
+  ],
+  [
+    "Remove Vault",
+    "Rimuovi Archivio"
+  ],
+  [
+    "Write Permission",
+    "Permessi di Scrittura"
+  ],
+  [
+    "Allow Editing",
+    "Abilita Modifica"
+  ],
+  [
+    "This group does not have access to any vaults yet.",
+    "Questo gruppo non ha accesso ad alcun archivio ancora."
+  ],
+  [
+    "by {0}",
+    "di {0}"
+  ],
+  [
+    "Name",
+    "Nome"
+  ],
+  [
+    "<Unnamed>",
+    ""
+  ],
+  [
+    "Restore",
+    ""
+  ],
+  [
+    "Tags",
+    "Etichette"
+  ],
+  [
+    "None",
+    "Nessuno"
+  ],
+  [
+    "Fields",
+    "Campi"
+  ],
+  [
+    "restore",
+    ""
+  ],
+  [
+    "Are you sure you want to restore your item to this version?",
+    ""
+  ],
+  [
+    "Restore Version",
+    ""
+  ],
+  [
+    "Import Data",
+    "Importa Dati"
+  ],
+  [
+    "Choose the correct column names and types for each column below.",
+    "Scegli il nome ed il tipo corretti per ogni colonna di seguito."
+  ],
+  [
+    "First row contains field names",
+    "La prima riga contiene i nomi dei campi"
+  ],
+  [
+    "Name Column",
+    "Colonna Nome"
+  ],
+  [
+    "Tags Column",
+    "Colonna Etichette"
+  ],
+  [
+    "Column {0}",
+    "{0} Colonna"
+  ],
+  [
+    "Field Name",
+    "Nome campo"
+  ],
+  [
+    "Field Type",
+    "Tipo campo"
+  ],
+  [
+    "Import {0} Items",
+    "Importa {0} elementi"
+  ],
+  [
+    "This file is protected by a password.",
+    "Questo file è protetto da una password."
+  ],
+  [
+    "Wrong Password",
+    "Password Sbagliata"
+  ],
+  [
+    "Successfully imported {0} items.",
+    "{0} Elementi importati con successo."
+  ],
+  [
+    "expired",
+    "scaduto"
+  ],
+  [
+    "accepted",
+    "accettato"
+  ],
+  [
+    "{0}",
+    "{0}"
+  ],
+  [
+    "Please enter a confirmation code!",
+    "Inserisci un codice di conferma!"
+  ],
+  [
+    "You have successfully accepted the invite. You'll be notified once you've been granted access.",
+    "Hai accettato con successo l'invito. Verrai notificato una volta che ti sarà stato concesso l'accesso."
+  ],
+  [
+    "Invite Accepted",
+    "Invito Accettato"
+  ],
+  [
+    "Wrong confirmation code. Please try again!",
+    "Codice di conferma errato. Riprova!"
+  ],
+  [
+    "Are you sure you want to dismiss this invite?",
+    "Sei sicuro di voler ignorare questo invito?"
+  ],
+  [
+    "Dismiss",
+    "Ignora"
+  ],
+  [
+    "Dismiss Invite",
+    "Ignora Invito"
+  ],
+  [
+    "Invite",
+    "Invita"
+  ],
+  [
+    "Invite not found.",
+    "Invito non trovato."
+  ],
+  [
+    "This invite has expired",
+    "Questo invito è scaduto"
+  ],
+  [
+    "Accepted",
+    "Accettato"
+  ],
+  [
+    "expires {0}",
+    "scade {0}"
+  ],
+  [
+    "{0} requested to confirm your membership with",
+    "{0} ha richiesto di confermare la tua adesione a"
+  ],
+  [
+    "{0} invited to join",
+    "{0} ti ha invitato ad unirti"
+  ],
+  [
+    "You have already accepted this invite!",
+    "Hai già accettato questo invito!"
+  ],
+  [
+    "This invite has expired!",
+    "Questo invito è scaduto!"
+  ],
+  [
+    "Please enter the confirmation code provided to you by the organization owner!",
+    "Si prega di inserire il codice di conferma che è stato fornito dal proprietario dell'organizzazione!"
+  ],
+  [
+    "Confirmation Code",
+    "Codice di conferma"
+  ],
+  [
+    "Are you sure you want to delete this invite?",
+    "Sei sicuro di voler cancellare questo invito?"
+  ],
+  [
+    "Delete Invite",
+    "Cancella Invito"
+  ],
+  [
+    "{0} was successfully added to your organization!",
+    "{0} è stato aggiunto con successo alla tua organizzazione!"
+  ],
+  [
+    "No invite selected.",
+    "Nessun invito selezionato."
+  ],
+  [
+    "They will also need the following confirmation code, which you should communicate to them separately:",
+    "Avranno anche bisogno del seguente codice di conferma, che si dovrebbe comunicare loro separatamente:"
+  ],
+  [
+    "Resend",
+    "Inviare nuovamente"
+  ],
+  [
+    "No item selected.",
+    "Nessun elemento selezionato."
+  ],
+  [
+    "Enter Item Name",
+    "Inserisci il nome dell'elemento"
+  ],
+  [
+    "Favorite",
+    "Preferito"
+  ],
+  [
+    "Field",
+    "Campo"
+  ],
+  [
+    "More Options",
+    "Più Opzioni"
+  ],
+  [
+    "Move To Vault ...",
+    "Sposta nell'archivio ..."
+  ],
+  [
+    "Delete Item",
+    "Cancella Elemento"
+  ],
+  [
+    "tags",
+    "etichette"
+  ],
+  [
+    "Add Field",
+    "Aggiungi Campo"
+  ],
+  [
+    "Attachments",
+    "Allegati"
+  ],
+  [
+    "Click or drag files here to add an attachment!",
+    "Clicca o trascina i file qui per aggiungere un allegato!"
+  ],
+  [
+    "Expiration",
+    ""
+  ],
+  [
+    "Expire",
+    ""
+  ],
+  [
+    "days after being updated.",
+    ""
+  ],
+  [
+    "Remove Expiration",
+    ""
+  ],
+  [
+    "Expires",
+    "Scadenza"
+  ],
+  [
+    "Expired",
+    ""
+  ],
+  [
+    "Add Expiration",
+    ""
+  ],
+  [
+    "History",
+    ""
+  ],
+  [
+    "Current Version",
+    ""
+  ],
+  [
+    "Are you sure you want to remove this field?",
+    "Sei sicuro di voler rimuovere questo campo?"
+  ],
+  [
+    "Remove Field",
+    "Rimuovi Campo"
+  ],
+  [
+    "Are you sure you want to delete this item?",
+    "Sei sicuro di voler eliminare questo elemento?"
+  ],
+  [
+    "Delete Vault Item",
+    "Cancella Elemento"
+  ],
+  [
+    "Items with attachments cannot be moved!",
+    "Gli elementi con allegati non possono essere spostati!"
+  ],
+  [
+    "The selected file is too large! Only files of up to 5 MB are supported.",
+    "Il file selezionato è troppo grande! Sono supportati solo file fino a 5 MB."
+  ],
+  [
+    "File uploaded successfully!",
+    "File caricato con successo!"
+  ],
+  [
+    "New Item",
+    "Nuovo Elemento"
+  ],
+  [
+    "copied",
+    "copiato"
+  ],
+  [
+    "No Fields",
+    "Nessun campo"
+  ],
+  [
+    "This item has no fields.",
+    "Questo elemento non ha campi."
+  ],
+  [
+    "Your search did not match any items.",
+    "La ricerca non corrisponde a nessun elemento."
+  ],
+  [
+    "This vault does not have any items yet.",
+    "Questo archivio non ha ancora elementi."
+  ],
+  [
+    "You don't have any attachments yet.",
+    "Non hai ancora nessun allegato."
+  ],
+  [
+    "You don't have any favorites yet.",
+    "Non hai ancora nessun preferito."
+  ],
+  [
+    "You don't have any recently used items!",
+    "Non hai elementi usati di recente!"
+  ],
+  [
+    "You don't have any items yet.",
+    "Non hai ancora nessun elementi."
+  ],
+  [
+    "Favorites",
+    "Preferiti"
+  ],
+  [
+    "Recently Used",
+    "Utilizzati di recente"
+  ],
+  [
+    "Type To Search",
+    "Digita per ricercare"
+  ],
+  [
+    "{0} items selected",
+    "{0} elementi selezionati"
+  ],
+  [
+    "Some items in your selection are from Vaults you don't have write access to and cannot be deleted. Do you want to proceed deleting the other items?",
+    "Alcuni elementi nella tua selezione provengono da Archivi a cui non hai accesso in scrittura e non possono essere eliminati. Vuoi procedere con l'eliminazione degli altri elementi?"
+  ],
+  [
+    "Yes",
+    "Si"
+  ],
+  [
+    "No",
+    "No"
+  ],
+  [
+    "Are you sure you want to delete these items? This action can not be undone!",
+    "Sei sicuro di voler eliminare questi elementi? Questa azione non può essere annullata!"
+  ],
+  [
+    "Delete {0} Items",
+    "Elimina {0} Elementi"
+  ],
+  [
+    "Some items in your selection have attachments and cannot be moved. Do you want to proceed moving the other items?",
+    "Alcuni elementi nella selezione hanno allegati e non possono essere spostati. Vuoi procedere spostando gli altri elementi?"
+  ],
+  [
+    "Some items in your selection are from Vaults you don't have write access to and cannot be moved. Do you want to proceed moving the other items?",
+    "Alcuni elementi della tua selezione provengono da Archivi a cui non hai accesso in scrittura e non possono essere spostati. Vuoi procedere spostando gli altri elementi?"
+  ],
+  [
+    "An account with this email address does not exist!",
+    "Un account con questo indirizzo email non esiste!"
+  ],
+  [
+    "Sign Up",
+    "Registrati"
+  ],
+  [
+    "Do you want to add this device as a trusted device?",
+    "Vuoi aggiungere questo dispositivo come dispositivo sicuro?"
+  ],
+  [
+    "Add Trusted Device",
+    "Aggiungi Dispositivo Sicuro"
+  ],
+  [
+    "We failed to verify your email address. Please start over!",
+    "Non siamo riusciti a verificare il tuo indirizzo email. Ricomincia da capo!"
+  ],
+  [
+    "Wrong master password. Please try again!",
+    "Password principale errata. Riprova!"
+  ],
+  [
+    "Can't remember your master password?",
+    "Non ricordi la tua password principale?"
+  ],
+  [
+    "Recover Account",
+    "Recupera Account"
+  ],
+  [
+    "We failed to verify your session. Please start over!",
+    ""
+  ],
+  [
+    "We recommend using a randomly generated password that is both strong and easy to remember.",
+    "Si consiglia di utilizzare una password generata casualmente che sia forte e facile da ricordare."
+  ],
+  [
+    "Keep This One",
+    "Tengo questa"
+  ],
+  [
+    "Generate Another",
+    "Genera un'altra"
+  ],
+  [
+    "Choose My Own",
+    "Scelgo la mia"
+  ],
+  [
+    "Want A Different Master Password?",
+    "Vuoi una password principale differente?"
+  ],
+  [
+    "Choose Own Master Password",
+    "Scelgi la tua password principale"
+  ],
+  [
+    "The password you entered is weak which makes it easier for attackers to break the encryption used to protect your data. Try to use a longer password or include a variation of uppercase, lowercase and special characters as well as numbers!",
+    "La password inserita è debole, il che rende più facile per gli aggressori annullare la crittografia utilizzata per proteggere i dati. Prova a usare una password più lunga o includi una variazione di caratteri maiuscoli, minuscoli e speciali oltre ai numeri!"
+  ],
+  [
+    "Choose Different Password",
+    "Scegli una password diversa"
+  ],
+  [
+    "Use Anyway",
+    "Usa comunque"
+  ],
+  [
+    "WARNING: Weak Password",
+    "ATTENZIONE: Password debole"
+  ],
+  [
+    "You didn't repeat your master password correctly. Try again!",
+    "Non hai ripetuto correttamente la password principale. Riprova!"
+  ],
+  [
+    "Server error.",
+    "Errore Server."
+  ],
+  [
+    "An account with this email address already exists!",
+    "Un account con questo indirizzo email esiste già!"
+  ],
+  [
+    "Login",
+    "Login"
+  ],
+  [
+    "Change Email",
+    "Cambia email"
+  ],
+  [
+    "Account Exists",
+    "L'account esiste"
+  ],
+  [
+    "You don't have a Padloc 4 account yet but we've found an account from an older version. Would you like to migrate your account to Padloc 4 now?",
+    "Non hai ancora un account Padloc 4 ma abbiamo trovato un account da una versione precedente. Vuoi migrare il tuo account su Padloc 4 adesso?"
+  ],
+  [
+    "Migrate",
+    "Migra"
+  ],
+  [
+    "Learn More",
+    "Scopri di più"
+  ],
+  [
+    "Migrating Account",
+    "Migrazione Account"
+  ],
+  [
+    "Your account and all associated data was migrated successfully! Do you want to delete your old account now?",
+    "Il tuo account e tutti i dati associati sono stati migrati con successo! Vuoi eliminare il tuo vecchio account ora?"
+  ],
+  [
+    "Delete Legacy Account",
+    "Elimina vecchio account"
+  ],
+  [
+    "All done! Please note that you won't be able to access your Padloc 4 account with older versions of the app, so please make sure you have the latest version installed on all your devices! (You can find download links for all platforms at https://padloc.app/downloads/). Enjoy using Padloc 4!",
+    "Tutto fatto! Tieni presente che non potrai accedere al tuo account Padloc 4 con versioni precedenti dell'app, quindi assicurati di avere l'ultima versione installata su tutti i tuoi dispositivi! (Puoi trovare i link per il download di tutte le piattaforme su https:/padloc.app/downloads/). Buon divertimento con Padloc 4!"
+  ],
+  [
+    "Migration Complete",
+    "Migrazione Completa"
+  ],
+  [
+    "Unfortunately we could not complete migration of your data.",
+    "Purtroppo non siamo riusciti a completare la migrazione dei tuoi dati."
+  ],
+  [
+    "Admin Portal",
+    ""
+  ],
+  [
+    "has invited you to join their organization",
+    "ti ha invitato ad unirti alla loro organizzazione"
+  ],
+  [
+    "Welcome! Please enter your email address to continue.",
+    "Benvenuto! Inserisci il tuo indirizzo email per continuare."
+  ],
+  [
+    "Your Name (Optional)",
+    "Il tuo Nome (Opzionale)"
+  ],
+  [
+    "Create Account",
+    "Crea Account"
+  ],
+  [
+    "Master Password",
+    "Password Principale"
+  ],
+  [
+    "Say hello to your",
+    "Dì ciao al tuo"
+  ],
+  [
+    "[Tap To Reveal]",
+    "[Tocca per rivelare]"
+  ],
+  [
+    "[Hover To Reveal]",
+    "[Passa col mouse per rivelare]"
+  ],
+  [
+    "This random passphrase was generated just for you and is designed to be both secure and easy to remember.",
+    "Questa passphrase casuale è stata generata solo per te ed è progettata per essere sicura e facile da ricordare."
+  ],
+  [
+    "Don't like it?",
+    "Non ti piace?"
+  ],
+  [
+    "Try Another One",
+    "Prova un'altra"
+  ],
+  [
+    "Choose Your Own",
+    "Scegli la tua"
+  ],
+  [
+    "Change Name",
+    "Cambia Nome"
+  ],
+  [
+    "Repeat Master Password",
+    "Ripetere la password principale"
+  ],
+  [
+    "Your master password is the last password you'll ever have to remember! Please memorize it and never reveal it to anyone - not even us! We recommend writing it down on a piece of paper and storing it somewhere safe, at least until you have it safely memorized.",
+    "La tua master password è l'ultima password che dovrai mai ricordare! Per favore memorizzala e non rivelarla a nessuno - nemmeno a noi! Si consiglia di scriverla su un pezzo di carta e conservarla in un luogo sicuro, almeno fino a quando non l'hai memorizzata bene."
+  ],
+  [
+    "Change Password",
+    "Cambia Password"
+  ],
+  [
+    "All set!",
+    "Tutto pronto!"
+  ],
+  [
+    "Your account was created successfully. Enjoy using {0}!",
+    "Il tuo account è stato creato con successo. Goditi l'utilizzo di {0}!"
+  ],
+  [
+    "Get Started",
+    "Inizia"
+  ],
+  [
+    "Owner",
+    "Proprietario"
+  ],
+  [
+    "Admin",
+    "Amministratore"
+  ],
+  [
+    "Provisioned",
+    "Fornito"
+  ],
+  [
+    "Suspended",
+    "Sospeso"
+  ],
+  [
+    "Something went wrong while processing your request. Please try again later!",
+    "Qualcosa è andato storto durante l'elaborazione della richiesta. Riprova più tardi!"
+  ],
+  [
+    "Are you sure you want to remove this member from this organization?",
+    "Sei sicuro di voler rimuovere questo membro da questa organizzazione?"
+  ],
+  [
+    "Are you sure you want to make this member an admin? Admins can manage vaults, groups and permissions.",
+    "Vuoi davvero che questo membro diventi un amministratore? Gli amministratori possono gestire archivi, gruppi e autorizzazioni."
+  ],
+  [
+    "Make Admin",
+    "Rendi Amministratore"
+  ],
+  [
+    "Are you sure you want to transfer this organization's ownership to {0}?",
+    "Sei sicuro di voler trasferire la proprietà di queste organizzazioni a {0}?"
+  ],
+  [
+    "Make Owner",
+    "Rendi proprietario"
+  ],
+  [
+    "The organization ownership was transferred successfully!",
+    "La proprietà di queste organizzazioni è stata trasferita con successo!"
+  ],
+  [
+    "Are you sure you want to remove this member as admin?",
+    "Sei sicuro di voler rimuovere questo membro come amministratore?"
+  ],
+  [
+    "Remove Admin",
+    "Rimuovi Amministratore"
+  ],
+  [
+    "Are you sure you want to suspend this member?",
+    "Sei sicuro di voler sospendere questo membro?"
+  ],
+  [
+    "Suspend Member",
+    "Sospendere membro"
+  ],
+  [
+    "No member selected.",
+    "Nessun membro selezionato."
+  ],
+  [
+    "Suspend",
+    "Sospendi"
+  ],
+  [
+    "Unsuspend",
+    "Rimuovi sospensione"
+  ],
+  [
+    "Groups",
+    "Gruppi"
+  ],
+  [
+    "No more Groups available",
+    "Nessun altro gruppo disponibile"
+  ],
+  [
+    "Remove From Group",
+    "Rimuovi dal gruppo"
+  ],
+  [
+    "This member is not part of any groups yet.",
+    "Questo membro non fa parte di nessun gruppo ancora."
+  ],
+  [
+    "Via Groups",
+    "Via Gruppi"
+  ],
+  [
+    "This member does not have access to any vaults yet.",
+    "Questo membro non ha accesso a nessun archivio ancora."
+  ],
+  [
+    "Close",
+    "Chiudi"
+  ],
+  [
+    "Dashboard",
+    "Cruscotto"
+  ],
+  [
+    "Settings",
+    "Impostazioni"
+  ],
+  [
+    "Invites",
+    "Inviti"
+  ],
+  [
+    "A newer version of {0} is required to synchronize this vault. Please update to the latest version now!",
+    "Per sincronizzare questo archivio è necessaria una versione più recente di {0} . Aggiorna ora all'ultima versione!"
+  ],
+  [
+    "This vault could not be synchronized because you no longer have access to it.",
+    "Questo archivio non può essere sincronizzato perché non è più possibile accedervi."
+  ],
+  [
+    "This vault could not be synchronized because you currently don't have access to it's data.",
+    "Questo archivio non può essere sincronizzato perché al momento non si ha accesso ai suoi dati"
+  ],
+  [
+    "An unknown error occured while synchronizing this vault. If this problem persists please contact customer support.",
+    "Si è verificato un errore sconosciuto durante la sincronizzazione di questo archivio. Se questo problema persiste, contattare l'assistenza clienti."
+  ],
+  [
+    "Vaults & Items",
+    "Archivi & Elementi"
+  ],
+  [
+    "My Vault",
+    "Il mio Archivio"
+  ],
+  [
+    "New Vault",
+    "Nuovo Archivio"
+  ],
+  [
+    "Manage Tags",
+    ""
+  ],
+  [
+    "Orgs & Teams",
+    "Organizzazioni & Teams"
+  ],
+  [
+    "New Organization",
+    "Nuova Organizzazione"
+  ],
+  [
+    "Security Report",
+    "Report Sicurezza"
+  ],
+  [
+    "Support",
+    "Supporta"
+  ],
+  [
+    "Lock App",
+    "Blocca Applicazione"
+  ],
+  [
+    "Theme:",
+    "Tema:"
+  ],
+  [
+    "Last Sync:",
+    "Ultima Sincronizzazione:"
+  ],
+  [
+    "Never",
+    "Mai"
+  ],
+  [
+    "{0} Items",
+    "{0} Elementi"
+  ],
+  [
+    "Move {0} To",
+    "Sposta {0} in"
+  ],
+  [
+    "No target vaults available!",
+    "Nessun Archivio disponibile!"
+  ],
+  [
+    "Vault",
+    "Archivio"
+  ],
+  [
+    "Move Item",
+    "Sposta Elemento"
+  ],
+  [
+    "Move Items",
+    "Sposta Elementi"
+  ],
+  [
+    "Successfully created {0} invites!",
+    "Creati {0} inviti con successo!"
+  ],
+  [
+    "This org is frozen",
+    "Questa organizzazione è congelata"
+  ],
+  [
+    "Show All",
+    "Mostra tutti"
+  ],
+  [
+    "This organization does not have any groups yet.",
+    "Questa organizzazione non ha nessun gruppo ancora."
+  ],
+  [
+    "Create Group",
+    "Crea Gruppo"
+  ],
+  [
+    "This organization does not have any vaults yet.",
+    "Questa organizzazione non ha nessun archivio ancora."
+  ],
+  [
+    "Create Vault",
+    "Crea Archivio"
+  ],
+  [
+    "Search...",
+    "Ricerca..."
+  ],
+  [
+    "Are you sure you want to delete this organization? All associated vaults and the data within them will be lost! This action can not be undone.",
+    "Sei sicuro di voler eliminare questa organizzazione? Tutti gli archivi associati e i dati al loro interno andranno persi! Questa azione non può essere annullata."
+  ],
+  [
+    "Delete Organization",
+    "Cancella Organizzazione"
+  ],
+  [
+    "Type 'DELETE' to confirm",
+    "Digitare 'DELETE' per confermare"
+  ],
+  [
+    "Organization deleted successfully.",
+    "Organizzazione cancellata con successo."
+  ],
+  [
+    "Rename Organization",
+    "Rinomina Organizzazione"
+  ],
+  [
+    "Company Name",
+    "Nome Azienda"
+  ],
+  [
+    "Please enter a name!",
+    "Inserisci un nome!"
+  ],
+  [
+    "Do you want to rotate this organization's cryptographic keys? All organization memberships will have to be reconfirmed but no data will be lost.",
+    "Vuoi ruotare queste chiavi crittografiche delle organizzazioni? Tutte le appartenenze dell'organizzazione dovranno essere riconfermate ma nessun dato verrà perso."
+  ],
+  [
+    "Confirm",
+    "Conferma"
+  ],
+  [
+    "The organization's cryptographic keys have been rotated successfully and membership confirmation requests for all members have been sent out.",
+    "Le chiavi crittografiche delle organizzazioni sono state ruotate con successo e sono state inviate richieste di conferma di appartenenza per tutti i membri."
+  ],
+  [
+    "Do you want to enable Directory Sync via SCIM for this organization? You will be given a unique URL to provide to your Active Directory or LDAP server for synchronizing and provisioning members.",
+    "Vuoi abilitare la Sincronizzazione Cartella tramite SCIM per questa organizzazione? Verrà fornito un URL univoco da fornire al server Active Directory o LDAP per la sincronizzazione e la fornitura dei membri."
+  ],
+  [
+    "Do you want to disable Directory Sync? Your members will no longer be automatically synchronized and provisioned.",
+    "Vuoi disabilitare la Sincronizzazione Cartella? I tuoi membri non saranno più sincronizzati e forniti automaticamente."
+  ],
+  [
+    "Security",
+    "Sicurezza"
+  ],
+  [
+    "Rotate Cryptographic Keys",
+    "Ruota chiavi crittografiche"
+  ],
+  [
+    "Change Organization Name",
+    "Cambia nome organizzazione"
+  ],
+  [
+    "Directory Sync",
+    "Sincronizzazione Cartella"
+  ],
+  [
+    "Enable Directory Sync",
+    "Abilita Sincronizzazione Cartella"
+  ],
+  [
+    "SCIM Tenant Url",
+    "Url Tenant SCIM"
+  ],
+  [
+    "Tenant URL",
+    "URL Tenant"
+  ],
+  [
+    "SCIM Secret Token",
+    "SCIM Secret Token"
+  ],
+  [
+    "Secret Token",
+    "Secret Token"
+  ],
+  [
+    "Organizations allow you to securely share passwords, documents and other data within your family, team or any other kind of group!",
+    "Le organizzazioni ti consentono di condividere in modo sicuro password, documenti e altri dati all'interno della tua famiglia, del tuo team o di qualsiasi altro tipo di gruppo!"
+  ],
+  [
+    "Failed to scan QR code. Error: ",
+    "Scansione del codice QR non riuscita. Errore: "
+  ],
+  [
+    "Public Key Fingerprint",
+    "Fingerprint chiave pubblica"
+  ],
+  [
+    "Back To Login",
+    "Torna a Login"
+  ],
+  [
+    "Please enter your email address and new master password.",
+    "Inserisci il tuo indirizzo email e la nuova password principale."
+  ],
+  [
+    "New Master Password",
+    "Nuova Password Principale"
+  ],
+  [
+    "WARNING: Weak Password!",
+    "ATTENZIONE: Password debole!"
+  ],
+  [
+    "IMPORTANT, READ CAREFULLY: {0} is designed in a way that makes it impossible for us to access the data encrypted in any of your vaults even if we wanted to. While this is essential to ensuring the security of your data, it also has the following implications:",
+    "IMPORTANTE, LEGGERE ATTENTAMENTE: {0} è stato progettato in modo da rendere impossibile per noi accedere ai dati crittografati in uno qualsiasi dei vostri archivi, anche volendo. Anche se questo è essenziale per garantire la sicurezza dei vostri dati, ha le seguenti implicazioni:"
+  ],
+  [
+    "Any data stored in your private vault can not be recovered and will be permantently lost.",
+    "Tutti i dati memorizzati nel vostro archivio privato non possono essere recuperati e saranno persi in modo permanente."
+  ],
+  [
+    "All your organization memberships will be suspended temporarily until confirmed by the organization owner.",
+    "Tutti i membri della tua organizzazione saranno temporaneamente sospesi fino alla conferma da parte del proprietario dell'organizzazione."
+  ],
+  [
+    "All members of organizations you own will be suspended temporarily until confirmed by you.",
+    "Tutti i membri delle organizzazioni che possiedi saranno temporaneamente sospesi fino alla conferma da parte tua"
+  ],
+  [
+    "Please enter a master password!",
+    "Inserisci una password principale!"
+  ],
+  [
+    "All data in your personal vault **WILL BE DELETED** and cannot be recovered!",
+    ""
+  ],
+  [
+    "Delete data and recover account",
+    ""
+  ],
+  [
+    "Account recovery successful!",
+    "Recupero account eseguito con successo!"
+  ],
+  [
+    "Account Recovery",
+    "Recupera Account"
+  ],
+  [
+    "Report Errors",
+    "Segnala Errori"
+  ],
+  [
+    "{0} Errors Detected",
+    "{0} Errori Trovati"
+  ],
+  [
+    "Padloc has registered {0} errors during your use of the app. These errors may not have any impact on functionality and can often be ignored, but reporting them may help us diagnose problems, identify possible failure modes and generally improve the stability of the app.",
+    "Padloc ha registrato {0} errori durante l'utilizzo dell'app. Questi errori possono non avere alcun impatto sulla funzionalità e spesso possono essere ignorati, ma segnalarli può aiutarci a diagnosticare i problemi, identificare possibili modalità di guasto e in generale migliorare la stabilità dell'app."
+  ],
+  [
+    "All Security Reports have been disabled.",
+    "Tutti i Report di Sicurezza sono stati disabilitati."
+  ],
+  [
+    "Enable In Settings",
+    "Abilita in Impostazioni"
+  ],
+  [
+    "Nothing Found",
+    "Non Trovato"
+  ],
+  [
+    "Text Mode",
+    "Modalità Testo"
+  ],
+  [
+    "Bold",
+    "Grassetto"
+  ],
+  [
+    "Italic",
+    "Corsivo"
+  ],
+  [
+    "Strikethrough",
+    "Barrato"
+  ],
+  [
+    "Unordered List",
+    "Lista non Ordinata"
+  ],
+  [
+    "Ordered List",
+    "Lista Ordinata"
+  ],
+  [
+    "Blockquote",
+    "Citazione"
+  ],
+  [
+    "Code Block",
+    "Blocco di Codice"
+  ],
+  [
+    "Insert Horizontal Line",
+    "Inserisci linea orizzontale"
+  ],
+  [
+    "Are you sure you want to change your email address to {0}? Please enter your master password to continue.",
+    ""
+  ],
+  [
+    "WARNING: You'll be suspended from any organizations you're not an owner of and will lose access to any shared vaults of that organization until the organization owner unsuspends you.",
+    ""
+  ],
+  [
+    "Change Email Address",
+    ""
+  ],
+  [
+    "Your email address has been changed successfully!",
+    ""
+  ],
+  [
+    "Do you really want to log out?",
+    "Vuoi davvero effettuare log out?"
+  ],
+  [
+    "Log Out",
+    "Log Out"
+  ],
+  [
+    "Please enter your master password to proceed.",
+    "Si prega di inserire la password principale per procedere."
+  ],
+  [
+    "Delete Account",
+    "Cancella Account"
+  ],
+  [
+    "Are you sure you want to delete this account? All associated vaults and the data within them will be lost and any active subscriptions will be canceled immediately. This action can not be undone!",
+    "Sei sicuro di voler eliminare questo account? Tutti gli archivi associati e i dati al loro interno andranno persi e tutte le sottoscrizioni attive verranno cancellate immediatamente. Questa azione non può essere annullata!"
+  ],
+  [
+    "The following organizations are owned by you and will be deleted along with your account:",
+    "Le seguenti organizzazioni sono di tua proprietà e verranno eliminate insieme al tuo account:"
+  ],
+  [
+    "Account",
+    "Account"
+  ],
+  [
+    "Profile",
+    "Profilo"
+  ],
+  [
+    "Email",
+    "Email"
+  ],
+  [
+    "Display Name",
+    "Mostra Nome"
+  ],
+  [
+    "Billing",
+    "Fatturazione"
+  ],
+  [
+    "Display",
+    "Display"
+  ],
+  [
+    "Theme",
+    "Tema"
+  ],
+  [
+    "Favicons",
+    "Favicons"
+  ],
+  [
+    "If this option is enabled, {0} will automatically load and display website icons for vault items that have at least one URL field.",
+    "Se quest'opzione è abilitata, {0} si caricherà automaticamente e mostrerà le icone del sito web per gli elementi dell'archivio che hanno almeno un campo URL."
+  ],
+  [
+    "Enable Favicons",
+    "Abilita Favicons"
+  ],
+  [
+    "Masked Fields",
+    "Campi mascherati"
+  ],
+  [
+    "If this option is enabled, masked fields such as passwords or credit card numbers will be unmasked when you move your mouse over them. Disable this option if you would rather use an explicit button.",
+    "Se questa opzione è abilitata, i campi mascherati come password o numeri di carta di credito saranno rivelati quando si sposta il mouse su di loro. Disabilitare questa opzione se si preferisce utilizzare un pulsante esplicito."
+  ],
+  [
+    "Reveal On Hover",
+    "Rivela su passaggio cursore "
+  ],
+  [
+    "Extension",
+    "Estensione"
+  ],
+  [
+    "Badge",
+    "Badge"
+  ],
+  [
+    "If this option is enabled, the extension icon will show a badge with the number of matching items (if any) for the currently active tab. NOTE: Changing this setting can take up to a minute to take effect.",
+    "Se questa opzione è abilitata, l'icona dell'estensione mostrerà un badge con il numero di elementi corrispondenti (se presenti) per la scheda attualmente attiva. NOTA: La modifica di questa impostazione può richiedere fino a un minuto per avere effetto."
+  ],
+  [
+    "Enable Badge",
+    "Abilita Badge"
+  ],
+  [
+    "Please enter your current password!",
+    "Inserisci la tua password attuale!"
+  ],
+  [
+    "Change Master Password",
+    "Cambia password principale"
+  ],
+  [
+    "Enter Current Password",
+    "Inserisci la password corrente"
+  ],
+  [
+    "Now choose a new master password!",
+    "Ora scegli una nuova password principale!"
+  ],
+  [
+    "Enter New Password",
+    "Inserisci una nuova password"
+  ],
+  [
+    "Please enter a password!",
+    "Si prega di inserire una nuova password!"
+  ],
+  [
+    "Please confirm your new password!",
+    "Si prega di confermare la nuova password!"
+  ],
+  [
+    "Repeat New Password",
+    "Ripetere la nuova password"
+  ],
+  [
+    "Master password changed successfully.",
+    "La password principale è stata modificata correttamente."
+  ],
+  [
+    "Are you sure you want to disable biometric unlock for this device?",
+    "Sei sicuro di voler disabilitare il riconoscimento biometrico per questo dispositivo?"
+  ],
+  [
+    "Disable",
+    "Disabilita"
+  ],
+  [
+    "Disable Biometric Unlock",
+    "Disabilita Riconoscimento Biometrico"
+  ],
+  [
+    "What kind of multi-factor authenticator would you like to add?",
+    "Che tipo di metodo di autenticazione a più fattori vuoi aggiungere?"
+  ],
+  [
+    "Failed to add authenticator",
+    "Aggiunta metodo di autenticazione fallita!"
+  ],
+  [
+    "Are you sure you want to delete this authenticator?",
+    "Sei sicuro di voler rimuovere questo metodo di autenticazione?"
+  ],
+  [
+    "Delete Authenticator",
+    "Rimuovi metodo di autenticazione"
+  ],
+  [
+    "Are you sure you want to revoke this session?",
+    "Sei sicuro di voler revocare questa sessione?"
+  ],
+  [
+    "Revoke",
+    "Revoca"
+  ],
+  [
+    "Revoke Session",
+    "Revoca Sessione"
+  ],
+  [
+    "Are you sure you want to remove this device from your trusted devices?",
+    "Sei sicuro di voler rimuovere questo dispositivo dai tuoi dispositivi sicuri?"
+  ],
+  [
+    "Remove Trusted Device",
+    "Rimuovi Dispositivo Sicuro"
+  ],
+  [
+    "The test was successfull!",
+    "Il test è stato eseguito con successo!"
+  ],
+  [
+    "Test Authenticator",
+    "Test Metodo Autenticazione"
+  ],
+  [
+    "Test failed!",
+    "Il test è fallito!"
+  ],
+  [
+    "Test failed! Error: {0}",
+    "Test fallito! Errore: {0}"
+  ],
+  [
+    "Are you sure you want to revoke biometric unlock for the device \"{0}\"?",
+    "Sei sicuro di voler revocare il riconoscimento biometrico per il dispositivo \"{0}\"?"
+  ],
+  [
+    "Revoke Biometric Unlock",
+    "Revoca Riconoscimento Biometrico"
+  ],
+  [
+    "Multi-Factor Authentication",
+    "Autenticazione a più fattori"
+  ],
+  [
+    "not activated",
+    "non attiva"
+  ],
+  [
+    "revoked",
+    "revocata"
+  ],
+  [
+    "never",
+    "mai"
+  ],
+  [
+    "Test",
+    "Test"
+  ],
+  [
+    "Add MFA Method",
+    "Aggiungi Metodo MFA"
+  ],
+  [
+    "Active Sessions",
+    "Sessioni Attive"
+  ],
+  [
+    "Active sessions indicate which devices or browsers are currently logged into your account. Note that sessions are not automatically revoked if you close or uninstall the Padloc app (or close the browser tab if you're using the web app). So it's possible that some devices that you haven't used Padloc on in a while still show up as active sessions. If you're unsure which device a session belongs to, simply revoke it.",
+    ""
+  ],
+  [
+    "Unknown",
+    "Sconosciuto"
+  ],
+  [
+    "Unknown City",
+    "Città sconosciuta"
+  ],
+  [
+    "Unknown Country",
+    "Paese Sconosciuto"
+  ],
+  [
+    "Unknown Device",
+    "Dispositivo sconosciuto"
+  ],
+  [
+    "Current Session",
+    "Sessione corrente"
+  ],
+  [
+    "Trusted Devices",
+    "Dispositivi Sicuri"
+  ],
+  [
+    "Trusted devices are devices that are excluded from multi-factor authentication, which means that logging in from these devices will only require your email and master password. If you have lost or don't recognise any of these devices, please make sure to remove them.",
+    ""
+  ],
+  [
+    "Current Device",
+    "Dispositivo Corrente"
+  ],
+  [
+    "You don't have any trusted devices yet.",
+    ""
+  ],
+  [
+    "Supported",
+    ""
+  ],
+  [
+    "Not Supported",
+    ""
+  ],
+  [
+    "Weak Passwords",
+    "Password Deboli"
+  ],
+  [
+    "Reused Passwords",
+    "Password Riutilizzate"
+  ],
+  [
+    "Compromised Passwords",
+    "Password Compromesse"
+  ],
+  [
+    "Expiring or Expired Items",
+    ""
+  ],
+  [
+    "Email Notifications",
+    ""
+  ],
+  [
+    "Failed Login Attempts",
+    ""
+  ],
+  [
+    "New Logins (on new or untrusted devices)",
+    ""
+  ],
+  [
+    "Auto Lock",
+    "Blocco Automatico"
+  ],
+  [
+    "Lock Automatically",
+    "Blocca automaticamente"
+  ],
+  [
+    " min",
+    " minimo"
+  ],
+  [
+    "After",
+    "Dopo"
+  ],
+  [
+    "Please enter the new tag name.",
+    ""
+  ],
+  [
+    "Rename Tag",
+    ""
+  ],
+  [
+    "Create Tag",
+    ""
+  ],
+  [
+    "Are you sure you want to delete this tag? This will remove it from all vault items.",
+    ""
+  ],
+  [
+    "Delete Tag",
+    ""
+  ],
+  [
+    "You don't have any tags yet.",
+    "Non hai etichette ancora."
+  ],
+  [
+    "Rename",
+    ""
+  ],
+  [
+    "Unlist",
+    ""
+  ],
+  [
+    "Unlisted",
+    ""
+  ],
+  [
+    "Unlisted tags still show up on vault items but are hidden from the main menu and from suggestions.",
+    ""
+  ],
+  [
+    "You don't have any unlisted tags.",
+    ""
+  ],
+  [
+    "Remove From Unlisted",
+    ""
+  ],
+  [
+    "Tools",
+    "Strumenti"
+  ],
+  [
+    "Import / Export",
+    "Importa / Esporta"
+  ],
+  [
+    "Import...",
+    "Importa..."
+  ],
+  [
+    "Export...",
+    "Esporta..."
+  ],
+  [
+    "Type tag name...",
+    "Inserisci nome etichetta..."
+  ],
+  [
+    "Choose A Template",
+    "Scegli un modello"
+  ],
+  [
+    "Invalid Code",
+    "Codice non valido"
+  ],
+  [
+    "Welcome back! Please enter your master password to unlock the app.",
+    "Bentornato! Inserisci la tua password principale per sbloccare l'applicazione."
+  ],
+  [
+    "Logged In As",
+    "Autenticato come"
+  ],
+  [
+    "Unlock",
+    "Sblocca"
+  ],
+  [
+    "Failed to unlock too many times. You will have to login again.",
+    ""
+  ],
+  [
+    "Failed To Unlock",
+    "Sblocco non riuscito"
+  ],
+  [
+    "Wrong password! Please try again.",
+    "Password sbagliata! Per favore, Riprova."
+  ],
+  [
+    "Are you sure you want to log out of this account?",
+    "Sei sicuro di voler uscire da questo account?"
+  ],
+  [
+    "Biometric unlock expired. Complete setup to reeneable.",
+    "Riconoscimento biometrico scaduto. Configurazione completa per la riattivazione."
+  ],
+  [
+    "Biometric Unlock Failed",
+    "Riconoscimento Biometrico Fallito"
+  ],
+  [
+    "Biometric unlock failed! Reason: {0}",
+    "Riconoscimento biometrico fallito. Motivo: {0}"
+  ],
+  [
+    "Storage limit exceeded!",
+    "Limite di memoria superato!"
+  ],
+  [
+    "Upload failed! Please try again!",
+    "Caricamento non riuscito! Riprova!"
+  ],
+  [
+    "Upload Attachment",
+    "Carica Allegato"
+  ],
+  [
+    "uploading... {0}/{1}",
+    "upload in corso... {0}/{1}"
+  ],
+  [
+    "Unkown File Type",
+    "Tipo di file sconosciuto"
+  ],
+  [
+    "Retry Upload",
+    "Riprova Caricamento"
+  ],
+  [
+    "Upload",
+    "Carica"
+  ],
+  [
+    "Please enter a Vault name!",
+    "Inserisci un nome per l'archivio!"
+  ],
+  [
+    "Vault name required!",
+    "Nome Archivio obbligatorio!"
+  ],
+  [
+    "Please enter a different Vault name!",
+    "Inserisci un nome differente per l'archivio!"
+  ],
+  [
+    "Reserved Name!",
+    "Nome Riservato!"
+  ],
+  [
+    "Please assign at least one member or group to this vault!",
+    "Assegna almeno un membro o gruppo a questo archivio!"
+  ],
+  [
+    "Are you sure you want to delete this vault? All the data stored in it will be lost! This action can not be undone.",
+    "Sei sicuro di voler eliminare questo archivio? Tutti i dati memorizzati in esso andranno persi! Questa azione non può essere annullata."
+  ],
+  [
+    "Delete Vault",
+    "Cancella Archivio"
+  ],
+  [
+    "Vault deleted successfully!",
+    "Archivio Cancellato con Successo!"
+  ],
+  [
+    "No vault selected.",
+    "Nessun archivio selezionato."
+  ],
+  [
+    "No Groups have been given access to this vault yet.",
+    "Nessun gruppo ha accesso a questo archivio ancora."
+  ],
+  [
+    "No Members have been given access to this vault yet.",
+    "Nessun membro ha accesso a questo archivio ancora."
+  ],
+  [
+    "The app could not establish a connection with our servers, please check your internet connection or try again later!",
+    "L'applicazione non ha potuto stabilire una connessione con i nostri server, si prega di controllare la connessione Internet o riprovare più tardi!"
+  ],
+  [
+    "You don't have any items with weak passwords!",
+    "Non hai elementi con password deboli!"
+  ],
+  [
+    "You don't have any items with reused passwords!",
+    "Non hai elementi con password riutilizzate!"
+  ],
+  [
+    "You don't have any items with compromised passwords!",
+    "Non hai elementi con password compromesse!"
+  ],
+  [
+    "You don't have any expired items!",
+    ""
+  ],
+  [
+    "You don't have any insecure items!",
+    "Non hai elementi non sicuri!"
+  ],
+  [
+    "Expired Items",
+    ""
+  ],
+  [
+    "Insecure",
+    "Non sicuro"
+  ],
+  [
+    "Passwords are considered weak if they're too short, don't have a lot of variation or contain commonly used words or phrases. These passwords generally don't offer enough protection against automated guessing attempts and should be replaced with strong, randomly generated passwords.",
+    "Le password sono considerate deboli se sono troppo brevi, non hanno molte variazioni o contengono parole o frasi comunemente usate. Queste password in genere non offrono una protezione sufficiente contro tentativi di detezione automatici e dovrebbero essere sostituite con password forti e generate casualmente."
+  ],
+  [
+    "Using the same password in multiple places is strongly discouraged as a data leak in one of those places will automatically compromise all other accounts/logins using the same password. We recommend generating strong, random and unique passwords for every single vault item.",
+    "Utilizzare la stessa password in più elementi è fortemente scoraggiato dato che una perdita di dati in uno degli elementi comprometterà automaticamente tutti gli altri account / login che utilizzano la stessa password. Si consiglia di generare password forti, casuali e univoche per ogni singolo elemento dell'archivio."
+  ],
+  [
+    "Compromised passwords are those that have been identified as having been leaked in the past by comparing them against a database of known data breaches. These passwords can no longer be considered secure and should be changed immediately.",
+    "Le password compromesse sono quelle che sono state identificate come trapelate in passato confrontandole con un database di violazioni di dati noti. Queste password non possono più essere considerate sicure e devono essere modificate immediatamente."
+  ],
+  [
+    "Expired items are those that have been identified as being past their set expiry date, which haven't been updated in a given number of days. These items should be rotated as soon as possible.",
+    ""
+  ],
+  [
+    "Card Number",
+    "Numero Carta"
+  ],
+  [
+    "Card Owner",
+    "Intestatario Carta"
+  ],
+  [
+    "Valid Until",
+    "Valida fino al"
+  ],
+  [
+    "CVC",
+    "CVC"
+  ],
+  [
+    "Notes",
+    "Note"
+  ],
+  [
+    "One-Time Password",
+    "Password One-time"
+  ],
+  [
+    "Other Username",
+    ""
+  ],
+  [
+    "Cardholder Name",
+    ""
+  ],
+  [
+    "Expiry Date",
+    ""
+  ],
+  [
+    "Zip Code",
+    ""
+  ],
+  [
+    "Full Name",
+    "Nome completo"
+  ],
+  [
+    "Phone Number",
+    "Numero di telefono"
+  ],
+  [
+    "Address 1",
+    ""
+  ],
+  [
+    "Address 2",
+    ""
+  ],
+  [
+    "City",
+    ""
+  ],
+  [
+    "Country",
+    "Paese"
+  ],
+  [
+    "State",
+    ""
+  ],
+  [
+    "{0} on {1}",
+    "{0} su {1}"
+  ],
+  [
+    "{0} Device",
+    "{0} Dispositivi"
+  ],
+  [
+    "Authentication type not supported!",
+    "Tipo di autenticazione non supportato!"
+  ],
+  [
+    "Setup Canceled",
+    "Installazione Annullata"
+  ],
+  [
+    "The request was canceled.",
+    "La richiesta è stata annullata."
+  ],
+  [
+    "Your account has been frozen, meaning you can still access your existing data, but you won't be able to create new vault items or edit existing ones.",
+    "Il tuo account è stato bloccato, il che significa che è ancora possibile accedere ai dati esistenti, ma non sarai in grado di creare nuovi elementi dell'archivio o modificare quelli esistenti."
+  ],
+  [
+    "Your account has been suspended, meaning you can no longer use this service. If you believe your account has been suspended in error, please contact your service administrator or customer support.",
+    "Il tuo account è stato sospeso, il che significa che non puoi più utilizzare questo servizio. Se ritieni che il tuo account sia stato sospeso per errore, contatta l'amministratore del servizio o l'assistenza clienti."
+  ],
+  [
+    "You don't currently have permission to use this service. Please contact the service administrator to request access.",
+    "Al momento non hai l'autorizzazione per utilizzare questo servizio. Contatta l'amministratore del servizio per richiedere l'accesso."
+  ],
+  [
+    "Active",
+    "Attivo"
+  ],
+  [
+    "Account Deleted",
+    "Account Cancellato"
+  ],
+  [
+    "Account Frozen",
+    "Account Congelato"
+  ],
+  [
+    "Account Suspended",
+    "Account Sospeso"
+  ],
+  [
+    "Access Denied",
+    "Accesso non Consentito"
+  ],
+  [
+    "Your session has expired. Please log in again!",
+    "La tua sessione è scaduta. Accedi di nuovo!"
+  ],
+  [
+    "Some data associated with your account was saved with a newer version of this app and cannot be decoded. Please install the latest version!",
+    "Alcuni dati associati al tuo account sono stati salvati con una versione più recente e non possono essere decodificati. Installa l'ultima versione!"
+  ],
+  [
+    "Update Required",
+    "Aggiornamento Richiesto"
+  ],
+  [
+    "Are you sure you want to leave this page? Any changes will be lost.",
+    "Sei sicuro di voler lasciare questa pagina? I cambiamenti verranno persi."
+  ],
+  [
+    "A new update is ready to install! Do you want to install it now?",
+    "Un nuovo aggiornamento è pronto per l'installazione! Vuoi installarlo ora?"
+  ],
+  [
+    "Install & Reload",
+    "Installa e ricarica"
+  ],
+  [
+    "Later",
+    "Più tardi"
+  ],
+  [
+    "Update Available",
+    "Aggiornamento Disponibile"
+  ],
+  [
+    "Created",
+    ""
+  ],
+  [
+    "Orgs",
+    ""
+  ],
+  [
+    "owner",
+    ""
+  ],
+  [
+    "Raw Data",
+    ""
+  ],
+  [
+    "Done",
+    ""
+  ],
+  [
+    "Accounts",
+    ""
+  ],
+  [
+    "Logs",
+    ""
+  ],
+  [
+    "lines",
+    ""
+  ],
+  [
+    "Time",
+    ""
+  ],
+  [
+    "Class",
+    ""
+  ],
+  [
+    "User",
+    ""
+  ],
+  [
+    "Device",
+    ""
+  ],
+  [
+    "App Version",
+    ""
+  ],
+  [
+    "Location",
+    ""
+  ],
+  [
+    "Unknown Location",
+    ""
+  ],
+  [
+    "Changes",
+    ""
+  ],
+  [
+    "Object",
+    ""
+  ],
+  [
+    "Audit Logs",
+    ""
+  ],
+  [
+    "API Requests",
+    ""
+  ],
+  [
+    "Display events between",
+    ""
+  ],
+  [
+    "and",
+    ""
+  ],
+  [
+    "Apply",
+    ""
+  ],
+  [
+    "Filter By Email Address...",
+    ""
+  ],
+  [
+    "Action",
+    ""
+  ],
+  [
+    "Endpoint",
+    ""
+  ],
+  [
+    "Response Time",
+    ""
+  ],
+  [
+    "Delete Org",
+    ""
+  ],
+  [
+    "Org",
+    ""
+  ],
+  [
+    "admin",
+    ""
+  ],
+  [
+    "Request",
+    ""
+  ],
+  [
+    "Method",
+    ""
+  ],
+  [
+    "Params",
+    ""
+  ],
+  [
+    "You have been granted access to this vault, but before you can see its contents somebody else with access to it has to log into their account first. Once you have full access, this warning will disappear automatically.",
+    ""
+  ],
+  [
+    "Local changes to this vault could not be synchronized because there was a problem retrieving information for this vault's organization. If this problem persists please contact customer support!",
+    "Le modifiche locali a questo archivio non possono essere sincronizzate perché c'è stato un problema nel recupero delle informazioni per questa organizzazione. Se questo problema persiste si prega di contattare l'assistenza clienti!"
+  ],
+  [
+    "Syncing local changes failed because the organization this vault belongs to is frozen.",
+    "La sincronizzazione delle modifiche locali non è riuscita perché l'organizzazione a cui appartiene questo archivio è bloccata."
+  ],
+  [
+    "Syncing local changes failed because you don't have write permissions for this vault.",
+    "Sincronizzazione delle modifiche locali non riuscita perché non si dispone delle autorizzazioni di scrittura per questo archivio."
+  ],
+  [
+    "This group name is not available!",
+    "Questo nome gruppo non è disponibile!"
+  ],
+  [
+    "Open",
+    "Apri"
+  ],
+  [
+    "Date",
+    "Data"
+  ],
+  [
+    "Month",
+    "Mese"
+  ],
+  [
+    "Credit Card Number",
+    "Numero Carta di Credito"
+  ],
+  [
+    "PIN",
+    "PIN"
+  ],
+  [
+    "Plain Text",
+    "Testo Semplice"
+  ],
+  [
+    "Richtext / Markdown",
+    "Richtext / Markdown"
+  ],
+  [
+    "Website / App",
+    "Sito web / Applicazione"
+  ],
+  [
+    "Computer",
+    "Computer"
+  ],
+  [
+    "Credit Card",
+    "Carta di Credito"
+  ],
+  [
+    "Bank Account",
+    "Account banca"
+  ],
+  [
+    "Account Owner",
+    "Account proprietario"
+  ],
+  [
+    "IBAN",
+    "IBAN"
+  ],
+  [
+    "BIC",
+    "BIC"
+  ],
+  [
+    "Card PIN",
+    "PIN Carta"
+  ],
+  [
+    "WIFI Password",
+    "Password WIFI"
+  ],
+  [
+    "Passport",
+    "Passaporto"
+  ],
+  [
+    "Passport Number",
+    "Numero passaporto"
+  ],
+  [
+    "Birthdate",
+    "Giorno di Nascita"
+  ],
+  [
+    "Birthplace",
+    "Luogo di Nascita"
+  ],
+  [
+    "Issued On",
+    "Creato il"
+  ],
+  [
+    "Note",
+    "Nota"
+  ],
+  [
+    "Authenticator",
+    "Metodo di Autenticazione"
+  ],
+  [
+    "Document",
+    "Documento"
+  ],
+  [
+    "Custom",
+    "Personalizzato"
+  ],
+  [
+    "unknown location",
+    ""
+  ]
+]

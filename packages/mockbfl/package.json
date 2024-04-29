@@ -1,0 +1,41 @@
+{
+    "name": "@didvault/mockbfl",
+    "version": "0.1.0",
+    "description": "Mock BFL",
+    "private": true,
+    "files": [
+        "src",
+        "tsconfig.json"
+    ],
+    "main": "index.js",
+    "author": "Pengpeng <pengpeng@bytetrade.io>",
+    "license": "GPLv3",
+    "devDependencies": {
+        "@types/chai": "4.2.18",
+        "@types/dompurify": "2.3.3",
+        "@types/jsdom": "16.2.14",
+        "@types/mocha": "8.2.2",
+        "chai": "4.3.4",
+        "mocha": "9.2.2",
+        "ts-node-dev": "1.1.8"
+    },
+    "dependencies": {
+        "dotenv": "16.0.0",
+        "express": "^4.18.2",
+        "ts-node": "10.1.0",
+        "typescript": "4.5.4",
+        "level": "7.0.0"
+    },
+    "scripts": {
+        "start": "ts-node src/app.ts",
+        "start-dry": "ts-node src/app.ts --dryrun",
+        "dev": "ts-node-dev src/app.ts",
+        "dev:desktop": "ts-node-dev src/app.ts",
+        "dev-inspect": "node -r ts-node/register --inspect-brk --stack-trace-limit=1000 src/app.ts",
+        "clean" : "rm -rf ./data"
+    },
+    "engines": {
+        "node": "16.13.1",
+        "npm": "8.2.0"
+    }
+}

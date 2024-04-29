@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="263dp"
+            android:layout_gravity="center"
+            android:background="#ffffff"
+            android:layout_height="54dp">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="48dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:layout_centerVertical="true"
+                android:paddingStart="12dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:paddingEnd="12dp"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:id="@+id/text_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:layout_alignTop="@id/icon"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:text="Autofill with TermiPass"
+                android:textColor="#0D0D0D"
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/icon" />
+
+            <TextView
+                android:id="@+id/text_action"
+                android:layout_alignBottom="@id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:text="go to my password vault"
+                android:textColor="#6E6E6E"
+                android:textSize="12dp"
+                android:layout_toRightOf="@id/icon" />
+
+        </RelativeLayout>
+
+</FrameLayout>

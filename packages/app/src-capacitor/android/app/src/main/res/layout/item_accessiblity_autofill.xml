@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="263dp"
+        android:layout_gravity="center"
+        android:layout_height="54dp"
+        android:elevation="8dp"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="4dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF">
+
+            <ImageView
+                android:id="@+id/icon"
+                android:src="@mipmap/ic_launcher_round"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/text_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:ellipsize="marquee"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:text="Autofill with TermiPass"
+                android:textColor="#0D0D0D"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toTopOf="@id/text_action"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toTopOf="@id/icon" />
+
+            <TextView
+                android:id="@+id/text_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:gravity="start|center_vertical"
+                android:singleLine="true"
+                android:text="go to my password vault"
+                android:textColor="#6E6E6E"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@id/icon"
+                app:layout_constraintStart_toEndOf="@id/icon"
+                app:layout_constraintTop_toBottomOf="@id/text_label" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

@@ -1,0 +1,630 @@
+package com.terminus.planeta.file.ui;
+
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.terminus.planeta.R;
+import com.terminus.planeta.VaultApp;
+import com.terminus.planeta.file.ConcurrentAsyncTask;
+import com.terminus.planeta.file.NavContext;
+import com.terminus.planeta.file.SeafException;
+import com.terminus.planeta.file.SettingsManager;
+import com.terminus.planeta.file.Utils;
+import com.terminus.planeta.file.account.Account;
+import com.terminus.planeta.file.data.DataManager;
+import com.terminus.planeta.file.data.SeafDirent;
+import com.terminus.planeta.file.data.SeafRepo;
+import com.terminus.planeta.file.ui.adapter.DirentsAdapter;
+import com.terminus.planeta.file.ui.adapter.SeafReposAdapter;
+
+import java.net.HttpURLConnection;
+import java.util.List;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.widget.Toolbar;
+
+/**
+ * Path chooser - Let the user choose a target path (repo, dir)
+ */
+public class SeafilePathChooserActivity extends BaseActivity implements Toolbar.OnMenuItemClickListener {
+    private static final String DEBUG_TAG = "SeafilePathChooserActivity";
+
+    private NavContext mNavContext;
+
+    private Account mAccount;
+
+    private DataManager mDataManager;
+
+    private SeafReposAdapter mReposAdapter;
+    private DirentsAdapter mDirentsAdapter;
+
+    private LoadDirTask mLoadDirTask;
+    private LoadReposTask mLoadReposTask;
+    private boolean onlyShowWritableRepos;
+    private String encryptedRepoId;
+
+    private boolean isOnlyChooseRepo;
+
+    private View mProgressContainer, mListContainer, mContentArea;
+    private Button mOkButton, mCancelButton, mNewFolder;
+    private TextView mEmptyText, mErrorText;
+    private ListView mListView;
+
+    private static final int STEP_CHOOSE_REPO = 2;
+    private static final int STEP_CHOOSE_DIR = 3;
+    private int mStep = 1;
+
+    public static final String DATA_REPO_PERMISSION = "permission";
+    public static final String DATA_REPO_ID = "repoID";
+    public static final String DATA_REPO_NAME = "repoNAME";
+    public static final String DATA_DIRECTORY_PATH = "dirPath";
+    public static final String DATA_DIR = "dir";
+    public static final String DATA_ACCOUNT = "account";
+
+    public static final String ONLY_SHOW_WRITABLE_REPOS = "onlyShowWritableRepos";
+    public static final String SHOW_ENCRYPTED_REPOS = "showEncryptedRepos";
+    public static final String ENCRYPTED_REPO_ID = "encryptedRepoId";
+    public static final String REPO_ENCRYPTED = "repo_encrypted";
+    private boolean showEncryptedRepos;
+    private boolean isShowEncryptedRepos;
+
+    public static final String CAMERA_UPLOAD_BOTH_PAGES = "com.seafile.seadroid2.camera.upload";
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.seafile_path_chooser);
+        Intent intent = getIntent();
+        Account account = (Account) intent.getParcelableExtra("account");
+        if (account == null) {
+            mAccount = VaultApp.Companion.getApplication().getAccount();
+        }else {
+            mAccount = account;
+        }
+        onlyShowWritableRepos = intent.getBooleanExtra(ONLY_SHOW_WRITABLE_REPOS, true);
+        showEncryptedRepos = intent.getBooleanExtra(SHOW_ENCRYPTED_REPOS, true);
+        encryptedRepoId = intent.getStringExtra(ENCRYPTED_REPO_ID);
+        isShowEncryptedRepos = intent.getBooleanExtra(REPO_ENCRYPTED, true);
+
+        mOkButton = (Button) findViewById(R.id.ok);
+        mNewFolder = (Button) findViewById(R.id.new_folder);
+        mCancelButton = (Button) findViewById(R.id.cancel);
+        mListView = (ListView) findViewById(android.R.id.list);
+        mEmptyText = (TextView) findViewById(android.R.id.empty);
+        mErrorText = (TextView) findViewById(R.id.error_message);
+        mListContainer = findViewById(R.id.listContainer);
+        mProgressContainer = findViewById(R.id.progressContainer);
+        mContentArea = findViewById(R.id.content);
+        isOnlyChooseRepo = intent.getBooleanExtra(CAMERA_UPLOAD_BOTH_PAGES, false);
+        if (isOnlyChooseRepo) {
+            mOkButton.setVisibility(View.GONE);
+            mNewFolder.setVisibility(View.GONE);
+        }
+        mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        mListView.setOnItemClickListener((l, view, position, id) -> onListItemClick(view, position, id));
+
+        mOkButton.setOnClickListener(view -> {
+            String repoName = mNavContext.getRepoName();
+            String repoID = mNavContext.getRepoID();
+            String dir = mNavContext.getDirPath();
+            Intent intent1 = new Intent();
+            intent1.putExtra(DATA_REPO_NAME, repoName);
+            intent1.putExtra(DATA_REPO_ID, repoID);
+            intent1.putExtra(DATA_DIR, dir);
+            intent1.putExtra(DATA_ACCOUNT, mAccount);
+            setResult(RESULT_OK, intent1);
+            finish();
+        });
+
+        mNewFolder.setOnClickListener(view -> createNewFolder());
+
+        mCancelButton.setOnClickListener(view -> {
+            setResult(RESULT_CANCELED);
+            finish();
+        });
+
+        chooseRepo();
+
+        Toolbar toolbar = getActionBarToolbar();
+        toolbar.setOnMenuItemClickListener(this);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(R.string.app_name);
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    protected void onDestroy() {
+        Log.d(DEBUG_TAG, "onDestroy is called");
+
+        if (mLoadReposTask != null && mLoadReposTask.getStatus() != AsyncTask.Status.FINISHED) {
+            mLoadReposTask.cancel(true);
+        }
+
+        if (mLoadDirTask != null && mLoadDirTask.getStatus() != AsyncTask.Status.FINISHED) {
+            mLoadDirTask.cancel(true);
+        }
+
+        super.onDestroy();
+    }
+
+    public void onListItemClick(final View v, final int position, final long id) {
+        NavContext nav = getNavContext();
+        SeafRepo repo = null;
+
+        if (mStep == STEP_CHOOSE_REPO) {
+            repo = getReposAdapter().getItem(position);
+        } else if (mStep == STEP_CHOOSE_DIR) {
+            repo = getDataManager().getCachedRepoByID(nav.getRepoID());
+        }
+
+        switch (mStep) {
+            case STEP_CHOOSE_REPO:
+                if (!isOnlyChooseRepo) {
+                    nav.setRepoName(repo.name);
+                    nav.setRepoID(repo.id);
+                    nav.setDirPermission(repo.permission);
+                    nav.setDir("/", repo.root);
+                    chooseDir();
+                } else {
+                    Intent intent = new Intent();
+                    intent.putExtra(DATA_REPO_NAME, repo.name);
+                    intent.putExtra(DATA_REPO_ID, repo.id);
+                    intent.putExtra(DATA_REPO_PERMISSION, repo.permission);
+                    intent.putExtra(DATA_DIR, repo.root);
+                    intent.putExtra(DATA_ACCOUNT, mAccount);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+                break;
+            case STEP_CHOOSE_DIR:
+                SeafDirent dirent = getDirentsAdapter().getItem(position);
+                if (dirent.type == SeafDirent.DirentType.FILE) {
+                    return;
+                }
+
+                nav.setDir(Utils.pathJoin(nav.getDirPath(), dirent.name), dirent.id);
+                refreshDir();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Toolbar toolbar = getActionBarToolbar();
+        toolbar.inflateMenu(R.menu.seafile_path_chooser_menu);
+        toolbar.setOnMenuItemClickListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuRefresh = menu.findItem(R.id.refresh);
+        menuRefresh.setVisible(true);
+        menuRefresh.setEnabled(true);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            stepBack();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.refresh) {
+            refreshList();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        stepBack(true);
+    }
+
+    private void refreshList() {
+        switch (mStep) {
+            case STEP_CHOOSE_REPO:
+                if (mLoadReposTask != null && mLoadReposTask.getStatus() != AsyncTask.Status.FINISHED) {
+                    return;
+                } else {
+                    chooseRepo(true);
+                    break;
+                }
+            case STEP_CHOOSE_DIR:
+                if (mLoadDirTask == null || mLoadDirTask.getStatus() == AsyncTask.Status.FINISHED) {
+                    SeafRepo repo = getDataManager().getCachedRepoByID(getNavContext().getRepoID());
+                    chooseDir(true);
+                    break;
+                }
+        }
+    }
+
+    private void stepBack() {
+        stepBack(false);
+    }
+
+    private void stepBack(boolean cancelIfFirstStep) {
+        switch (mStep) {
+            case STEP_CHOOSE_REPO:
+                if (cancelIfFirstStep) {
+                    finish();
+                }
+                break;
+            case STEP_CHOOSE_DIR:
+                if (getNavContext().isRepoRoot()) {
+                    chooseRepo();
+                } else {
+                    String path = getNavContext().getDirPath();
+                    getNavContext().setDir(Utils.getParentPath(path), null);
+                    refreshDir();
+                }
+                break;
+        }
+    }
+
+    private void setListAdapter(BaseAdapter adapter) {
+        mListView.setAdapter(adapter);
+    }
+
+    /**
+     * List all repos
+     */
+    private void chooseRepo() {
+        chooseRepo(false);
+    }
+
+    private void chooseRepo(boolean forceRefresh) {
+        mStep = STEP_CHOOSE_REPO;
+        mEmptyText.setText(R.string.no_repo);
+
+        setListAdapter(getReposAdapter());
+        mOkButton.setVisibility(View.GONE);
+        mNewFolder.setVisibility(View.GONE);
+
+        getNavContext().setRepoID(null);
+
+        if (!Utils.isNetworkOn() || !forceRefresh) {
+            List<SeafRepo> repos = getDataManager().getReposFromCache();
+            if (repos != null) {
+                updateAdapterWithRepos(repos);
+                // update action bar
+                ActionBar bar = getSupportActionBar();
+                bar.setDisplayHomeAsUpEnabled(true);
+                bar.setTitle(R.string.choose_a_library);
+                return;
+            }
+        }
+
+        showLoading(true);
+        mLoadReposTask = new LoadReposTask(getDataManager());
+        ConcurrentAsyncTask.execute(mLoadReposTask);
+
+        // update action bar
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.choose_a_library);
+    }
+
+    private void chooseDir() {
+        chooseDir(false);
+    }
+
+    private void chooseDir(boolean forceRefresh) {
+        mStep = STEP_CHOOSE_DIR;
+        mEmptyText.setText(R.string.dir_empty);
+
+        // update action bar
+        setListAdapter(getDirentsAdapter());
+        mOkButton.setVisibility(View.VISIBLE);
+//        mNewFolder.setVisibility(View.VISIBLE);
+        refreshDir(forceRefresh);
+    }
+
+    private void refreshDir() {
+        refreshDir(false);
+    }
+
+    private void updateAdapterWithDirents(List<SeafDirent> dirents) {
+        DirentsAdapter adapter = getDirentsAdapter();
+        if (dirents.size() > 0) {
+            adapter.clearDirents();
+            for (SeafDirent dirent : dirents) {
+                adapter.add(dirent);
+            }
+            int sort_type = SettingsManager.instance().getSortFilesTypePref();
+            int sort_order = SettingsManager.instance().getSortFilesOrderPref();
+            adapter.sortFiles(sort_type, sort_order);
+            adapter.notifyDataSetChanged();
+        }
+        showListOrEmptyText(dirents.size());
+    }
+
+    private void updateAdapterWithRepos(List<SeafRepo> repos) {
+        SeafReposAdapter adapter = getReposAdapter();
+        if (repos.size() > 0) {
+            adapter.clearRepos();
+            for (SeafRepo item : repos) {
+                boolean isContains = false;
+                for (SeafRepo data : adapter.getData()) {
+                    if (TextUtils.equals(data.getID(), item.getID())) {
+                        isContains = true;
+                        break;
+                    }
+                }
+                if (onlyShowWritableRepos && !item.hasWritePermission()) {
+                    // Read only dir need not  show in list
+                    continue;
+                }
+
+//                if (item.encrypted && !showEncryptedRepos) {
+                if (item.encrypted && !isShowEncryptedRepos) {
+                    // encrypted dir need not show in list
+                    continue;
+                }
+
+                if (item.encrypted && TextUtils.equals(item.id, encryptedRepoId)) {
+                    NavContext nav = getNavContext();
+                    nav.setRepoName(item.name);
+                    nav.setRepoID(item.id);
+                    nav.setDirPermission(item.permission);
+                    nav.setDir("/", item.root);
+                    chooseDir();
+//                    mStep = STEP_CHOOSE_REPO;
+                    break;
+                }
+                if (!isContains) {
+                    adapter.add(item);
+                }
+            }
+            int sort_type = SettingsManager.instance().getSortFilesTypePref();
+            int sort_order = SettingsManager.instance().getSortFilesOrderPref();
+            adapter.sortFiles(sort_type, sort_order);
+            adapter.notifyDataSetChanged();
+        }
+        showListOrEmptyText(repos.size());
+    }
+
+    private void refreshDir(boolean forceRefresh) {
+        String repoID = getNavContext().getRepoID();
+        String dirPath = getNavContext().getDirPath();
+
+        if (!Utils.isNetworkOn() || !forceRefresh) {
+            List<SeafDirent> dirents = getDataManager().getCachedDirents(
+                    getNavContext().getRepoID(), getNavContext().getDirPath());
+            if (dirents != null) {
+                updateAdapterWithDirents(dirents);
+                // update action bar
+                ActionBar bar = getSupportActionBar();
+                bar.setDisplayHomeAsUpEnabled(true);
+                bar.setTitle(R.string.choose_a_folder);
+                return;
+            }
+        }
+
+        showLoading(true);
+        mLoadDirTask = new LoadDirTask(repoID, dirPath, getDataManager());
+        ConcurrentAsyncTask.execute(mLoadDirTask);
+
+        // update action bar
+        ActionBar bar = getSupportActionBar();
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setTitle(R.string.choose_a_folder);
+    }
+
+    private void showLoading(boolean loading) {
+        clearError();
+        if (loading) {
+            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                    this, android.R.anim.fade_in));
+            mListContainer.startAnimation(AnimationUtils.loadAnimation(
+                    this, android.R.anim.fade_out));
+
+            mProgressContainer.setVisibility(View.VISIBLE);
+            mListContainer.setVisibility(View.INVISIBLE);
+        } else {
+            mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                    this, android.R.anim.fade_out));
+            mListContainer.startAnimation(AnimationUtils.loadAnimation(
+                    this, android.R.anim.fade_in));
+
+            mProgressContainer.setVisibility(View.GONE);
+            mListContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void setErrorMessage(int resID) {
+        mContentArea.setVisibility(View.GONE);
+        mErrorText.setVisibility(View.VISIBLE);
+        mErrorText.setText(getString(resID));
+    }
+
+    private void clearError() {
+        mErrorText.setVisibility(View.GONE);
+        mContentArea.setVisibility(View.VISIBLE);
+    }
+
+    private void showListOrEmptyText(int listSize) {
+        if (listSize == 0) {
+            mListView.setVisibility(View.GONE);
+            mEmptyText.setVisibility(View.VISIBLE);
+        } else {
+            mListView.setVisibility(View.VISIBLE);
+            mEmptyText.setVisibility(View.GONE);
+        }
+    }
+
+    private DataManager getDataManager() {
+        if (mDataManager == null) {
+            mDataManager = new DataManager(mAccount);
+        }
+
+        return mDataManager;
+    }
+
+    private NavContext getNavContext() {
+        if (mNavContext == null) {
+            mNavContext = new NavContext();
+        }
+
+        return mNavContext;
+    }
+
+    private SeafReposAdapter getReposAdapter() {
+        if (mReposAdapter == null) {
+            mReposAdapter = new SeafReposAdapter(onlyShowWritableRepos, encryptedRepoId);
+        }
+
+        return mReposAdapter;
+    }
+
+    private DirentsAdapter getDirentsAdapter() {
+        if (mDirentsAdapter == null) {
+            mDirentsAdapter = new DirentsAdapter();
+        }
+
+        return mDirentsAdapter;
+    }
+
+    private void setAccount(Account account) {
+        mAccount = account;
+        mDataManager = new DataManager(account);
+    }
+
+    private class LoadReposTask extends AsyncTask<Void, Void, Void> {
+        private List<SeafRepo> repos;
+        private SeafException err;
+        private DataManager dataManager;
+
+        public LoadReposTask(DataManager dataManager) {
+            this.dataManager = dataManager;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                repos = dataManager.getReposFromServer();
+            } catch (SeafException e) {
+                err = e;
+            }
+
+            return null;
+        }
+
+        @SuppressLint("LongLogTag")
+        @Override
+        protected void onPostExecute(Void v) {
+            if (mStep != STEP_CHOOSE_REPO) {
+                return;
+            }
+
+            showLoading(false);
+            if (err != null || repos == null) {
+                setErrorMessage(R.string.load_libraries_fail);
+                Log.d(DEBUG_TAG, "failed to load repos: " + (err != null ? err.getMessage() : " no error present"));
+                return;
+            }
+
+            updateAdapterWithRepos(repos);
+        }
+    }
+
+    private class LoadDirTask extends AsyncTask<Void, Void, Void> {
+        private String repoID, dirPath;
+        private SeafException err;
+        private DataManager dataManager;
+        private List<SeafDirent> dirents;
+
+        public LoadDirTask(String repoID, String dirPath, DataManager dataManager) {
+            this.repoID = repoID;
+            this.dirPath = dirPath;
+            this.dataManager = dataManager;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                dirents = dataManager.getDirentsFromServer(repoID, dirPath);
+            } catch (SeafException e) {
+                err = e;
+            }
+
+            return null;
+        }
+
+        @SuppressLint("LongLogTag")
+        @Override
+        protected void onPostExecute(Void v) {
+            if (mStep != STEP_CHOOSE_DIR) {
+                return;
+            }
+
+            getDirentsAdapter().clearDirents();
+            showLoading(false);
+            if (err != null) {
+                int retCode = err.getCode();
+                if (retCode == HttpURLConnection.HTTP_NOT_FOUND) {
+                    final String message = String.format(getString(R.string.op_exception_folder_deleted), dirPath);
+                    showShortToast(SeafilePathChooserActivity.this, message);
+                } else {
+                    Log.d(DEBUG_TAG, "failed to load dirents: " + err.getMessage());
+                    err.printStackTrace();
+                    setErrorMessage(R.string.load_dir_fail);
+                }
+                return;
+            }
+
+            if (dirents == null) {
+                Log.d(DEBUG_TAG, "failed to load dirents: no error present");
+                setErrorMessage(R.string.load_dir_fail);
+                return;
+            }
+
+            updateAdapterWithDirents(dirents);
+        }
+    }
+
+    private void createNewFolder() {
+        if (!hasRepoWritePermission()) {
+            showShortToast(this, R.string.library_read_only);
+            return;
+        }
+
+        final NewDirDialog dialog = new NewDirDialog();
+        dialog.init(mNavContext.getRepoID(), mNavContext.getDirPath(), mAccount);
+        dialog.setTaskDialogLisenter(new TaskDialog.TaskDialogListener() {
+            @Override
+            public void onTaskSuccess() {
+                refreshDir();
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "PathChooserNewDirDialogFragment");
+    }
+
+    public boolean hasRepoWritePermission() {
+        if (mNavContext == null) {
+            return false;
+        }
+        if (mNavContext.getDirPermission() == null || mNavContext.getDirPermission().indexOf('w') == -1) {
+            return false;
+        }
+        return true;
+    }
+}

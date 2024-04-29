@@ -1,0 +1,100 @@
+<template>
+	<q-page class="column setting bg-white" :style-fn="myTweak">
+		<div class="row items-center q-ml-lg" style="margin-bottom: 20px">
+			<BtIcon src="settings" />
+			<q-toolbar-title>{{ t('setting') }}</q-toolbar-title>
+		</div>
+		<q-list>
+			<template v-for="(cell, index) in setting" :key="index">
+				<q-item
+					class="settingItem bg-blue-1-hover"
+					:class="{
+						'itemActive bg-blue-1': SETTING_MENU[cell].mode == mode
+					}"
+					clickable
+					@click="setMode(SETTING_MENU[cell].mode)"
+				>
+					<q-item-section avatar>
+						<q-avatar :icon="SETTING_MENU[cell].icon" />
+					</q-item-section>
+					<q-item-section>
+						<q-item-label>{{ SETTING_MENU[cell].name }}</q-item-label>
+					</q-item-section>
+				</q-item>
+			</template>
+		</q-list>
+	</q-page>
+</template>
+
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { SETTING_MENU } from '../../../utils/constants';
+// import { useMenuStore } from '../../../stores/menu';
+import { useI18n } from 'vue-i18n';
+
+const settingMenu = ['account', 'security', 'display', 'tools', 'rebinding'];
+
+export default defineComponent({
+	name: 'SettingsIndex',
+	components: {},
+	setup() {
+		let mode = ref(1);
+		const setting = ref(settingMenu);
+		const Router = useRouter();
+		const Route = useRoute();
+		// const meunStore = useMenuStore();
+
+		const setMode = (menu: number) => {
+			mode.value = menu;
+			Router.push({
+				path: '/settings/' + (mode.value ? mode.value : '')
+			});
+
+			console.log('Route.params', Route.params);
+
+			// setTimeout(() => {
+			// 	meunStore.rightDrawerOpen = true;
+			// }, 0);
+		};
+
+		// const toggleDrawer = () => {
+		// 	meunStore.leftDrawerOpen = !meunStore.leftDrawerOpen;
+		// };
+
+		const myTweak = () => {
+			return { height: '100%' };
+		};
+
+		const { t } = useI18n();
+
+		return {
+			mode,
+			setting,
+			setMode,
+			SETTING_MENU,
+			// toggleDrawer,
+			myTweak,
+			t
+		};
+	}
+});
+</script>
+
+<style scoped lang="scss">
+.setting {
+	padding-top: 20px;
+	height: 100vh;
+
+	.settingItem {
+		height: 58px;
+		line-height: 58px;
+		border-bottom: 0.5px solid #ececec;
+		box-sizing: border-box;
+
+		&.itemActive {
+			border-left: 2px solid $blue;
+		}
+	}
+}
+</style>

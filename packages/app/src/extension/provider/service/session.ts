@@ -1,0 +1,98 @@
+import PortMessage from '../../utils/message/portMessage';
+import { permissionService } from './index';
+
+export interface SessionProp {
+	origin: string;
+	icon: string;
+	name: string;
+}
+
+export class Session {
+	origin = '';
+	icon = '';
+	name = '';
+
+	pm: PortMessage | null = null;
+
+	pushMessage(event, data) {
+		if (this.pm) {
+			this.pm.send('message', { event, data });
+		}
+	}
+
+	constructor(data?: SessionProp | null) {
+		if (data) {
+			this.setProp(data);
+		}
+	}
+
+	setPortMessage(pm: PortMessage) {
+		this.pm = pm;
+	}
+
+	setProp({ origin, icon, name }: SessionProp) {
+		this.origin = origin;
+		this.icon = icon;
+		this.name = name;
+	}
+}
+
+// for each tab
+const sessionMap = new Map<string, Session | null>();
+
+const getSession = (key: string) => {
+	return sessionMap.get(key);
+};
+
+const getOrCreateSession = (id: number, origin: string) => {
+	if (sessionMap.has(`${id}-${origin}`)) {
+		return getSession(`${id}-${origin}`);
+	}
+
+	return createSession(`${id}-${origin}`, null);
+};
+
+const createSession = (key: string, data?: null | SessionProp) => {
+	const session = new Session(data);
+	sessionMap.set(key, session);
+
+	return session;
+};
+
+const deleteSession = (key: string) => {
+	sessionMap.delete(key);
+};
+
+const broadcastEvent = (ev, data?, origin?: string) => {
+	let sessions: { key: string; data: Session }[] = [];
+	sessionMap.forEach((session, key) => {
+		if (session && permissionService.hasPermission(session.origin)) {
+			sessions.push({
+				key,
+				data: session
+			});
+		}
+	});
+
+	// same origin
+	if (origin) {
+		sessions = sessions.filter((session) => session.data.origin === origin);
+	}
+
+	sessions.forEach((session) => {
+		try {
+			session.data.pushMessage?.(ev, data);
+		} catch (e) {
+			if (sessionMap.has(session.key)) {
+				deleteSession(session.key);
+			}
+		}
+	});
+};
+
+export default {
+	getSession,
+	getOrCreateSession,
+	deleteSession,
+	broadcastEvent
+};

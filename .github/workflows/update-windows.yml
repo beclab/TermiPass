@@ -1,0 +1,78 @@
+name: Update Windows
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches:
+            - "build/release1"
+        tags:
+          - 'v*'
+
+jobs:
+    update_windows:
+        runs-on: windows-2022
+        steps:
+            - name: Check out the repo
+              uses: actions/checkout@v3
+
+            - name: Setup Node
+              uses: actions/setup-node@v1
+              with:
+                node-version: '16.13'
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v1
+              with:
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
+            
+            - name: get latest tag
+              uses: "WyriHaximus/github-action-get-previous-tag@v1"
+              id: get-latest-tag
+              with:
+                fallback: latest
+
+            - name: Get npm cache directory
+              id: npm-cache-dir
+              shell: pwsh
+              run: echo "dir=$(npm config get cache)" >> ${env:GITHUB_OUTPUT}
+            - name: Cache
+              uses: actions/cache@v1
+              with:
+                path: ${{ steps.npm-cache-dir.outputs.dir }}
+                key: ${{ runner.os }}-node-${{ hashFiles('**/packagge-lock.json')}}
+                restore-keys: |
+                    ${{ runner.os }}-node-
+
+            - run: npm i -g @quasar/cli
+            - run: npm install
+
+            - name: format
+              run: npm run format
+              working-directory: ./packages/app
+              
+            - name: Build
+              run: quasar build -m electron -T win
+              working-directory: ./packages/app
+              env:
+                PLATFORM: DESKTOP
+
+            - name: Show path
+              run: ls packages/app/dist/electron/Packaged/
+
+            - name: Get package version
+              id: get-version
+              run:  |
+                $version = (Get-Content -Path .\packages\app\package.json | ConvertFrom-Json).version
+                Write-Output "##[set-output name=version;]$version"
+
+            - name: Release Windows app
+              uses: djnicholson/release-action@v2.11
+              with:
+                token: ${{ secrets.GITHUB_TOKEN }}
+                release-name: TermiPass-exe Release
+                tag-name: ${{ steps.get-latest-tag.outputs.tag }}
+                asset-name: TermiPass.exe
+                file: 'packages/app/dist/electron/Packaged/TermiPass Setup ${{ steps.get-version.outputs.version }}.exe'

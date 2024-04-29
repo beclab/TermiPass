@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
+    <TextView
+        android:id="@+id/item_url"
+        android:layout_width="wrap_content"
+        android:textColor="#000000"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="uri"
+        app:layout_constraintBottom_toTopOf="@id/item_usename"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintTop_toTopOf="@id/imageView" />
+
+    <TextView
+        android:id="@+id/item_usename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="帐号信息"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@id/imageView"
+        app:layout_constraintStart_toEndOf="@id/imageView"
+        app:layout_constraintStart_toStartOf="@id/item_url"
+        app:layout_constraintTop_toBottomOf="@id/item_url" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

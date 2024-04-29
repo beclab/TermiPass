@@ -1,0 +1,9 @@
+framework module "LocalVpnSDK" {
+	header "ref.h"
+    header "Local_vpn_sdk.objc.h"
+    header "Utils.objc.h"
+    header "Universe.objc.h"
+    header "LocalVpnSDK.h"
+
+    export *
+}

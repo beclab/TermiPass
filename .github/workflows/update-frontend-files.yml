@@ -1,0 +1,53 @@
+name: Update Frontend Files
+
+on:
+    workflow_dispatch:
+
+    push:
+        branches:
+          - "v8"
+          - "dev_wrx_v8"
+          - "cache-download"
+        tags:
+          - 'v*'
+          - 'w*'
+
+jobs:
+    update_frontend:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out the repo
+              uses: actions/checkout@v3
+
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v2
+              with:
+                username: ${{ secrets.DOCKERHUB_USERNAME }}
+                password: ${{ secrets.DOCKERHUB_PASS }}
+            - name: get latest tag
+              uses: "WyriHaximus/github-action-get-previous-tag@v1"
+              id: get-latest-tag
+              with:
+                fallback: latest
+            - name: Setup Node
+              uses: actions/setup-node@v1
+              with:
+                node-version: '16.13'
+            - name: Cache
+              uses: actions/cache@v1
+              with:
+                path: ~/.npm
+                key: ${{ runner.os }}-node-${{ hashFiles('**/packagge-lock.json')}}
+                restore-keys: |
+                    ${{ runner.os }}-node-
+            - run: npm i -g @quasar/cli
+            - run: npm install
+            - name: Build
+              run: npm run files:build
+            - name: Build and push
+              uses: docker/build-push-action@v2
+              with:
+                context: .
+                file: Dockerfile-frontend
+                push: true
+                tags: beclab/files-frontend:${{ steps.get-latest-tag.outputs.tag }}
