@@ -5,13 +5,13 @@ on:
 
     push:
         branches:
-            - "build/release"
+            - "refactor/macos"
         tags:
           - 'v*'
 
 jobs:
     update_ios:
-        runs-on: macos-latest
+        runs-on: macos-13
         steps:
             - name: Check out the repo
               uses: actions/checkout@v3
@@ -19,13 +19,21 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v1
               with:
-                  node-version: '16.18'
+                node-version: '16.18'
 
             - name: get latest tag
               uses: "WyriHaximus/github-action-get-previous-tag@v1"
               id: get-latest-tag
               with:
                 fallback: latest
+
+            - name: Show All Xcode version
+              run: ls /Applications | grep Xcode
+              
+            - name: Setup Xcode
+              uses: maxim-lobanov/setup-xcode@v1
+              with:
+                xcode-version: '14.2'
 
             - name: Cache
               uses: actions/cache@v1
@@ -38,7 +46,7 @@ jobs:
             - name: configure ruby
               uses: ruby/setup-ruby@v1
               with:
-                  ruby-version: 3.0
+                ruby-version: 3.0
 
             - name: Install Cocoapods
               run: sudo gem install cocoapods
