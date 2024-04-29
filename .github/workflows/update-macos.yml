@@ -61,14 +61,17 @@ jobs:
               env:
                 BUILD_CERTIFICATE_BASE64: ${{ secrets.IOS_BUILD_DEV_CERTIFICATE_BASE64 }}
                 P12_PASSWORD: ${{ secrets.IOS_P12_DEV_PASSWORD }}
+                BUILD_PROVISION_PROFILE_BASE64: ${{ secrets.MACOS_BUILD_PROVISION_PROFILE_BASE64 }}
                 KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
               run: |
                 # create variables
                 CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+                PlanetaMacDev=$RUNNER_TEMP/PlanetaMacDev.provisionprofile
                 KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
 
                 # import certificate and provisioning profile from secrets
-                echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode --output $CERTIFICATE_PATH
+                echo -n "$BUILD_CERTIFICATE_BASE64" | base64 --decode -o $CERTIFICATE_PATH
+                echo -n "$BUILD_PROVISION_PROFILE_BASE64" | base64 --decode -o $PlanetaMacDev
 
                 # create temporary keychain
                 security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
@@ -78,7 +81,14 @@ jobs:
                 # import certificate to keychain
                 security import $CERTIFICATE_PATH -P "$P12_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
                 security list-keychain -d user -s $KEYCHAIN_PATH
-            
+
+                # apply provisioning profile
+                mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+                cp $PlanetaMacDev ${{ github.workspace }}/packages/app/build/mac/
+                
+            - name: Show mac build files
+              run: ls -a packages/packages/app/build/mac/
+
             - name: Build dmg
               run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin/python quasar build -m electron -T mac
 
