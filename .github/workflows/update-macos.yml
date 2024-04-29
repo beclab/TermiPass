@@ -27,24 +27,6 @@ jobs:
               with:
                 fallback: latest
 
-            - name: Install pyenv
-              run: |
-                brew install pyenv
-
-            - name: Install Python 2.7
-              run: |
-                pyenv install 2.7.18
-                pyenv global 2.7.18
-                echo "Python 2.7 path is $(pyenv which python)"      
-              
-            - name: Get Python 2.7 Path
-              run: |
-                echo "PYTHON27_PATH=$(pyenv which python)" >> $GITHUB_ENV
-  
-            - name: Verify Python Path
-              run: |
-                echo "Using Python at $PYTHON27_PATH"
-
             - name: Show All Xcode version
               run: ls /Applications | grep Xcode
             
@@ -108,7 +90,7 @@ jobs:
               run: ls -a packages/app/build/mac/
             
             - name: Build dmg
-              run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=$PYTHON27_PATH quasar build -m electron -T mac
+              run: cd packages/app/;PLATFORM=DESKTOP quasar build -m electron -T mac
 
             - name: Show
               run: ls -a packages/app/dist/electron/Packaged/
