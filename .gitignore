@@ -76,3 +76,4 @@ packages/mockbfl2
 packages/app/src-capacitor/android/app/keystore.properties
 packages/app/src-capacitor/android/app/TerminusKey
 packages/app/macAddonSDK/TermiPassMac/TermiPassMac.xcodeproj/project.xcworkspace/xcuserdata/gjm.xcuserdatad/UserInterfaceState.xcuserstate
+packages/app/build/mac/PlanetaMacDev.provisionprofile
