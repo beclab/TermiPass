@@ -32,7 +32,7 @@ async function createMenuItem(options: {
 				}
 			);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 	});
 }

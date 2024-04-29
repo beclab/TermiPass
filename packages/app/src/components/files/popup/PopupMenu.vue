@@ -56,7 +56,6 @@ const emits = defineEmits(['showPopupProxy']);
 const { t } = useI18n();
 
 const showPopupProxy = (value: boolean) => {
-	console.log('showPopupProxyshowPopupProxy', props.item);
 	if (value) {
 		onBeforeShow();
 	}
@@ -157,8 +156,6 @@ const checkShardUser = () => {
 
 		newMenuList.push(slef);
 	}
-
-	console.log('newMenuListnewMenuList', newMenuList);
 
 	menuList.value = newMenuList;
 

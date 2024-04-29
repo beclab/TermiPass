@@ -38,8 +38,7 @@ export default route(function (/* { store, ssrContext } */) {
 		)
 	});
 
-	Router.beforeEach(async (to, from, next) => {
-		console.log(from);
+	Router.beforeEach(async (to, _from, next) => {
 		if (getUiType().isNotification) {
 			const store = useBexStore();
 			const approval = await store.controller.getApproval();

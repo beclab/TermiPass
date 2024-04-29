@@ -67,8 +67,6 @@ export const getFileInfo = (fileName: string) => {
 		ext.length == 0
 			? fileName
 			: fileName.substring(0, fileName.length - ext.length);
-	console.log('withoutExtFileName ===> ');
-	console.log(withoutExtFileName);
 	return {
 		ext,
 		realname: withoutExtFileName

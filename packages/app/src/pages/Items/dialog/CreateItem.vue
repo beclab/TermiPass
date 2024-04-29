@@ -244,7 +244,7 @@ async function onOKClick() {
 			vault: hasVault
 		});
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 }
 

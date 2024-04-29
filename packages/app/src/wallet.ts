@@ -16,15 +16,8 @@ class WalletCoreService {
 	}
 
 	async load() {
-		// if (this._walletCore) {
-		// 	return this.loaded;
-		// }
-
 		this._walletCore = await initWasm();
-
 		this._resolveLoad();
-		// console.log(this._walletCore);
-
 		return this.loaded;
 	}
 }

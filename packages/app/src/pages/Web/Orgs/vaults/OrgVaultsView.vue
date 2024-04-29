@@ -204,7 +204,7 @@
 <script lang="ts">
 import { defineComponent, computed, ref, watch, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { OrgMember, Group } from '@didvault/sdk/src/core';
+import { OrgMember } from '@didvault/sdk/src/core';
 import { formatDateFromNow, formatDateTime } from '@didvault/sdk/src/util';
 import { OrgMemberStatus } from '@didvault/sdk/src/core';
 import { app } from '../../../../globals';
@@ -418,14 +418,12 @@ export default defineComponent({
 				})
 					.onOk((data) => {
 						if (data.toLowerCase() === 'delete') {
-							console.log('onOk code is ');
 							resolve(true);
 						} else {
 							notifyWarning(t('please_re_enter'));
 						}
 					})
 					.onCancel(() => {
-						console.log('onCancel code is null');
 						resolve(false);
 					})
 			);
@@ -512,14 +510,6 @@ export default defineComponent({
 			groups.value = groups.value.filter((g: any) => g.name !== group.name);
 		}
 
-		function toggleMemberPermission(member: OrgMember) {
-			console.log(member);
-		}
-
-		function toggleGroupPermission(group: Group) {
-			console.log(group);
-		}
-
 		const handleEditExpir = (type: number) => {
 			if (!type) {
 				isEditExpir.value = false;
@@ -568,10 +558,8 @@ export default defineComponent({
 			onCancel,
 			addMember,
 			removeMember,
-			toggleMemberPermission,
 			addGroup,
 			removeGroup,
-			toggleGroupPermission,
 			handleEditExpir,
 			onDelete,
 			members,

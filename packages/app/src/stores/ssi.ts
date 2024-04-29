@@ -28,8 +28,6 @@ export const useSSIStore = defineStore('did', {
 	getters: {},
 	actions: {
 		async pre_did_register(jws: string) {
-			console.log('pre_did_register', jws);
-
 			const data = await this.did_instance!.post('/create_local', {
 				jws
 			});
@@ -47,7 +45,6 @@ export const useSSIStore = defineStore('did', {
 				);
 
 				if (get_did_response && get_did_response.status == 200) {
-					console.log(JSON.stringify(get_did_response.data, null, 2));
 					if (get_did_response.data.code == 0) {
 						return get_did_response.data.data;
 					} else {
@@ -56,8 +53,6 @@ export const useSSIStore = defineStore('did', {
 				}
 				return null;
 			} catch (err) {
-				console.log(err);
-				console.log('not found name err: ' + did);
 				return undefined;
 			}
 		},
@@ -68,13 +63,10 @@ export const useSSIStore = defineStore('did', {
 				);
 
 				if (get_did_response && get_did_response.status == 200) {
-					console.log(JSON.stringify(get_did_response.data, null, 2));
 					return get_did_response.data;
 				}
 				return null;
 			} catch (err) {
-				console.log(err);
-				console.log('not found name err: ' + name);
 				return null;
 			}
 		},
@@ -83,29 +75,19 @@ export const useSSIStore = defineStore('did', {
 				const get_name_response = await this.did_instance!.get(
 					'/1.0/name/' + name.replace('@', '.')
 				);
-				console.log(get_name_response);
 				if (get_name_response && get_name_response.status == 200) {
-					console.log(JSON.stringify(get_name_response.data, null, 2));
 					return get_name_response.data;
 				}
 				return null;
 			} catch (err) {
-				console.log(err);
-				console.log('not found name err: ' + name);
 				return null;
 			}
 		},
 		async get_application_schema(
 			type: string
 		): Promise<ClientSchema | undefined> {
-			console.log('get_application_schema', type);
 			const response: any = await this.vc_instance!.get(
 				'/get_application_schema/' + type
-			);
-			console.log('get_application_schema', response.status);
-			console.log(
-				'get_application_schema',
-				JSON.stringify(response.data, null, 2)
 			);
 			if (response.status != 200 && response.data.code != 0) {
 				return undefined;
@@ -115,7 +97,6 @@ export const useSSIStore = defineStore('did', {
 		async get_application_response(
 			id: string
 		): Promise<GetResponseResponse | undefined> {
-			console.log('get_application_response', id);
 			const response: any = await this.vc_instance!.get(
 				'/get_application_response/' + id
 			);
@@ -127,14 +108,8 @@ export const useSSIStore = defineStore('did', {
 		async get_presentation_definition(
 			type: string
 		): Promise<PresentationDefinition | undefined> {
-			console.log('get_presentation_definition', type);
 			const response = await this.vc_instance!.get(
 				'/get_presentation_definition/' + type
-			);
-			console.log('get_presentation_definition', response.status);
-			console.log(
-				'get_presentation_definition',
-				JSON.stringify(response.data, null, 2)
 			);
 			if (response.status != 200 || response.data.code != 0) {
 				return undefined;

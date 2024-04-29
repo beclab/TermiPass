@@ -37,9 +37,6 @@ export class WebPlatform extends SubAppPlatform {
 
 	async appLoadPrepare(data: any): Promise<void> {
 		super.appLoadPrepare(data);
-		console.log('data ===>');
-		console.log(data);
-
 		if (data.router) {
 			this.router = data.router;
 		}
@@ -63,7 +60,6 @@ export class WebPlatform extends SubAppPlatform {
 		const userStore = useUserStore();
 		return this.getTerminusInfo()
 			.then((data) => {
-				console.log('userStore', userStore.isBooted);
 				if (data.terminusName && data.wizardStatus == 'completed') {
 					return userStore.load().then(() => {
 						userStore.currentUserSaveTerminusInfo(data);
@@ -113,11 +109,6 @@ export class WebPlatform extends SubAppPlatform {
 						getWebPlatform().quasar?.loading.show();
 						try {
 							await app.clearSession();
-							console.log('app.vault ===>');
-							console.log(app.state.vaults);
-
-							// await app.unlock(userStore.current_user!.mnemonic);
-
 							const authRes = await _authenticate({
 								did: userStore.current_user!.local_name,
 								type: AuthType.SSI,
@@ -135,7 +126,7 @@ export class WebPlatform extends SubAppPlatform {
 								authToken: authRes.token
 							});
 						} catch (e) {
-							console.log(e);
+							console.error(e);
 						} finally {
 							getWebPlatform().quasar?.loading.hide();
 						}

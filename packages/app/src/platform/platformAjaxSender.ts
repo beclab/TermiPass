@@ -32,8 +32,6 @@ export class PlatformAjaxSender implements Sender {
 		if (getAppPlatform().hookServerHttp) {
 			const instance1 = axiosInstanceProxy(config);
 			instance1.interceptResponse((res) => {
-				console.log('res ===>', res);
-
 				if (typeof res.data === 'string') {
 					const jsonString = base64ToString(res.data);
 					res.data = new Blob([jsonString], {
@@ -62,8 +60,6 @@ export class PlatformAjaxSender implements Sender {
 			res = unmarshal(res);
 			return new Response().fromRaw(res);
 		} catch (e) {
-			console.log('PlatformAjaxSender request', e.response);
-
 			if (e.response) {
 				if (e.response.status == 525) {
 					throw new Err(ErrorCode.SERVER_NOT_EXIST);
@@ -75,7 +71,6 @@ export class PlatformAjaxSender implements Sender {
 					throw new Err(ErrorCode.TOKE_INVILID);
 				}
 			}
-			console.log('PlatformAjaxSender send error: ', e);
 			throw new Err(ErrorCode.SERVER_ERROR);
 		}
 	}

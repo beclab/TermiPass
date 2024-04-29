@@ -86,7 +86,6 @@ const { t } = useI18n();
 if (process.env.IS_BEX) {
 	bexStore.controller.getApproval().then((approval) => {
 		if (approval) {
-			console.log(approval);
 			approvalUserIdRef.value = approval.data.params.requestDidKey as string;
 		}
 	});

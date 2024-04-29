@@ -214,7 +214,6 @@ const getParams = (app, value) => {
 
 const search = async (value) => {
 	message_end.value = false;
-	console.log('message_endaaa', message_end.value);
 	typewriter.start();
 	controller = new AbortController();
 

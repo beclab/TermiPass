@@ -226,19 +226,15 @@ const ns = ref<string[]>([]);
 onMounted(async () => {
 	const base: string = route.params.base as string;
 	domainName.value = Encoder.bytesToString(Encoder.base64UrlToBytes(base));
-	console.log(domainName.value);
 	domain.value = await cloudStore.selectDomain(domainName.value);
-	console.log(domain.value);
 
 	if (domain.value && domain.value.status == 'WAIT_CNAME_RESOLVE') {
 		try {
-			console.log(domain.value.ns);
-			console.log(domain.value.ns?.length);
 			let jsonString = domain.value.ns!.replace('[', '');
 			jsonString = jsonString.replace(']', '');
 			ns.value = jsonString.split(',');
 		} catch (error) {
-			console.log(error.message);
+			console.error(error.message);
 		}
 	}
 });
@@ -476,7 +472,7 @@ const copyFunc = async (content: string) => {
 		await getPlatform().setClipboard(content);
 		notifySuccess(t('copy_success'));
 	} catch (error) {
-		console.log(error.message);
+		console.error(error.message);
 	}
 };
 </script>

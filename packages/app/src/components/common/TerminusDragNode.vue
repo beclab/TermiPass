@@ -20,7 +20,6 @@ var mouseDownFlag = false;
 var moveTimer: NodeJS.Timer | null = null;
 
 const barDBClick = async () => {
-	console.log('double click');
 	if (!$q.platform.is.electron) {
 		return;
 	}

@@ -104,7 +104,6 @@ const verifyPassword = async () => {
 		return;
 	}
 
-	console.log('loading-test');
 	loading.value = true;
 	await savePassword(password, {
 		async onSuccess() {

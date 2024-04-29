@@ -156,14 +156,13 @@ export default defineComponent({
           let usageStats  = { used: 0, total: 0, usedPercentage: 0 };
           try {
             let data = await api.usage(path);
-            console.log(data)
             usageStats = {
               used: prettyBytes(data.used, { binary: true }),
               total: prettyBytes(data.total, { binary: true }),
               usedPercentage: Math.round((data.used / data.total) * 100),
             };
           } catch (error) {
-						console.log(error);
+						console.error(error);
           }
           usage.value = usageStats;
       }

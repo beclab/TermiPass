@@ -232,7 +232,6 @@ export default defineComponent({
 		});
 
 		const raw = computed(function () {
-			console.log('rawraw', store.req);
 			if (store.req.type === 'image' && !fullSize.value) {
 				return api.getPreviewURL(store.req, 'thumb');
 			}
@@ -375,7 +374,6 @@ export default defineComponent({
 		}, 500);
 
 		const close = async () => {
-			console.log('store.req', store.req);
 			if (!checkSeahub(store.req.path)) {
 				router.back();
 				store.updateRequest({});

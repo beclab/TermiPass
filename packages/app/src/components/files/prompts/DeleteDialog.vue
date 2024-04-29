@@ -86,11 +86,9 @@ const submit = async () => {
 			const pathLen =
 				store.req.path.indexOf(store.currentItem) + store.currentItem.length;
 			parent_dir = store.req.path.slice(pathLen);
-			console.log(parent_dir);
 			const nameLen = parent_dir.indexOf(store.req.name);
 			dirents.push(store.req.name);
 			parent_dir = parent_dir.substring(0, nameLen);
-			console.log(parent_dir);
 		} else if (checkSeahub(route.path)) {
 			const dec = decodeURI(route.path);
 			const pathLen = dec.indexOf(store.currentItem) + store.currentItem.length;
@@ -98,10 +96,7 @@ const submit = async () => {
 			for (let index of store.selected) {
 				dirents.push(store.req.items[index].name);
 			}
-			console.log('pathLen ===>' + pathLen);
 		}
-
-		console.log('dirents ===>' + dirents);
 
 		const parmas = {
 			dirents: dirents,
@@ -147,7 +142,6 @@ const submit = async () => {
 		notifyWaitingShow('Deleting, Please wait...');
 
 		if (store.selectedCount === 0 && !store.req.isDir) {
-			console.log(4);
 			await promises.push(api.remove(store.req.url));
 		} else {
 			for (let index of store.selected) {

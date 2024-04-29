@@ -101,11 +101,9 @@ export class WebPlatform extends StubPlatform implements Platform {
 				this._clipboardTextArea =
 					this._clipboardTextArea || document.createElement('textarea');
 				document.body.appendChild(this._clipboardTextArea);
-				console.log(this._clipboardTextArea);
 				this._clipboardTextArea.value = '';
 				this._clipboardTextArea.select();
 				document.execCommand('paste');
-				console.log(this._clipboardTextArea.value);
 				document.body.removeChild(this._clipboardTextArea);
 				resolve(this._clipboardTextArea.value);
 			}
@@ -113,7 +111,6 @@ export class WebPlatform extends StubPlatform implements Platform {
 	}
 
 	async getDeviceInfo() {
-		console.log('getDeviceInfo ......');
 		const { os, browser } = await browserInfo;
 		const platform = (os.name && os.name.replace(' ', '')) || '';
 		return new DeviceInfo({
@@ -265,9 +262,6 @@ export class WebPlatform extends StubPlatform implements Platform {
 			// 	const pdata = new PublicKeyAuthClientData();
 			// 	await pdata.generateKeys();
 
-			// 	console.log(pdata.publicKey);
-			// 	console.log(pdata.privateKey);
-
 			// 	if (!pdata.privateKey || !pdata.privateKey) {
 			// 		return null;
 			// 	}
@@ -294,9 +288,6 @@ export class WebPlatform extends StubPlatform implements Platform {
 				$l('Authentication type not supported!')
 			);
 		}
-
-		console.log('_prepareRegisterAuthenticator ' + type + ' ' + data);
-
 		return client.prepareRegistration(data);
 	}
 

@@ -24,9 +24,6 @@ export default defineComponent({
 	setup() {
 		// const $q = useQuasar();
 		const userStore = useUserStore();
-		console.log('userStore.terminusInfo ==>');
-		console.log(userStore.terminusInfo());
-
 		const options = ref([
 			{
 				value: 'QRCode',
@@ -54,30 +51,9 @@ export default defineComponent({
 				frps_region: 'Virginia'
 			}
 		};
-		console.log(wizard);
-
 		const url = ref<string>(
 			'active_vault://' + Encoder.stringToBase64Url(JSON.stringify(wizard))
 		);
-
-		//const sso_token = ref<string>(ostoken);
-		//const bfl_token = ref<string>('');
-
-		//if (base_url.startsWith('http://localhost')) {
-		// if (process.env.PL_SERVER_URL) {
-		// 	// token.value =
-		// 	// 	'test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token-test-token';
-		// 	//sso_token.value = 'GDbSOW6E#2lH5##i8fotFrqpYLToslqt'
-		// 	bfl_token.value =
-		// 		'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Nzg3NzU0OTQsImlhdCI6MTY3ODc2ODI5NCwiaXNzIjoia3ViZXNwaGVyZSIsInN1YiI6ImxpdXl1IiwidG9rZW5fdHlwZSI6ImFjY2Vzc190b2tlbiIsInVzZXJuYW1lIjoibGl1eXUifQ.Yr7OhrQ39OXmesVJldORZ34UsFZpiiCWpssKlRxEOR4';
-		// }
-
-		// const url = ref<string>(
-		// 	base_url +
-		// 		'?bfl_token=' +
-		// 		bfl_token.value +
-		// 		'&username=liuyu&password=Test123456'
-		// );
 
 		return {
 			url,

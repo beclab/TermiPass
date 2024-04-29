@@ -225,7 +225,6 @@ const deleteFile = () => {
 
 const prev = async () => {
 	const items = store.oldReq.items.filter((e) => !e.isDir);
-	console.log('items ==>' + items);
 
 	const index = items.findIndex((e) => e.name == store.req.name);
 	if (index < 1) {
@@ -253,7 +252,6 @@ const next = async () => {
 		return;
 	}
 	let nextItem = items[index + 1];
-	console.log(nextItem);
 	if (
 		nextItem.type == 'audio' ||
 		nextItem.type == 'video' ||
@@ -263,7 +261,6 @@ const next = async () => {
 			nextItem = await seahub.formatFileContent(nextItem);
 		}
 	}
-	console.log(nextItem);
 	store.req = nextItem;
 };
 
@@ -273,8 +270,6 @@ watch(
 		if (newVal.type == undefined) {
 			return null;
 		}
-		console.log('store.req ===>');
-		console.log(store.req);
 		title.value = store.req.name;
 		currentView.value = undefined;
 

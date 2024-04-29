@@ -391,7 +391,6 @@ export const useMenuStore = defineStore('menu', {
 		},
 
 		clear() {
-			console.log('clear');
 			this.favorites = false;
 			this.attachments = false;
 			this.recent = false;
@@ -500,8 +499,6 @@ export const useMenuStore = defineStore('menu', {
 				orgs,
 				invites: app.authInfo?.invites
 			});
-
-			console.log('appstatesyncingappstatesyncing', app.state.syncing);
 
 			this.syncInfo = {
 				syncing: app.state.syncing,

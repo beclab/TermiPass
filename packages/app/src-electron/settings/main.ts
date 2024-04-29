@@ -28,11 +28,7 @@ const listenerEvent = (window: BrowserWindow | undefined) => {
 		});
 
 		port2.on('message', (message) => {
-			console.log('port2 receive:' + message.data);
-			// port2.postMessage("i receive your messages:")
 			const type = message.data.type;
-			console.log('port2 type');
-			console.log(type);
 			if (type == 'ready') {
 				port2.postMessage({
 					type: 'start'
@@ -40,15 +36,12 @@ const listenerEvent = (window: BrowserWindow | undefined) => {
 			}
 
 			if (type == 'network_status' && window) {
-				console.log(message.data);
 				const value = message.data.content;
 				ipcSettingsMainSend(window, 'listenerNetworkUpdate', value);
 			}
 		});
 		port2.start();
-		child.on('message', (e) => {
-			console.log('接收到消息了:', e);
-		});
+		child.on('message', () => {});
 	}
 
 	ipcSettingsMainHandle('getAutomaticallyStartBoot', () => {
@@ -61,8 +54,6 @@ const listenerEvent = (window: BrowserWindow | undefined) => {
 	ipcSettingsMainHandle(
 		'setAutomaticallyStartBoot',
 		(_event, enable: boolean) => {
-			console.log('enable ===>');
-			console.log(enable);
 			const exeName = path.basename(process.execPath);
 			app.setLoginItemSettings({
 				openAtLogin: enable,
@@ -126,10 +117,6 @@ const updatePreventSleepTasks = () => {
 		stores.TASKS_PRESENT_DISPLAY_SLEEP,
 		true
 	) as boolean;
-	// 如果开关是关闭的 不需要启动sleep
-	console.log(
-		'setting set settingsPreventSleepBoot===>: ' + settingsPreventSleepBoot
-	);
 	if (!settingsPreventSleepBoot) {
 		if (preventDisplaySleepId >= 0) {
 			powerSaveBlocker.stop(preventDisplaySleepId);
@@ -137,19 +124,11 @@ const updatePreventSleepTasks = () => {
 		}
 		return;
 	}
-	console.log(
-		'if has sleep task ===>' +
-			preventDisplaySleepTaskList.find((e) => e.status == true)
-	);
-
-	// 如果有需要阻止lsleep的任务 添加
 	if (preventDisplaySleepTaskList.find((e) => e.status == true)) {
 		if (preventDisplaySleepId < 0) {
-			console.log('prevent-display-sleep start');
 			preventDisplaySleepId = powerSaveBlocker.start('prevent-display-sleep');
 		}
 	} else {
-		//没有sleep任务时 移除
 		if (preventDisplaySleepId >= 0) {
 			powerSaveBlocker.stop(preventDisplaySleepId);
 			preventDisplaySleepId = -1;

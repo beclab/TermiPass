@@ -73,7 +73,6 @@ export const useScaleStore = defineStore('scale', {
 			if (data) {
 				if (typeof data == 'string') {
 					this.authKey = new PreAuthKey().fromJSON(data);
-					console.log(this.authKey);
 				} else {
 					this.authKey = data;
 				}
@@ -110,8 +109,8 @@ export const useScaleStore = defineStore('scale', {
 					}
 					this.authKey = data;
 					await this.setEncryptData(this.owner, data.toJSON());
-				} catch {
-					console.log('get preauthKey error');
+				} catch (e) {
+					console.error('get preauthKey error', e);
 				}
 			}
 
@@ -129,7 +128,6 @@ export const useScaleStore = defineStore('scale', {
 			}
 			if (await this.reLogin()) {
 				if (!this.authKey) {
-					console.log('authKey error');
 					this.vpnStatus = TermiPassVpnStatus.off;
 					return;
 				}

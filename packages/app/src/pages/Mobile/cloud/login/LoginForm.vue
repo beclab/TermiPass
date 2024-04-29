@@ -190,10 +190,7 @@ const handleLogin = async () => {
 	try {
 		const ob1: any = {};
 		ob1.item = email.value;
-		console.log(ob1);
-		console.log(password.value);
 		ob1.password = md5(password.value);
-		console.log(ob1);
 		const res = await api.post(cloudStore.url + '/v1/user/login', ob1);
 
 		loginToken.value = res.data;
@@ -209,7 +206,7 @@ const handleLogin = async () => {
 		Loading.hide();
 		step.value = 2;
 	} catch (e: any) {
-		console.log(e);
+		console.error(e);
 		Loading.hide();
 		notifyFailed(e.message || t('prompts.error'));
 	}
@@ -294,8 +291,6 @@ const handleSubmit = async () => {
 
 		Loading.hide();
 
-		console.log(response);
-
 		var res = response.data;
 
 		if (response.code == 200 && loginToken.value) {
@@ -306,7 +301,6 @@ const handleSubmit = async () => {
 			user.cloud_email_enable = loginToken.value.emailEnable || false;
 			user.cloud_email_mask = loginToken.value.emailMask || '';
 			user.cloud_expired = loginToken.value.expired;
-			console.log(4);
 			await userStore.users!.items.update(user);
 			await userStore.save();
 			emit('loginSuccess');

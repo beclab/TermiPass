@@ -71,8 +71,6 @@ export const filesMainHandleCallBack = (
 export const filesWorkerInit = () => {
 	worker = new Worker(path.resolve(__dirname, 'filesAsync.js'));
 	worker.on('message', (message) => {
-		console.log('main on message  ===>', message);
-		console.log(message.resolveKey);
 		if (message.resolveKey && resolveCallback.get(message.resolveKey)) {
 			const resolve = resolveCallback.get(message.resolveKey);
 			if (resolve) {

@@ -58,7 +58,6 @@ defineProps({
 const emit = defineEmits(['onConfirm', 'onError']);
 
 const onConfirm = () => {
-	console.log('on - confirm');
 	emit('onConfirm');
 };
 

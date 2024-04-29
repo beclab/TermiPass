@@ -15,8 +15,7 @@ const getProviderState = async (req) => {
 		session: { origin }
 	} = req;
 
-	const data = permissionService.getWithoutUpdate(origin);
-	console.log(data);
+	permissionService.getWithoutUpdate(origin);
 	const center = getExtensionBackgroundPlatform().dataCenter;
 	const isUnlocked = !center.isLocked();
 	const didKey = await center.getUser();

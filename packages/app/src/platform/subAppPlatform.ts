@@ -60,7 +60,5 @@ export class SubAppPlatform extends WebPlatform implements AppPlatform {
 		return '';
 	}
 
-	reconfigAppStateDefaultValue(appState: AppState) {
-		console.log(appState);
-	}
+	reconfigAppStateDefaultValue(_appState: AppState) {}
 }

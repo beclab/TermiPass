@@ -182,7 +182,6 @@ export const useMenuStore = defineStore('filesMenu', {
 			}
 
 			const res = await shareToUser.getUserList();
-			console.log('getUserList res', res);
 
 			this.userList = res.filter((item: any) => {
 				return (
@@ -285,7 +284,6 @@ export const useMenuStore = defineStore('filesMenu', {
 				);
 				if (!result) {
 					this.syncStatus = !this.syncStatus;
-					console.log('updateAutoSync fail');
 				}
 			}
 		},

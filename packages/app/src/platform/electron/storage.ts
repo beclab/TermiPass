@@ -51,7 +51,7 @@ export class ElectronUserStorage implements UserStorage {
 			const jsonData = JSON.parse(data);
 			return jsonData;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 		return data;
 	}
@@ -61,7 +61,7 @@ export class ElectronUserStorage implements UserStorage {
 			try {
 				saveValue = JSON.stringify(value);
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 		}
 		window.electron.store.set(key, saveValue);

@@ -47,10 +47,7 @@ const listenerEvent = async () => {
 				true,
 				(result: string) => {
 					if (result && result.length) {
-						console.log('result ===>');
-						console.log(result);
 						const path = `${result}${subPath ? subPath : ''}`;
-						console.log('path ===>', path);
 						shell.openPath(path);
 					}
 				}

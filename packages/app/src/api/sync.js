@@ -83,7 +83,6 @@ export async function getSyncMenu() {
 	for (let index = 0; index < menu.length; index++) {
 		const el = menu[index];
 		if (el.label === MenuItem.SYNC) {
-			console.log('syncChildremsyncChildrem', el);
 			let shardArr = [];
 			if (shareChildren.length > 0 || sharedme.length > 0) {
 				shardArr = [shardWith, ...shareChildren, ...sharedme];

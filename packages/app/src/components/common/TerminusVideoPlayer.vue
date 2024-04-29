@@ -29,9 +29,7 @@ const videoOptions = {
 };
 
 onMounted(() => {
-	player = videojs('videoPlayer', videoOptions, () => {
-		console.log();
-	});
+	player = videojs('videoPlayer', videoOptions, () => {});
 });
 
 onBeforeUnmount(() => {

@@ -464,8 +464,7 @@ const action = async (
 				notifyHide();
 				dataStore.setReload(true);
 			})
-			.catch((e) => {
-				console.log(e);
+			.catch(() => {
 				notifyHide();
 			});
 	} else {
@@ -476,8 +475,7 @@ const action = async (
 				notifyHide();
 				dataStore.setReload(true);
 			})
-			.catch((e) => {
-				console.log(e);
+			.catch(() => {
 				notifyHide();
 			});
 	}

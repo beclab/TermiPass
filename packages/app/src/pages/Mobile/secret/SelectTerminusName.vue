@@ -80,7 +80,6 @@ async function readySubmitPresentation(chooseCard: VCCardInfo) {
 			throw new Error(t('errors.not_choose_valid_vc_card'));
 		}
 
-		console.log(chooseCard.type);
 		if (chooseCard.type && chooseCard.type.toLowerCase() === 'facebook') {
 			throw new Error(
 				t(
@@ -120,8 +119,6 @@ async function readySubmitPresentation(chooseCard: VCCardInfo) {
 			address,
 			null
 		);
-		console.log(submission);
-
 		if (submission && submission.status === 'approved') {
 			user.name = submission.reason;
 			await userStore.users!.items.update(user);
@@ -133,7 +130,6 @@ async function readySubmitPresentation(chooseCard: VCCardInfo) {
 			throw new Error(submission.reason);
 		}
 	} catch (e) {
-		console.log(e);
 		$q.loading.hide();
 		notifyFailed(e.message);
 	}

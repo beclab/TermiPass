@@ -32,7 +32,7 @@ export class RssBackground implements UpdateBadgeInterface, BrowserInterface {
 						text: 'getPageRSS'
 					});
 				} catch (error) {
-					console.log(error);
+					console.error(error);
 				}
 				await RssService.handleRSS(feeds, tabid);
 			}

@@ -107,7 +107,6 @@ const lockTime = ref(app.settings.autoLockDelay);
 const lockStatus = ref(app.settings.autoLock);
 
 const changeAutoLockDelay = (value: number) => {
-	console.log(value);
 	app.setSettings({ autoLockDelay: value });
 };
 

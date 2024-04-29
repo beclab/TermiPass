@@ -98,9 +98,6 @@ watch(
 				resumeEnable.value = false;
 			}
 		}
-
-		console.log(pauseEnable.value);
-		console.log(resumeEnable.value);
 	},
 	{
 		immediate: true

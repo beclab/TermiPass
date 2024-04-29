@@ -50,7 +50,7 @@ export default class RssService {
 					Utils.global.pageRSSHub[tabId] = info;
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 		}
 	};
@@ -71,7 +71,7 @@ export default class RssService {
 				text: 'getHTML'
 			});
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 
 		const result = utilGetPageRSSHub({
@@ -92,7 +92,7 @@ export default class RssService {
 					Utils.global.pageRSS[tabId].push(feed);
 				}
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 		}
 	};

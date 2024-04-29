@@ -82,7 +82,6 @@ export const useMonitorStore = defineStore('monitor', {
 		},
 		async loadMonitor() {
 			const userStore = useUserStore();
-			console.log('monitor');
 			if (!userStore.current_user) {
 				this.clear();
 				return;
@@ -124,16 +123,12 @@ export const useMonitorStore = defineStore('monitor', {
 						transmitted: 200000
 					}
 				};
-				console.log(data);
-
 				this.usages = [];
 				this.usages.push(data.cpu);
 				this.usages.push(data.memory);
 				this.usages.push(data.disk);
 				this.net = data.net;
 				this.status = TerminusStatus.NORMAL;
-				console.log('monitor');
-				console.log(data);
 				return;
 			}
 
@@ -153,15 +148,11 @@ export const useMonitorStore = defineStore('monitor', {
 					{}
 				);
 
-				console.log('response ===>');
-				console.log(response);
-
 				if (!response || response.status != 200 || !response.data) {
 					this.error();
 					throw Error('Network error, please try again later');
 				}
 
-				console.log(response.data);
 				if (response.data.code != 0) {
 					this.error();
 					if (response.data.code == '100001' || response.data.code == 100001) {
@@ -192,8 +183,6 @@ export const useMonitorStore = defineStore('monitor', {
 					this.status = TerminusStatus.NORMAL;
 				}
 			} catch (error) {
-				console.log('monitor request error code');
-				console.log(error);
 				busEmit('network_error', {
 					type: NetworkErrorMode.monitor
 				});

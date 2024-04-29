@@ -199,7 +199,7 @@ export function download(format, ...files) {
 				node = parts[1].substring(0, parts[1].indexOf('/'));
 			}
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	}
 
@@ -409,7 +409,7 @@ export const formatFileContent = async (file) => {
 				const res = await fetchURL(`/api/resources${url}`, {});
 				file.content = res.data.content;
 			} catch (error) {
-				console.log(error.message);
+				console.error(error.message);
 			}
 		}
 	}

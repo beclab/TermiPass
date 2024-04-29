@@ -48,8 +48,6 @@ export default boot(({ app, router }) => {
 	app.config.globalProperties.$axios.interceptors.request.use(
 		(config: AxiosRequestConfig) => {
 			const cloudStore = useCloudStore();
-			console.log('config ' + config.url);
-			console.log(cloudStore.url);
 			if (
 				config.url &&
 				config.url.indexOf(cloudStore.url) !== -1 &&
@@ -105,10 +103,6 @@ export default boot(({ app, router }) => {
 
 	app.config.globalProperties.$axios.interceptors.response.use(
 		(response: AxiosResponse) => {
-			//console.log("response " + JSON.stringify(response));
-			console.log('response ==>');
-			console.log(response);
-
 			if (!response || response.status != 200 || !response.data) {
 				throw Error('Network error, please try again later');
 			}

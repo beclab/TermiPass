@@ -35,7 +35,6 @@ const $router = useRouter();
 
 const Route = useRoute();
 
-console.log(Route.params);
 const isPersonal = Route.params.isPersonal
 	? Route.params.isPersonal == 'true'
 		? true

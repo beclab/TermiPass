@@ -315,8 +315,6 @@ export const downloadFile = async (fileUrl: any, filename = '') => {
 						algoValue = keyValue[1];
 					}
 				});
-				console.log('algoValue：', algoValue);
-
 				if (name === '') {
 					const secondLastPart = urlParts[urlParts.length - 2];
 					const secondLastFileNameParts = secondLastPart.split('/');
@@ -333,9 +331,7 @@ export const downloadFile = async (fileUrl: any, filename = '') => {
 				name = match ? match[1] : name;
 			}
 
-			name = decodeURIComponent(name); // URL 解码
-			console.log('Download URL：', targetUrl);
-			console.log('Download Filename: ', name);
+			name = decodeURIComponent(name);
 
 			const blob = new Blob([xhr.response], {
 				type: 'application/octet-stream'
@@ -352,9 +348,6 @@ export const downloadFile = async (fileUrl: any, filename = '') => {
 			document.body.removeChild(link);
 
 			URL.revokeObjectURL(url);
-
-			// 在下载完成后执行回调函数或处理逻辑
-			console.log('File download successful!');
 		} else {
 			console.error(`Download failed with status ${xhr.status}`);
 		}

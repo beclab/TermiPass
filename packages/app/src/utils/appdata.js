@@ -56,7 +56,5 @@ export function formatAppDataNode(url, data) {
 		});
 	}
 
-	console.log(nodeDir);
-
 	return nodeDir;
 }

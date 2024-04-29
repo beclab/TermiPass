@@ -44,16 +44,9 @@ const extraShow = ref(false);
 const isnotification = ref(searchParamsObj.notification);
 const toggle = () => {
 	show.value = !show.value;
-	console.log(
-		'getSearchParamsObj',
-		searchParamsObj,
-		searchParamsObj.q,
-		searchParamsObj.v
-	);
 };
 
-$q?.bex?.on('webos.app.status', ({ data, respond }) => {
-	console.log(data);
+$q?.bex?.on('webos.app.status', ({ respond }) => {
 	toggle();
 	respond();
 });

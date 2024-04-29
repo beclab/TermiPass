@@ -86,7 +86,6 @@ export default defineComponent({
 		const store = useDataStore();
 
 		const raw = computed(function () {
-			console.log('rawraw', store.req);
 			if (store.req.type === 'image' && !store.preview.fullSize) {
 				return api.getPreviewURL(store.req, 'big');
 			}

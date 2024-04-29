@@ -151,7 +151,6 @@ const mnemonicsInit = () => {
 		});
 	}
 	mnemonicsRef.value = mnemonics;
-	console.log(mnemonicsRef.value.length);
 };
 
 mnemonicsInit();
@@ -230,20 +229,19 @@ const pasteFunc = async () => {
 	if (props.isPaste) {
 		try {
 			let text = await getPlatform().getClipboard();
-			console.log(text);
 			text = text.replace(/(^\s*)|(\s*$)/g, '');
 			if (text.length > 0 && text.split(' ').length === mnemonicsLength.value) {
 				textOnChanged(0, text);
 			}
 		} catch (error) {
-			console.log(error.message);
+			console.error(error.message);
 		}
 	} else {
 		try {
 			await getPlatform().setClipboard(props.mnemonics);
 			notifySuccess('copy success');
 		} catch (error) {
-			console.log(error.message);
+			console.error(error.message);
 		}
 	}
 };

@@ -42,7 +42,6 @@ export const useRssStore = defineStore('rss', {
 				});
 				return data;
 			} catch (error) {
-				console.log(error);
 				return undefined;
 			}
 		},

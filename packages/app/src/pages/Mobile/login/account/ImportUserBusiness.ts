@@ -61,7 +61,7 @@ export async function parsingMnemonics(
 
 		await callback.onSuccess(name);
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		callback.onFailure(error.message);
 	}
 }

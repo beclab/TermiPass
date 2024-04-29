@@ -38,11 +38,7 @@ module.exports = class CopyWebpackPlugin {
 											path.resolve(option.toPath, option.toName),
 											(error) => {
 												if (error) {
-													console.error(file.name + '复制失败：' + error);
-												} else {
-													console.log(
-														file.name + '复制成功！path: ' + option.toPath
-													);
+													console.error(file.name + 'copy failed：' + error);
 												}
 											}
 										);

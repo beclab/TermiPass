@@ -62,7 +62,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 	$q.loading.show();
 	await requestBindVC(request_type, null, {
 		async onSuccess(data: any) {
-			console.log(data);
 			if (data) {
 				const userBindStatus = current_user_bind_status();
 				const terminusName = userStore.current_user?.name;
@@ -121,7 +120,6 @@ const googleTestUpdateCheck = () => {
 	// 	}
 	// }
 	// count++;
-	// console.log(count);
 };
 </script>
 

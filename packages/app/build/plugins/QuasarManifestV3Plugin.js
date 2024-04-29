@@ -71,7 +71,7 @@ module.exports = class CopyWebpackPlugin {
 									});
 
 									fs.writeFile(filePath, replaced, 'utf-8', function (err) {
-										console.log(err);
+										console.error(err);
 									});
 								});
 							}

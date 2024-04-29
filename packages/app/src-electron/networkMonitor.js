@@ -40,7 +40,6 @@ function emitNetworkStatusDidChange(status) {
 		return;
 	}
 	networkStatus = status;
-	console.log(status);
 	if (!curreport) {
 		return;
 	}

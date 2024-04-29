@@ -17,7 +17,6 @@ export const homeUnMounted = () => {
 };
 
 function startLockTimer() {
-	console.log('startLockTimer');
 	_cancelAutoLock();
 	if (app.settings.autoLock && !app.state.locked) {
 		_lockTimeout = window.setTimeout(
@@ -64,7 +63,7 @@ async function _doSync() {
 			try {
 				await app.synchronize();
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		}
 		_doSync();

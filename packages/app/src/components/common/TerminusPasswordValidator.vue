@@ -126,11 +126,9 @@ function setButtonStatus() {
 		emit('update:buttonStatus', ConfirmButtonStatus.normal);
 		emit('update:buttonText', t('next'));
 	}
-	console.log('btnStatusRef.value ===' + props.btnStatusRef);
 }
 
 function clearPassword() {
-	console.log('clear');
 	passwordRef.value = '';
 	rePwdRef.value = '';
 }

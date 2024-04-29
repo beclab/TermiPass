@@ -7,8 +7,8 @@ export class SSIAuthClient implements AuthClient {
 		return type === AuthType.SSI;
 	}
 
-	async prepareRegistration(params: { challenge: string }) {
-		console.log(params);
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async prepareRegistration(_params: { challenge: string }) {
 		// const userStore = useUserStore();
 		// if (
 		// 	!userStore.current_id ||
@@ -32,7 +32,6 @@ export class SSIAuthClient implements AuthClient {
 	}
 
 	async prepareAuthentication(params: { challenge: any }) {
-		console.log('challenge ' + params.challenge.value);
 		const userStore = useUserStore();
 		if (
 			!userStore.current_id ||

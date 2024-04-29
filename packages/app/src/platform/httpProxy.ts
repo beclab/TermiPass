@@ -91,8 +91,6 @@ const formatHookRequest = (
 				url,
 				method: prop as Method
 			};
-			console.log(reConfig);
-
 			return await requestCommonCallBack(target, url, reConfig, prop as Method);
 		};
 	} else if (['post', 'put', 'patch'].includes(prop)) {

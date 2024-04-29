@@ -32,7 +32,6 @@ export function formatSeahub(url, data) {
 				? el.name.substring(el.name.lastIndexOf('.'))
 				: '';
 		let fileTypeName = el.type === 'dir' ? 'folder' : getFileType(el.name);
-		console.log(new Date(el.mtime * 1000));
 		const obj = {
 			path: `${url}${el.name}/`,
 			name: el.name,

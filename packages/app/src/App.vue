@@ -72,13 +72,9 @@ export default defineComponent({
 
 			let state = $q.platform.is.mobile;
 			if (state) {
-				import('./css/listing-mobile.css').then(() => {
-					console.log('listing-mobile');
-				});
+				import('./css/listing-mobile.css').then(() => {});
 			} else {
-				import('./css/listing.css').then(() => {
-					console.log('listing');
-				});
+				import('./css/listing.css').then(() => {});
 			}
 
 			if (process.env.PLATFORM !== 'FILES') {

@@ -113,13 +113,12 @@ export class DIDKey {
 		// 	const mnemonic = wallet.mnemonic();
 		// 	return mnemonic;
 		// } catch (e) {
-		// 	console.log(e);
 		// }
 		try {
 			const mnemonic = bip39.generateMnemonic();
 			return mnemonic;
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	}
 

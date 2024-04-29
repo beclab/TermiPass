@@ -13,7 +13,6 @@ class SeafileAPI {
 	req: any;
 
 	init(initOptions: InitOptionsInterface) {
-		console.log('initOptions', initOptions);
 		this.server = initOptions.server;
 		this.req = axiosInstanceProxy({
 			baseURL: this.server,

@@ -304,8 +304,6 @@ export default defineComponent({
 
 				const currentItem = store.currentItem;
 
-				console.log('currentItemcurrentItem', currentItem);
-
 				fileUploaderPath.value =
 					route.path.slice(
 						route.path.indexOf(currentItem) + currentItem.length
@@ -477,8 +475,6 @@ export default defineComponent({
 
 			let key = String.fromCharCode(event.which).toLowerCase();
 
-			console.log('keykeykeykeykeykey', key);
-
 			switch (key) {
 				case 'f':
 					event.preventDefault();
@@ -519,39 +515,15 @@ export default defineComponent({
 		};
 
 		const copyCut = (event: any) => {
-			handleFileOperate(
-				event,
-				route,
-				OPERATE_ACTION.CUT,
-				async (action: OPERATE_ACTION, data: any) => {
-					console.log('action', action);
-					console.log('data', data);
-				}
-			);
+			handleFileOperate(event, route, OPERATE_ACTION.CUT, async () => {});
 		};
 
 		const copy = (e: any) => {
-			handleFileOperate(
-				e,
-				route,
-				OPERATE_ACTION.COPY,
-				async (action: OPERATE_ACTION, data: any) => {
-					console.log('action', action);
-					console.log('data', data);
-				}
-			);
+			handleFileOperate(e, route, OPERATE_ACTION.COPY, async () => {});
 		};
 
 		const paste = (event: any) => {
-			handleFileOperate(
-				event,
-				route,
-				OPERATE_ACTION.PASTE,
-				async (action: OPERATE_ACTION, data: any) => {
-					console.log('action', action);
-					console.log('data', data);
-				}
-			);
+			handleFileOperate(event, route, OPERATE_ACTION.PASTE, async () => {});
 		};
 
 		const scrollEvent = throttle(() => {
@@ -578,7 +550,6 @@ export default defineComponent({
 
 		const dragEnter = () => {
 			dragCounter.value++;
-			console.log('dragEnter', dragCounter.value);
 
 			// When the user starts dragging an item, put every
 			// file on the listing with 50% opacity.
@@ -591,8 +562,6 @@ export default defineComponent({
 
 		const dragLeave = () => {
 			dragCounter.value--;
-			console.log('dragCounter', dragCounter.value);
-
 			if (dragCounter.value == 0) {
 				resetOpacity();
 			}
@@ -656,7 +625,6 @@ export default defineComponent({
 		};
 
 		const uploadInput = async (event: any) => {
-			console.log('eventevent', event);
 			store.closeHovers();
 			if (!store.showUploadModal) {
 				store.changeUploadModal(true);
@@ -732,7 +700,6 @@ export default defineComponent({
 				}
 			}
 
-			console.log(selfBy);
 			store.updateActiveSort(selfBy, asc);
 
 			// try {

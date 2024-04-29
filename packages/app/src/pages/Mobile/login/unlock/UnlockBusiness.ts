@@ -27,7 +27,7 @@ export async function savePassword(
 		sendUnlock();
 		callback.onSuccess(password);
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		callback.onFailure(e.message);
 	}
 }

@@ -89,6 +89,9 @@
     "type_traits": "cpp",
     "utility": "cpp",
     "cinttypes": "cpp"
+},
+"[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
   }
   

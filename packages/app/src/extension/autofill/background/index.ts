@@ -54,7 +54,6 @@ export class AutofillBackground
 		const item = platform.dataCenter.findChildItem(info);
 
 		if (item) {
-			console.log('item ===>', item);
 			await autofillService.doAutoFill(
 				{
 					tab: tab,
@@ -165,7 +164,7 @@ export class AutofillBackground
 					try {
 						await this.doAutofillTab(tab, info);
 					} catch (error) {
-						console.log(error);
+						console.error(error);
 					}
 					break;
 			}

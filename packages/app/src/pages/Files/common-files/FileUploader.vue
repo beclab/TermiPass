@@ -221,7 +221,7 @@ const onFileAdded = (resumableFile, files) => {
 				resumableUpload(resumableFile);
 			})
 			.catch((error) => {
-				console.log('errMessage', error);
+				console.error('errMessage', error);
 			});
 		// }
 	} else {
@@ -237,7 +237,7 @@ const onFileAdded = (resumableFile, files) => {
 					resumable.upload();
 				})
 				.catch((error) => {
-					console.log('errMessage', error);
+					console.error('errMessage', error);
 				});
 		}
 	}
@@ -260,7 +260,7 @@ const resumableUpload = (resumableFile) => {
 			resumable.upload();
 		})
 		.catch((error) => {
-			console.log('errMessage000', error);
+			console.error('errMessage000', error);
 		});
 };
 
@@ -279,7 +279,7 @@ const setUploadFileList = () => {
 };
 
 const onFileProgress = (resumableFile) => {
-	console.log('onFileProgress', resumableFile);
+	console.info('onFileProgress', resumableFile);
 	// let uploadFileListTemp = uploadFileList.value.map((item) => {
 	// 	return item;
 	// });
@@ -424,21 +424,21 @@ const onError = () => {
 };
 
 const onPause = () => {
-	console.log('onPause');
+	// console.log('onPause');
 };
 
 const onFileRetry = () => {
 	// todo, cancel upload file, uploded again;
-	console.log('onFileRetry');
+	// console.log('onFileRetry');
 };
 
 const onBeforeCancel = () => {
 	// todo, giving a pop message ?
-	console.log('onBeforeCancel');
+	// console.log('onBeforeCancel');
 };
 
 const onCancel = () => {
-	console.log('onCancel');
+	// console.log('onCancel');
 };
 
 const setHeaders = (resumableFile, resumable) => {
@@ -477,7 +477,7 @@ const generateUniqueIdentifier = (file) => {
 };
 
 const onDragStart = () => {
-	console.log('onDragStart');
+	// console.log('onDragStart');
 	// uploadInput.value.setAttribute('webkitdirectory', 'webkitdirectory');
 };
 

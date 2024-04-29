@@ -6,7 +6,6 @@ import { Encoder } from '../../encoder';
 Ed25519.utils.sha512 = async function (
 	...messages: Uint8Array[]
 ): Promise<Uint8Array> {
-	console.log('use local sha512');
 	const message = Ed25519.utils.concatBytes(...messages);
 	return Uint8Array.from(createHash('sha512').update(message).digest());
 };

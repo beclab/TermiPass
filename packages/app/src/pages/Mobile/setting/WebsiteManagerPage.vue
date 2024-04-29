@@ -7,7 +7,7 @@
 				<terminus-item
 					v-for="(website, index) in connectWebSiteRef"
 					:key="'ii' + index"
-					@click="choose(website.origin, website.name)"
+					@click="choose(website.origin)"
 					style="margin-top: 16px"
 					:image-uri="website.icon"
 				>
@@ -51,8 +51,7 @@ onMounted(async () => {
 	}
 });
 
-const choose = async (origin: string, name: string) => {
-	console.log(name);
+const choose = async (origin: string) => {
 	if (didKey) {
 		$q.dialog({
 			component: TerminusDialog,

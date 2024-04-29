@@ -168,7 +168,6 @@ export default defineComponent({
 		}
 
 		async function selectItem(item: Invite) {
-			console.log(item.id);
 			router.push({
 				path: '/org/Invites/' + (item.id ? item.id : '')
 			});

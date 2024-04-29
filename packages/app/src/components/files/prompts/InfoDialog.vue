@@ -100,7 +100,6 @@ const humanNumber = computed(function () {
 		return 0;
 	}
 	const item = store.req.items[store.selected[0]];
-	console.log('itemitemitem', item);
 	let folder = `${item.numDirs} ${item.numDirs > 1 ? 'folders, ' : 'folder, '}`;
 	let file = `${item.numFiles} ${item.numFiles > 1 ? 'files' : 'file'}`;
 
@@ -150,7 +149,6 @@ const path = computed(function () {
 });
 
 const onCancel = () => {
-	console.log('onHide');
 	store.closeHovers();
 };
 </script>

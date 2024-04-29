@@ -87,8 +87,6 @@ const submit = async (_event: any) => {
 	}
 
 	try {
-		console.log('uriuriuri', uri);
-
 		const newName = await checkSameName(name.value, store.req.items);
 
 		uri += encodeURIComponent(newName) + '/';

@@ -34,7 +34,7 @@ const md: MarkdownIt = MarkdownIt({
 					}).value
 				}</code></div></div>`;
 			} catch (__) {
-				console.log(__, 'error');
+				console.error(__, 'error');
 			}
 		}
 		return `<div class="hl-code"><div class="hl-code-header"><span>${lang}</span></div><div class="hljs"><code>${md.utils.escapeHtml(
@@ -57,33 +57,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { loading, loadingHidden } = toRefs(props);
 const popRef = ref();
-// function findLastElement(element: HTMLElement): HTMLElement {
-// 	if (!element.children.length) {
-// 		return element;
-// 	}
-// 	const lastChild = element.children[element.children.length - 1];
-// 	if (lastChild.nodeType === Node.ELEMENT_NODE) {
-// 		return findLastElement(lastChild as HTMLElement);
-// 	}
-// 	return element;
-// }
-
-// function appendInputCursor() {
-// 	const parent = popRef.value;
-// 	if (!parent) return;
-// 	let lastChild = parent.lastElementChild || parent;
-// 	if (lastChild.tagName === 'PRE') {
-// 		lastChild = lastChild.getElementsByClassName('hljs')[0] || lastChild;
-// 	}
-// 	if (lastChild.tagName === 'OL') {
-// 		lastChild = findLastElement(lastChild as HTMLElement);
-// 	}
-// 	console.log('lastChild', lastChild);
-// 	lastChild?.insertAdjacentHTML(
-// 		'beforeend',
-// 		'<span class="input-cursor"></span>'
-// 	);
-// }
 
 const html = computed(() => {
 	if (!props.loading && !props.ended) {

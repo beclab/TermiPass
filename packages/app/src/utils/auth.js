@@ -104,8 +104,6 @@ export function logout() {
 export function getCookie() {
 	var cookieValue = null;
 	var name = 'sfcsrftoken';
-	console.log('document.cookiedocument.cookie', document.cookie);
-
 	if (document.cookie && document.cookie != '') {
 		var cookies = document.cookie.split(';');
 		for (var i = 0; i < cookies.length; i++) {
@@ -117,6 +115,5 @@ export function getCookie() {
 			}
 		}
 	}
-	console.log('cookieValuecookieValue', cookieValue);
 	return cookieValue;
 }

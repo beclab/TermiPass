@@ -160,7 +160,6 @@ const submit = async () => {
 };
 
 const onCancel = () => {
-	console.log('onHide');
 	onDialogCancel();
 	store.selected = [];
 	store.closeHovers();

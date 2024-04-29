@@ -181,7 +181,6 @@ export default defineComponent({
 		};
 
 		const selectHandler = (value) => {
-			console.log('selectHandler--', value);
 			if (
 				value.item.label === VaultMenuItem.SECURITYREPORT ||
 				value.item.label === VaultMenuItem.PASSWORDGENERATOR ||
@@ -244,7 +243,6 @@ export default defineComponent({
 			vaultID = ''
 		): void => {
 			active.value = itemName;
-			console.log('itemNameitemName', itemName);
 			if (vaultID) {
 				store.currentItem = itemName;
 			}

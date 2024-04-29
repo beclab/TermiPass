@@ -58,13 +58,6 @@ export const useFilesUploadStore = defineStore('upload', {
 
 			const totalSize = this.sizes.reduce((a: any, b: any) => a + b, 0);
 			const sum = this.progress.reduce((acc: any, val: any) => acc + val);
-			console.log('getProgressgetProgress', totalSize, '--', sum);
-
-			console.log(
-				'getProgressgetProgress',
-				Math.floor((sum / totalSize) * 100)
-			);
-
 			return Math.floor((sum / totalSize) * 100) > 100
 				? 100
 				: Math.floor((sum / totalSize) * 100);
@@ -74,9 +67,6 @@ export const useFilesUploadStore = defineStore('upload', {
 			return total;
 		},
 		filesInUpload(): any {
-			console.log('filesInUploadfilesInUpload', this.uploads);
-			console.log('sizessizessizessizessizes', this.sizes);
-
 			for (const index in this.uploads) {
 				const upload = this.uploads[index];
 				const id = upload.id;
@@ -84,11 +74,6 @@ export const useFilesUploadStore = defineStore('upload', {
 				const name = upload.file.name;
 				const size = this.sizes[id];
 				const isDir = upload.file.isDir;
-
-				console.log('progress', this.progress);
-				console.log('uploads', this.progress[id]);
-				console.log('sizesid', this.sizes);
-				console.log('sizes', this.sizes[id]);
 
 				const progress =
 					(isDir ? 100 : Math.floor((this.progress[id] / size) * 100)) || 0;
@@ -127,7 +112,6 @@ export const useFilesUploadStore = defineStore('upload', {
 
 	actions: {
 		setProgress({ id, loaded }: { id: any; loaded: any }) {
-			console.log('setProgress', id, '---', loaded);
 			this.progress[id] = loaded;
 		},
 		reset() {
@@ -197,7 +181,6 @@ export const useFilesUploadStore = defineStore('upload', {
 
 			if (canProcess) {
 				const item = this.queue[0];
-				console.log('itemitemitem', item);
 				this.moveJob();
 
 				if (item.file.isDir) {

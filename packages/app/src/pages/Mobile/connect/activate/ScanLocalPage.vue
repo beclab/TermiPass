@@ -93,8 +93,6 @@ async function onSubmit() {
 	$q.loading.show();
 
 	const obj: WizardInfo = JSON.parse(base64ToString(content));
-	console.log(obj);
-
 	if (obj.username?.split('@').length != 2) {
 		notifyFailed('Username is error,please retry scan ' + obj.username);
 		return;

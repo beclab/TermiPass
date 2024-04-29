@@ -117,7 +117,6 @@ const props = defineProps({
 const $q = useQuasar();
 const menuStore = useMenuStore();
 
-console.log(props.body);
 const sign_id = props.body.message?.id;
 
 const emit = defineEmits(['hide']);
@@ -221,7 +220,6 @@ const onOKClick = async () => {
 		notifySuccess(t('sign_success'));
 		emit('hide');
 	} catch (e) {
-		console.log(e);
 		notifyFailed(e.message);
 	} finally {
 		confirmEnable.value = true;

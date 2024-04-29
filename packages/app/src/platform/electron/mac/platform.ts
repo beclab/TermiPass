@@ -19,7 +19,6 @@ export class MacPlatform
 
 		if (this.quasar?.platform.is.electron) {
 			window.electron.api.vpn.listenerVpnStatusUpdate(async () => {
-				console.log('window receive vpn status update');
 				const status = await window.electron.api.vpn.statusVpn();
 				if (!scaleStore.isOn && status == TermiPassVpnStatus.on) {
 					setTimeout(() => {
@@ -64,7 +63,6 @@ export class MacPlatform
 
 	async hostPeerInfo() {
 		const peersInfoJsonString = await window.electron.api.vpn.peersState();
-		console.log('peersInfoJsonString ===>', peersInfoJsonString);
 		let result: HostPeerInfo | undefined;
 		try {
 			const { Peer } = JSON.parse(peersInfoJsonString);
@@ -75,7 +73,7 @@ export class MacPlatform
 				}
 			});
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 		return result;
 	}

@@ -175,11 +175,7 @@ export const useCloudStore = defineStore('cloud', {
 						secret: body.secret
 					}
 				);
-				console.log(result);
-
 				const loginToken: TokenData = result.data;
-				console.log('loginToken ===>');
-				console.log(loginToken);
 
 				if (result.code == 200) {
 					const user: UserItem = userStore.users!.items.get(
@@ -188,7 +184,6 @@ export const useCloudStore = defineStore('cloud', {
 					user.cloud_id = loginToken.userid;
 					user.cloud_token = loginToken.token;
 					user.cloud_expired = loginToken.expired;
-					console.log(4);
 					await userStore.users!.items.update(user);
 					await userStore.save();
 				}
@@ -201,7 +196,6 @@ export const useCloudStore = defineStore('cloud', {
 					domain: domain
 				}
 			);
-			console.log(response);
 			if (response.code != 200 && response.code != 0) {
 				throw Error(response.message);
 			}
@@ -223,7 +217,6 @@ export const useCloudStore = defineStore('cloud', {
 					token: userStore.current_user.cloud_token
 				}
 			);
-			console.log(response);
 			if (response.code != 200 && response.code != 0) {
 				throw Error('get google result failure');
 			}
@@ -247,13 +240,9 @@ export const useCloudStore = defineStore('cloud', {
 					jws: jws
 				}
 			);
-
-			console.log(response);
-
 			if (response.code != 200 && response.code != 0) {
 				throw Error(response.data.message || 'Submit Presentation Failure');
 			}
-			console.log(response.data);
 			return response.data;
 		},
 		async selectDomain(domain: string): Promise<Domain | undefined> {
@@ -278,7 +267,6 @@ export const useCloudStore = defineStore('cloud', {
 				userid: userStore.current_user.cloud_id,
 				token: userStore.current_user.cloud_token
 			});
-			console.log(response.data);
 			this.domain_init = true;
 
 			this.domains = response.data.domains;
@@ -320,7 +308,6 @@ export const useCloudStore = defineStore('cloud', {
 					token: userStore.current_user.cloud_token
 				}
 			);
-			console.log(response);
 			if (response.code != 200 && response.code != 0) {
 				throw Error('get google result failure');
 			}
@@ -341,13 +328,9 @@ export const useCloudStore = defineStore('cloud', {
 					jws: jws
 				}
 			);
-
-			console.log(response);
-
 			if (response.code != 200 && response.code != 0) {
 				throw Error(response.data.message || 'Submit Presentation Failure');
 			}
-			console.log(response.data);
 			return response.data;
 		},
 

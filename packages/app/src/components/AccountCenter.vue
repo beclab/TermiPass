@@ -78,11 +78,9 @@ const handleCopy = () => {
 		return;
 	}
 	const copyTxt = current_user.value.mnemonic;
-	console.log('copyTxt', copyTxt);
 	Clipboard.write({
 		string: copyTxt
 	});
-	// $q.notify('Copied successful!');
 	notifySuccess('Copied successful!');
 };
 </script>

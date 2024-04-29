@@ -92,7 +92,6 @@ export default defineComponent({
 		watch(
 			() => app.settings.theme,
 			(newVal) => {
-				console.log('newValnewValnewVal', newVal);
 				themeModel.value = newVal;
 			}
 		);
@@ -100,7 +99,6 @@ export default defineComponent({
 		watch(
 			() => themeModel.value,
 			async (newVal) => {
-				console.log(newVal);
 				if (newVal) {
 					await app.setSettings({ theme: newVal });
 					if (newVal === 'auto') {

@@ -285,13 +285,10 @@ export const useUserStore = defineStore('user', {
 			};
 		},
 		async signJWS(payload: any): Promise<string | null> {
-			console.log('signJWS ' + this.current_id + ' ' + this.current_user);
-			console.log(payload);
 			if (!this.current_user) {
 				return null;
 			}
 			const privateKey = await this.current_user_private_key;
-			console.log(privateKey);
 			if (!privateKey) {
 				return null;
 			}
@@ -308,7 +305,6 @@ export const useUserStore = defineStore('user', {
 				]
 			);
 			const jws = signer.getJws();
-			console.log(jws);
 			return jws;
 		},
 		async removeUser(id: string) {
@@ -322,16 +318,11 @@ export const useUserStore = defineStore('user', {
 
 			this.users.items.remove(u);
 
-			console.log(id);
 			await this.save();
 			await app.removeState(id);
 			await this.removeBackupByUserId(id);
-
-			console.log('this.users.items.size');
-			console.log(this.users.items.size);
 			if (this.users.items.size > 0) {
 				for (const user of this.users.items) {
-					console.log(user);
 					this.current_id = user.id;
 					if (this.current_id) {
 						await this.setCurrentID(this.current_id);
@@ -340,7 +331,6 @@ export const useUserStore = defineStore('user', {
 					}
 				}
 			} else {
-				console.log('remove item =>> current user id');
 				this.current_id = undefined;
 				await userModeRemoveItem('current-user-id');
 			}
@@ -349,7 +339,6 @@ export const useUserStore = defineStore('user', {
 			const user1 = new UserItem();
 			user1.name = name;
 			user1.id = did;
-			//console.log('did ' + did);
 			user1.mnemonic = mnemonic;
 
 			return user1;
@@ -440,7 +429,6 @@ export const useUserStore = defineStore('user', {
 
 		async updateDeviceInfo(data: any): Promise<boolean> {
 			if (!this.current_user || !this.current_user.setup_finished) {
-				console.log('submitFirebaseToken current user not exists');
 				return false;
 			}
 
@@ -458,13 +446,10 @@ export const useUserStore = defineStore('user', {
 						'X-Authorization': this.current_user.access_token
 					}
 				});
-				const response = await instance.post('/api/device', data);
-
-				console.log(response.data);
+				await instance.post('/api/device', data);
 
 				return true;
 			} catch (e) {
-				console.log(e);
 				return false;
 			}
 		},
@@ -476,7 +461,6 @@ export const useUserStore = defineStore('user', {
 				!userStore.current_user.auth_url ||
 				!userStore.current_user.name
 			) {
-				console.log('submitFirebaseToken current user not exists');
 				return;
 			}
 			const baseURL = userStore.current_user.auth_url.replace('/server', '/');
@@ -490,7 +474,6 @@ export const useUserStore = defineStore('user', {
 			});
 
 			const response = await instance.get('/api/users');
-			console.log(response);
 			if (
 				!response ||
 				response.status != 200 ||
@@ -499,8 +482,6 @@ export const useUserStore = defineStore('user', {
 			) {
 				throw Error('Network error, please try again later');
 			}
-
-			console.log(response.data);
 		},
 		resetCurrentUserData() {
 			const scale = useScaleStore();
@@ -518,7 +499,6 @@ export const useUserStore = defineStore('user', {
 			}
 
 			this.backupList.push(this.current_id);
-			console.log(this.backupList);
 			await userModeSetItem('backupList', JSON.stringify(this.backupList));
 		},
 
@@ -531,7 +511,6 @@ export const useUserStore = defineStore('user', {
 			await userModeSetItem('backupList', JSON.stringify(this.backupList));
 		},
 		async currentUserRefreshToken() {
-			console.log('current user refresh token');
 			if (!this.current_user) {
 				return {
 					status: false,
@@ -622,8 +601,8 @@ export const useUserStore = defineStore('user', {
 					message: 'access_token refresh success'
 				};
 			} catch (error) {
-				console.log('refresh token failed:');
-				console.log(error.message);
+				console.error('refresh token failed:');
+				console.error(error.message);
 				return {
 					status: false,
 					oldToken: {
@@ -659,8 +638,6 @@ export const useUserStore = defineStore('user', {
 		},
 
 		getUserTerminusInfo(userId: string) {
-			console.log('UsersTerminusInfo ===>');
-			console.log(UsersTerminusInfo);
 			return (
 				UsersTerminusInfo[userId] || {
 					...DefaultTerminusInfo,

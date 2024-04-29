@@ -25,7 +25,7 @@ try {
 		);
 	}
 } catch (err) {
-	console.log(err);
+	console.error(err);
 }
 
 let mainWindow: BrowserWindow | undefined;
@@ -70,7 +70,6 @@ function createWindow() {
 		// titleBarStyle: 'hiddenInset'
 	});
 
-	console.log('main process platform:', platform);
 	if (platform === 'win32') {
 		connectUtilityIsolatedWrold();
 	}
@@ -148,7 +147,6 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-	console.log('activate');
 	if (mainWindow === undefined) {
 		createWindow();
 	} else {
@@ -161,14 +159,10 @@ app.once('before-quit', () => {
 });
 
 function connectUtilityIsolatedWrold() {
-	console.log('connectUtilityIsolatedWrold start');
-
 	const { utilityProcess } = require('electron');
 
 	const child = utilityProcess.fork(path.resolve(__dirname, 'tailscale.js'));
-	child.on('message', (message) => {
-		console.log(message);
-	});
+	child.on('message', () => {});
 	const { MessageChannelMain } = require('electron');
 	const { port1, port2 } = new MessageChannelMain();
 
@@ -177,7 +171,6 @@ function connectUtilityIsolatedWrold() {
 	mainWindow?.once('ready-to-show', () => {
 		mainWindow?.webContents.postMessage('port', null, [port1]);
 	});
-	console.log('connectUtilityIsolatedWrold end');
 }
 
 ipcMain.handle('platform', async () => {
@@ -188,11 +181,10 @@ ipcMain.handle('cookie', async () => {
 	return mainWindow?.webContents.session.cookies
 		.get({})
 		.then((cookies) => {
-			console.log(cookies);
 			return cookies;
 		})
 		.catch((error) => {
-			console.log(error);
+			console.error(error);
 			return '';
 		});
 });

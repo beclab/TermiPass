@@ -120,13 +120,9 @@ export default defineComponent({
 			}
 		};
 
-		const logOut = () => {
-			console.log('1');
-		};
+		const logOut = () => {};
 
-		const deleteAccount = () => {
-			console.log('1');
-		};
+		const deleteAccount = () => {};
 
 		const toggleDrawer = () => {
 			meunStore.rightDrawerOpen = false;
@@ -136,7 +132,6 @@ export default defineComponent({
 			getPlatform()
 				.setClipboard(mnemonic.value)
 				.then(() => {
-					// success!
 					notifySuccess(t('copy_success'));
 				})
 				.catch(() => {

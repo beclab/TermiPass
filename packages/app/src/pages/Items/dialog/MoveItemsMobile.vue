@@ -93,7 +93,7 @@ const onOKClick = async () => {
 		);
 		onDialogOK();
 	} catch (e) {
-		console.log('catch', e);
+		console.error('catch', e);
 	}
 };
 

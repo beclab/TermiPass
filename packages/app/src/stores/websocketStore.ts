@@ -21,7 +21,6 @@ export const useSocketStore = defineStore('websocket', {
 
 	actions: {
 		getConnectUrl() {
-			console.log(process.env.IS_PC_TEST);
 			if (process.env.IS_PC_TEST) {
 				return 'ws://localhost:5300';
 			}
@@ -29,7 +28,6 @@ export const useSocketStore = defineStore('websocket', {
 			const userStore = useUserStore();
 
 			if (!userStore.connected) {
-				console.log('userStore is not connected');
 				return undefined;
 			}
 
@@ -39,7 +37,6 @@ export const useSocketStore = defineStore('websocket', {
 		start() {
 			const userStore = useUserStore();
 			const ws_url = this.getConnectUrl();
-			console.log('ws_url', ws_url);
 			this.connectedUserId = userStore.current_id;
 			if (ws_url === undefined) {
 				return;
@@ -55,7 +52,6 @@ export const useSocketStore = defineStore('websocket', {
 					data: {}
 				}),
 				onopen: async () => {
-					console.log('websocket open ===>');
 					const platform = getAppPlatform();
 					const firebase_token = await platform.getFirebaseToken();
 					if (userStore.current_user && firebase_token.length > 0) {
@@ -72,9 +68,6 @@ export const useSocketStore = defineStore('websocket', {
 				onmessage: async (ev) => {
 					try {
 						const body: MessageBody = JSON.parse(ev.data);
-						console.log('onmessage body=>');
-						console.log(body);
-
 						if (process.env.IS_PC_TEST) {
 							if (body.topic == MessageTopic.Data) {
 								if (body.event == 'onOpen') {
@@ -93,22 +86,20 @@ export const useSocketStore = defineStore('websocket', {
 						}
 						busEmit('receiveMessage', body);
 					} catch (e) {
-						console.log('message error');
-						console.log(e);
+						console.error('message error:', e);
 					}
 				},
 				onerror: () => {
-					console.log('socket error');
+					console.error('socket error');
 				},
 				onreconnect: () => {
-					console.log('socket start reconnect');
+					console.error('socket start reconnect');
 				},
 				onFailReconnect: () => {
-					console.log('socket fail reconnect');
+					console.error('socket fail reconnect');
 				}
 			});
 			this.websocket.start();
-			console.log('socket start !!!!');
 		},
 
 		isConnected() {
@@ -133,22 +124,17 @@ export const useSocketStore = defineStore('websocket', {
 			return sendResult;
 		},
 		restart() {
-			console.log('restart websocket');
-			// return;
 			const userStore = useUserStore();
-			console.log(this.websocket?.status);
 			if (
 				(this.isConnected() || this.isConnecting()) &&
 				this.connectedUserId == userStore.current_id
 			) {
-				console.log('no need restart');
 				return;
 			}
 
 			const deviceStore = useDeviceStore();
 
 			if (!deviceStore.networkOnLine) {
-				console.log('network error, not start');
 				return;
 			}
 
@@ -158,7 +144,6 @@ export const useSocketStore = defineStore('websocket', {
 			this.start();
 		},
 		dispose() {
-			console.log('dispose');
 			if (this.websocket) {
 				this.websocket!.dispose();
 			}

@@ -64,16 +64,10 @@ const rejectAction = async () => {
 };
 
 const approveAction = async () => {
-	console.log('33333');
-
 	const userStore = useUserStore();
-	console.log('333332');
 	let user = userStore.users!.items.get(userStore.current_id!);
-	console.log('333333');
 	const didKey: string = await getDID(user?.mnemonic);
-	console.log('333334');
 	const { resolveApproval } = useApproval($router);
-	console.log('333335');
 	await resolveApproval({ didKey: didKey });
 };
 </script>

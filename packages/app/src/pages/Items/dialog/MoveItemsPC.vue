@@ -90,7 +90,7 @@ const handleOk = async () => {
 		);
 		onDialogOK();
 	} catch (e) {
-		console.log('catch', e);
+		console.error('catch', e);
 	}
 };
 

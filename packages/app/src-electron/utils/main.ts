@@ -10,11 +10,7 @@ export const ipcMainHandle = <T>(
 	listener: (event: IpcMainInvokeEvent, ...args: any[]) => Promise<T> | void | T
 ): void => {
 	ipcMain.handle(eventName, async (event, ...args: any[]) => {
-		console.log('ipcMainHandle func start==> ', eventName);
-		console.log('args ===> ' + args);
 		const result = await listener(event, ...args);
-		console.log('ipcMainHandle func end==> ', eventName);
-		console.log(result);
 		return result;
 	});
 };
@@ -24,9 +20,7 @@ export const ipcMainSend = (
 	eventName: string,
 	...args: any[]
 ): void => {
-	// console.log('window webcontent send event start===> ', eventName);
 	window.webContents.send(eventName, args);
-	// console.log('window webcontent send event end===> ', eventName);
 };
 
 export const ipcWebContentsSend = (
@@ -34,8 +28,5 @@ export const ipcWebContentsSend = (
 	eventName: string,
 	...args: any[]
 ): void => {
-	// console.log('webContents send event start===> ', eventName);
-	// console.log(...args);
 	webContents.send(eventName, ...args);
-	// console.log('webContents send event end===> ', eventName);
 };

@@ -25,7 +25,6 @@ export function getTerminusName(card: VCCardItem) {
 
 	if (card.type == 'Google') {
 		const tName = vc.credentialSubject['email'];
-		console.log('tName ' + tName);
 		name = getTerminusNameFromVC('Google', tName);
 	} else if (card.type == 'Twitter') {
 		const tName = vc.credentialSubject['username'];

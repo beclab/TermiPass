@@ -92,17 +92,11 @@ export class ExtensionBackground {
 			});
 		});
 
-		browser.action.onClicked.addListener(async (info, tab) => {
-			console.log(222);
-			console.log(info);
-			console.log(tab);
-
+		browser.action.onClicked.addListener(async () => {
 			const activeTab = await getActiveTab();
 			if (!activeTab) {
 				return;
 			}
-			console.log(activeTab);
-
 			browser.tabs.sendMessage(activeTab.id!, {
 				url: activeTab.url,
 				type: 'toggle-slider'
@@ -122,11 +116,7 @@ export class ExtensionBackground {
 		await this.app.load(undefined);
 
 		chrome.alarms.onAlarm.addListener((name) => {
-			console.log('browser.alarms.onAlarm ===> ' + name.name);
 			if (name.name === 'TERMIPASS_SERVER_WORKER_KEEP_ALIVE') {
-				console.log(
-					'borwser alarms TERMIPASS_SERVER_WORKER_KEEP_ALIVE success'
-				);
 				this.createKeepAliveAlarm();
 			}
 		});
@@ -136,20 +126,10 @@ export class ExtensionBackground {
 
 	// keep sw alive
 	createKeepAliveAlarm = async () => {
-		console.log('createKeepAliveAlarm start');
 		await chrome.alarms.clearAll();
-
-		const alarm = await chrome.alarms.get('TERMIPASS_SERVER_WORKER_KEEP_ALIVE');
-		console.log(alarm);
-
 		chrome.alarms.create('TERMIPASS_SERVER_WORKER_KEEP_ALIVE', {
 			when: Date.now() + 20000
 		});
-
-		const alarm2 = await chrome.alarms.get(
-			'TERMIPASS_SERVER_WORKER_KEEP_ALIVE'
-		);
-		console.log(alarm2);
 	};
 
 	async update(options: any) {

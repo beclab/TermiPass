@@ -62,7 +62,7 @@ export async function createUser() {
 		}
 		return { data: userStore.current_id };
 	} catch (e) {
-		console.log(e.message);
+		console.error(e.message);
 		return { message: e.message };
 	}
 }

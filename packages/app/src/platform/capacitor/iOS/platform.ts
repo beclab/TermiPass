@@ -37,8 +37,7 @@ export class IOSMobilePlatform extends CapacitorPlatform {
 		});
 	}
 
-	getFCMToken(token: { value: string }): Promise<{ token: string }> {
-		console.log(token.value);
+	getFCMToken(): Promise<{ token: string }> {
 		return FCM.getToken();
 	}
 
@@ -114,7 +113,6 @@ export class IOSMobilePlatform extends CapacitorPlatform {
 	iOSStateChange = async (state: { isActive: boolean }) => {
 		if (state.isActive) {
 			const iOSAutofill = await iOSPlugins.iOSAutofillPlugin.getAutofillList();
-			console.log(iOSAutofill);
 			if (iOSAutofill.list.length > 0) {
 				this.iOSAppUrlOpen({ url: iOSAutofill.list[0] });
 			}
@@ -136,7 +134,7 @@ export class IOSMobilePlatform extends CapacitorPlatform {
 		iOSPlugins.iOSAutofillPlugin
 			.replaceAllIdentities({ identities })
 			.catch((e) => {
-				console.log(e);
+				console.error(e);
 			});
 	};
 

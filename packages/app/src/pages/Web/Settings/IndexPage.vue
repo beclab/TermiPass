@@ -50,8 +50,6 @@ export default defineComponent({
 			Router.push({
 				path: '/settings/' + (mode.value ? mode.value : '')
 			});
-
-			console.log('Route.params', Route.params);
 		};
 
 		const myTweak = () => {

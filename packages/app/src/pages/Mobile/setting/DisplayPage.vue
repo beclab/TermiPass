@@ -127,7 +127,6 @@ const setApprovalBadgeEnable = async (enable: boolean) => {
 
 const setExtensionBadge = async (enable) => {
 	await app.setSettings({ extensionBadge: enable });
-	console.log(app.settings.extensionBadge);
 };
 
 onMounted(async () => {

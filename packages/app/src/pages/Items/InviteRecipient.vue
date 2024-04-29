@@ -207,7 +207,7 @@ export default defineComponent({
 					notifyFailed(t('vault_t.wrong_confirmation_code_please_try_again'));
 				}
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 				notifyFailed(
 					e.message || t('something_went_wrong_please_try_again_later')
 				);

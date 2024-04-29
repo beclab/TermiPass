@@ -42,7 +42,6 @@ const props = defineProps({
 });
 
 const onShow = () => {
-	console.log(props.index);
 	if (props.index && props.index !== -1) {
 		stopScrollMove();
 		if (store.selectedCount === 0) {

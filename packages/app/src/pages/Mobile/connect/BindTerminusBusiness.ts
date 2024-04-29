@@ -341,16 +341,9 @@ export async function loginTerminus(
 	user.refresh_token = token.refresh_token;
 	user.session_id = token.session_id;
 	user.passed_fa2 = false;
-	console.log('app.state.validate 4===>');
-	console.log(app.state.vaults);
 
 	if (token.fa2) {
 		const itemList = getVaultsByType(VaultType.TerminusTotp);
-		console.log(app.account);
-		console.log(app.state);
-		console.log('itemList');
-		console.log(itemList);
-
 		let totpFiledRef;
 		if (itemList.length > 0) {
 			totpFiledRef = itemList[0].fields.find((value) => {
@@ -454,8 +447,6 @@ export async function connectTerminus(
 	if (!user) {
 		throw new Error(i18n.global.t('errors.user_is_empty'));
 	}
-	console.log('app.state.validate 1===>');
-	console.log(app.state.vaults);
 	let isWebPlatform = false;
 	if (process.env.PLATFORM == 'WEB') {
 		isWebPlatform = true;
@@ -473,31 +464,23 @@ export async function connectTerminus(
 	if (!isWebPlatform) {
 		await loginTerminus(user, password, use_local, false);
 	}
-	console.log('app.state.validate 2===>');
-	console.log(app.state.vaults);
 
 	setSenderUrl({
 		url: baseUrl
 	});
-	console.log('app.state.validate 2.1===>');
 	if (isWebPlatform) {
 		await app.load(undefined);
 	} else {
 		await app.load(user.id);
 		await app.unlock(user.mnemonic, false);
-		console.log('app.state.validate 2.2===>');
 	}
 	if (user.setup_finished) {
 		const code = await app.simpleSync();
-		console.log('code===>', code);
-
 		if (code == ErrorCode.INVALID_SESSION) {
 			await loginVault(user);
 		} else {
 			if (code == ErrorCode.TOKE_INVILID) {
 				const terminusInfo = await getTerminusInfo(user);
-				console.log('current terminus id:', user.terminus_id);
-				console.log('terminusInfo:', terminusInfo);
 				if (user.terminus_id != terminusInfo?.terminusId) {
 					await loginVault(user);
 				}
@@ -506,8 +489,6 @@ export async function connectTerminus(
 	} else {
 		await loginVault(user);
 	}
-	console.log('app.state.validate 3===>');
-	console.log(app.state.vaults);
 }
 
 export async function getTerminusInfo(

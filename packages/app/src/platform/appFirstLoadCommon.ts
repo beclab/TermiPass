@@ -32,7 +32,6 @@ export const appLoadPrepare = (_platform: AppPlatform, data: any) => {
 
 	const quasar = data.quasar as QVueGlobals;
 	if (!quasar.platform.is.bex) {
-		console.log('walletService load');
 		walletService.load();
 	}
 
@@ -56,14 +55,10 @@ export const appLoadPrepare = (_platform: AppPlatform, data: any) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const appMounted = (_platform: AppPlatform) => {
-	console.log(_platform);
-};
+export const appMounted = (_platform: AppPlatform) => {};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const appUnMounted = (_platform: AppPlatform) => {
-	console.log(_platform);
-};
+export const appUnMounted = (_platform: AppPlatform) => {};
 
 export const configPlatform = (quasar: QVueGlobals) => {
 	if (process.env.IS_BEX) {

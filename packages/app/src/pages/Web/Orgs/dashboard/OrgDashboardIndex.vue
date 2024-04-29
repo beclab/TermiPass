@@ -332,7 +332,6 @@ export default defineComponent({
 		const org = computed(function () {
 			return app.orgs.find((org) => org.id == meunStore.org_id);
 		});
-		console.log('orgorgorgorgorg', org.value);
 
 		const getGroups = (vault) => {
 			return org.value?.getGroupsForVault(vault);

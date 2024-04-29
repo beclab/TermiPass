@@ -166,7 +166,7 @@ import {
 	SecertData
 } from '@didvault/sdk/src/core';
 import { hexToBytes } from '@didvault/sdk/src/core';
-import { AddSecertParams, AddSecertResponse } from '@didvault/sdk/src/core/api';
+import { AddSecertParams } from '@didvault/sdk/src/core/api';
 
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
@@ -252,7 +252,7 @@ export default {
 			try {
 				onDialogOK();
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		}
 
@@ -422,19 +422,14 @@ export default {
 					secert.host_type == HostType.ONLY_SAVE_NAME ||
 					secert.host_type == HostType.SAVE_SECERT
 				) {
-					const response: AddSecertResponse = await app.addSecertToSignServer(
+					await app.addSecertToSignServer(
 						new AddSecertParams({
 							secert
 						})
 					);
-					console.log(response);
 				}
 
-				// console.log(secert);
-				// console.log(tags.value);
-
 				const fields: any = [];
-				// const public_key = null;
 
 				if (secert.secert_type == SecertType.Mnemonic) {
 					const w = HDWallet.createWithMnemonic(secert.data!.mnemonic!, '');
@@ -465,9 +460,6 @@ export default {
 						});
 					}
 				}
-
-				// console.log(fields);
-
 				let crypto: CryptoTemplate = {
 					name: secert.name,
 					tags: tags.value,

@@ -225,10 +225,8 @@ export default defineComponent({
 					path: props.url
 				},
 				OPERATE_ACTION.MOVE,
-				async (action: OPERATE_ACTION, data: any) => {
-					console.log('action', action);
-					console.log('data', data);
-				}
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				async () => {}
 			);
 		};
 

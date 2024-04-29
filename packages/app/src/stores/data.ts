@@ -120,10 +120,7 @@ export const useDataStore = defineStore('data', {
 		},
 
 		sortList(list: any) {
-			console.log('sort ===>');
-
 			if (list) {
-				console.log(this.activeSort);
 				const list1 = list.sort((a, b) => {
 					if (this.activeSort.by == FilesSortType.TYPE) {
 						return this.activeSort.asc
@@ -136,7 +133,6 @@ export const useDataStore = defineStore('data', {
 					} else if (this.activeSort.by == FilesSortType.SIZE) {
 						return this.activeSort.asc ? a.size - b.size : b.size - a.size;
 					} else {
-						console.log('sort by time');
 						if (typeof a.modified == 'string') {
 							return this.activeSort.asc
 								? a.modified.localeCompare(b.modified)
@@ -148,8 +144,6 @@ export const useDataStore = defineStore('data', {
 						}
 					}
 				});
-				console.log(list1);
-
 				return list1;
 			}
 		},
@@ -268,10 +262,8 @@ export const useDataStore = defineStore('data', {
 					process.env.PLATFORM == 'MOBILE'
 				) {
 					const baseURL = user.getModuleSever('files');
-					console.log('baseURLbaseURLbaseURL', baseURL);
 					return baseURL;
 				} else {
-					console.log('fileBaseURLfileBaseURL', fileBaseURL);
 					return fileBaseURL;
 				}
 			}

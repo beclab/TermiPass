@@ -89,8 +89,6 @@ export default defineComponent({
 					url: item.url
 				});
 			}
-
-			console.log(items);
 		};
 
 		const next = (event: any) => {

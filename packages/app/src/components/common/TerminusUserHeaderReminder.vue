@@ -37,27 +37,16 @@
 </template>
 
 <script setup lang="ts">
-// import { useUserStore } from '../../stores/user';
 import { UserStatusActive } from '../../utils/checkTerminusState';
 import { getPlatform } from '../../../../sdk/src/core';
 import { TerminusCommonPlatform } from '../../platform/terminusCommon/terminalCommonPlatform';
-import { useTermipassStore } from 'src/stores/termipass';
-import { watch } from 'vue';
-// const userStore = useUserStore();
+import { useTermipassStore } from '../../stores/termipass';
 const termipassStore = useTermipassStore();
 
 const itemClick = () => {
 	const platform = getPlatform() as TerminusCommonPlatform;
 	platform.userStatusUpdateAction();
 };
-
-watch(
-	() => termipassStore.totalStatus,
-	() => {
-		console.log('eeeeeeeee=>');
-		console.log(termipassStore.totalStatus);
-	}
-);
 </script>
 
 <style scoped lang="scss">

@@ -139,8 +139,6 @@ const props = defineProps({
 	}
 });
 
-console.log(props.item);
-
 const cardStyleRef = ref();
 const brandRef = ref();
 const nameRef = ref();
@@ -153,8 +151,6 @@ const vc = JSON.parse(
 ).vc;
 
 subjectRef.value = vc.credentialSubject;
-console.log(subjectRef.value);
-
 nameRef.value = subjectRef.value[`${props.item.type.toLowerCase()}_name`];
 avatarRef.value = subjectRef.value['profile_image'];
 
@@ -162,9 +158,6 @@ if (props.item) {
 	const card = cardList.find((value) => {
 		return value.type == props.item.type;
 	});
-
-	console.log(card);
-	console.log(props.item.type);
 
 	if (card) {
 		cardStyleRef.value = card;

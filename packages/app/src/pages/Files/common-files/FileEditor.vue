@@ -42,7 +42,6 @@ onMounted(async () => {
 		mode: modelist.getModeForPath(store.req.name).mode,
 		wrap: true
 	});
-	console.log(editor.value);
 });
 
 onUnmounted(() => {

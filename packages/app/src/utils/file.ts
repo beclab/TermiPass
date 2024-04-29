@@ -71,19 +71,15 @@ export function checkSeahub(url: string) {
 
 export function isAppData(url: string) {
 	const res = url == '/AppData/' || url == '/AppData';
-	console.log('isAppData ' + url + ' ' + res);
 	return res;
 }
 
 export function checkAppData(url: string) {
-	console.log('checkAppdata ' + url + '  ' + url.startsWith('/AppData/'));
 	return url.startsWith('/AppData/') && !isAppData(url);
 }
 
 export function getAppDataPath(url: string) {
-	console.log('getAppDataPath ' + url);
 	const res = url.split('/');
-	console.log(res);
 	if (res[1] != 'AppData') {
 		throw Error('Invalid AppData path');
 	}

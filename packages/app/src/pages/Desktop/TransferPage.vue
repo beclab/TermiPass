@@ -232,7 +232,6 @@ const columns = [
 ];
 
 const pauseOrResumeAction = (item: any) => {
-	console.log('');
 	if (item.front == 1 && $q.platform.is.electron) {
 		window.electron.api.download.allPauseOrResume(!item.paused, [item.id]);
 	}

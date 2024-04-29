@@ -219,7 +219,7 @@ async function updateInfo() {
 			await authRequestTerminusInfo();
 			await gotoResetPassword();
 		} catch (e) {
-			console.log(e);
+			console.error(e);
 		}
 	}
 }
@@ -253,7 +253,6 @@ if (user.terminus_activate_status == 'wait_reset_password') {
 }
 
 const dnsConfigRetry = () => {
-	console.log('dnsConfigRetry');
 	failed.value = false;
 	updateInfo();
 };

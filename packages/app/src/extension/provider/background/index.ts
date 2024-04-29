@@ -71,9 +71,6 @@ export class ProviderBackground
 				});
 				return;
 			}
-			console.log('========EVENTS.BROADCAST_TO_BACKGROUND========');
-			console.log(data);
-
 			const sessionId = port.sender?.tab?.id;
 			if (sessionId === undefined || !port.sender?.url) {
 				return;
@@ -84,12 +81,7 @@ export class ProviderBackground
 			const req = { data, session };
 			req.session?.setPortMessage(pm);
 
-			console.log('======== req ========');
-			console.log(req);
-
 			const result = provider(req);
-			console.log('======== result ========');
-			console.log(result);
 			return result;
 		});
 	}

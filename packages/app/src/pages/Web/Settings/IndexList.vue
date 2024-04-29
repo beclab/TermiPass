@@ -28,9 +28,8 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { SETTING_MENU } from '../../../utils/constants';
-// import { useMenuStore } from '../../../stores/menu';
 import { useI18n } from 'vue-i18n';
 
 const settingMenu = ['account', 'security', 'display', 'tools', 'rebinding'];
@@ -42,26 +41,13 @@ export default defineComponent({
 		let mode = ref(1);
 		const setting = ref(settingMenu);
 		const Router = useRouter();
-		const Route = useRoute();
-		// const meunStore = useMenuStore();
 
 		const setMode = (menu: number) => {
 			mode.value = menu;
 			Router.push({
 				path: '/settings/' + (mode.value ? mode.value : '')
 			});
-
-			console.log('Route.params', Route.params);
-
-			// setTimeout(() => {
-			// 	meunStore.rightDrawerOpen = true;
-			// }, 0);
 		};
-
-		// const toggleDrawer = () => {
-		// 	meunStore.leftDrawerOpen = !meunStore.leftDrawerOpen;
-		// };
-
 		const myTweak = () => {
 			return { height: '100%' };
 		};

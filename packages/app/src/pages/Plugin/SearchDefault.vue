@@ -40,7 +40,6 @@ import { useUserStore } from '../../stores/user';
 // import { getPluginImageUrl } from '../../stores/bex-url';
 
 const userStore = useUserStore();
-console.log('userStore111', userStore.terminusInfo);
 
 function getGreetingTime() {
 	var time = new Date().getHours();

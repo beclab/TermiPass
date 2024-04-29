@@ -38,8 +38,6 @@ export default defineComponent({
 
 		const tab = ref(options.value[0].value);
 
-		console.log('process.env.PL_SERVER_URL ' + process.env.PL_SERVER_URL);
-
 		const base_url =
 			process.env.PL_SERVER_URL || window.location.origin + '/server';
 

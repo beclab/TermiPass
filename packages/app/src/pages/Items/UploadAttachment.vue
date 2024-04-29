@@ -129,7 +129,7 @@ export default {
 			try {
 				await upload.completed;
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 			upload.removeEventListener('progress', handler);
 

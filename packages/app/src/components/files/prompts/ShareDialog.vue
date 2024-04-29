@@ -194,7 +194,7 @@ const submit = async () => {
 		sync.getSyncMenu();
 		userModel.value = null;
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 	}
 };
 
@@ -204,7 +204,7 @@ const updateItem = async (name: string, permission: string) => {
 		await menuStore.listSharedItems();
 		sync.getSyncMenu();
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 	}
 };
 
@@ -214,7 +214,7 @@ const deleteShareItem = async (name: string) => {
 		await menuStore.listSharedItems();
 		sync.getSyncMenu();
 	} catch (error) {
-		console.log('error', error);
+		console.error('error', error);
 	}
 };
 

@@ -76,7 +76,7 @@ const confirmAction = async () => {
 		}
 	} catch (error) {
 		$q.loading.hide();
-		console.log(error);
+		console.error(error);
 	}
 };
 

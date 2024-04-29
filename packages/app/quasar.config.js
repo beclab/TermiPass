@@ -13,7 +13,6 @@ const path = require('path');
 const fs = require('fs');
 const { configure } = require('quasar/wrappers');
 
-console.log('processenv', process.env.NODE_ENV);
 const extensionPlaceholder = 'webos_app_plugin_id';
 
 module.exports = configure(function (ctx) {
@@ -161,11 +160,8 @@ module.exports = configure(function (ctx) {
 				const isBex = ctx.modeName === 'bex';
 				const isMobile = ctx.modeName === 'capacitor';
 				const isElectron = ctx.modeName === 'electron';
-				console.log('ctx ===>' + ctx.targetName);
 
-				if (ctx.dev) {
-					chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
-				}
+				chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
 
 				if (!ctx.dev) {
 					if (!isBex) {
@@ -175,11 +171,6 @@ module.exports = configure(function (ctx) {
 							return args;
 						});
 					}
-					chain.plugin('node-polyfill').use(
-						new nodePolyfillWebpackPlugin({
-							excludeAliases: ['console']
-						})
-					);
 
 					if (isMobile) {
 						wasmRoot = './src-capacitor/www/';
@@ -880,8 +871,7 @@ module.exports = configure(function (ctx) {
 				}
 				// afterPack: async (context) => {
 				// your code
-				// console.log('afterPack contenxt ===>');
-				// console.log(context);
+
 				// }
 			},
 

@@ -64,7 +64,6 @@ const screenOrientation = ref<OrientationLockType>('portrait');
 onMounted(() => {
 	if ($q.platform.is.nativeMobile) {
 		ScreenOrientation.addListener('screenOrientationChange', (origin) => {
-			console.log(origin.type);
 			screenOrientation.value = origin.type;
 		});
 	}

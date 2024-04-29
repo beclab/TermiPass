@@ -220,7 +220,6 @@ const startBackUp = () => {
 	// 	JSON.stringify(message)
 	// );
 	// // return `0x${outputData}`;
-	// console.log('messae ===>', outputData);
 };
 
 const enterVCManagement = () => {
@@ -291,7 +290,6 @@ const updateShowCheckHistory = () => {
 	// 	}
 	// }
 	// count++;
-	// console.log(count);
 };
 </script>
 

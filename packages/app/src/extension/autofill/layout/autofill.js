@@ -285,7 +285,7 @@
 				'((\\\\b|_|-)pin(\\\\b|_|-)|password|passwort|kennwort|(\\\\b|_|-)passe(\\\\b|_|-)|contraseña|senha|密码|adgangskode|hasło|wachtwoord)',
 				'i'
 			);
-			console.log(passwordRegEx);
+			console.info(passwordRegEx);
 
 			// get all the docs
 			var theForms = Array.prototype.slice
@@ -930,11 +930,7 @@
 										operationsToDo
 									);
 							  }, AUTOSUBMIT_DELAY)
-							: DEBUG_AUTOSUBMIT &&
-							  console.log(
-									'[AUTOSUBMIT] Not attempting to submit since no fields were filled: ',
-									operationsToDo
-							  ));
+							: DEBUG_AUTOSUBMIT);
 				}
 
 				// handle protectedGlobalPage

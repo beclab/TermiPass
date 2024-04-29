@@ -103,7 +103,7 @@ import {
 	SecertData
 } from '@didvault/sdk/src/core';
 import { app } from '../../../globals';
-import { AddSecertParams, AddSecertResponse } from '@didvault/sdk/src/core/api';
+import { AddSecertParams } from '@didvault/sdk/src/core/api';
 
 import { useI18n } from 'vue-i18n';
 
@@ -203,20 +203,19 @@ export default {
 						secert.host_type == HostType.ONLY_SAVE_NAME ||
 						secert.host_type == HostType.SAVE_SECERT
 					) {
-						const response: AddSecertResponse = await app.addSecertToSignServer(
+						await app.addSecertToSignServer(
 							new AddSecertParams({
 								secert
 							})
 						);
-						console.log(response);
 					}
 				} catch (err) {
-					console.log(err);
+					console.error(err);
 				}
 
 				onDialogOK(exchange.value);
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		}
 

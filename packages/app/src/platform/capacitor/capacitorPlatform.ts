@@ -131,7 +131,6 @@ export class CapacitorPlatform
 	networkUpdateList: ConnectionStatus[] = [];
 
 	busNotification = (notification: PushNotificationSchema) => {
-		console.log('Bus notification received: ', notification);
 		this.pushNotificationReceived(notification);
 	};
 
@@ -145,7 +144,7 @@ export class CapacitorPlatform
 			.then(() => {
 				// alert("subscribed to topic");
 			})
-			.catch((err) => console.log(err));
+			.catch((err) => console.error(err));
 
 		const addListeners = async () => {
 			const websocketStore = useSocketStore();
@@ -157,9 +156,7 @@ export class CapacitorPlatform
 
 				busEmit('device_update');
 
-				PushNotifications.removeAllDeliveredNotifications().then(() => {
-					console.log('remove all notifications');
-				});
+				PushNotifications.removeAllDeliveredNotifications().then(() => {});
 
 				if (userStore.connected) {
 					try {
@@ -172,21 +169,10 @@ export class CapacitorPlatform
 									did: userStore.current_user.id
 								}
 							});
-						} else {
-							console.log('registerNotifications no current user');
 						}
-						console.log('registerNotifications submit succeed');
 					} catch (e) {
 						console.error(e);
-						console.log('registerNotifications submit failed' + e);
 					}
-				} else {
-					console.log(
-						'registerNotifications no_submit ' +
-							userStore.connected +
-							' ' +
-							userStore.current_id
-					);
 				}
 			});
 
@@ -197,7 +183,6 @@ export class CapacitorPlatform
 			PushNotifications.addListener(
 				'pushNotificationReceived',
 				async (notification) => {
-					console.log('Push notification received: ', notification);
 					this.pushNotificationReceived(notification);
 				}
 			);
@@ -205,11 +190,6 @@ export class CapacitorPlatform
 			PushNotifications.addListener(
 				'pushNotificationActionPerformed',
 				(notification) => {
-					console.log(
-						'Push notification action performed',
-						notification.actionId,
-						notification.inputValue
-					);
 					this.pushNotificationReceived(notification.notification);
 				}
 			);
@@ -243,7 +223,6 @@ export class CapacitorPlatform
 			const deviceStore = useDeviceStore();
 			deviceStore.networkOnLine = (await Network.getStatus()).connected;
 			Network.addListener('networkStatusChange', (status) => {
-				console.log('Network status changed', status);
 				this.networkUpdateList = [status].concat(this.networkUpdateList);
 				if (this.networkUpdateDelayTimer) {
 					return;
@@ -272,23 +251,8 @@ export class CapacitorPlatform
 
 		const userStore = useUserStore();
 		if (userStore.connected) {
-			console.log(
-				'registerNotifications started ' +
-					userStore.connected +
-					' ' +
-					userStore.current_id
-			);
-
 			this.registerNotifications();
-		} else {
-			console.log(
-				'registerNotifications passed ' +
-					userStore.connected +
-					' ' +
-					userStore.current_id
-			);
 		}
-		// await app.setSettings({ theme: 'dark' });
 	}
 
 	isHookHttpRequest = true;
@@ -399,7 +363,6 @@ export class CapacitorPlatform
 					server: vaultBiometricServerHost
 				})
 					.then((data) => {
-						// console.log(data);
 						resolve(stringToBytes(data.password));
 					})
 					.catch(reject);
@@ -500,7 +463,6 @@ export class CapacitorPlatform
 			await this.biometricKeyStore.deleteKey('');
 			closeStatus = true;
 		} catch (error) {
-			console.log(error);
 			message = error.message;
 		}
 		if (closeStatus) {
@@ -521,7 +483,7 @@ export class CapacitorPlatform
 			const password = await this.biometricKeyStore.getKey('');
 			return bytesToString(password);
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 		return '';
 	};
@@ -691,12 +653,10 @@ export class CapacitorPlatform
 	}
 
 	async hostPeerInfo() {
-		// {"Version":"1.48.1-ERR-BuildInfo","TUN":true,"BackendState":"Running","AuthURL":"","TailscaleIPs":["100.64.0.4","fd7a:115c:a1e0::4"],"Self":{"ID":"4","PublicKey":"nodekey:4e12011547170f842cc058c7d3695e1ade53df0d66d109579faef862b4ac3c6c","HostName":"localhost","DNSName":"localhost-vint6y2y.default.example.com","OS":"iOS","UserID":1,"TailscaleIPs":["100.64.0.4","fd7a:115c:a1e0::4"],"Addrs":["210.12.106.226:64073","192.168.50.67:64073"],"CurAddr":"","Relay":"custom","RxBytes":0,"TxBytes":0,"Created":"2024-03-26T11:37:28.908635948Z","LastWrite":"0001-01-01T00:00:00Z","LastSeen":"0001-01-01T00:00:00Z","LastHandshake":"0001-01-01T00:00:00Z","Online":true,"ExitNode":false,"ExitNodeOption":false,"Active":false,"PeerAPIURL":["http://100.64.0.4:37067","http://[fd7a:115c:a1e0::4]:40203"],"Capabilities":["https://tailscale.com/cap/file-sharing","https://tailscale.com/cap/is-admin","https://tailscale.com/cap/ssh"],"InNetworkMap":true,"InMagicSock":false,"InEngine":false},"Health":null,"MagicDNSSuffix":"default.example.com","CurrentTailnet":{"Name":"example.com","MagicDNSSuffix":"default.example.com","MagicDNSEnabled":true},"CertDomains":null,"Peer":{"nodekey:079a71f19d982d06b22b0bcce51492816206734589b01c996c6ae5b570a5d557":{"ID":"3","PublicKey":"nodekey:079a71f19d982d06b22b0bcce51492816206734589b01c996c6ae5b570a5d557","HostName":"localhost","DNSName":"localhost-kv2v1lna.default.example.com","OS":"iOS","UserID":1,"TailscaleIPs":["100.64.0.3","fd7a:115c:a1e0::3"],"Addrs":null,"CurAddr":"","Relay":"custom","RxBytes":0,"TxBytes":0,"Created":"2024-03-26T05:28:22.567983146Z","LastWrite":"0001-01-01T00:00:00Z","LastSeen":"2024-03-26T05:46:25.749768363Z","LastHandshake":"0001-01-01T00:00:00Z","Online":false,"ExitNode":false,"ExitNodeOption":false,"Active":false,"PeerAPIURL":["http://100.64.0.3:34152","http://[fd7a:115c:a1e0::3]:34984"],"InNetworkMap":true,"InMagicSock":true,"InEngine":false},"nodekey:7776f773e06908d5665c961b4234fdf14b1e05e68d03bc230ae275da6634a04e":{"ID":"2","PublicKey":"nodekey:7776f773e06908d5665c961b4234fdf14b1e05e68d03bc230ae275da6634a04e","HostName":"localhost","DNSName":"localhost.default.example.com","OS":"android","UserID":1,"TailscaleIPs":["100.64.0.2","fd7a:115c:a1e0::2"],"Addrs":null,"CurAddr":"","Relay":"custom","RxBytes":0,"TxBytes":0,"Created":"2024-03-25T04:53:43.22294316Z","LastWrite":"0001-01-01T00:00:00Z","LastSeen":"2024-03-28T07:08:36.966964684Z","LastHandshake":"0001-01-01T00:00:00Z","Online":false,"ExitNode":false,"ExitNodeOption":false,"Active":false,"PeerAPIURL":["http://100.64.0.2:1","http://[fd7a:115c:a1e0::2]:1"],"InNetworkMap":true,"InMagicSock":true,"InEngine":false},"nodekey:7ce5bcccf1d2a32187c48ddadd074ef0a6104e25b636ec25a38ed0bdd9b40717":{"ID":"1","PublicKey":"nodekey:7ce5bcccf1d2a32187c48ddadd074ef0a6104e25b636ec25a38ed0bdd9b40717","HostName":"headscale-848499b648-cqpgx","DNSName":"headscale-848499b648-cqpgx.default.example.com","OS":"linux","UserID":1,"TailscaleIPs":["100.64.0.1","fd7a:115c:a1e0::1"],"PrimaryRoutes":["192.168.50.210/32"],"Addrs":null,"CurAddr":"192.168.50.210:35305","Relay":"custom","RxBytes":364544,"TxBytes":135092,"Created":"2024-03-22T07:06:30.529549228Z","LastWrite":"2024-03-28T07:17:28.969091459Z","LastSeen":"2024-03-28T07:17:11.216641185Z","LastHandshake":"2024-03-28T07:17:29.377101Z","Online":true,"ExitNode":false,"ExitNodeOption":false,"Active":true,"PeerAPIURL":["http://100.64.0.1:58436","http://[fd7a:115c:a1e0::1]:58436"],"InNetworkMap":true,"InMagicSock":true,"InEngine":true}},"User":{"1":{"ID":1,"LoginName":"default","DisplayName":"default@example.com","ProfilePicURL":"","Roles":[]}}}
 		const peersInfoJsonString = (
 			await DefinePlugins.TailscalePlugin.peersState()
 		).state;
 		const { Peer } = JSON.parse(peersInfoJsonString);
-		console.log('peer ===>', Peer);
 
 		let result: HostPeerInfo | undefined;
 		Object.keys(Peer).forEach((key) => {

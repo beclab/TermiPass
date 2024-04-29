@@ -13,7 +13,6 @@ const flow = new PromiseFlow();
 
 const flowContext = flow
 	.use(async (ctx: any, next: any) => {
-		console.log(ctx);
 		const {
 			request: {
 				session: { origin, name, icon }
@@ -22,7 +21,6 @@ const flowContext = flow
 		//check unlock
 		const center = getExtensionBackgroundPlatform().dataCenter;
 		const hasUser = await center.hasUser();
-		console.log(hasUser);
 		if (!hasUser) {
 			throw Error('Please import the account first.');
 		}
@@ -34,7 +32,6 @@ const flowContext = flow
 			ctx.request.requestedApproval = true;
 			lockedOrigins.add(origin);
 			try {
-				console.log('try unlock');
 				await notificationService.requestApproval({
 					session: { origin, name, icon },
 					routerPath: '/unlock'
@@ -56,8 +53,6 @@ const flowContext = flow
 		} = ctx;
 		//check permission
 		if (!permissionService.hasPermission(origin)) {
-			console.log('no permission');
-			console.log(origin);
 			if (connectOrigins.has(origin)) {
 				throw Error('Already processing connect. Please wait.');
 			}
@@ -97,8 +92,6 @@ const flowContext = flow
 			}
 			const curDidKey = await center.getCurrentDidKey();
 			if (curDidKey !== requestDidKey) {
-				console.log(`current ${curDidKey}`);
-				console.log(`request ${requestDidKey}`);
 				ctx.request.requestedApproval = true;
 				try {
 					const { selectedDidKey } = await notificationService.requestApproval({
@@ -136,8 +129,6 @@ const flowContext = flow
 					params,
 					approvalType
 				});
-				console.log('data ====>');
-				console.log(data);
 
 				//business page
 				if (data && data.routerPath) {
@@ -149,8 +140,7 @@ const flowContext = flow
 					});
 				}
 			} catch (e) {
-				console.log('errrr ===>', e);
-
+				console.error('errrr ===>', e);
 				return e;
 			}
 		}
@@ -163,10 +153,6 @@ const flowContext = flow
 				data: { method }
 			}
 		} = ctx;
-		// process request
-		console.log('method');
-		console.log(method);
-
 		return Promise.resolve<any>(
 			(providerController as any)[method]({ ...request, ...result })
 		);
@@ -178,10 +164,7 @@ export default async (request: any) => {
 	return flowContext(ctx).finally(() => {
 		if (ctx.request.requestedApproval) {
 			flow.requestedApproval = false;
-			// only unlock notification if current flow is an approval flow
 			notificationService.unLock();
-			// @todo: need check if unlock is needed
-			// notificationService.clear();
 		}
 	});
 };

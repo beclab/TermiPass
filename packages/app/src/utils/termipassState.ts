@@ -143,38 +143,20 @@ export class TermiPassState {
 		init: TermipassActionStatus.None,
 		transitions: {
 			step: [],
-			reset: BuildTransition(
-				'*',
-				TermipassActionStatus.None,
-				async (from, to) => console.log(from, to)
-			),
+			reset: BuildTransition('*', TermipassActionStatus.None, async () => {
+				// console.log(from, to);
+			}),
 			goto: BuildTransition<TermipassActionStatus>(
 				'*',
 				(state) => state,
-				async (from, to) => {
-					console.log(from, to);
-					// const termipassStore = useTermipassStore();
+				async (_from, to) => {
 					if (to == TermipassActionStatus.SrpValid) {
-						// 	if (
-						// 		termipassStore.totalStatus?.isError == UserStatusActive.active
-						// 	) {
-						// this.publicActions.resetTokenRefresh(true);
-						// this.tokenRefresh = true;
-						// }
 						setTimeout(() => {
 							this.stateMachine
 								.transition()
 								.goto(TermipassActionStatus.Completed);
 						}, 100);
 					}
-
-					// if (to == TermipassActionStatus.TokenRefreshed) {
-					// 	setTimeout(() => {
-					// 		this.stateMachine
-					// 			.transition()
-					// 			.goto(TermipassActionStatus.Completed);
-					// 	}, 100);
-					// }
 				}
 			)
 		}
@@ -186,15 +168,11 @@ export class TermiPassState {
 		busOn(
 			'network_error',
 			async (info: { type: NetworkErrorMode; error: any }) => {
-				console.log('network_error ===>');
-				console.log('type:', info.type);
-				console.log('error:', info.error);
 				const now = new Date().getTime();
 				if (now - this.lastErrorCheckNetworkTimer > 30 * 1000) {
 					if (!this.needChecking()) {
 						return;
 					}
-					console.log('network error checking');
 					this.lastErrorCheckNetworkTimer = now;
 					if (this.currentUser) {
 						this.addCheckHistory(this.currentUser.id, {
@@ -217,11 +195,9 @@ export class TermiPassState {
 		busOn('account_update', async () => {
 			await this.actions.init();
 			this.resetTermipassState();
-			console.log('account_update 1 ===> needChecking:', this.needChecking());
 			if (!this.needChecking()) {
 				return;
 			}
-			console.log('account_update 2 ===> user:', this.currentUser.id);
 			this.addCheckHistory(this.currentUser.id, {
 				date: new Date(),
 				type: 'reason',
@@ -232,7 +208,6 @@ export class TermiPassState {
 		});
 
 		busOn('network_update', async (mode: NetworkUpdateMode) => {
-			console.log('network_update ===> mode:', mode);
 			if (!this.needChecking()) {
 				return;
 			}
@@ -258,12 +233,10 @@ export class TermiPassState {
 		});
 
 		busOn('appStateChange', async (state: { isActive: boolean }) => {
-			console.log('appStateChange ===> state:', state.isActive);
 			this.appIsActive = state.isActive;
 			if (!this.needChecking()) {
 				return;
 			}
-			console.log('appStateChange checking');
 			this.addCheckHistory(this.currentUser.id, {
 				date: new Date(),
 				type: 'reason',
@@ -312,7 +285,6 @@ export class TermiPassState {
 			if (this.stateMachine.state() < TermipassActionStatus.UserSetupFinished) {
 				return;
 			}
-			console.log('isLocal ----> 1');
 			const isLocal = await initPing(
 				'',
 				3000,
@@ -320,7 +292,6 @@ export class TermiPassState {
 					this.currentUser!.name.replace('@', '.') +
 					'/ping'
 			);
-			console.log('isLocal ----> 2', isLocal);
 
 			this.currentUser!.isLocal = isLocal;
 			this.actions.resetSenderUrl();
@@ -379,7 +350,6 @@ export class TermiPassState {
 			this.stateMachine.transition().goto(TermipassActionStatus.SrpChecking);
 
 			const result = await app.simpleSync();
-			console.log('simpleSync ===> result:', result);
 			if (result) {
 				checkResult.description = result;
 				this.stateMachine.transition().goto(TermipassActionStatus.SrpInvalid);
@@ -436,8 +406,6 @@ export class TermiPassState {
 				return;
 			}
 			const userStore = useUserStore();
-			console.log('userStore.getUserTerminusInfo(this.currentUser.id)===>');
-			console.log(userStore.getUserTerminusInfo(this.currentUser.id));
 			if (
 				!forceReload &&
 				userStore.getUserTerminusInfo(this.currentUser.id).terminusId.length > 0
@@ -446,8 +414,6 @@ export class TermiPassState {
 			}
 
 			if (this.terminusInfoRefreshIng) {
-				console.log('terminusinfo is refreshing');
-
 				return;
 			}
 
@@ -466,10 +432,6 @@ export class TermiPassState {
 			};
 
 			try {
-				console.log(
-					'request terminus info ---->',
-					this.currentUser.terminus_url
-				);
 				const instance = axiosInstanceProxy({
 					baseURL: this.currentUser.terminus_url,
 					headers: {
@@ -494,9 +456,6 @@ export class TermiPassState {
 				checkResult.description = JSON.stringify(terminusInfo);
 				return terminusInfo;
 			} catch (e) {
-				console.log('get terminusinfo error ===>', e);
-				console.log('e.response', e.response);
-				console.log('e.message', e.message);
 				const termipassStore = useTermipassStore();
 				checkResult.description = e.message;
 				if (e.response || process.env.PLATFORM == 'BEX') {

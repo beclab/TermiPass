@@ -257,7 +257,6 @@ export default defineComponent({
 		const $q = useQuasar();
 
 		const fileOperation = () => {
-			console.log(props.index);
 			$q.dialog({
 				component: FileOperationDialog,
 				componentProps: {
@@ -278,7 +277,6 @@ export default defineComponent({
 				if (['audio', 'video'].includes(item.type)) {
 					const res: any = await fetchFileContent(item);
 					item.url = store.baseURL() + res.data.raw_path; //res.data.raw_path
-					console.log(item.url);
 				} else if (['text', 'txt', 'textImmutable'].includes(item.type)) {
 					const res: any = await fetchFileContent(item);
 					(item as any).content = res.data.file_content;

@@ -46,9 +46,6 @@ class ProviderController {
 				params: { credentialSubject, schema }
 			}
 		} = info;
-		console.log(credentialSubject);
-		console.log(schema);
-
 		const { didKey, privateJWK } = await this._getSignInfo();
 
 		return await getChannelCredentialJWS(
@@ -67,11 +64,7 @@ class ProviderController {
 			},
 			session: { origin, name, icon }
 		} = info;
-		console.log(response);
-		console.log(schema);
 		const vcCardInfo = await submitChannelVCInfo(response, schema);
-		console.log('vcCardInfo ===>');
-		console.log(vcCardInfo);
 		try {
 			const { code } = await notificationService.requestApproval({
 				params: { origin, name, icon, vcInfo: vcCardInfo },
@@ -93,20 +86,9 @@ class ProviderController {
 			},
 			vc
 		} = info;
-		console.log(definition);
-		console.log(vc);
-
-		// if (!(await this.hasVC({ data: { params: { name: definition } } }))) {
-		// 	throw Error('not has this vc');
-		// }
 
 		const { didKey, privateJWK } = await this._getSignInfo();
-		console.log('didKey ===>', didKey);
-		console.log('privateJWK ===>', privateJWK);
-
 		const result = await getPresentationJWS(didKey, privateJWK, definition, vc);
-		console.log('result ===>', result);
-
 		return result;
 	};
 
@@ -127,37 +109,22 @@ class ProviderController {
 				params: { name }
 			}
 		} = info;
-		console.log('request privoder get vc');
 		const vcList: VCCardItem[] = [];
 		const dataCenter = getExtensionBackgroundPlatform().dataCenter;
-		console.log(
-			'dataCenter.getVaults().length ===>',
-			dataCenter.getVaults().length
-		);
-
 		for (const vault of dataCenter.getVaults()) {
 			for (const item of vault.items) {
 				const card = convertVault2CardItem(item);
-				console.log('card type===>', card?.type);
-				console.log(
-					'card verifiable_credential===>',
-					card?.verifiable_credential
-				);
 
 				if (card && card?.type === 'Channel') {
 					vcList.push(card);
 				}
 			}
 		}
-		console.log('vcList.length', vcList.length);
-
 		if (vcList.length > 0) {
-			console.log(vcList);
 			const result = vcList.find((cardItem) => {
 				const vc = JSON.parse(
 					base64ToString(cardItem.verifiable_credential.split('.')[1])
 				).vc;
-				console.log(vc);
 				return vc.credentialSubject['name'] === name;
 			});
 			return !!result;
@@ -173,11 +140,7 @@ class ProviderController {
 				params: { domain, types, data, primaryType }
 			}
 		} = info;
-
-		console.log('signTypeData====> start');
-
 		const result = await this.signStatement(domain, types, data, primaryType);
-		console.log('sign result ===>', result);
 		if (!result) {
 			throw new Error('sign error');
 		}
@@ -207,18 +170,15 @@ class ProviderController {
 			message: signData,
 			primaryType
 		});
-		console.log(signMessage);
 
 		try {
 			const outputData = EthereumMessageSigner.signTypedMessage(
 				privateKey,
 				signMessage
 			);
-			console.log(5555);
-
 			return `0x${outputData}`;
 		} catch (error) {
-			console.log('error ===>', error);
+			console.error('error ===>', error);
 		}
 	}
 }

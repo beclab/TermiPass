@@ -573,7 +573,7 @@ export default defineComponent({
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 
@@ -607,7 +607,7 @@ export default defineComponent({
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 
@@ -643,7 +643,7 @@ export default defineComponent({
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 
@@ -677,7 +677,7 @@ export default defineComponent({
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 
@@ -711,7 +711,7 @@ export default defineComponent({
 					}
 				})
 				.catch((err) => {
-					console.log(err);
+					console.error(err);
 				});
 		}
 

@@ -187,10 +187,6 @@ export default defineComponent({
 		}
 		function _getItems() {
 			const memFilter = filterInput.value?.toLowerCase();
-			console.log('memFilter', memFilter);
-			console.log('appvaults', app.vaults);
-			console.log('appaccountid', app.account?.id);
-
 			const vault = app.vaults.filter(
 				({ name, id }) =>
 					name?.toLowerCase().includes(memFilter) && app.mainVault?.id != id
@@ -211,7 +207,6 @@ export default defineComponent({
 
 		function stateUpdate() {
 			itemList.value = _getItems();
-			console.log('itemListitemListitemList', itemList.value);
 		}
 
 		async function search() {

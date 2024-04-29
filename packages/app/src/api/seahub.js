@@ -195,9 +195,6 @@ export async function batchCopyItem(data) {
 }
 
 export const formatFileContent = async (file) => {
-	console.log('filefilefile', file);
-	console.log('filefilefile', file.path);
-	// const hasSeahub = file.path.slice(7);
 	const store = useDataStore();
 	const seahubStore = useSeahubStore();
 
@@ -214,17 +211,13 @@ export const formatFileContent = async (file) => {
 	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
 	const hasSeahub = file.path.slice(startIndex);
 
-	console.log('hasSeahub', hasSeahub);
-
 	const res = await fetchURL(
 		`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
 		{}
 	);
-	console.log('resres', res);
 
 	if (['audio', 'video', 'pdf'].includes(file.type)) {
 		file.url = store.baseURL() + res.data.raw_path; //res.data.raw_path
-		console.log(file.url);
 	} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
 		file.content = res.data.file_content;
 	}

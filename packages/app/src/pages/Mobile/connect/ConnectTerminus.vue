@@ -95,9 +95,6 @@ onMounted(() => {
 		monitorKeyboard.onShow(() => (keyboardOpen.value = true));
 		monitorKeyboard.onHidden(() => (keyboardOpen.value = false));
 	}
-	console.log('termipassStore.srpInvalid ===>', termipassStore.srpInvalid);
-	console.log('termipassStore.ssoInvalid ===>', termipassStore.ssoInvalid);
-
 	if (termipassStore.srpInvalid) {
 		btnTitle.value = t('reconnect');
 	} else if (termipassStore.ssoInvalid) {

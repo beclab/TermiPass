@@ -119,9 +119,7 @@ export default defineComponent({
 
 		onMounted(async () => {
 			if (process.env.PLATFORM === 'DESKTOP') {
-				import('../css/layout-desktop.css').then(() => {
-					console.log('layout-desktop');
-				});
+				import('../css/layout-desktop.css').then(() => {});
 			}
 
 			busOn('appSubscribe', stateUpdate);

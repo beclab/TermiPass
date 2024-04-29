@@ -65,27 +65,10 @@ export async function getTerminusInfo(
 		);
 		return data;
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return null;
 	}
 }
-
-// async function checkSSO(user: UserItem): Promise<boolean> {
-// 	if (!user.setup_finished) {
-// 		return false;
-// 	}
-
-// 	const url = user.auth_url;
-// 	try {
-// 		const data = await axios.get(url + 'bfl/monitor/v1alpha1/cluster');
-// 		console.log(data);
-
-// 		return true;
-// 	} catch (e) {
-// 		console.log(e);
-// 		return false;
-// 	}
-// }
 
 async function checkSRPValid(user: UserItem): Promise<number> {
 	if (!user.setup_finished) {

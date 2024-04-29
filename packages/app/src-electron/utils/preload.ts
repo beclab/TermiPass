@@ -10,8 +10,6 @@ export const ipcRendererListener = (
 	callback: (event: IpcRendererEvent, ...args: any[]) => void
 ): void => {
 	ipcRenderer.on(eventName, (event, ...args: any[]) => {
-		// console.log('ipcRendererListener on===>');
-		// console.log(eventName);
 		callback(event, ...args);
 	});
 };

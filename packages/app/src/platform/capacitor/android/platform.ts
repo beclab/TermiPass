@@ -58,7 +58,6 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 		App.addListener('backButton', async (state) => {
 			if (this.route && this.router) {
 				if (this.route.meta['exit']) {
-					console.log(this.route.meta['exit']);
 					busEmit('backButton', state);
 					return;
 				}
@@ -71,7 +70,6 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 			({ uri }) => {
 				this._performAction(() => {
 					if (this.router && uri) {
-						console.log(this.route?.path);
 						if (this.route?.path.includes('/autoFillList')) {
 							this.router.replace({
 								path: '/autoFillList',
@@ -113,28 +111,15 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 
 		AndroidPlugins.AutofillFramework.addListener(
 			'onAutofillFrameworkSave',
-			({ uri, dataType, data }) => {
+			({ uri, data }) => {
 				this._performAction(() => {
 					if (this.router) {
-						console.log(dataType);
 						const { username, password } = JSON.parse(data);
 						updateUIToAddWeb(uri, this.router, username, password);
 					}
 				});
 			}
 		);
-
-		// SeafilePlugin.addListener('uploadSuccess', async () => {
-		// const store = useDataStore();
-		// await store.setReload(true);
-		// });
-		// SeafilePlugin.addListener('downloadSuccess', async ({}) => {
-		// const store = useDataStore();
-		// console.log(path);
-		// console.log(fileId);
-		// console.log(local);
-		// await store.updateFileLocal(path, fileId, local);
-		// });
 	}
 
 	async homeMounted(): Promise<void> {
@@ -142,7 +127,6 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 		this.androidStateChange({ isActive: true });
 		busOn('appStateChange', this.androidStateChange);
 
-		console.log('homeMounted');
 		if (this.tempAction) {
 			this.tempAction();
 			this.tempAction = null;

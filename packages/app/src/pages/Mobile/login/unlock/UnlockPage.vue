@@ -86,7 +86,6 @@ const loginByPassword = async (password: string) => {
 					resolveApproval();
 					return;
 				}
-				console.log(userStore.current_user);
 				if (userStore.current_user) {
 					if (userStore.current_user.name) {
 						router.replace('/connectLoading');
@@ -166,7 +165,7 @@ const setBiometric = async () => {
 				return;
 			}
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 			notifyFailed(error.message);
 		}
 	}

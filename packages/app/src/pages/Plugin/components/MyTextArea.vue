@@ -15,7 +15,6 @@ const text = ref('');
 const emit = defineEmits(['update:modelValue', 'submit']);
 
 const handleEnter = (event: KeyboardEvent) => {
-	console.log('tet', event.key === 'Enter' && event.ctrlKey);
 	if (event.ctrlKey) {
 		emit('update:modelValue', text.value + '\n');
 	} else {

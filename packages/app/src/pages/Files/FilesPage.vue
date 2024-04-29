@@ -100,22 +100,6 @@ export default defineComponent({
 
 			try {
 				const res = await api.fetch(url, loading, currentItem);
-
-				// if (checkSeahub(url)) {
-				// 	for (let i = 0; i < res.items.length; i++) {
-				// 		const el = res.items[i];
-				// 		if (el.type === 'image' && !el.encoded_thumbnail_src) {
-				// 			console.log(el);
-				// 			console.log(seahubStore);
-				// 			let start =
-				// 				el.url.indexOf(seahubStore.repo_name) +
-				// 				seahubStore.repo_name.length;
-				// 			const path = encodeURIComponent(el.url.slice(start));
-				// 			seahub.createThumbnail(path);
-				// 		}
-				// 	}
-				// }
-
 				if (res.type == 'video') {
 					store.updateRequest(res);
 				} else {
@@ -129,7 +113,6 @@ export default defineComponent({
 					}
 				}
 				error.value = e;
-				console.log(error);
 			} finally {
 				store.setLoading(false);
 			}

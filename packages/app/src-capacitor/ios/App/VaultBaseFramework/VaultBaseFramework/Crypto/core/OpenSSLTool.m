@@ -23,10 +23,8 @@
 
 @implementation OpenSSLTool
 
-//通过私钥生成key
 + (RSA *)createRsaKeyWithPrivateKey:(NSString *) privateKey{
     
-    //为了避免写法的不同意，如果私钥已经带有下面标记字符，先去除，后面再统一加上固定格式
     NSRange spos = [privateKey rangeOfString:@"-----BEGIN RSA PRIVATE KEY-----"];
     NSRange epos = [privateKey rangeOfString:@"-----END RSA PRIVATE KEY-----"];
     if(spos.location != NSNotFound && epos.location != NSNotFound){
@@ -36,20 +34,18 @@
         privateKey = [privateKey substringWithRange:range];
     }
     
-    //除去换行符，空格等
     privateKey = [privateKey stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     privateKey = [privateKey stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     privateKey = [privateKey stringByReplacingOccurrencesOfString:@"\t" withString:@""];
     privateKey = [privateKey stringByReplacingOccurrencesOfString:@" "  withString:@""];
     
-    // ras私钥
     NSMutableString * rsa_private_key = [[NSMutableString alloc]initWithString:privateKey];
     [rsa_private_key insertString:@"-----BEGIN RSA PRIVATE KEY-----\n" atIndex:0];
     [rsa_private_key appendString:@"\n-----END RSA PRIVATE KEY-----\n"];
     
     BIO *bio = NULL;
     const char * chPrivateKey =[rsa_private_key UTF8String];
-    if ((bio = BIO_new_mem_buf(chPrivateKey, -1)) == NULL)       //从字符串读取RSA公钥
+    if ((bio = BIO_new_mem_buf(chPrivateKey, -1)) == NULL)
     {
         return nil;
     }
@@ -61,7 +57,6 @@
 }
 
 
-//私钥解密
 + (NSData *)decryptData:(NSData *)data withPrivateRSA:(RSA *)privateRSA {
     
     if (!privateRSA) {
@@ -92,7 +87,7 @@
     return decrypeData;
 }
 
-#pragma 解密
+
 + (NSData *) decryptString:(NSString *)encryptContent withPrivateKey:(NSString *)privateKey{
     //解密
     RSA *privateRSA=[self createRsaKeyWithPrivateKey:privateKey];
@@ -122,32 +117,9 @@
     return key;
 }
 
-//+(NSString *)getIPAddress {
-//    NSString *address = @"error";
-//    struct ifaddrs *interfaces = NULL;
-//    struct ifaddrs *temp_addr = NULL;
-//    int success = 0;
-//    success = getifaddrs(&interfaces);
-//    if (success == 0) {
-//        temp_addr = interfaces;
-//        while(temp_addr != NULL) {
-//            if(temp_addr->ifa_addr->sa_family == AF_INET) {
-//                 if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
-//                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-//                 }
-//            }
-//            temp_addr = temp_addr->ifa_next;
-//        }
-//    }
-//    freeifaddrs(interfaces);
-//    return address;
-//
-//}
-
 +(NSString *)getIPAddress
 {
     int sockfd = socket(AF_INET,SOCK_DGRAM, 0);
-    // if (sockfd <</span> 0) return nil; //这句报错，由于转载的，不太懂，注释掉无影响，懂的大神欢迎指导
     NSMutableArray *ips = [NSMutableArray array];
     
     int BUFFERSIZE =4096;
@@ -205,33 +177,6 @@
     }
     
     return deviceIP;
-}
-
-
-+ (NSString *)deviceIPAdress {
-    NSString *address = @"手机移动网络";
-    struct ifaddrs *interfaces = NULL;
-    struct ifaddrs *temp_addr = NULL;
-    int success = 0;
-    
-    success = getifaddrs(&interfaces);
-    if (success == 0) {
-        temp_addr = interfaces;
-        while (temp_addr != NULL) {
-            if( (*temp_addr).ifa_addr->sa_family == AF_INET) {
-                if ([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:@"en0"]) {
-                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)temp_addr->ifa_addr)->sin_addr)];
-                }
-            }
-            
-            temp_addr = temp_addr->ifa_next;
-        }
-    }
-    freeifaddrs(interfaces);
-    
-    //    NSLog(@"手机的IP是：%@", address);
-    
-    return address;
 }
 
 @end

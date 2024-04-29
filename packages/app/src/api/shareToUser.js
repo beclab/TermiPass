@@ -12,7 +12,6 @@ export async function listSharedItems() {
 			menuStore.shareRepoInfo.path || '/'
 		}&share_type=user`
 	);
-	console.log('listSharedItems', res.data);
 	return res.data;
 }
 
@@ -21,10 +20,9 @@ export async function getUserList() {
 		const res = await fetchURL(
 			'/seahub/api/v2.1/admin/users/?page=1&per_page=1000'
 		);
-		console.log('getUserListgetUserList', res.data.data);
 		return res.data.data;
 	} catch (error) {
-		console.log('errrr', error);
+		console.error('errrr', error);
 	}
 }
 

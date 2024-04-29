@@ -13,8 +13,6 @@ export const space: NativeScanQRProtocol = {
 		try {
 			const message = commonGetRealQRConent(result);
 			const rawBody: MessageBody = JSON.parse(base64ToString(message));
-			console.log('message');
-			console.log(message);
 			busEmit('signMessage', rawBody);
 			return true;
 		} catch (error) {

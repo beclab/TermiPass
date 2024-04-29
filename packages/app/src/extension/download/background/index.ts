@@ -108,15 +108,7 @@ export class DownLoadBackground
 
 		const data: any = { dataSource: dataSource, path: '' };
 
-		// if (captureCookies) {
-		//   const cookies = await browser.cookies.getAll({ url: dataSource });
-		//   data.cookies = cookies.map((cookie) => {
-		//     return `${cookie.name}=${cookie.value}`;
-		//   }).join(';');
-		// }
-
 		try {
-			console.log(JSON.stringify(data));
 			const response = await fetch(server + '/api/v1/download', {
 				method: 'POST',
 				mode: 'cors',

@@ -69,13 +69,10 @@ export abstract class BaseProvider extends EventEmitter {
 			const { didKey, isUnlocked }: any = await this.requestInternalMethods({
 				method: 'getProviderState'
 			});
-
-			console.log(`====> isUnlocked ${isUnlocked}`);
-			console.log(`====> didKey ${didKey}`);
 			this._pushEventHandlers.setUnlock(isUnlocked);
 			this._pushEventHandlers.accountChanged(didKey);
 		} catch (e) {
-			console.log(`====> e ${e.message}`);
+			console.error(`error ====>${e.message}`);
 		} finally {
 			this._initialized = true;
 			this.emit('_initialized');
@@ -103,8 +100,6 @@ export abstract class BaseProvider extends EventEmitter {
 	};
 
 	request = async (data: any) => {
-		console.log(' ===== > request ');
-		console.log(data);
 		if (!this._isReady) {
 			return new Promise((resolve, reject) => {
 				this._cacheRequestsBeforeReady.push({

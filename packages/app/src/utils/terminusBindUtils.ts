@@ -45,20 +45,14 @@ export const needBindStatusOkToNext = (
 
 export function getVaultsByType(type: VaultType): VaultItem[] {
 	const res: VaultItem[] = [];
-	console.log('type ===>');
-	console.log(type);
+
 	for (const vault of app.state.vaults) {
-		console.log('app.state.vaults --->');
-		console.log(vault.items);
 		for (const item of vault.items) {
-			console.log(item);
 			if (item.type === type) {
 				res.push(item);
 			}
 		}
 	}
-	// console.log('app.state.vaults --->');
-	// console.log(app.state.vaults);
 	return res;
 }
 

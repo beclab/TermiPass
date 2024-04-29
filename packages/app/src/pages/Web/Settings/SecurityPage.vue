@@ -191,16 +191,7 @@ export default defineComponent({
 			meunStore.dialogShow = true;
 			$q.dialog({
 				component: UpdatePassWord
-			})
-				.onOk(async () => {
-					console.log('11');
-				})
-				.onCancel(() => {
-					console.log('Cancel');
-				})
-				.onDismiss(() => {
-					console.log('Called on OK or Cancel');
-				});
+			});
 		};
 
 		const toggleDrawer = () => {

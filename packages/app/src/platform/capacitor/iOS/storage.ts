@@ -59,7 +59,7 @@ export class IOSUserStorage implements UserStorage {
 			const jsonData = JSON.parse(data.value);
 			return jsonData;
 		} catch (error) {
-			console.log(error);
+			console.error(error);
 		}
 		return data.value;
 	}
@@ -69,7 +69,7 @@ export class IOSUserStorage implements UserStorage {
 			try {
 				saveValue = JSON.stringify(value);
 			} catch (error) {
-				console.log(error);
+				console.error(error);
 			}
 		}
 

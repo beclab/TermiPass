@@ -196,8 +196,6 @@ const getInputs = (app: { mode: any }, value: any) => {
 				query: value
 			};
 	}
-	console.log('getInputs', params);
-
 	return params;
 };
 
@@ -221,8 +219,6 @@ const getParams = (app: { model_config: any }, value: any) => {
 
 const onmessage = async (ev: { data: string }) => {
 	const data = JSON.parse(ev.data);
-	console.log('onmessage', data.event);
-
 	if (data.event === 'message') {
 		typewriter.add(data.answer);
 		textCache.value += data.answer;
@@ -256,22 +252,17 @@ const reset = () => {
 	textCache.value = '';
 };
 
-const onerror = (e: any) => {
-	console.log('onerror', e);
-
+const onerror = () => {
 	loading.value = false;
 	message_end.value = true;
 };
 
 const onclose = () => {
-	console.log('onclose');
 	loading.value = false;
 	message_end.value = true;
 };
 
 const onopen = (res: Response) => {
-	console.log('onopen');
-	console.log(res);
 	if (res.status != 200) {
 		const clonedResponse = res.clone();
 		const reader = clonedResponse.body?.getReader();
@@ -297,8 +288,6 @@ const onopen = (res: Response) => {
 				return;
 			}
 			const text = decoder.decode(value);
-			console.log('text ===>');
-			console.log(text);
 			totalErrorJsonData = totalErrorJsonData + text;
 
 			return reader.read().then(processText);
@@ -334,7 +323,6 @@ const send = () => {
 };
 
 const getApps = async () => {
-	console.log('getApps ===>');
 	const res = await api.getApps();
 	let data = res.data.data;
 	// let target: any = undefined;

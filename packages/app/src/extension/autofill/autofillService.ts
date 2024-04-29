@@ -32,7 +32,6 @@ export interface GenerateFillScriptOptions {
 
 export default class AutofillService {
 	async doAutoFill(options: AutoFillOptions, item: VaultItem) {
-		console.log('do autofill');
 		const tab = options.tab;
 		if (
 			!tab ||
@@ -47,8 +46,6 @@ export default class AutofillService {
 			throw new Error('auto fill fields empty');
 		}
 
-		console.log('options.pageDetails length', options.pageDetails.length);
-
 		options.pageDetails.forEach((pd) => {
 			// make sure we're still on correct tab
 			if (pd.tab.id !== tab.id || pd.tab.url !== tab.url) {
@@ -61,8 +58,6 @@ export default class AutofillService {
 				fillNewPassword: options.fillNewPassword || false,
 				fields: item.fields
 			});
-
-			console.log('fillScript ===>', fillScript);
 
 			if (!fillScript || !fillScript.script || !fillScript.script.length) {
 				return;
@@ -492,7 +487,7 @@ export default class AutofillService {
 					return regex.test(fieldVal);
 				}
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		} else if (name.startsWith('csv=')) {
 			const csvParts = name.split('=', 2);

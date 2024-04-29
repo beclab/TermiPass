@@ -164,7 +164,6 @@ watch(
 				copyed.value = false;
 			}
 
-			console.log('RouteRouteRoute', Route.query);
 			if (newVal[1] && newVal[1] !== 'mine' && newVal[2] === 'r') {
 				menuListSelf.value = [
 					{
@@ -315,7 +314,6 @@ const handle = (e: any, item: any) => {
 					Router.push({ path: data });
 				}
 			} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
-				console.log('data ==>', data);
 				const repo_id = Route.query.id as string;
 				const isElectron = $q.platform.is.electron;
 				if (isElectron) {

@@ -590,8 +590,6 @@ export default defineComponent({
 			} else {
 				item.value = null;
 			}
-
-			console.log('itemitemitemitem1', item.value);
 		}
 
 		watch(
@@ -1007,7 +1005,6 @@ export default defineComponent({
 		};
 
 		const startScan = (index: any) => {
-			console.log(index);
 			scanIndex.value = index;
 			scanIng.value = true;
 		};

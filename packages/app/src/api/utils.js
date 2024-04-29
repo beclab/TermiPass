@@ -22,7 +22,7 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 			};
 		}
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 	}
 	const instance = axiosInstanceProxy({
 		baseURL: baseURL,

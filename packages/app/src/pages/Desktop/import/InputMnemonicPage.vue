@@ -113,7 +113,6 @@ async function getTerminusInfo(baseUrl: string): Promise<TerminusInfo | null> {
 		);
 		return data;
 	} catch (e) {
-		console.log(e);
 		return null;
 	}
 }

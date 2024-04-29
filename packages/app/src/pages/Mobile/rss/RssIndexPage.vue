@@ -187,7 +187,6 @@ const addToFolder = async (item: any) => {
 			notifyFailed(t('add_feed_fail'));
 		}
 	} catch (e) {
-		console.log(e);
 		$q.loading.hide();
 	} finally {
 		$q.loading.hide();
@@ -206,7 +205,7 @@ const addToBoard = async () => {
 		$q.loading.hide();
 		notifySuccess(t('add_page_success'));
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 		notifyFailed(t('add_page_fail'));
 		$q.loading.hide();
 	}

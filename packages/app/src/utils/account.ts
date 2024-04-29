@@ -24,7 +24,6 @@ export const onFirstFactor = async (
 	if (needTwoFactor) {
 		targetURL = 'https://desktop.' + terminus_name.replace('@', '.') + '/';
 	}
-	console.log('targetURL', targetURL);
 
 	try {
 		const response = await instanceProxy.post(
@@ -44,8 +43,6 @@ export const onFirstFactor = async (
 			}
 		);
 
-		console.log('response ===>', response);
-
 		if (!response || response.status != 200 || !response.data) {
 			throw Error('Network error, please try again later');
 		}
@@ -59,14 +56,13 @@ export const onFirstFactor = async (
 
 		return token;
 	} catch (error) {
-		console.log('error ===>', error);
+		console.error('error ===>', error);
 		if (error.response) {
 			if (error.response.data) {
 				throw new Error(error.response.data.message);
 			}
 			throw new Error(error.message);
 		}
-		console.log('PlatformAjaxSender send error: ', error);
 		throw error;
 	}
 };

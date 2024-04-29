@@ -134,7 +134,7 @@ export default {
 			try {
 				await download.completed;
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 			download.removeEventListener('progress', handler);
 
@@ -218,7 +218,7 @@ export default {
 			try {
 				onDialogOK(false);
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		}
 

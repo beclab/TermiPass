@@ -104,7 +104,6 @@ export const useTransferStore = defineStore('transfer', {
 			});
 
 			window.electron.api.download.listenerDownloadItemUpdate(() => {
-				console.log('listenerDownloadItemUpdate');
 				if (this.activeItem == MenuType.Download) {
 					this.refreshData();
 				}
