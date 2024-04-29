@@ -133,9 +133,15 @@ export const useScaleStore = defineStore('scale', {
 				}
 				const platform = getAppPlatform();
 				if (instanceOfConfigVPNInterface(platform)) {
+					const userStore = useUserStore();
 					(platform as any as ConfigVPNInterface).vpnOpen({
 						authKey: this.authKey.key,
-						server: this.scaleServer
+						server: userStore.getModuleSever(
+							'headscale',
+							undefined,
+							undefined,
+							false
+						)
 					});
 					this.vpnStatus = TermiPassVpnStatus.connecting;
 

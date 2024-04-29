@@ -187,7 +187,12 @@ export const useUserStore = defineStore('user', {
 				this.users.fromRaw(res);
 			}
 		},
-		getModuleSever(module: string, protocol = 'https:', suffix = '') {
+		getModuleSever(
+			module: string,
+			protocol = 'https:',
+			suffix = '',
+			useLocal = true
+		) {
 			if (!this.current_user) {
 				return '';
 			}
@@ -200,7 +205,7 @@ export const useUserStore = defineStore('user', {
 					'//' +
 					module +
 					'.' +
-					this.current_user.local_url +
+					(useLocal ? this.current_user.local_url : '') +
 					array[0] +
 					'.' +
 					array[1] +
@@ -210,7 +215,7 @@ export const useUserStore = defineStore('user', {
 					protocol +
 					'//' +
 					array[0] +
-					this.current_user.local_url +
+					(useLocal ? this.current_user.local_url : '') +
 					'.' +
 					TerminusDefaultDomain +
 					suffix;
