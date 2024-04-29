@@ -5,9 +5,8 @@ on:
 
     push:
         branches:
-          - "v8"
-          - "dev_wrx_v8"
-          - "cache-download"
+          - "main"
+
         tags:
           - 'v*'
           - 'w*'
