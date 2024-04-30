@@ -6,9 +6,9 @@ import os.log
 
 
 public func tp_log(_ type: OSLogType, staticMessage msg: StaticString) {
-    os_log(msg, log: OSLog.default, type: type)
+//    os_log(msg, log: OSLog.default, type: type)
 }
 
 public func tp_log(_ type: OSLogType, message msg: String) {
-    os_log("%{public}s", log: OSLog.default, type: type, msg)
+//    os_log("%{public}s", log: OSLog.default, type: type, msg)
 }

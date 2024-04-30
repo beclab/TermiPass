@@ -18,6 +18,8 @@ FOUNDATION_EXPORT void Local_vpn_sdkLogout(void);
 
 FOUNDATION_EXPORT void Local_vpn_sdkSDKInitFunc(long fd, NSString* _Nullable loginUrl, NSString* _Nullable authKey, NSString* _Nullable root, NSString* _Nullable cookie, id<UtilsCallback> _Nullable c);
 
+FOUNDATION_EXPORT void Local_vpn_sdkShutdown(void);
+
 FOUNDATION_EXPORT NSString* _Nonnull Local_vpn_sdkState(void);
 
 FOUNDATION_EXPORT NSString* _Nonnull Local_vpn_sdkStatus(void);

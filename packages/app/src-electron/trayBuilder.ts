@@ -1,4 +1,4 @@
-import { BrowserWindow, Menu, Tray } from 'electron';
+import { BrowserWindow, Menu, Tray, nativeTheme } from 'electron';
 import * as path from 'path';
 import os from 'os';
 const platform = process.platform || os.platform();
@@ -86,6 +86,11 @@ export class TrayBuilder {
 		this.tray.on('click', this.onClick);
 
 		this.tray.on('right-click', this.onRightClick);
+
+		// 监听系统主题变化
+		nativeTheme.on('updated', () => {
+			this.tray?.setImage(this.getIcon());
+		});
 	};
 
 	setMainWindow = (mainWD: BrowserWindow | undefined) => {
@@ -108,5 +113,16 @@ export class TrayBuilder {
 		}
 
 		this.tray.setImage(path.join(__dirname, `icons/${iconName}.png`));
+	};
+
+	getIcon = () => {
+		if (platform == 'win32') {
+			return path.join(__dirname, 'icons/icon2.png');
+		}
+		if (nativeTheme.shouldUseDarkColors) {
+			return path.join(__dirname, 'icons/tray-dark.png');
+		} else {
+			return path.join(__dirname, 'icons/tray-white.png');
+		}
 	};
 }
