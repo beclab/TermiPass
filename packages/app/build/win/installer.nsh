@@ -5,7 +5,7 @@ showinstdetails show
 showuninstdetails show
 
 !macro customInstall
-  SimpleSC::InstallService "TermiPass" "TermiPassService" "16" "2" "$INSTDIR\tailscaled.exe" "" "" ""
+  SimpleSC::InstallService "TermiPass" "TermiPassService" "16" "2" "$INSTDIR\tailscaled.exe -no-logs-no-support" "" "" ""
   Pop $0
   ${If} $0 <> 0
     Push $0

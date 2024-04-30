@@ -713,8 +713,8 @@ module.exports = configure(function (ctx) {
 					signDlls: false,
 					extraFiles: [
 						{
-							from: './tailscale.dll',
-							to: './tailscale.dll'
+							from: './tailscale-ffi.dll',
+							to: './tailscale-ffi.dll'
 						},
 						{
 							from: './build/win/wintun.dll',

@@ -1,7 +1,6 @@
 const ffi = require('@tigerconnect/ffi-napi');
 
-const GoProgram = ffi.Library('./tailscale', {
-	Run: ['string', ['string']],
+const GoProgram = ffi.Library('./tailscale-ffi', {
 	RunWithArgs: ['string', ['string', 'string']],
 	WatchIPN: ['string', ['string', 'bool', 'pointer']],
 	SetCookie: ['bool', ['string']],
