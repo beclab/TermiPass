@@ -75,12 +75,7 @@ export class TrayBuilder {
 		if (this.tray) {
 			return;
 		}
-		this.tray = new Tray(
-			path.join(
-				__dirname,
-				platform == 'win32' ? 'icons/icon2.png' : 'icons/tray.png'
-			)
-		);
+		this.tray = new Tray(this.getIcon());
 		this.tray.setIgnoreDoubleClickEvents(true);
 
 		this.tray.on('click', this.onClick);

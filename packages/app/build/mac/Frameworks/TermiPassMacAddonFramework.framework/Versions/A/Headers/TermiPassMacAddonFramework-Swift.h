@@ -300,6 +300,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #if defined(__OBJC__)
 
+@class NETunnelProviderManager;
 enum Status : NSInteger;
 @class NSString;
 enum LocalVpnSDKStatus : NSInteger;
@@ -308,11 +309,17 @@ SWIFT_CLASS("_TtC26TermiPassMacAddonFramework19TermiPassVpnManager")
 @interface TermiPassVpnManager : NSObject
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) TermiPassVpnManager * _Nonnull shared;)
 + (TermiPassVpnManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+@property (nonatomic, readonly, strong) NETunnelProviderManager * _Nullable tunnel;
 @property (nonatomic, copy) void (^ _Nullable statusDidChangeHandler)(enum Status);
 @property (nonatomic, copy) NSString * _Nonnull connectNodeInfo;
 @property (nonatomic, readonly) enum Status status;
 @property (nonatomic) enum LocalVpnSDKStatus localVpnSdkStatus;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
+- (void)openVpn:(NSString * _Nonnull)serverUrl :(NSString * _Nonnull)authKey :(NSString * _Nonnull)cookies;
 @end
 
 
@@ -342,11 +349,6 @@ typedef SWIFT_ENUM(NSInteger, Status, closed) {
 
 
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
-- (void)openVpn:(NSString * _Nonnull)serverUrl :(NSString * _Nonnull)authKey :(NSString * _Nonnull)cookies;
-@end
-
-
-@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
 + (NSString * _Nonnull)localVpnSDKToStringWithVpnStatus:(enum LocalVpnSDKStatus)vpnStatus SWIFT_WARN_UNUSED_RESULT;
 @end
 
@@ -362,7 +364,6 @@ typedef SWIFT_ENUM(NSInteger, LocalVpnSDKStatus, closed) {
 };
 
 @class NSError;
-@class NETunnelProviderManager;
 
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
 - (void)isVpnPreparedWithCompletion:(void (^ _Nonnull)(BOOL))completion;
@@ -747,6 +748,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #if defined(__OBJC__)
 
+@class NETunnelProviderManager;
 enum Status : NSInteger;
 @class NSString;
 enum LocalVpnSDKStatus : NSInteger;
@@ -755,11 +757,17 @@ SWIFT_CLASS("_TtC26TermiPassMacAddonFramework19TermiPassVpnManager")
 @interface TermiPassVpnManager : NSObject
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) TermiPassVpnManager * _Nonnull shared;)
 + (TermiPassVpnManager * _Nonnull)shared SWIFT_WARN_UNUSED_RESULT;
+@property (nonatomic, readonly, strong) NETunnelProviderManager * _Nullable tunnel;
 @property (nonatomic, copy) void (^ _Nullable statusDidChangeHandler)(enum Status);
 @property (nonatomic, copy) NSString * _Nonnull connectNodeInfo;
 @property (nonatomic, readonly) enum Status status;
 @property (nonatomic) enum LocalVpnSDKStatus localVpnSdkStatus;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+
+@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
+- (void)openVpn:(NSString * _Nonnull)serverUrl :(NSString * _Nonnull)authKey :(NSString * _Nonnull)cookies;
 @end
 
 
@@ -789,11 +797,6 @@ typedef SWIFT_ENUM(NSInteger, Status, closed) {
 
 
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
-- (void)openVpn:(NSString * _Nonnull)serverUrl :(NSString * _Nonnull)authKey :(NSString * _Nonnull)cookies;
-@end
-
-
-@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
 + (NSString * _Nonnull)localVpnSDKToStringWithVpnStatus:(enum LocalVpnSDKStatus)vpnStatus SWIFT_WARN_UNUSED_RESULT;
 @end
 
@@ -809,7 +812,6 @@ typedef SWIFT_ENUM(NSInteger, LocalVpnSDKStatus, closed) {
 };
 
 @class NSError;
-@class NETunnelProviderManager;
 
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
 - (void)isVpnPreparedWithCompletion:(void (^ _Nonnull)(BOOL))completion;
