@@ -82,11 +82,11 @@ const menus = ref([
 		identify: 'home',
 		label: 'Chat'
 	},
-	{
-		icon: 'sym_r_apps',
-		identify: 'rss',
-		label: 'Collect'
-	},
+	// {
+	// 	icon: 'sym_r_apps',
+	// 	identify: 'rss',
+	// 	label: 'Collect'
+	// },
 	{
 		icon: 'sym_r_apps',
 		identify: 'read',
