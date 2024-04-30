@@ -98,7 +98,7 @@ export class WinPlatform
 				break;
 			}
 		}
-		const args = `up --login-server=${_options.server} --accept-routes=true --accept-dns=false --auth-key=${_options.authKey} --unattended --force-reauth=true --reset`;
+		const args = `up --login-server=${_options.server} --accept-routes=true --accept-dns=false --auth-key=${_options.authKey} --unattended --force-reauth=true --reset --shields-up=true --timeout=90s`;
 		this.myport.postMessage({ messagetype: 'up', args: args });
 	}
 
