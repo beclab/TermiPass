@@ -12,6 +12,8 @@
 const path = require('path');
 const fs = require('fs');
 const { configure } = require('quasar/wrappers');
+const { notarize } = require('@electron/notarize');
+const macosConfig = require('./build/mac/notarize');
 
 const extensionPlaceholder = 'webos_app_plugin_id';
 
@@ -164,13 +166,13 @@ module.exports = configure(function (ctx) {
 				chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
 
 				if (!ctx.dev) {
-					if (!isBex) {
-						chain.optimization.minimizer('js').tap((args) => {
-							args[0].terserOptions.compress.drop_console = true;
-							args[0].terserOptions.compress.drop_debugger = true;
-							return args;
-						});
-					}
+					// if (!isBex) {
+					// 	chain.optimization.minimizer('js').tap((args) => {
+					// 		args[0].terserOptions.compress.drop_console = true;
+					// 		args[0].terserOptions.compress.drop_debugger = true;
+					// 		return args;
+					// 	});
+					// }
 
 					if (isMobile) {
 						wasmRoot = './src-capacitor/www/';
@@ -681,11 +683,12 @@ module.exports = configure(function (ctx) {
 				appId: 'com.terminus.planetam',
 				mac: {
 					target: 'dmg',
+					minimumSystemVersion: '10.15',
 					asar: true,
 					extraFiles: [
 						{
-							from: './build/mac/PlugIns/',
-							to: 'PlugIns/'
+							from: './build/mac/Library/',
+							to: 'Library/'
 						},
 						{
 							from: './build/mac/Frameworks/',
@@ -696,12 +699,28 @@ module.exports = configure(function (ctx) {
 							to: 'Resources/'
 						}
 					],
-					identity: 'Apple Development: 建民 郭 (U5V2TRU38T)',
 					provisioningProfile: 'build/mac/PlanetaMacDev.provisionprofile',
 					entitlements: 'build/mac/entitlements.mac.plist',
 					entitlementsInherit: 'build/mac/entitlements.mac.inherit.plist',
 					hardenedRuntime: true,
-					asarUnpack: ['./*.node']
+					asarUnpack: ['./*.node'],
+					signIgnore: ['./Library/*']
+				},
+				afterSign: async (context) => {
+					const { electronPlatformName, appOutDir } = context;
+					if (electronPlatformName !== 'darwin') {
+						return;
+					}
+					console.log('macos notarize');
+					const appName = context.packager.appInfo.productFilename;
+					return await notarize({
+						appBundleId: 'com.terminus.planetam',
+						appPath: `${appOutDir}/${appName}.app`,
+						appleId: macosConfig.default.appleId,
+						appleIdPassword: macosConfig.default.appleIdPassword,
+						tool: 'notarytool',
+						teamId: macosConfig.default.teamId
+					});
 				},
 				win: {
 					// target: 'nsis',
