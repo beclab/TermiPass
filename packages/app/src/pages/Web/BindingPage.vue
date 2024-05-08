@@ -46,9 +46,8 @@ export default defineComponent({
 				location: 'Singapore'
 			},
 			network: {
-				use_frps: false,
+				enable_tunnel: false,
 				external_ip: '127.0.0.1',
-				frps_region: 'Virginia'
 			}
 		};
 		const url = ref<string>(

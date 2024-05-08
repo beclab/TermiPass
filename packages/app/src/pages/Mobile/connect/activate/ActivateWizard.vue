@@ -163,15 +163,11 @@ async function configNetwork() {
 	wizardStatus.value = 'network_activating';
 	try {
 		let ob: any = {};
-		if (wizard.network.use_frps) {
-			if (wizard.network.frps_region == 'Virginia') {
-				ob.frp_server = 'frp-east-1.snowinning.com';
-			} else if (wizard.network.frps_region == 'Singapore') {
-				ob.frp_server = 'frp.snowinning.com';
-			} else if (wizard.network.frps_region == 'Hong Kong') {
-				ob.frp_server = 'frp-hk.snowinning.com';
-			}
+		if (wizard.network.enable_tunnel) {
+			ob.enable_tunnel = true;
+			ob.ip = "";
 		} else {
+			ob.enable_tunnel = false;
 			ob.ip = wizard.network.external_ip;
 		}
 
