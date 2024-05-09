@@ -122,7 +122,7 @@ async function checkHttpsCertificateProgress() {
 		} else if (data.state == 8) {
 			state.value = 'ConfigureIngressHTTPs';
 		} else if (data.state == 9) {
-			state.value = 'CheckHTTPs';
+			state.value = 'CheckTunnel';
 		} else if (data.state == 3) {
 			state.value = 'Failed';
 		} else if (data.state == 1) {

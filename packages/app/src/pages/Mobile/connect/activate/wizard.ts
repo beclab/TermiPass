@@ -3,9 +3,8 @@ export interface SystemOption {
 	language: string;
 }
 
-export interface NetworkOption {
-	use_frps: boolean;
-	frps_region: string;
+export interface CloudflareNetworkOption {
+	enable_tunnel: boolean;
 	external_ip: string | null;
 }
 
@@ -14,5 +13,5 @@ export interface WizardInfo {
 	password: string;
 	url: string;
 	system: SystemOption;
-	network: NetworkOption;
+	network: CloudflareNetworkOption;
 }
