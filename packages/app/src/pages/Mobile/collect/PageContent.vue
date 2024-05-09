@@ -1,28 +1,31 @@
 <template>
 	<div class="page-content">
-		<collec-item
+		<collect-item
 			v-for="(item, index) in pagesList"
 			:key="index"
 			:item="item"
 			class="q-mt-md"
 		>
+			<template v-slot:image>
+				<q-avatar color="primary" text-color="white" icon="bluetooth" />
+			</template>
 			<template v-slot:side>
-				<CollectionItemStatus class="status-white-bg">
+				<collection-item-status class="status-white-bg">
 					<template v-slot:status>
 						<q-icon
-							v-if="item.status == PageStatus.none"
+							v-if="item.status === PageStatus.none"
 							name="sym_r_add_box"
 							size="20px"
 							class="text-grey-8"
 						/>
 						<q-icon
-							v-if="item.status == PageStatus.error"
+							v-if="item.status === PageStatus.error"
 							name="sym_r_error"
 							size="20px"
 							class="text-negative"
 						/>
 						<q-knob
-							v-if="item.status == PageStatus.loading"
+							v-if="item.status === PageStatus.loading"
 							v-model="item.progress"
 							size="20px"
 							:min="0"
@@ -34,29 +37,29 @@
 						/>
 
 						<q-icon
-							v-if="item.status == PageStatus.cancel"
+							v-if="item.status === PageStatus.cancel"
 							name="sym_r_cancel"
 							size="20px"
 							class="text-negative"
 						/>
 						<q-icon
-							v-if="item.status == PageStatus.success"
+							v-if="item.status === PageStatus.success"
 							name="sym_r_check_circle"
 							size="20px"
 							class="text-positive"
 						/>
 					</template>
-				</CollectionItemStatus>
+				</collection-item-status>
 			</template>
-		</collec-item>
+		</collect-item>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import CollecItem from './CollecItem.vue';
 import { PageInfo, PageStatus } from './utils';
 import CollectionItemStatus from './CollectionItemStatus.vue';
+import CollectItem from './CollectItem.vue';
 
 const pagesList = ref<PageInfo[]>([
 	{

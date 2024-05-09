@@ -103,7 +103,11 @@ export default boot(({ app, router }) => {
 
 	app.config.globalProperties.$axios.interceptors.response.use(
 		(response: AxiosResponse) => {
-			if (!response || response.status != 200 || !response.data) {
+			if (
+				!response ||
+				(response.status != 200 && response.status != 201) ||
+				!response.data
+			) {
 				throw Error('Network error, please try again later');
 			}
 

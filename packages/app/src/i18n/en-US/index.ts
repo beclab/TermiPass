@@ -1316,5 +1316,11 @@ If you want to create an organization, please refer to the steps listed in the T
 		bind_desc: 'Completed',
 		allocated_desc: 'Allocated'
 	},
-	verify_using_gmail: 'Verify using Gmail'
+	verify_using_gmail: 'Verify using Gmail',
+	//bex pdf
+	download_success_waiting_sync: 'Download PDF Success, waiting entry sync...',
+	download_failed: 'Download Failed',
+	rename_file: 'Rename File',
+	pdf_name: 'PDF name',
+	input_pdf_name: 'Input PDF name'
 };
