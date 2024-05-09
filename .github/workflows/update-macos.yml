@@ -94,7 +94,7 @@ jobs:
                 echo "  appleIdPassword: '${{ secrets.APPLE_DEVELOPER_APP_ID_PASSWORD }}'," >> notarize.js
                 echo "  teamId: '${{ secrets.APPLE_DEVELOPER_APP_ID_TEAM_ID }}'" >> notarize.js
                 echo "};" >> notarize.js
-                echo "export default config;" >> notarize.js
+                echo "module.exports = config;" >> notarize.js
                 npx prettier --write notarize.js
                 
             - name: Show mac build files

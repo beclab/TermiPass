@@ -13,7 +13,6 @@ const path = require('path');
 const fs = require('fs');
 const { configure } = require('quasar/wrappers');
 const { notarize } = require('@electron/notarize');
-const macosConfig = require('./build/mac/notarize');
 
 const extensionPlaceholder = 'webos_app_plugin_id';
 
@@ -711,15 +710,16 @@ module.exports = configure(function (ctx) {
 					if (electronPlatformName !== 'darwin') {
 						return;
 					}
+					const macosConfig = require('./build/mac/notarize');
 					console.log('macos notarize');
 					const appName = context.packager.appInfo.productFilename;
 					return await notarize({
 						appBundleId: 'com.terminus.planetam',
 						appPath: `${appOutDir}/${appName}.app`,
-						appleId: macosConfig.default.appleId,
-						appleIdPassword: macosConfig.default.appleIdPassword,
+						appleId: macosConfig.appleId,
+						appleIdPassword: macosConfig.appleIdPassword,
 						tool: 'notarytool',
-						teamId: macosConfig.default.teamId
+						teamId: macosConfig.teamId
 					});
 				},
 				win: {
