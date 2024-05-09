@@ -1,52 +1,55 @@
 <template>
 	<div class="page-content">
 		<collect-item
-			v-for="(item, index) in pagesList"
+			v-for="(item, index) in collectStore.pagesList"
 			:key="index"
 			:item="item"
 			class="q-mt-md"
 		>
 			<template v-slot:image>
-				<q-avatar color="primary" text-color="white" icon="bluetooth" />
+				<q-img
+					:src="
+						item.image
+							? item.image
+							: getRequireImage('rss/page_default_img.svg')
+					"
+					class="image-avatar"
+				>
+					<template v-slot:loading>
+						<q-img
+							:src="getRequireImage('rss/page_default_img.svg')"
+							class="image-avatar"
+						/>
+					</template>
+					<template v-slot:error>
+						<q-img
+							:src="getRequireImage('rss/page_default_img.svg')"
+							class="image-avatar"
+						/>
+					</template>
+				</q-img>
 			</template>
 			<template v-slot:side>
 				<collection-item-status class="status-white-bg">
 					<template v-slot:status>
 						<q-icon
-							v-if="item.status === PageStatus.none"
-							name="sym_r_add_box"
+							v-if="item.status === RssStatus.none"
+							name="sym_r_bookmark_add"
 							size="20px"
 							class="text-grey-8"
+							@click="onSaveEntry(item)"
 						/>
 						<q-icon
-							v-if="item.status === PageStatus.error"
-							name="sym_r_error"
+							v-if="item.status === RssStatus.added"
+							name="sym_r_bookmark_added"
+							size="20px"
+							class="text-yellow-7"
+						/>
+						<q-icon
+							v-if="item.status === RssStatus.removed"
+							name="sym_r_bookmark_remove"
 							size="20px"
 							class="text-negative"
-						/>
-						<q-knob
-							v-if="item.status === PageStatus.loading"
-							v-model="item.progress"
-							size="20px"
-							:min="0"
-							:max="1"
-							:thickness="0.22"
-							color="yellow-7"
-							track-color="grey-1"
-							class=""
-						/>
-
-						<q-icon
-							v-if="item.status === PageStatus.cancel"
-							name="sym_r_cancel"
-							size="20px"
-							class="text-negative"
-						/>
-						<q-icon
-							v-if="item.status === PageStatus.success"
-							name="sym_r_check_circle"
-							size="20px"
-							class="text-positive"
 						/>
 					</template>
 				</collection-item-status>
@@ -56,50 +59,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { PageInfo, PageStatus } from './utils';
+import { RssInfo, RssStatus } from './utils';
 import CollectionItemStatus from './CollectionItemStatus.vue';
 import CollectItem from './CollectItem.vue';
+import { useCollectStore } from '../../../stores/collect';
+import { useQuasar } from 'quasar';
+import { getRequireImage } from '../../../utils/imageUtils';
+const collectStore = useCollectStore();
+const $q = useQuasar();
 
-const pagesList = ref<PageInfo[]>([
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: PageStatus.none
-	},
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: PageStatus.error
-	},
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: PageStatus.loading,
-		progress: 0.5
-	},
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: PageStatus.cancel
-	},
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: PageStatus.success
-	}
-]);
+const onSaveEntry = async (item: RssInfo) => {
+	$q.loading.show();
+	await collectStore.addEntry(item);
+	$q.loading.hide();
+};
 </script>
 
 <style scoped lang="scss">
 .page-content {
 	width: 100%;
 	height: 100%;
+	.image-avatar {
+		width: 44px;
+		height: 44px;
+		border-radius: 8px;
+	}
 	.status-white-bg {
 		background: #fff;
 	}

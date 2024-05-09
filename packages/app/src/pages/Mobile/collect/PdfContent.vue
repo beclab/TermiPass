@@ -1,7 +1,7 @@
 <template>
 	<div class="pdf-content">
 		<collect-item
-			v-for="(item, index) in pagesList"
+			v-for="(item, index) in collectStore.pdfList"
 			:key="index"
 			:item="item"
 			class="q-mt-md"
@@ -55,70 +55,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 import CollectItem from './CollectItem.vue';
-import { DOWNLOAD_STATUS, PDFInfo, PDFStatus } from './utils';
+import { PDFInfo, PDFStatus } from './utils';
 import CollectionItemStatus from './CollectionItemStatus.vue';
 import { getRequireImage } from '../../../utils/imageUtils';
 import { BtDialog } from '@bytetrade/ui';
 import { useI18n } from 'vue-i18n';
-import { useRssStore } from '../../../stores/rss';
-import { bus } from '../../../utils/bus';
-
-const pagesList = ref<PDFInfo[]>([
-	// {
-	// 	title: 'Upcoming releases - United States',
-	// 	detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-	// 	logo: '',
-	// 	status: PDFStatus.loading,
-	// 	progress: 0.3
-	// },
-	// {
-	// 	title: 'Upcoming releases - United States',
-	// 	detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-	// 	logo: '',
-	// 	status: PDFStatus.error
-	// },
-	// {
-	// 	title: 'Upcoming releases - United States',
-	// 	detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-	// 	logo: '',
-	// 	status: PDFStatus.success
-	// }
-]);
+import { useCollectStore } from '../../../stores/collect';
 
 const { t } = useI18n();
-const rssStore = useRssStore();
-
-onMounted(() => {
-	// const url = window.location.href;
-	const url =
-		'https://www.beijing.gov.cn/ywdt/gzdt/202305/P020230529616313576667.pdf';
-	if (url.endsWith('.pdf') && pagesList.value.length === 0) {
-		pagesList.value.push({
-			title: 'Upcoming releases - United States',
-			detail: url,
-			logo: '',
-			status: PDFStatus.none
-		});
-	}
-
-	bus.on('DOWNLOAD_PROGRESS_UPDATE', (data) => {
-		const pdfInfo = pagesList.value.find((item) => item.id === data.id);
-		if (pdfInfo) {
-			pdfInfo.progress = data;
-			if (data.status === DOWNLOAD_STATUS.SUCCESS) {
-				pdfInfo.status = PDFStatus.success;
-			}
-			if (data.status === DOWNLOAD_STATUS.FAILED) {
-				pdfInfo.status = PDFStatus.error;
-			}
-		}
-	});
-});
+const collectStore = useCollectStore();
 
 const onDownloadPdf = (item: PDFInfo) => {
-	const array = item.detail.split('/');
+	const array = item.url.split('/');
 	let fileName = '';
 	if (array.length > 0) {
 		fileName = array[array.length - 1];
@@ -139,7 +88,7 @@ const onDownloadPdf = (item: PDFInfo) => {
 	})
 		.then((name: any) => {
 			if (name) {
-				rssStore.downloadPdf(item.detail, name).then((result) => {
+				collectStore.downloadPdf(item.url, name).then((result) => {
 					if (result) {
 						item.id = result;
 						item.status = PDFStatus.loading;
@@ -161,6 +110,7 @@ const onDownloadPdf = (item: PDFInfo) => {
 	.image-avatar {
 		width: 44px;
 		height: 44px;
+		border-radius: 8px;
 	}
 
 	.status-white-bg {

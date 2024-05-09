@@ -82,11 +82,11 @@ const menus = ref([
 		identify: 'home',
 		label: 'Chat'
 	},
-	// {
-	// 	icon: 'sym_r_apps',
-	// 	identify: 'rss',
-	// 	label: 'Collect'
-	// },
+	{
+		icon: 'sym_r_apps',
+		identify: 'rss',
+		label: 'Collect'
+	},
 	{
 		icon: 'sym_r_apps',
 		identify: 'read',
@@ -132,7 +132,7 @@ const handleItem = (label: string) => {
 			break;
 		case 'Collect':
 			router.push({
-				path: '/rss'
+				path: '/collect'
 			});
 			break;
 

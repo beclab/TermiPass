@@ -390,13 +390,6 @@ const bex: RouteRecordRaw[] = [
 			{
 				path: 'setting',
 				component: () => import('pages/Mobile/setting/SettingIndex.vue')
-			},
-			{
-				path: 'rss',
-				meta: {
-					tabIdentify: 'rss'
-				},
-				component: () => import('pages/Mobile/rss/RssIndexPage.vue')
 			}
 		]
 	},

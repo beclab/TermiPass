@@ -1,34 +1,43 @@
 import { defineStore } from 'pinia';
-import { Board, Category } from '../extension/rss/model/type';
-import { create_feed, save_entry } from '../extension/rss/utils/api';
-
 import { useUserStore } from './user';
-import { AxiosInstance } from 'axios';
-import { axiosInstanceProxy } from 'src/platform/httpProxy';
-import { downloadPdf, getDownloadPdfProgress } from '../api/pdf';
+import {
+	downloadPdf,
+	getDownloadPdfProgress,
+	queryPdfEntry
+} from '../extension/rss/utils/pdf';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
 import { i18n } from 'src/boot/i18n';
 import {
+	BaseCollectInfo,
 	DOWNLOAD_STATUS,
-	DownloadProgress
+	DownloadProgress,
+	PDFInfo,
+	PDFStatus,
+	RssInfo,
+	RssStatus
 } from '../pages/Mobile/collect/utils';
-import { bus } from '../utils/bus';
+import { saveFeed, queryFeed } from '../extension/rss/utils/feed';
+import { saveEntry, queryEntry } from '../extension/rss/utils/entry';
+import { notifyFailed, notifySuccess } from '../utils/notifyRedefinedUtil';
+import { rsshubDomain, rsshubReplaceDomain } from '../extension/rss/utils';
 
 export type DataState = {
-	categories: Category[];
-	boards: Board[];
-	instance?: AxiosInstance;
-
+	baseUrl: string;
+	pagesList: RssInfo[];
+	rssList: RssInfo[];
+	pdfList: PDFInfo[];
 	waitingQueue: DownloadProgress[];
 	downloadTasks: Record<string, DownloadProgress>;
 	timer: any;
 };
 
-export const useRssStore = defineStore('rss', {
+export const useCollectStore = defineStore('collect', {
 	state: () => {
 		return {
-			categories: [],
-			boards: [],
+			baseUrl: '',
+			pagesList: [],
+			rssList: [],
+			pdfList: [],
 			waitingQueue: [],
 			downloadTasks: {},
 			timer: null
@@ -45,46 +54,82 @@ export const useRssStore = defineStore('rss', {
 		}
 	},
 	actions: {
-		get_local_category(id: number): Category | undefined {
-			return this.categories.find((category) => category.id == id);
+		async setRssList(pagesList: BaseCollectInfo[], rssList: BaseCollectInfo[]) {
+			const userStore = useUserStore();
+			this.baseUrl = userStore.getModuleSever('wise');
+			const pageList: RssInfo[] = [];
+			const pdfList: PDFInfo[] = [];
+			for (const page of pagesList) {
+				if (page.url.endsWith('.pdf')) {
+					const data = page as PDFInfo;
+					const result = await queryPdfEntry(data.url);
+					if (result) {
+						data.status = PDFStatus.success;
+					} else {
+						data.status = PDFStatus.none;
+					}
+					pdfList.push(data);
+				} else {
+					const data = page as RssInfo;
+					const result = await queryEntry(data.url);
+					if (result) {
+						data.status = RssStatus.added;
+					} else {
+						data.status = RssStatus.none;
+					}
+					pageList.push(data);
+				}
+			}
+			this.pagesList = pageList;
+			this.pdfList = pdfList;
+			this.rssList = [];
+			for (const rss of rssList) {
+				const data = rss as RssInfo;
+				data.url = data.url.startsWith(rsshubDomain)
+					? rsshubReplaceDomain + data.url.substring(rsshubDomain.length)
+					: data.url;
+				const result = await queryFeed(data.url);
+				if (result) {
+					data.status = RssStatus.added;
+				} else {
+					data.status = RssStatus.none;
+				}
+				this.rssList.push(data);
+			}
+			console.log(this.pagesList);
+			console.log(this.rssList);
+			console.log(this.pdfList);
 		},
-
-		async create_feed(feed_url: string) {
+		async addFeed(item: RssInfo) {
 			try {
-				const data = await create_feed({
-					feed_url,
+				await saveFeed({
+					feed_url: item.url,
 					source: 'wise'
 				});
-				return data;
-			} catch (error) {
-				return undefined;
+				item.status = RssStatus.added;
+				notifySuccess(i18n.global.t('add_feed_success'));
+			} catch (e) {
+				console.log(e.message);
+				item.status = RssStatus.removed;
+				notifyFailed(i18n.global.t('add_feed_fail') + e.message);
 			}
 		},
 
-		async addEntry(url: string) {
-			return await save_entry([
-				{
-					url,
-					source: 'library'
-				}
-			]);
-		},
-
-		initInstance() {
-			const userStore = useUserStore();
-			if (!userStore.current_user) {
-				this.instance = undefined;
-				return;
+		async addEntry(item: RssInfo) {
+			try {
+				await saveEntry([
+					{
+						url: item.url,
+						source: 'library'
+					}
+				]);
+				item.status = RssStatus.added;
+				notifySuccess(i18n.global.t('add_page_success'));
+			} catch (e) {
+				console.log(e.message);
+				item.status = RssStatus.removed;
+				notifyFailed(i18n.global.t('add_page_fail') + e.message);
 			}
-			const url = userStore.getModuleSever('wise');
-			this.instance = axiosInstanceProxy({
-				baseURL: url,
-				timeout: 10000,
-				headers: {
-					'Content-Type': 'application/json',
-					'X-Authorization': userStore.current_user.access_token
-				}
-			});
 		},
 
 		async downloadPdf(url: string, fileName: string): Promise<string | null> {
@@ -168,7 +213,18 @@ export const useRssStore = defineStore('rss', {
 				this.downloadTasks[task.id].status = progress.status;
 				this.downloadTasks[task.id].download = progress.download;
 				this.downloadTasks[task.id].total = progress.total;
-				bus.emit('DOWNLOAD_PROGRESS_UPDATE', this.downloadTasks[task.id]);
+
+				const pdfInfo = this.pdfList.find((item) => item.id === progress.id);
+				if (pdfInfo) {
+					pdfInfo.progress = progress;
+					if (progress.status === DOWNLOAD_STATUS.SUCCESS) {
+						pdfInfo.status = PDFStatus.success;
+					}
+					if (progress.status === DOWNLOAD_STATUS.FAILED) {
+						pdfInfo.status = PDFStatus.error;
+					}
+				}
+
 				if (progress.status === DOWNLOAD_STATUS.FAILED) {
 					BtNotify.show({
 						type: NotifyDefinedType.FAILED,

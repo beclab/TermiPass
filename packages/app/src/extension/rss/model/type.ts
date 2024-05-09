@@ -12,16 +12,6 @@ export interface Board {
 	description: string;
 }
 
-export interface BoardRequest {
-	title: string;
-	description: string;
-}
-
-export interface FeedIcon {
-	feed_id: number;
-	icon_id: number;
-}
-
 export interface Category {
 	id: number;
 	title: string;
@@ -29,51 +19,46 @@ export interface Category {
 	hide_globally: boolean;
 }
 
-export interface CategoryRequest {
-	title: string;
-	hide_globally?: boolean;
-}
-
-export interface Enclosure {
-	id: number;
-	user_id: number;
-	entry_id: number;
-	url: string;
-	mime_type: string;
-	size: number;
-}
-
 export interface Entry {
-	id: number;
-	user_id: number;
-	feed_id: number;
-	status: string;
-	hash: string;
-	title: string;
+	_id: string;
+
+	algorithms: string[];
+	feed_id?: string;
+	sources: string[];
+
 	url: string;
-	comments_url: string;
-	published_at: string;
-	created_at: string;
-	changed_at: string;
-	readlater_tag: boolean;
-	content: string;
-	author: string;
-	share_code: string;
+	title?: string;
+	author?: string;
+	full_content?: string;
+	raw_content?: string;
+	image_url: string;
+
+	readlater: boolean;
+	crawler: boolean;
 	starred: boolean;
-	reading_time: number;
-	enclosures: Enclosure[];
-	feed: Feed;
-	board_ids: string;
-}
+	disabled: boolean;
+	saved: boolean;
+	unread: boolean;
+	published_at: number;
+	//reading_time: number;
+	createdAt: string;
+	updatedAt: string;
 
-export interface EntryContent {
-	content: string;
-}
+	source?: string;
+	ranked?: boolean;
+	score?: number;
+	impression?: number;
+	impression_id?: string;
+	keywords?: string[];
 
-export enum EntryStatus {
-	Unread = 'unread',
-	Read = 'read',
-	Removed = 'removed'
+	batch_id?: number;
+
+	local_file_path: string;
+	file_type: string;
+	extract: boolean;
+	language: string;
+	download_faiure: boolean;
+	__v: string;
 }
 
 export interface Feed {
@@ -116,11 +101,6 @@ export interface Feed {
 	isTrend: boolean;
 }
 
-export interface FeedCounters {
-	reads: Record<string, number>;
-	unreads: Record<string, number>;
-}
-
 export interface FeedCreationRequest {
 	feed_url: string;
 	source: string;
@@ -139,28 +119,6 @@ export interface FeedCreationRequest {
 	keeplist_rules?: string;
 	hide_globally?: boolean;
 	urlrewrite_rules?: string;
-}
-
-export enum EnteryQueryOrder {
-	ID = 'id',
-	Status = 'status',
-	ChangeAt = 'change_at',
-	PublishedAt = 'published_at',
-	CategoryTitle = 'category_title',
-	CategoryID = 'category_id',
-	Title = 'title',
-	Author = 'author'
-}
-
-export enum EntryQueryDirection {
-	ASC = 'asc',
-	DESC = 'desc'
-}
-
-export interface PageToBoard {
-	url: string;
-	title: string;
-	board_id: number;
 }
 
 export interface CreateEntry {

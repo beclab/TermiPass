@@ -6,7 +6,6 @@ import PluginItemIndex from 'pages/Mobile/vault/ItemIndex.vue';
 import PluginItemView from 'pages/Mobile/vault/ItemView.vue';
 import PluginSettingIndex from 'pages/Mobile/setting/SettingIndex.vue';
 // import PluginRssIndexPage from 'pages/Mobile/rss/RssIndexPage.vue';
-import PluginCreateNewFolderPage from 'pages/Mobile/rss/CreateNewFolderPage.vue';
 
 import MobileLoginLayout from 'layouts/MobileLoginLayout.vue';
 import WelcomePage from 'src/pages/Mobile/login/WelcomePage.vue';
@@ -369,10 +368,6 @@ const bex: RouteRecordRaw[] = [
 					tabIdentify: 'collect'
 				},
 				component: CollectPage
-			},
-			{
-				path: '/create_new_folder',
-				component: PluginCreateNewFolderPage
 			},
 			{
 				path: 'org/:org_mode',
