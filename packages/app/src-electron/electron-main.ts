@@ -1,14 +1,15 @@
-import { app, BrowserWindow, nativeTheme, ipcMain } from 'electron';
+import { app, BrowserWindow, nativeTheme } from 'electron';
 import path from 'path';
 import os from 'os';
 import { TrayBuilder } from './trayBuilder';
 import { registerDownloadService, resetWin } from './download/main';
-import { registerVpnService } from './vpn/main';
+import { registerMacVpnService } from './mac-vpn/main';
 import { registerFilesService } from './files/main';
 import { registerStoreService } from './store/main';
 import { registerTransferService } from './transfer/main';
 import { registerWindowsService } from './windows/main';
 import { registerSettingsService } from './settings/main';
+import { registerWinVPNService } from './win-vpn/main';
 
 // 禁用 Electron 的 crashReporter
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
@@ -70,10 +71,6 @@ function createWindow() {
 		// titleBarStyle: 'hiddenInset'
 	});
 
-	if (platform === 'win32') {
-		connectUtilityIsolatedWrold();
-	}
-
 	// mainWindow.loadURL(process.env.APP_URL!);
 	mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
@@ -127,11 +124,10 @@ app.whenReady().then(() => {
 		registerFilesService();
 	}
 
-	if (platform !== 'win32' && !process.env.MOCKTEST) {
-		/**
-		 * 注册vpn服务 mac
-		 */
-		registerVpnService(mainWindow);
+	if (platform == 'win32') {
+		registerWinVPNService(mainWindow);
+	} else if (platform == 'darwin') {
+		registerMacVpnService(mainWindow);
 	}
 
 	/**
@@ -157,39 +153,3 @@ app.on('activate', () => {
 app.once('before-quit', () => {
 	isQuitApp = true;
 });
-
-function connectUtilityIsolatedWrold() {
-	const { utilityProcess } = require('electron');
-
-	const child = utilityProcess.fork(path.resolve(__dirname, 'tailscale.js'));
-	child.on('message', () => {});
-	const { MessageChannelMain } = require('electron');
-	const { port1, port2 } = new MessageChannelMain();
-
-	child.postMessage('port', [port2]);
-
-	mainWindow?.once('ready-to-show', () => {
-		mainWindow?.webContents.postMessage('port', null, [port1]);
-	});
-}
-
-ipcMain.handle('platform', async () => {
-	return platform;
-});
-
-ipcMain.handle('cookie', async () => {
-	return mainWindow?.webContents.session.cookies
-		.get({})
-		.then((cookies) => {
-			return cookies;
-		})
-		.catch((error) => {
-			console.error(error);
-			return '';
-		});
-});
-
-// process.on('uncaughtException', (error) =>{
-//   console.error('Uncaught exception:', error);
-//   app.exit(1)
-// })

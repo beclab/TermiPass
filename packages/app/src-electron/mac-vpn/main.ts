@@ -5,7 +5,7 @@ import {
 	ipcVpnMainSend
 } from './interface';
 
-export const registerVpnService = (window: BrowserWindow | undefined) => {
+export const registerMacVpnService = (window: BrowserWindow | undefined) => {
 	listenerEvent(window);
 };
 

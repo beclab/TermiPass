@@ -2,7 +2,8 @@ import {
 	ipcMain,
 	IpcMainInvokeEvent,
 	BrowserWindow,
-	WebContents
+	WebContents,
+	MessagePortMain
 } from 'electron';
 
 export const ipcMainHandle = <T>(
@@ -21,6 +22,14 @@ export const ipcMainSend = (
 	...args: any[]
 ): void => {
 	window.webContents.send(eventName, args);
+};
+
+export const ipcMainPostMessage = (
+	window: BrowserWindow,
+	eventName: string,
+	transfer?: MessagePortMain[]
+): void => {
+	window.webContents.postMessage(eventName, null, transfer);
 };
 
 export const ipcWebContentsSend = (

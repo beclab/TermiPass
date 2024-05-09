@@ -24,56 +24,58 @@ export class WinPlatform
 
 	async appMounted(): Promise<void> {
 		const scaleStore = useScaleStore();
-		window.onmessage = (event) => {
-			if (event.source === window && event.data === 'main-world-port') {
-				const [port] = event.ports;
-				this.myport = port;
+		window.electron.api.winVPN.registerPort((event) => {
+			const [port] = event.ports;
+			this.myport = port;
+			port.onmessage = (event: {
+				data: { messagetype: string; resp: string };
+			}) => {
+				const messagetype = event.data.messagetype;
 
-				port.onmessage = (event) => {
-					const messagetype = event.data.messagetype;
-
-					if (messagetype == 'watchipn-resp') {
-						const obj = JSON.parse(event.data.resp);
-						if (
-							obj.State == LocalVPNSDKStatus.NoState ||
-							obj.State == LocalVPNSDKStatus.InUseOtherUser ||
-							obj.State == LocalVPNSDKStatus.NeedsLogin ||
-							obj.State == LocalVPNSDKStatus.NeedsMachineAuth
-						) {
-							scaleStore.vpnStatus = TermiPassVpnStatus.Invalid;
-						} else if (obj.State == LocalVPNSDKStatus.Stopped) {
-							scaleStore.vpnStatus = TermiPassVpnStatus.off;
-						} else if (obj.State == LocalVPNSDKStatus.Starting) {
-							scaleStore.vpnStatus = TermiPassVpnStatus.connecting;
-						} else if (obj.State == LocalVPNSDKStatus.Running) {
-							scaleStore.vpnStatus = TermiPassVpnStatus.on;
-							if (scaleStore.isOn) {
-								setTimeout(() => {
-									busEmit('network_update', NetworkUpdateMode.vpnStart);
-								}, 10000);
-								busEmit('device_update');
-							}
+				if (messagetype == 'watchipn-resp') {
+					const obj = JSON.parse(event.data.resp);
+					if (
+						obj.State == LocalVPNSDKStatus.NoState ||
+						obj.State == LocalVPNSDKStatus.InUseOtherUser ||
+						obj.State == LocalVPNSDKStatus.NeedsLogin ||
+						obj.State == LocalVPNSDKStatus.NeedsMachineAuth
+					) {
+						scaleStore.vpnStatus = TermiPassVpnStatus.Invalid;
+					} else if (obj.State == LocalVPNSDKStatus.Stopped) {
+						scaleStore.vpnStatus = TermiPassVpnStatus.off;
+					} else if (obj.State == LocalVPNSDKStatus.Starting) {
+						scaleStore.vpnStatus = TermiPassVpnStatus.connecting;
+					} else if (obj.State == LocalVPNSDKStatus.Running) {
+						scaleStore.vpnStatus = TermiPassVpnStatus.on;
+						if (scaleStore.isOn) {
+							setTimeout(() => {
+								busEmit('network_update', NetworkUpdateMode.vpnStart);
+							}, 10000);
+							busEmit('device_update');
 						}
-					} else if (messagetype == 'prefs-resp') {
-						const obj = JSON.parse(event.data.resp);
-						this.resp.push(obj.Config.NodeID);
-					} else if (messagetype == 'status-resp') {
-						const obj = JSON.parse(event.data.resp);
-						this.respMap.get('status')?.push(obj);
-					} else if (messagetype == 'netcheck-resp') {
-						const obj = JSON.parse(event.data.resp);
-						this.respMap.get('netcheck')?.push(obj);
 					}
-				};
-				port.postMessage({ messagetype: 'watchipn', initial: true });
-				setTimeout(() => {
-					port.postMessage({
-						messagetype: 'watchipn',
-						initial: false
-					});
-				}, 1000);
-			}
-		};
+				} else if (messagetype == 'prefs-resp') {
+					const obj = JSON.parse(event.data.resp);
+					this.resp.push(obj.Config.NodeID);
+				} else if (messagetype == 'status-resp') {
+					const obj = JSON.parse(event.data.resp);
+					this.respMap.get('status')?.push(obj);
+				} else if (messagetype == 'netcheck-resp') {
+					const obj = JSON.parse(event.data.resp);
+					this.respMap.get('netcheck')?.push(obj);
+				}
+			};
+			port.postMessage({ messagetype: 'watchipn', initial: true });
+			setTimeout(() => {
+				port.postMessage({
+					messagetype: 'watchipn',
+					initial: false
+				});
+			}, 1000);
+		});
+
+		window.electron.api.winVPN.winHadLoad();
+
 		const deviceStore = useDeviceStore();
 
 		window.electron.api.settings.listenerNetworkUpdate(
@@ -90,14 +92,8 @@ export class WinPlatform
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	async vpnOpen(_options: { authKey: string; server: string }): Promise<void> {
-		const cookies = await window.winapi.getCookie();
-		for (const cookie of cookies) {
-			if (_options.server.endsWith(cookie.domain)) {
-				const args = `${cookie.name}=${cookie.value}`;
-				this.myport.postMessage({ messagetype: 'setcookie', args: args });
-				break;
-			}
-		}
+		const cookies = await window.electron.api.winVPN.getCookie();
+		this.myport.postMessage({ messagetype: 'setcookie', args: cookies });
 		const args = `up --login-server=${_options.server} --accept-routes=true --accept-dns=false --auth-key=${_options.authKey} --unattended --force-reauth=true --reset --shields-up=true --timeout=90s`;
 		this.myport.postMessage({ messagetype: 'up', args: args });
 	}

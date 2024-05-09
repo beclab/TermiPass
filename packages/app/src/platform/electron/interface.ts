@@ -62,6 +62,8 @@ export type IPCSettingsEventName =
 	| 'getTaskPreventSleepBoot'
 	| 'setTaskPreventSleepBoot';
 
+export type IPCWinVPNEventName = 'getCookie' | 'registerPort' | 'winHadLoad';
+
 export interface IOpenVpnInterface {
 	server: string;
 	authKey: string;
@@ -136,7 +138,6 @@ export interface IAppInfo {
 
 declare global {
 	interface Window {
-		winapi: { getCookie };
 		electron: {
 			api: {
 				vpn: {
@@ -218,6 +219,12 @@ declare global {
 					) => void;
 					getTaskPreventSleepBoot: () => Promise<boolean>;
 					setTaskPreventSleepBoot: (status: boolean) => Promise<void>;
+				};
+
+				winVPN: {
+					getCookie: () => Promise<string>;
+					registerPort: (callback: (_event: any) => void) => void;
+					winHadLoad: () => Promise<void>;
 				};
 			};
 

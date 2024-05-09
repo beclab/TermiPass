@@ -6,6 +6,7 @@ import { registerStoreMethods } from './store/preload';
 import { registerTransferMethods } from './transfer/preload';
 import { registerWindowsMethods } from './windows/preload';
 import { registerSettingsMethods } from './settings/preload';
+import { registerWinVPNMethods } from './win-vpn/preload';
 
 contextBridge.exposeInMainWorld('electron', {
 	api: {
@@ -20,7 +21,9 @@ contextBridge.exposeInMainWorld('electron', {
 
 		windows: registerWindowsMethods,
 
-		settings: registerSettingsMethods
+		settings: registerSettingsMethods,
+
+		winVpn: registerWinVPNMethods
 	},
 	store: registerStoreMethods
 });
@@ -36,9 +39,3 @@ if (platform === 'win32') {
 		window.postMessage('main-world-port', '*', e.ports);
 	});
 }
-
-contextBridge.exposeInMainWorld('winapi', {
-	getCookie: async () => {
-		return await ipcRenderer.invoke('cookie');
-	}
-});
