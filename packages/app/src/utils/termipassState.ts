@@ -93,7 +93,7 @@ interface CheckLogHistoryInterface {
 	reasonDesc?: string;
 }
 
-const GetVPNHostPeerInfoCountMax = 20;
+const GetVPNHostPeerInfoCountMax = 6;
 
 // const CheckSrpTokenTimeInterval = 30;
 
@@ -548,6 +548,9 @@ export class TermiPassState {
 		checkVPNStatusTask: async () => {
 			const scaleStore = useScaleStore();
 			if (!scaleStore.isOn) {
+				return;
+			}
+			if (!this.currentUser.id) {
 				return;
 			}
 			const date = new Date();

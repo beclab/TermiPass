@@ -10,7 +10,7 @@
 		<span class="text-white text-h5 scan-title">{{ t('scan_qr_code') }}</span>
 		<div class="img-box" />
 		<span class="text-white text-h6 scan-label">{{
-			t('scan_qr_code_to_login')
+			t('scan_qr_code_to_activate')
 		}}</span>
 		<canvas id="myCanvas" />
 
