@@ -47,7 +47,7 @@ export interface TermiPassStateInterface {
 	status: TermiPassStatus;
 }
 
-type TermiPassStateCacheInfo = 'termimusInfo';
+type TermiPassStateCacheInfo = 'termimusInfo' | 'vpnStateInfo';
 
 type TermiPassCheckItem = 'termimusInfo' | 'srpToken' | 'refreshToken';
 
@@ -98,6 +98,8 @@ const GetVPNHostPeerInfoCountMax = 6;
 // const CheckSrpTokenTimeInterval = 30;
 
 const CheckTerminusInfoTimeInterval = 60 * 2;
+
+const CheckVPNStatusInfoTimeInterval = 30;
 
 const UserCheckHistoryMaxLength = 100;
 
@@ -542,6 +544,40 @@ export class TermiPassState {
 				},
 				checkItem: 'refreshToken'
 			});
+		},
+		checkVPNStatusTask: async () => {
+			const scaleStore = useScaleStore();
+			if (!scaleStore.isOn) {
+				return;
+			}
+			if (!this.currentUser.id) {
+				return;
+			}
+			const date = new Date();
+			const cacheVPNCheckInfo = this.getTermiPassStateUserLastCheckCacheInfo(
+				this.currentUser.id,
+				'vpnStateInfo'
+			);
+			if (
+				cacheVPNCheckInfo == undefined ||
+				!cacheVPNCheckInfo.cacheDate ||
+				cacheVPNCheckInfo.cacheDate.getTime() / 1000 +
+					CheckVPNStatusInfoTimeInterval <
+					date.getTime() / 1000
+			) {
+				await this.actions.getVPNHostPeerInfo();
+				this.setTermiPassStateUserLastCheckCacheInfo(
+					this.currentUser.id,
+					'vpnStateInfo',
+					{
+						cacheDate: date,
+						info: 'vpnStateInfo'
+					}
+				);
+			}
+		},
+		runloopTasks: async () => {
+			this.actions.checkVPNStatusTask();
 		}
 	};
 
@@ -572,6 +608,10 @@ export class TermiPassState {
 				this.termiPassStateUserLastCheckCacheInfo[userId] = {
 					termimusInfo: {
 						cacheDate: new Date(),
+						info: 'termimusInfo'
+					},
+					vpnStateInfo: {
+						cacheDate: undefined,
 						info: 'termimusInfo'
 					}
 				};
@@ -617,6 +657,7 @@ export class TermiPassState {
 			return;
 		}
 		this.terminusCheckingRunLoopTimer = setInterval(() => {
+			this.actions.runloopTasks();
 			if (!this.checkEnable || !this.needChecking()) {
 				return;
 			}

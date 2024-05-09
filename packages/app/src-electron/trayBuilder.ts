@@ -114,10 +114,11 @@ export class TrayBuilder {
 		if (platform == 'win32') {
 			return path.join(__dirname, 'icons/icon2.png');
 		}
-		if (nativeTheme.shouldUseDarkColors) {
-			return path.join(__dirname, 'icons/tray-dark.png');
-		} else {
-			return path.join(__dirname, 'icons/tray-white.png');
-		}
+		// if (nativeTheme.shouldUseDarkColors) {
+		// 	return path.join(__dirname, 'icons/tray-dark.png');
+		// } else {
+		// 	return path.join(__dirname, 'icons/tray-white.png');
+		// }
+		return path.join(__dirname, 'icons/trayDarkTemplate.png');
 	};
 }

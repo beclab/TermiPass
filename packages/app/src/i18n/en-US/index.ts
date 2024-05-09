@@ -100,7 +100,7 @@ export default {
 	photo_album: 'Photo Album',
 	scan_the_qr_code: 'Scan the QR code',
 	scan_qr_code: 'Scan QR Code',
-	scan_qr_code_to_login: 'Scan the QR Code to log in',
+	scan_qr_code_to_activate: 'Scan the QR code to activate',
 	read_fail_try_again: 'read content fail, please try again',
 	qr_code_error: 'The qr code content is error,please retry scan',
 	please_choose_user: 'Please choose user',

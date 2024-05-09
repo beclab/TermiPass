@@ -15,7 +15,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			YVWrx+SisojH6SoraTnYjPYRa3+5s8INF5FZimrrCNk=
+			+q2Bq9TNGgkt4/voYGmAcq96o4FWIvAn2TM0pigNs1s=
 			</data>
 		</dict>
 		<key>Headers/TermiPassSDKVPNManager.h</key>
@@ -29,14 +29,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			3poN9kMZZJ36dgEqbFb2i074yyrK+fw+jj7WOd5zkHQ=
+			fHfcR7M+A5fQGSV5IrzUaFDq20aApWnUuwklt3xwYFA=
 			</data>
 		</dict>
 		<key>Modules/TermiPassMacAddonFramework.swiftmodule/Project/x86_64-apple-macos.swiftsourceinfo</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wiA6G7jxnyqMoD9Mm5Lpi8arjYqgIC9lffXioGlGNlw=
+			lFzXbrXOwmc1d4SyHABEd3Yqaf7JGZdZb0bZUIxsg5I=
 			</data>
 		</dict>
 		<key>Modules/TermiPassMacAddonFramework.swiftmodule/arm64-apple-macos.abi.json</key>
@@ -57,7 +57,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			nyrxDSk6+rJqu0hezV6TWRCHMrhnldU66kVCRU72VVQ=
+			t/b544/1YsPfmzdJapf2k9CJLqxI/dNUFAFaWjpLrJk=
 			</data>
 		</dict>
 		<key>Modules/TermiPassMacAddonFramework.swiftmodule/x86_64-apple-macos.abi.json</key>
@@ -78,7 +78,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Nu5IbpTO3/jgJ3huS/wnxDD+q9J8BmHgI3CofuLo+f8=
+			PKOQxPccXtuo8EtVzQ9dSXwzGbS1+7fsPE5M8hDefFk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

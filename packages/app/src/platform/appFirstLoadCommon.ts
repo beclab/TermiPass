@@ -46,7 +46,9 @@ export const appLoadPrepare = (_platform: AppPlatform, data: any) => {
 			const updateOnlineStatus = () => {
 				const deviceStore = useDeviceStore();
 				deviceStore.networkOnLine = navigator.onLine;
-				busEmit('network_update', NetworkUpdateMode.update);
+				setTimeout(() => {
+					busEmit('network_update', NetworkUpdateMode.update);
+				}, 3000);
 			};
 			window.addEventListener('online', updateOnlineStatus);
 			window.addEventListener('offline', updateOnlineStatus);
