@@ -165,7 +165,7 @@ async function configNetwork() {
 		let ob: any = {};
 		if (wizard.network.enable_tunnel) {
 			ob.enable_tunnel = true;
-			ob.ip = "";
+			ob.ip = '';
 		} else {
 			ob.enable_tunnel = false;
 			ob.ip = wizard.network.external_ip;
