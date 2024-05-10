@@ -14,7 +14,7 @@
 				<div class="did text-subtitle2">{{ member.name }}</div>
 				<div>
 					<!-- TODO: snowning.com error-->
-					<span>@{{ TerminusDefaultDomain }}</span>
+					<span>@{{ getCurrentDomain }}</span>
 					<span
 						class="tag text-3ubtitle3 owner"
 						v-if="member.role === OrgRole.Owner"
@@ -74,6 +74,15 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
+		const getCurrentDomain = computed(() => {
+			const current_user = userStore.current_user;
+			if (current_user && current_user.name.indexOf('@')) {
+				return current_user.name.split('@')[1];
+			} else {
+				return TerminusDefaultDomain;
+			}
+		});
+
 		return {
 			org,
 			OrgMemberStatus,
@@ -81,7 +90,7 @@ export default defineComponent({
 			groups,
 			userStore,
 			t,
-			TerminusDefaultDomain
+			getCurrentDomain
 		};
 	}
 });

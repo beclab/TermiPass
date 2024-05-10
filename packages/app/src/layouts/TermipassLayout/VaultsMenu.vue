@@ -126,6 +126,7 @@ async function sync() {
 const changeItemMenu = (vaultID = ''): void => {
 	if (vaultID) {
 		store.changeItemMenu(vaultID);
+		store.currentItem = 'vault';
 	} else {
 		store.vaultId = '';
 	}

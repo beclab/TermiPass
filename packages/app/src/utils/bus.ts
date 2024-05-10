@@ -66,4 +66,5 @@ export type BusEventName =
 	| 'BROADCAST_TO_BACKGROUND'
 
 	// app
-	| 'appSubscribe';
+	| 'appSubscribe'
+	| 'orgSubscribe';

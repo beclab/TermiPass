@@ -127,9 +127,11 @@ export default defineComponent({
 				$q.platform.is.mobile
 		);
 
-		const org = computed(function () {
-			return app.orgs.find((org) => org.id == meunStore.org_id);
-		});
+		const org = ref();
+
+		const initOrg = () => {
+			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+		};
 
 		const getInvite = () => {
 			if (org.value && route.params.org_type) {
@@ -221,6 +223,7 @@ export default defineComponent({
 		}
 
 		function stateUpdate() {
+			initOrg();
 			invite.value = getInvite();
 		}
 

@@ -397,23 +397,12 @@ module.exports = configure(function (ctx) {
 					changeOrigin: true
 				},
 				'/bfl': {
-					// target: process.env.URL, //代理地址，这里设置的地址会代替axios中设置的baseURL
 					target: `https://vault.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
-					changeOrigin: true // 如果接口跨域，需要进行这个参数配置
-					// pathRewrite: {
-					// 	'^/bfl': 'bfl'
-					// }
-					//ws: true, // proxy websockets
-					//pathRewrite方法重写url
+					changeOrigin: true
 				},
 				'/server': {
 					target: `https://vault.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
-					changeOrigin: true // 如果接口跨域，需要进行这个参数配置
-					// pathRewrite: {
-					// 	'^/server': 'server'
-					// }
-					//ws: true, // proxy websockets
-					//pathRewrite方法重写url
+					changeOrigin: true
 				},
 				'/sign': {
 					target: 'http://127.0.0.1:3190',
@@ -422,89 +411,78 @@ module.exports = configure(function (ctx) {
 						'^/sign': 'sign'
 					}
 				},
-				// '/api': {
-				// 	target: process.env.URL, //代理地址，这里设置的地址会代替axios中设置的baseURL
-				// 	changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
-				// 	pathRewrite: {
-				// 		'^/api': 'api'
-				// 	}
-				// 	//ws: true, // proxy websockets
-				// 	//pathRewrite方法重写url
-				// },
 				// '/message': {
-				// 	target: 'https://message.cat.myterminus.com/', //代理地址，这里设置的地址会代替axios中设置的baseURL
-				// 	changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+				// 	target: 'https://message.cat.myterminus.com/',
+				// 	changeOrigin: true,
 				// 	pathRewrite: {
 				// 		'^/message': 'message'
 				// 	}
 				// 	//ws: true, // proxy websockets
-				// 	//pathRewrite方法重写url
 				// },
 				'/create_local': {
-					target: 'https://dev-obridge-lpnode.edge-dev.xyz/proxy/4010', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: 'https://dev-obridge-lpnode.edge-dev.xyz/proxy/4010',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/create_local': 'create_local'
 					}
 					//ws: true, // proxy websockets
-					//pathRewrite方法重写url
 				},
 				'/get_application_schema': {
-					target: 'https://vc-gate-v2.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: 'https://vc-gate-v2.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/get_application_schema': 'get_application_schema'
 					}
 				},
 				'/get_facebook_info': {
-					target: 'https://vc-gate-v2.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: 'https://vc-gate-v2.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/get_facebook_info': 'get_facebook_info'
 					}
 				},
 				'/submit_presentation': {
-					target: 'https://vc-gate-v2.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: 'https://vc-gate-v2.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/submit_presentation': 'submit_presentation'
 					}
 				},
 				'/request_twitter_auth': {
-					target: 'https://vc-gate-v2.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: 'https://vc-gate-v2.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/request_twitter_auth': 'request_twitter_auth'
 					}
 				},
 				'/twitter_result': {
-					target: 'https://vc-gate-v2.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: 'https://vc-gate-v2.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/twitter_result': 'twitter_result'
 					}
 				},
 				'/verifyAndCreateDomain': {
-					target: ' https://vc-gate-v2-admin.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: ' https://vc-gate-v2-admin.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/verifyAndCreateDomain': 'verifyAndCreateDomain'
 					}
 				},
 				'/verifyDomainPresentation': {
-					target: ' https://vc-gate-v2-admin.edge-dev.xyz', //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+					target: ' https://vc-gate-v2-admin.edge-dev.xyz',
+					changeOrigin: true,
 					pathRewrite: {
 						'^/verifyDomainPresentation': 'verifyDomainPresentation'
 					}
 				},
 
 				'/seafile': {
-					target: 'http://localhost:8000/', //接口的前缀
-					ws: true, //代理websocked
-					changeOrigin: true, //虚拟的站点需要更管origin
+					target: 'http://localhost:8000/',
+					ws: true,
+					changeOrigin: true,
 					pathRewrite: {
-						'^/seafile': '' //重写路径
+						'^/seafile': ''
 					}
 				},
 
@@ -514,13 +492,12 @@ module.exports = configure(function (ctx) {
 				},
 
 				'/api': {
-					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`, //代理地址，这里设置的地址会代替axios中设置的baseURL
-					changeOrigin: true // 如果接口跨域，需要进行这个参数配置
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
+					changeOrigin: true
 					// pathRewrite:{
 					//   '^/api': 'api'
 					// }
 					//ws: true, // proxy websockets
-					//pathRewrite方法重写url
 				},
 				'/second': {
 					target: `https://auth.${process.env.SERVER_PROXY_NNME}.myterminus.com`,

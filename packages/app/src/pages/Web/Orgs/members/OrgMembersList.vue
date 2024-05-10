@@ -147,10 +147,11 @@ export default defineComponent({
 				$q.platform.is.mobile
 		);
 		const platform = ref(process.env.PLATFORM);
+		const org = ref();
 
-		const org = computed(function () {
-			return app.orgs.find((org) => org.id == meunStore.org_id);
-		});
+		const initOrg = () => {
+			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+		};
 
 		const heading = computed(function () {
 			return {
@@ -160,6 +161,7 @@ export default defineComponent({
 		});
 
 		function _getItems() {
+			initOrg();
 			const members_hasid = org.value!.members.filter((org) => org.id);
 
 			const memFilter = filterInput.value.toLowerCase();
@@ -205,14 +207,14 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			busOn('appSubscribe', stateUpdate);
+			busOn('orgSubscribe', stateUpdate);
 
 			meunStore.$subscribe(() => {
 				updateItems();
 			});
 		});
 		onUnmounted(() => {
-			busOff('appSubscribe', stateUpdate);
+			busOff('orgSubscribe', stateUpdate);
 		});
 
 		let updateItems = debounce(() => {

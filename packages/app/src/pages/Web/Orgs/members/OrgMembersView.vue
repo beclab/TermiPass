@@ -42,7 +42,7 @@
 						<q-icon name="sym_r_more_horiz" size="28px">
 							<q-menu class="popup-menu">
 								<q-list dense padding style="width: 160px">
-									<q-item
+									<!-- <q-item
 										class="row items-center justify-start popup-item"
 										clickable
 										dense
@@ -51,8 +51,8 @@
 									>
 										<q-icon class="q-mr-xs" name="sym_r_delete" size="20px" />
 										{{ t('remove') }}
-									</q-item>
-									<q-item
+									</q-item> -->
+									<!-- <q-item
 										class="row items-center justify-start popup-item"
 										clickable
 										dense
@@ -62,8 +62,8 @@
 									>
 										<q-icon class="q-mr-xs" name="sym_r_block" size="20px" />
 										{{ t('suspend') }}
-									</q-item>
-									<q-item
+									</q-item> -->
+									<!-- <q-item
 										class="row items-center justify-start popup-item"
 										clickable
 										dense
@@ -74,7 +74,7 @@
 										<q-icon class="q-mr-xs" name="sym_r_block" size="20px" />
 										<q-icon size="22px" name="block" class="q-mr-xs" />
 										{{ t('unsuspend') }}
-									</q-item>
+									</q-item> -->
 									<q-item
 										class="row items-center justify-start popup-item"
 										clickable
@@ -105,7 +105,7 @@
 										/>
 										{{ t('remove_admin') }}
 									</q-item>
-									<q-item
+									<!-- <q-item
 										class="row items-center justify-start popup-item"
 										dense
 										clickable
@@ -119,7 +119,7 @@
 											size="20px"
 										/>
 										{{ t('make_owner') }}
-									</q-item>
+									</q-item> -->
 								</q-list>
 							</q-menu>
 						</q-icon>
@@ -204,7 +204,7 @@
 												option-label="auth"
 												@update:model-value="
 													(value) => {
-														v.readonly = value === 'Readonly' ? false : true;
+														v.readonly = value === 'Readonly' ? true : false;
 														v.auth = value;
 														updateMember(v, value);
 														// onEdit();
@@ -273,7 +273,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted, watch } from 'vue';
+import {
+	defineComponent,
+	computed,
+	ref,
+	onMounted,
+	watch,
+	onUnmounted
+} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Group, OrgRole, OrgMemberStatus } from '@didvault/sdk/src/core';
 import { formatDateFromNow, formatDateTime } from '@didvault/sdk/src/util';
@@ -288,6 +295,7 @@ import {
 import { useI18n } from 'vue-i18n';
 import { BtDialog } from '@bytetrade/ui';
 import { TerminusDefaultDomain } from '@bytetrade/core';
+import { busOn, busOff } from '../../../../utils/bus';
 
 export default defineComponent({
 	name: 'OrgInvitesView',
@@ -362,22 +370,30 @@ export default defineComponent({
 			return org.value!.isSuspended(member.value);
 		});
 
+		const init = async () => {
+			await initOrg();
+			await initMember();
+			await clearChanges();
+		};
+
 		watch(
 			() => route.params.org_type,
 			async (newVaule: any, oldVaule: any) => {
 				if (oldVaule == newVaule) {
 					return;
 				}
-				await initOrg();
-				await initMember();
-				await clearChanges();
+				init();
 			}
 		);
 
 		onMounted(async () => {
-			await initOrg();
-			await initMember();
-			await clearChanges();
+			busOn('orgSubscribe', init);
+
+			init();
+		});
+
+		onUnmounted(() => {
+			busOff('orgSubscribe', init);
 		});
 
 		const _getCurrentGroups = function () {
@@ -428,7 +444,7 @@ export default defineComponent({
 				const element = vaultSelf[i];
 				const obj = {
 					...element,
-					auth: element.readonly ? 'Editable' : 'Readonly'
+					auth: element.readonly ? 'Readonly' : 'Editable'
 				};
 				_vaults.value.push(obj);
 			}
@@ -441,7 +457,7 @@ export default defineComponent({
 		async function _addVault(vault: { id: string; name: string }) {
 			_vaults.value.push({
 				id: vault.id,
-				readonly: true,
+				readonly: false,
 				auth: 'Editable'
 			});
 		}
@@ -513,7 +529,7 @@ export default defineComponent({
 			for (let i = 0; i < vaultself.length; i++) {
 				const element = vaultself[i];
 				if (member.id === element.id) {
-					element.readonly = value === 'Readonly' ? false : true;
+					element.readonly = value === 'Readonly' ? true : false;
 					element.auth = value;
 				}
 			}

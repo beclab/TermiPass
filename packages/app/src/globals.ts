@@ -37,6 +37,7 @@ export function getSenderUrl() {
 
 const appSubscribeBlock = (state: AppState) => {
 	busEmit('appSubscribe', state);
+	busEmit('orgSubscribe', state.orgs);
 };
 
 export function resetAPP() {

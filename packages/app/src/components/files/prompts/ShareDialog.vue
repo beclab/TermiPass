@@ -8,7 +8,7 @@
 				:label="
 					isMobile
 						? t('share_repo')
-						: `${t('share_repo')}：${shareRepoInfo.name}`
+						: `${t('share_repo')}：${shareRepoInfo.repo_name}`
 				"
 				icon=""
 				titAlign="text-left"
@@ -31,13 +31,17 @@
 						option-value="email"
 						option-label="name"
 						placeholder="Select User"
-						@filter="filterFn"
 						color="yellow"
 						dropdown-icon="sym_r_expand_more"
 						style="width: 200px"
 					>
-						<template v-slot:option="{ itemProps, opt, selected }">
-							<q-item v-bind="itemProps">
+						<template v-slot:option="{ itemProps, opt }">
+							<q-item
+								v-bind="itemProps"
+								:style="{
+									'pointer-events': checkShared(opt.name) ? 'none' : 'auto'
+								}"
+							>
 								<q-item-section
 									class="text-grey-9"
 									style="word-break: normal; white-space: nowrap"
@@ -45,18 +49,19 @@
 									<span>{{ opt.name }}</span>
 								</q-item-section>
 								<q-item-section side>
-									<span class="added text-body3" v-if="selected">
-										{{ t('added') }}</span
-									>
+									<span class="added text-body3" v-if="checkShared(opt.name)">
+										{{ t('added') }}
+									</span>
 								</q-item-section>
 							</q-item>
 						</template>
 					</q-select>
 					<span
 						class="adduser text-body3"
-						:class="!userModel ? 'adduserdisable' : ''"
+						:class="!userModel || userModel.length <= 0 ? 'adduserdisable' : ''"
 						:style="{
-							'pointer-events': userModel ? 'auto' : 'none'
+							'pointer-events':
+								!userModel || userModel.length <= 0 ? 'none' : 'auto'
 						}"
 						@click="submit"
 					>
@@ -172,21 +177,6 @@ const permissionOption = ref([
 const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 const shareRepoInfo = ref(menuStore.shareRepoInfo);
 
-const filterFn = (val, update) => {
-	update(() => {
-		if (val === '') {
-			userOptions.value = menuStore.userList;
-		} else {
-			update(() => {
-				const needle = val.toLowerCase();
-				userOptions.value = menuStore.userList.filter(
-					(v: { name: string }) => v.name.toLowerCase().indexOf(needle) > -1
-				);
-			});
-		}
-	});
-};
-
 const submit = async () => {
 	try {
 		await shareToUser.setSharedItems(userModel.value, primaryModel.value);
@@ -215,6 +205,17 @@ const deleteShareItem = async (name: string) => {
 		sync.getSyncMenu();
 	} catch (error) {
 		console.error('error', error);
+	}
+};
+
+const checkShared = (name: string) => {
+	const isShared = menuStore.sharedItems.find(
+		(item) => item.user_info.nickname === name
+	);
+	if (isShared) {
+		return true;
+	} else {
+		return false;
 	}
 };
 

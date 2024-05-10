@@ -143,9 +143,16 @@ const readOnly = computed(function () {
 });
 
 const path = computed(function () {
-	return store.selectedCount === 0
-		? store.req.path
-		: store.req.items[store.selected[0]].path;
+	const path =
+		store.selectedCount === 0
+			? store.req.path
+			: store.req.items[store.selected[0]].path;
+
+	if (path.startsWith('/Seahub')) {
+		return path.slice(7);
+	} else {
+		return path;
+	}
 });
 
 const onCancel = () => {

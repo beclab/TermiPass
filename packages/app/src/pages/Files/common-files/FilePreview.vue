@@ -66,11 +66,11 @@ import { files as api } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.vue';
-import VueOfficeDocx from '@vue-office/docx';
-import VueOfficeExcel from '@vue-office/excel';
+// import VueOfficeDocx from '@vue-office/docx';
+// import VueOfficeExcel from '@vue-office/excel';
 
-import '@vue-office/docx/lib/index.css';
-import '@vue-office/excel/lib/index.css';
+// import '@vue-office/docx/lib/index.css';
+// import '@vue-office/excel/lib/index.css';
 
 import { shallowRef } from 'vue';
 
@@ -78,8 +78,8 @@ export default defineComponent({
 	name: 'FilePreview',
 	components: {
 		ExtendedImage,
-		VueOfficeDocx,
-		VueOfficeExcel,
+		// VueOfficeDocx,
+		// VueOfficeExcel,
 		TerminusVideoPlayer
 	},
 	setup() {
