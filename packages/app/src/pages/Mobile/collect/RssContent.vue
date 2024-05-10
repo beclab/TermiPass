@@ -1,71 +1,87 @@
 <template>
 	<div class="rss-content">
-		<collec-item
-			v-for="(item, index) in pagesList"
+		<collect-item
+			v-for="(item, index) in collectStore.rssList"
 			:key="index"
 			:item="item"
 			class="q-mt-md"
 		>
+			<template v-slot:image>
+				<q-img
+					:src="
+						item.image ? item.image : getRequireImage('rss/rss_default_img.svg')
+					"
+					class="image-avatar"
+				>
+					<template v-slot:loading>
+						<q-img
+							:src="getRequireImage('rss/rss_default_img.svg')"
+							class="image-avatar"
+						/>
+					</template>
+					<template v-slot:error>
+						<q-img
+							:src="getRequireImage('rss/rss_default_img.svg')"
+							class="image-avatar"
+						/>
+					</template>
+				</q-img>
+			</template>
 			<template v-slot:side>
-				<CollectionItemStatus class="status-white-bg">
+				<collection-item-status class="status-white-bg">
 					<template v-slot:status>
 						<q-icon
-							v-if="item.status == RssStatus.none"
+							v-if="item.status === RssStatus.none"
 							name="sym_r_bookmark_add"
 							size="20px"
 							class="text-grey-8"
+							@click="onSaveFeed(item)"
 						/>
 						<q-icon
-							v-if="item.status == RssStatus.added"
+							v-if="item.status === RssStatus.added"
 							name="sym_r_bookmark_added"
 							size="20px"
 							class="text-yellow-7"
 						/>
 						<q-icon
-							v-if="item.status == RssStatus.removed"
+							v-if="item.status === RssStatus.removed"
 							name="sym_r_bookmark_remove"
 							size="20px"
 							class="text-negative"
 						/>
 					</template>
-				</CollectionItemStatus>
+				</collection-item-status>
 			</template>
-		</collec-item>
+		</collect-item>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import CollecItem from './CollecItem.vue';
 import { RssInfo, RssStatus } from './utils';
 import CollectionItemStatus from './CollectionItemStatus.vue';
+import CollectItem from './CollectItem.vue';
+import { useCollectStore } from '../../../stores/collect';
+import { useQuasar } from 'quasar';
+import { getRequireImage } from '../../../utils/imageUtils';
+const collectStore = useCollectStore();
+const $q = useQuasar();
 
-const pagesList = ref<RssInfo[]>([
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: RssStatus.none
-	},
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: RssStatus.added
-	},
-	{
-		title: 'Upcoming releases - United States',
-		detail: 'https://www.bbc.com/news/world-middle-east-67866346',
-		logo: '',
-		status: RssStatus.removed
-	}
-]);
+const onSaveFeed = async (item: RssInfo) => {
+	$q.loading.show();
+	await collectStore.addFeed(item);
+	$q.loading.hide();
+};
 </script>
 
 <style scoped lang="scss">
 .rss-content {
 	width: 100%;
 	height: 100%;
+	.image-avatar {
+		width: 44px;
+		height: 44px;
+		border-radius: 8px;
+	}
 	.status-white-bg {
 		background: #fff;
 	}

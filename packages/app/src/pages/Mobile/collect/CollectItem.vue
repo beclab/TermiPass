@@ -2,7 +2,7 @@
 	<q-item class="collect-item">
 		<q-item>
 			<q-item-section avatar>
-				<q-avatar color="primary" text-color="white" icon="bluetooth" />
+				<slot name="image" />
 			</q-item-section>
 
 			<q-item-section style="max-width: 200px">

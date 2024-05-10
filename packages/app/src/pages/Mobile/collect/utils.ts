@@ -1,7 +1,8 @@
-export interface CollectBaseInfo {
+export interface BaseCollectInfo {
+	id?: string;
 	title: string;
-	detail: string;
-	logo: string;
+	url: string;
+	image: string;
 }
 
 export enum PageStatus {
@@ -12,7 +13,7 @@ export enum PageStatus {
 	success
 }
 
-export interface PageInfo extends CollectBaseInfo {
+export interface PageInfo extends BaseCollectInfo {
 	status: PageStatus;
 	progress?: any; // 0-1
 }
@@ -23,7 +24,7 @@ export enum RssStatus {
 	removed
 }
 
-export interface RssInfo extends CollectBaseInfo {
+export interface RssInfo extends BaseCollectInfo {
 	status: RssStatus;
 }
 
@@ -34,7 +35,26 @@ export enum PDFStatus {
 	success
 }
 
-export interface PDFInfo extends CollectBaseInfo {
+export interface PDFInfo extends BaseCollectInfo {
 	status: PDFStatus;
-	progress?: any; // 0-1
+	progress?: DownloadProgress; // 0-1
+}
+
+export interface DownloadProgress {
+	id: string;
+	url: string;
+	fileName: string;
+	status: string;
+	total: number;
+	download: number;
+	//local data
+	isLoading: boolean;
+}
+
+export enum DOWNLOAD_STATUS {
+	SUCCESS = 'success',
+	FAILED = 'failed',
+	DOWNLOADING = 'downloading',
+	//font
+	UNKNOWN = 'unknown'
 }
