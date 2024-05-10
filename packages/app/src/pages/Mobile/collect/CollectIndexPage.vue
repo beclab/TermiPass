@@ -90,10 +90,8 @@ async function getInfos() {
 	const { pageRSSHub, pageRSS } = await controller.controller.getAllRSSList(
 		tab.id
 	);
-	console.log(tab);
 	let list = [];
 	list = list.concat(pageRSSHub).concat(pageRSS);
-	console.log(list);
 
 	if (list.length === 0) {
 		const rss = items.value.find((item) => item.name === 'Rss');

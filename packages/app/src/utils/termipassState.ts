@@ -1,4 +1,4 @@
-import { TerminusInfo, initPing } from '@bytetrade/core';
+import { TerminusInfo } from '@bytetrade/core';
 import { ErrorCode, UserItem } from '@didvault/sdk/src/core';
 // import axios from 'axios';
 import { app, getSenderUrl, setSenderUrl } from 'src/globals';
@@ -94,8 +94,6 @@ interface CheckLogHistoryInterface {
 }
 
 const GetVPNHostPeerInfoCountMax = 6;
-
-// const CheckSrpTokenTimeInterval = 30;
 
 const CheckTerminusInfoTimeInterval = 60 * 2;
 
@@ -287,15 +285,8 @@ export class TermiPassState {
 			if (this.stateMachine.state() < TermipassActionStatus.UserSetupFinished) {
 				return;
 			}
-			const isLocal = await initPing(
-				'',
-				3000,
-				'https://healthz.local.' +
-					this.currentUser!.name.replace('@', '.') +
-					'/ping'
-			);
-
-			this.currentUser!.isLocal = isLocal;
+			const isLocal = await this.actions.getTerminusInfo(false, true);
+			this.currentUser!.isLocal = isLocal != undefined;
 			this.actions.resetSenderUrl();
 			this.stateMachine.transition().goto(TermipassActionStatus.TerminusPinged);
 		},
@@ -360,10 +351,7 @@ export class TermiPassState {
 				} else {
 					if (result == ErrorCode.TOKE_INVILID) {
 						// 400
-						const terminusInfo = await this.actions.getTerminusInfo(
-							true,
-							false
-						);
+						const terminusInfo = await this.actions.getTerminusInfo(false);
 						if (
 							terminusInfo &&
 							terminusInfo.terminusId == this.currentUser!.terminus_id
@@ -375,12 +363,14 @@ export class TermiPassState {
 					} else {
 						//525
 						if (result == ErrorCode.SERVER_NOT_EXIST) {
-							await this.actions.getTerminusInfo(true, false);
+							await this.actions.getTerminusInfo(false);
 						} else if (result == ErrorCode.SERVER_ERROR) {
 							if (this.currentUser.isLocal) {
 								await this.actions.ping();
 							}
-							await this.actions.getTerminusInfo(true, false);
+							if (!this.currentUser.isLocal) {
+								await this.actions.getTerminusInfo(false);
+							}
 						}
 					}
 				}
@@ -403,23 +393,18 @@ export class TermiPassState {
 				checkItem: 'srpToken'
 			});
 		},
-		getTerminusInfo: async (forceReload = false, addHistory = false) => {
+		getTerminusInfo: async (addHistory = false, isPing = false) => {
 			if (this.stateMachine.state() < TermipassActionStatus.UserSetupFinished) {
 				return;
 			}
 			const userStore = useUserStore();
-			if (
-				!forceReload &&
-				userStore.getUserTerminusInfo(this.currentUser.id).terminusId.length > 0
-			) {
-				return userStore.getUserTerminusInfo(this.currentUser.id);
-			}
 
 			if (this.terminusInfoRefreshIng) {
 				return;
 			}
 
 			this.terminusInfoRefreshIng = true;
+
 			const termipassStore = useTermipassStore();
 
 			const checkUserId = this.currentUser.id;
@@ -434,18 +419,19 @@ export class TermiPassState {
 			};
 
 			try {
+				const baseUrl = isPing
+					? userStore.pingTerminusInfo
+					: this.currentUser.terminus_url;
+
 				const instance = axiosInstanceProxy({
-					baseURL: this.currentUser.terminus_url,
+					baseURL: baseUrl,
 					headers: {
 						'Content-Type': 'application/json'
 					}
 				});
-				const data = await instance.get(
-					this.currentUser.terminus_url + '/api/terminus-info',
-					{
-						timeout: 5000
-					}
-				);
+				const data = await instance.get(baseUrl + '/api/terminus-info', {
+					timeout: 5000
+				});
 				const terminusInfo: TerminusInfo = data.data.data;
 
 				termipassStore.reactivation = false;
@@ -689,7 +675,7 @@ export class TermiPassState {
 							date.getTime() / 1000)
 				) {
 					this.terminusInfoRefresh = false;
-					this.actions.getTerminusInfo(true, true);
+					this.actions.getTerminusInfo(true);
 					return;
 				}
 			}

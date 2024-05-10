@@ -1323,5 +1323,5 @@ If you want to create an organization, please refer to the steps listed in the T
 	rename_file: 'Rename File',
 	pdf_name: 'PDF name',
 	input_pdf_name: 'Input PDF name',
-	please_use_a_gmail_emailaddress: 'Please use a "@gmail.com" email address.'
+	please_use_a_gmail_email_address: 'Please use a "{gmail}" email address.'
 };

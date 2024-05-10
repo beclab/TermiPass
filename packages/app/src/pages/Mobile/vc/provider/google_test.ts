@@ -44,7 +44,11 @@ export async function googleTestLogin(
 		obj
 	);
 	if (response.status != 200 && response.data.code != 0) {
-		throw Error(i18n.global.t('errors.get_google_result_failure'));
+		throw Error(
+			response.data.message
+				? response.data.message
+				: i18n.global.t('errors.get_google_result_failure')
+		);
 	}
 	const google_result: GetResponseResponse = response.data.data;
 	const verifiable_credential: string = google_result.verifiableCredentials![0];
