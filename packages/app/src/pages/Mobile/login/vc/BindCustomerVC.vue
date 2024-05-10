@@ -11,15 +11,16 @@
 			<span class="bind-terminus-vc-page__desc login-sub-title">{{
 				t('bind_terminus_vc_desc')
 			}}</span>
-			<div
-				class="bind-terminus-vc-page__title text-color-title text-h6"
-				@click="googleTestUpdateCheck"
-			>
+			<div class="bind-terminus-vc-page__title text-color-title text-h6">
 				{{ t('verify_using_gmail') }}
 			</div>
 			<terminus-v-c-card
 				style="margin-top: 20px"
-				:sub-text="t('please_use_a_gmail_emailaddress')"
+				:sub-text="
+					t('please_use_a_gmail_email_address', {
+						gmail: '@gmail.com'
+					})
+				"
 				:type="TERMINUS_VC_TYPE.GOOGLE"
 				@click="request(TERMINUS_VC_TYPE.GOOGLE)"
 			/>

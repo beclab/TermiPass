@@ -12,7 +12,6 @@ export async function queryEntry(url: string) {
 				source: 'library'
 			}
 		);
-		console.log(response);
 		return !!(response && response.count > 0);
 	} catch (e) {
 		return false;

@@ -183,7 +183,6 @@ export const useScaleStore = defineStore('scale', {
 				platform as any as ConfigVPNInterface
 			).hostPeerInfo();
 
-			console.log('hostPeerInfo ===>', this.hostPeerInfo);
 			return this.hostPeerInfo;
 		}
 	}

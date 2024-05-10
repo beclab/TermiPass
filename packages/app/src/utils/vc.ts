@@ -13,6 +13,7 @@ import {
 import { VaultItem, VaultType, uuid } from '@didvault/sdk/src/core';
 import { i18n } from 'src/boot/i18n';
 import { GeneralJwsSigner } from 'src/jose/jws/general/signer';
+import { TermipassConfig } from './constants';
 
 export interface VCCardInfo {
 	type: string;
@@ -58,7 +59,9 @@ export async function signVerifiableCredentialJWT(
 		t.exp = Math.floor(unixTime / 1000);
 	}
 	t.iss = cred.issuer;
-	t.nbf = Math.floor(new Date(cred.issuanceDate).getTime() / 1000);
+	t.nbf =
+		Math.floor(new Date(cred.issuanceDate).getTime() / 1000) -
+		TermipassConfig.jwt_payload_nbf_sub_second;
 	t.jti = cred.id;
 	t.sub = cred.credentialSubject.id;
 	t.vc = cred;

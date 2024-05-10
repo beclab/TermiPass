@@ -32,10 +32,8 @@ export async function downloadPdf(
 				filename
 			}
 		);
-		console.log(entry);
 		return entry;
 	} catch (e: any) {
-		console.log(e.message);
 		return null;
 	}
 }
@@ -48,10 +46,8 @@ export async function getDownloadPdfProgress(
 		const progress: DownloadProgress = await axios.get(
 			collectStore.baseUrl + '/knowledge/pdf/download/progress/' + id
 		);
-		console.log(progress);
 		return progress;
 	} catch (e: any) {
-		console.log(e.message);
 		return null;
 	}
 }

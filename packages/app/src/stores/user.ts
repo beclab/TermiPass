@@ -27,6 +27,8 @@ import {
 import { refresh_token, SSOTokenRaw } from '../utils/account';
 import { NetworkUpdateMode, busEmit } from 'src/utils/bus';
 import { useMonitorStore } from './monitor';
+import { seafileAPI } from 'src/api/seafileAPI';
+import { useDataStore } from './data';
 
 type UserStorageSaveType =
 	| 'locale'
@@ -141,20 +143,18 @@ export const useUserStore = defineStore('user', {
 		currentUserBackup(): boolean {
 			return this.backupList.find((e) => e == this.current_id) != undefined;
 		},
-		get_termins_url() {
+		pingTerminusInfo() {
 			if (!this.current_user) {
-				return undefined;
+				return '';
 			}
 			const array: string[] = this.current_user.name.split('@');
 			if (array.length == 1) {
-				return (
-					'https://desktop.' + array[0] + '.' + TerminusDefaultDomain + '/'
-				);
+				return 'https://' + 'local.' + array[0] + '.' + TerminusDefaultDomain;
 			} else if (array.length == 2) {
-				return 'https://desktop.' + array[0] + '.' + array[1] + '/';
+				return 'https://' + 'local.' + array[0] + '.' + array[1];
 			}
 
-			return undefined;
+			return '';
 		}
 	},
 	actions: {
@@ -493,6 +493,10 @@ export const useUserStore = defineStore('user', {
 			scale.reset();
 			const monitor = useMonitorStore();
 			monitor.clear();
+
+			const store = useDataStore();
+			const baseURL = store.baseURL();
+			seafileAPI.init({ server: baseURL });
 		},
 
 		async backupCurrentUser() {

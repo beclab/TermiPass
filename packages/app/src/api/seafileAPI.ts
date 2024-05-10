@@ -25,6 +25,7 @@ class SeafileAPI {
 		repoID: string,
 		folderPath: string | number | boolean
 	) {
+		this.configSeafileApi();
 		const path = encodeURIComponent(folderPath);
 
 		const url =
@@ -38,6 +39,7 @@ class SeafileAPI {
 	}
 
 	getFileUploadedBytes(repoID: string, filePath: any, fileName: any) {
+		this.configSeafileApi();
 		const url =
 			this.server +
 			'/seahub/api/v2.1/repos/' +
@@ -54,6 +56,7 @@ class SeafileAPI {
 		repoID: string,
 		folderPath: string | number | boolean
 	): Promise<string> {
+		this.configSeafileApi();
 		const url =
 			'/seahub/api2/repos/' +
 			repoID +
@@ -66,12 +69,15 @@ class SeafileAPI {
 			return '';
 		}
 	}
+	configSeafileApi() {
+		if (this.server && this.req) {
+			return;
+		}
+		const store = useDataStore();
+		const baseURL = store.baseURL();
+		this.init({ server: baseURL });
+	}
 }
 
 const seafileAPI = new SeafileAPI();
-const store = useDataStore();
-const baseURL = store.baseURL();
-
-seafileAPI.init({ server: baseURL });
-
 export { seafileAPI };

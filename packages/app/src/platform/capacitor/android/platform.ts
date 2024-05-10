@@ -6,6 +6,7 @@ import { updateUIToAddWeb } from '../addItem';
 import { addAxiosProxyGlobalRequestInterceptor } from '../../httpProxy';
 import AndroidPlugins from './androidPlugins';
 import { useUserStore } from '../../../stores/user';
+import { TermipassConfig } from 'src/utils/constants';
 
 export enum AUTO_FILL_TYPE {
 	FRAMEWORK = 'AUTOFILL_FRAMEWORK',
@@ -120,6 +121,8 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 				});
 			}
 		);
+
+		TermipassConfig.jwt_payload_nbf_sub_second = 10;
 	}
 
 	async homeMounted(): Promise<void> {

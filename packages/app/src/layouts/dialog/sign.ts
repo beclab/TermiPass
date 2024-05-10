@@ -8,6 +8,7 @@ import { PrivateJwk, GetResponseResponse } from '@bytetrade/core';
 import { PrivateKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { i18n } from '../../boot/i18n';
+import { TermipassConfig } from '../../utils/constants';
 
 function getFullyQualifiedVerificationMethodID(did: string): string {
 	const [, , id] = did.split(':');
@@ -36,7 +37,9 @@ export async function signJWS(
 	t.exp = Math.floor(unixTime / 1000);
 
 	t.iss = getFullyQualifiedVerificationMethodID(issuer);
-	t.nbf = Math.floor(issuanceDate.getTime() / 1000);
+	t.nbf =
+		Math.floor(issuanceDate.getTime() / 1000) -
+		TermipassConfig.jwt_payload_nbf_sub_second;
 
 	const signer = await GeneralJwsSigner.create(
 		new TextEncoder().encode(JSON.stringify(t)),

@@ -44,7 +44,11 @@ export async function facebookLogin(
 		{ jws: jws }
 	);
 	if (response.status != 200 && response.data.code != 0) {
-		throw Error(i18n.global.t('errors.get_facebook_result_failure'));
+		throw Error(
+			response.data.message
+				? response.data.message
+				: i18n.global.t('errors.get_facebook_result_failure')
+		);
 	}
 	const facebook_result: GetResponseResponse = response.data.data;
 	const verifiable_credential: string =
