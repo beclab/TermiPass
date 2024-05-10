@@ -48,7 +48,7 @@
 			<q-item-label>{{ lockTime }}{{ t('min') }}</q-item-label>
 		</q-item>
 	</q-list>
-
+	<!--
 	<q-list class="q-ma-md sItem" separator>
 		<q-item class="titleBg">
 			<q-item-section>{{ t('multi_factor_authentication') }}</q-item-section>
@@ -58,9 +58,9 @@
 				t('add_mfa_method')
 			}}</q-item-section>
 		</q-item>
-	</q-list>
+	</q-list> -->
 
-	<q-list class="q-ma-md sItem biometric" separator>
+	<!-- <q-list class="q-ma-md sItem biometric" separator>
 		<q-item class="titleBg">
 			<q-item-section>{{ t('active_sessions') }}</q-item-section>
 		</q-item>
@@ -79,9 +79,9 @@
 				<q-avatar icon="construction" />
 			</q-item-label>
 		</q-item>
-	</q-list>
+	</q-list> -->
 
-	<q-list class="q-ma-md sItem biometric" separator>
+	<!-- <q-list class="q-ma-md sItem biometric" separator>
 		<q-item class="titleBg">
 			<q-item-section>{{ t('trusted_devices') }}</q-item-section>
 		</q-item>
@@ -104,8 +104,8 @@
 				<q-avatar icon="construction" />
 			</q-item-label>
 		</q-item>
-	</q-list>
-
+	</q-list> -->
+	<!--
 	<q-list class="q-ma-md sItem" separator>
 		<q-item class="titleBg">
 			<q-item-section>{{ t('security_report') }}</q-item-section>
@@ -154,7 +154,7 @@
 				/>
 			</q-item-label>
 		</q-item>
-	</q-list>
+	</q-list> -->
 </template>
 
 <script lang="ts">

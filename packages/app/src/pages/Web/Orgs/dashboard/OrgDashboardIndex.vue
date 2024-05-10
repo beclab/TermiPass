@@ -66,7 +66,7 @@
 								{{ t('invites') }}
 							</span>
 							<span class="q-ml-md text-color-sub-title">{{
-								org!.invites.length
+								org?.invites.length
 							}}</span>
 						</div>
 					</div>
@@ -79,7 +79,7 @@
 							<div
 								class="text-color-sub-title column items-center justify-center"
 								style="height: 304px"
-								v-if="org!.invites.length == 0"
+								v-if="org?.invites.length == 0"
 							>
 								<img
 									class="q-mt-sm"
@@ -91,7 +91,7 @@
 							</div>
 							<template
 								v-else
-								v-for="(invite, index) in org!.invites"
+								v-for="(invite, index) in org?.invites"
 								:key="'member' + index"
 							>
 								<div
@@ -100,7 +100,7 @@
 								>
 									<OrgInviteItem :invite="invite" />
 								</div>
-								<q-separator v-if="index < org!.invites.length - 1" />
+								<q-separator v-if="index < org?.invites.length - 1" />
 							</template>
 						</q-scroll-area>
 					</div>
@@ -117,7 +117,7 @@
 							</span>
 							<span class="q-ml-md text-color-sub-title"
 								>{{ _availableMembers.length }}
-								{{ quota.members !== -1 ? ` / ${quota.members}` : '' }}</span
+								{{ quota?.members !== -1 ? ` / ${quota?.members}` : '' }}</span
 							>
 						</div>
 					</div>
@@ -205,8 +205,8 @@
 								{{ t('vaults') }}
 							</span>
 							<span class="q-ml-md text-color-sub-title"
-								>{{ org!.vaults.length }}
-								{{ quota.vaults !== -1 ? ` / ${quota.vaults}` : '' }}
+								>{{ org?.vaults.length }}
+								{{ quota?.vaults !== -1 ? ` / ${quota?.vaults}` : '' }}
 							</span>
 						</div>
 						<div>
@@ -224,7 +224,7 @@
 							<div
 								class="text-color-sub-title column items-center justify-center"
 								style="height: 304px"
-								v-if="org!.vaults.length == 0"
+								v-if="org?.vaults.length == 0"
 							>
 								<img
 									class="q-mt-sm"
@@ -236,7 +236,7 @@
 							</div>
 							<template
 								v-else
-								v-for="(vault, index) in org!.vaults"
+								v-for="(vault, index) in org?.vaults"
 								:key="'vault' + index"
 							>
 								<div class="card-wrap full-width">
@@ -281,7 +281,7 @@
 										</q-card-section>
 									</q-card>
 								</div>
-								<q-separator v-if="index < org!.vaults.length - 1" />
+								<q-separator v-if="index < org?.vaults.length - 1" />
 							</template>
 						</q-scroll-area>
 					</div>
@@ -303,6 +303,7 @@ import OrgInviteItem from '../invites/OrgInviteItem.vue';
 // import VaultsMenu from '../../../../layouts/TermipassLayout/VaultsMenu.vue';
 import { useUserStore } from '../../../../stores/user';
 import { useI18n } from 'vue-i18n';
+import { busOn, busOff } from '../../../../utils/bus';
 
 export default defineComponent({
 	name: 'OrgMembersIndex',
@@ -328,10 +329,12 @@ export default defineComponent({
 		const quota = ref();
 
 		const platform = ref(process.env.PLATFORM);
+		const org = ref();
 
-		const org = computed(function () {
-			return app.orgs.find((org) => org.id == meunStore.org_id);
-		});
+		const initOrg = () => {
+			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+			quota.value = app.getOrgProvisioning(org.value).quota;
+		};
 
 		const getGroups = (vault) => {
 			return org.value?.getGroupsForVault(vault);
@@ -340,10 +343,6 @@ export default defineComponent({
 		const getMembers = (vault) => {
 			return org.value?.getMembersForVault(vault);
 		};
-
-		if (org.value) {
-			quota.value = app.getOrgProvisioning(org.value).quota;
-		}
 
 		const isOwner = computed(function () {
 			return app && app.account && org.value!.isOwner(app.account);
@@ -401,9 +400,11 @@ export default defineComponent({
 		//let unsubscribe : any;
 		onMounted(() => {
 			meunStore.rightDrawerOpen = false;
+			busOn('orgSubscribe', initOrg);
 		});
 		onUnmounted(() => {
 			meunStore.rightDrawerOpen = true;
+			busOff('orgSubscribe', initOrg);
 		});
 
 		const { t } = useI18n();

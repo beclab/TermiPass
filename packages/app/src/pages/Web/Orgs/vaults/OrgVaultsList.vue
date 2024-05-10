@@ -165,9 +165,11 @@ export default defineComponent({
 				$q.platform.is.mobile
 		);
 
-		const org = computed(function () {
-			return app.orgs.find((org) => org.id == meunStore.org_id);
-		});
+		const org = ref();
+
+		const initOrg = () => {
+			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+		};
 
 		const heading = computed(function () {
 			return {
@@ -206,6 +208,7 @@ export default defineComponent({
 		let itemList = ref<Vault[]>(_getItems());
 
 		function stateUpdate() {
+			initOrg();
 			itemList.value = _getItems();
 		}
 
@@ -227,16 +230,13 @@ export default defineComponent({
 
 		//let unsubscribe : any;
 		onMounted(() => {
-			busOn('appSubscribe', stateUpdate);
-			// unsubscribe = meunStore.$subscribe((mutation, state) => {
-			//     updateItems();
-			// });
+			busOn('orgSubscribe', stateUpdate);
 			meunStore.$subscribe(() => {
 				updateItems();
 			});
 		});
 		onUnmounted(() => {
-			busOff('appSubscribe', stateUpdate);
+			busOff('orgSubscribe', stateUpdate);
 			//unsubscribe();
 		});
 

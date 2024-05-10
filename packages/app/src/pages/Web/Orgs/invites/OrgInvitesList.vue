@@ -145,10 +145,11 @@ export default defineComponent({
 				$q.platform.is.mobile
 		);
 		const platform = ref(process.env.PLATFORM);
+		const org = ref();
 
-		const org = computed(function () {
-			return app.orgs.find((org) => org.id == meunStore.org_id);
-		});
+		const initOrg = () => {
+			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+		};
 
 		const heading = computed(function () {
 			return {
@@ -158,7 +159,9 @@ export default defineComponent({
 		});
 
 		function _getItems() {
+			initOrg();
 			const memFilter = filterInput.value.toLowerCase();
+			console.log('org.valueorg.value', org.value);
 			const invites = memFilter
 				? org.value!.invites.filter(({ did }) =>
 						did.toLowerCase().includes(memFilter)
@@ -200,14 +203,14 @@ export default defineComponent({
 
 		//let unsubscribe : any;
 		onMounted(() => {
-			busOn('appSubscribe', stateUpdate);
+			busOn('orgSubscribe', stateUpdate);
 
 			meunStore.$subscribe(() => {
 				updateItems();
 			});
 		});
 		onUnmounted(() => {
-			busOff('appSubscribe', stateUpdate);
+			busOff('orgSubscribe', stateUpdate);
 		});
 
 		let updateItems = debounce(() => {

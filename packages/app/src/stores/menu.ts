@@ -426,7 +426,6 @@ export const useMenuStore = defineStore('menu', {
 			this.tag = tag;
 		},
 		changeItemMenu(vaultId = '') {
-			this.clear();
 			if (vaultId) {
 				this.vaultId = vaultId;
 			}
