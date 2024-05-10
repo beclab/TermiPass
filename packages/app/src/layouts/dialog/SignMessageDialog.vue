@@ -132,9 +132,15 @@ const onDialogHide = () => {
 	emit('hide');
 };
 
-onMounted(() => {
+let androidHideOverlay = false;
+
+onMounted(async () => {
 	if ($q.platform.is.android) {
-		StatusBar.setOverlaysWebView({ overlay: true });
+		const status = await StatusBar.getInfo();
+		if (!status.overlays) {
+			androidHideOverlay = true;
+			StatusBar.setOverlaysWebView({ overlay: true });
+		}
 	}
 	menuStore.changeSafeArea(false);
 	busOn('cancel_sign', (data) => {
@@ -150,7 +156,9 @@ onUnmounted(() => {
 
 onBeforeUnmount(() => {
 	if ($q.platform.is.android) {
-		StatusBar.setOverlaysWebView({ overlay: false });
+		if (androidHideOverlay) {
+			StatusBar.setOverlaysWebView({ overlay: false });
+		}
 	}
 	menuStore.changeSafeArea(true);
 });

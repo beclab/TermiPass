@@ -279,6 +279,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 @import Foundation;
 @import ObjectiveC;
+@import SystemExtensions;
 #endif
 
 #endif
@@ -299,6 +300,26 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 
 #if defined(__OBJC__)
+
+
+SWIFT_CLASS("_TtC26TermiPassMacAddonFramework31TermiPassSystemExtensionManager")
+@interface TermiPassSystemExtensionManager : NSObject
+@property (nonatomic, copy) void (^ _Nullable updateRequestExtensionResult)(OSSystemExtensionRequestResult);
+@property (nonatomic, copy) void (^ _Nullable updateRequestExtensionError)(NSError * _Nonnull);
+@property (nonatomic) BOOL isStart;
+- (void)startActivateExtWithStart:(BOOL)start callback:(void (^ _Nonnull)(OSSystemExtensionRequestResult))callback;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class OSSystemExtensionRequest;
+@class OSSystemExtensionProperties;
+
+@interface TermiPassSystemExtensionManager (SWIFT_EXTENSION(TermiPassMacAddonFramework)) <OSSystemExtensionRequestDelegate>
+- (OSSystemExtensionReplacementAction)request:(OSSystemExtensionRequest * _Nonnull)request actionForReplacingExtension:(OSSystemExtensionProperties * _Nonnull)existing withExtension:(OSSystemExtensionProperties * _Nonnull)ext SWIFT_WARN_UNUSED_RESULT;
+- (void)request:(OSSystemExtensionRequest * _Nonnull)request didFailWithError:(NSError * _Nonnull)error;
+- (void)requestNeedsUserApproval:(OSSystemExtensionRequest * _Nonnull)request;
+- (void)request:(OSSystemExtensionRequest * _Nonnull)request didFinishWithResult:(OSSystemExtensionRequestResult)result;
+@end
 
 @class NETunnelProviderManager;
 enum Status : NSInteger;
@@ -326,18 +347,6 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) TermiPassVpn
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
 @end
 
-
-SWIFT_CLASS("_TtCC26TermiPassMacAddonFramework19TermiPassVpnManager6Config")
-@interface Config : NSObject
-- (nonnull instancetype)initWithHostname:(NSString * _Nonnull)hostname serverName:(NSString * _Nonnull)serverName localizedDescription:(NSString * _Nonnull)localizedDescription OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-
-@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
-@end
-
 typedef SWIFT_ENUM(NSInteger, Status, closed) {
   StatusOff = 0,
   StatusOn = 1,
@@ -346,6 +355,18 @@ typedef SWIFT_ENUM(NSInteger, Status, closed) {
   StatusConnecting = 3,
   StatusDisconnecting = 4,
 };
+
+
+@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
+@end
+
+
+SWIFT_CLASS("_TtCC26TermiPassMacAddonFramework19TermiPassVpnManager6Config")
+@interface Config : NSObject
+- (nonnull instancetype)initWithHostname:(NSString * _Nonnull)hostname serverName:(NSString * _Nonnull)serverName localizedDescription:(NSString * _Nonnull)localizedDescription OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
 
 
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
@@ -394,6 +415,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _No
 + (NSString * _Nonnull)openLocalVpnSDKStatusNotification SWIFT_WARN_UNUSED_RESULT;
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _Nonnull getPeersStateSDKStatusNotification;)
 + (NSString * _Nonnull)getPeersStateSDKStatusNotification SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+SWIFT_CLASS("_TtC26TermiPassMacAddonFramework25TermipassRequestExDataKey")
+@interface TermipassRequestExDataKey : NSObject
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull vpnStatus;)
++ (NSString * _Nonnull)vpnStatus SWIFT_WARN_UNUSED_RESULT;
++ (void)setVpnStatus:(NSString * _Nonnull)value;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull peerStatus;)
++ (NSString * _Nonnull)peerStatus SWIFT_WARN_UNUSED_RESULT;
++ (void)setPeerStatus:(NSString * _Nonnull)value;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull profiles;)
++ (NSString * _Nonnull)profiles SWIFT_WARN_UNUSED_RESULT;
++ (void)setProfiles:(NSString * _Nonnull)value;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull current_profile;)
++ (NSString * _Nonnull)current_profile SWIFT_WARN_UNUSED_RESULT;
++ (void)setCurrent_profile:(NSString * _Nonnull)value;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
 @class NSData;
@@ -727,6 +766,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 @import Foundation;
 @import ObjectiveC;
+@import SystemExtensions;
 #endif
 
 #endif
@@ -747,6 +787,26 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 
 #if defined(__OBJC__)
+
+
+SWIFT_CLASS("_TtC26TermiPassMacAddonFramework31TermiPassSystemExtensionManager")
+@interface TermiPassSystemExtensionManager : NSObject
+@property (nonatomic, copy) void (^ _Nullable updateRequestExtensionResult)(OSSystemExtensionRequestResult);
+@property (nonatomic, copy) void (^ _Nullable updateRequestExtensionError)(NSError * _Nonnull);
+@property (nonatomic) BOOL isStart;
+- (void)startActivateExtWithStart:(BOOL)start callback:(void (^ _Nonnull)(OSSystemExtensionRequestResult))callback;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class OSSystemExtensionRequest;
+@class OSSystemExtensionProperties;
+
+@interface TermiPassSystemExtensionManager (SWIFT_EXTENSION(TermiPassMacAddonFramework)) <OSSystemExtensionRequestDelegate>
+- (OSSystemExtensionReplacementAction)request:(OSSystemExtensionRequest * _Nonnull)request actionForReplacingExtension:(OSSystemExtensionProperties * _Nonnull)existing withExtension:(OSSystemExtensionProperties * _Nonnull)ext SWIFT_WARN_UNUSED_RESULT;
+- (void)request:(OSSystemExtensionRequest * _Nonnull)request didFailWithError:(NSError * _Nonnull)error;
+- (void)requestNeedsUserApproval:(OSSystemExtensionRequest * _Nonnull)request;
+- (void)request:(OSSystemExtensionRequest * _Nonnull)request didFinishWithResult:(OSSystemExtensionRequestResult)result;
+@end
 
 @class NETunnelProviderManager;
 enum Status : NSInteger;
@@ -774,18 +834,6 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) TermiPassVpn
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
 @end
 
-
-SWIFT_CLASS("_TtCC26TermiPassMacAddonFramework19TermiPassVpnManager6Config")
-@interface Config : NSObject
-- (nonnull instancetype)initWithHostname:(NSString * _Nonnull)hostname serverName:(NSString * _Nonnull)serverName localizedDescription:(NSString * _Nonnull)localizedDescription OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-
-@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
-@end
-
 typedef SWIFT_ENUM(NSInteger, Status, closed) {
   StatusOff = 0,
   StatusOn = 1,
@@ -794,6 +842,18 @@ typedef SWIFT_ENUM(NSInteger, Status, closed) {
   StatusConnecting = 3,
   StatusDisconnecting = 4,
 };
+
+
+@interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
+@end
+
+
+SWIFT_CLASS("_TtCC26TermiPassMacAddonFramework19TermiPassVpnManager6Config")
+@interface Config : NSObject
+- (nonnull instancetype)initWithHostname:(NSString * _Nonnull)hostname serverName:(NSString * _Nonnull)serverName localizedDescription:(NSString * _Nonnull)localizedDescription OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
 
 
 @interface TermiPassVpnManager (SWIFT_EXTENSION(TermiPassMacAddonFramework))
@@ -842,6 +902,24 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _No
 + (NSString * _Nonnull)openLocalVpnSDKStatusNotification SWIFT_WARN_UNUSED_RESULT;
 SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, copy) NSString * _Nonnull getPeersStateSDKStatusNotification;)
 + (NSString * _Nonnull)getPeersStateSDKStatusNotification SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+SWIFT_CLASS("_TtC26TermiPassMacAddonFramework25TermipassRequestExDataKey")
+@interface TermipassRequestExDataKey : NSObject
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull vpnStatus;)
++ (NSString * _Nonnull)vpnStatus SWIFT_WARN_UNUSED_RESULT;
++ (void)setVpnStatus:(NSString * _Nonnull)value;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull peerStatus;)
++ (NSString * _Nonnull)peerStatus SWIFT_WARN_UNUSED_RESULT;
++ (void)setPeerStatus:(NSString * _Nonnull)value;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull profiles;)
++ (NSString * _Nonnull)profiles SWIFT_WARN_UNUSED_RESULT;
++ (void)setProfiles:(NSString * _Nonnull)value;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, copy) NSString * _Nonnull current_profile;)
++ (NSString * _Nonnull)current_profile SWIFT_WARN_UNUSED_RESULT;
++ (void)setCurrent_profile:(NSString * _Nonnull)value;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
 @class NSData;

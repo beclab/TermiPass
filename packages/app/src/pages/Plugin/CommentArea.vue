@@ -217,9 +217,12 @@ const getParams = (app: { model_config: any }, value: any) => {
 	return params;
 };
 
+const receiveMessageRef = ref(false);
+
 const onmessage = async (ev: { data: string }) => {
+	receiveMessageRef.value = true;
 	const data = JSON.parse(ev.data);
-	if (data.event === 'message') {
+	if (data.event === 'agent_message' || data.event === 'message') {
 		typewriter.add(data.answer);
 		textCache.value += data.answer;
 		task_id.value = data.task_id;
@@ -229,7 +232,7 @@ const onmessage = async (ev: { data: string }) => {
 		if (modeChat.value) {
 			const data2 = await api.getMessageById(
 				active.value.id,
-				active.value.mode,
+				'chat',
 				conversation_id.value
 			);
 			list.value = data2.data.data;
@@ -258,8 +261,10 @@ const onerror = () => {
 };
 
 const onclose = () => {
-	loading.value = false;
-	message_end.value = true;
+	if (!receiveMessageRef.value) {
+		loading.value = false;
+		message_end.value = true;
+	}
 };
 
 const onopen = (res: Response) => {
@@ -358,6 +363,7 @@ const search = async (value: any) => {
 			onopen,
 			signal: controller.signal
 		};
+		receiveMessageRef.value = false;
 		// active.value.mode
 		api.getMessage2(params, active.value.id, 'chat', callbacks);
 	}

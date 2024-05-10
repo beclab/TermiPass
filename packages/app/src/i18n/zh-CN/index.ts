@@ -47,7 +47,7 @@ export default {
 	photo_album: '相册',
 	scan_qr_code: '扫描二维码',
 	scan_the_qr_code: '扫描二维码',
-	scan_qr_code_to_login: '扫描二维码登录',
+	scan_qr_code_to_activate: '扫描二维码激活',
 	read_fail_try_again: '读取内容失败,请重试',
 	qr_code_error: '二维码内容错误,请重新扫描',
 	please_choose_user: '请选择用户',

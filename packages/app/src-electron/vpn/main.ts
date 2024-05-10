@@ -44,6 +44,9 @@ const listenerEvent = (window: BrowserWindow | undefined) => {
 	});
 
 	ipcVpnMainHandle('peersState', () => {
-		return vpnAddon.peersState();
+		console.log('start peersState');
+		const peers = vpnAddon.peersState();
+		console.log('peersState ===>', peers);
+		return peers;
 	});
 };

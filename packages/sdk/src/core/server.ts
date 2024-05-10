@@ -699,6 +699,10 @@ export class Controller extends API {
 		asAdmin
 	}: StartCreateSessionParams): Promise<StartCreateSessionResponse> {
 		const auth = await this._getAuth(did);
+		console.log('startCreateSession auth');
+		console.log(auth);
+		console.log('startCreateSession context');
+		console.log(this.context.device);
 
 		const deviceTrusted =
 			auth &&
@@ -1493,7 +1497,6 @@ export class Controller extends API {
 		console.log('found: ' + found);
 		if (found) {
 			return new CreateAccountResponse({
-				account,
 				mfa
 			});
 		}
@@ -1527,6 +1530,8 @@ export class Controller extends API {
 		auth.keyParams = keyParams;
 		auth.accountStatus = AccountStatus.Active;
 
+		console.log('Create Account');
+		console.log(this.context.device);
 		// Add device to trusted devices
 		if (
 			this.context.device &&
@@ -1534,6 +1539,7 @@ export class Controller extends API {
 				({ id }) => id === this.context.device!.id
 			)
 		) {
+			console.log('add trust device');
 			auth.trustedDevices.push(this.context.device);
 		}
 
@@ -1601,7 +1607,6 @@ export class Controller extends API {
 		this.log('account.create');
 
 		return new CreateAccountResponse({
-			account,
 			mfa
 		});
 	}

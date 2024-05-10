@@ -967,6 +967,8 @@ export class App {
 		console.log('name ' + name);
 		console.log('bflUser ' + bflUser);
 		await account.initialize(masterPassword);
+		console.log('this.device', this.state.device);
+		console.log('this.device.id', this.state.device.id);
 
 		// Initialize auth object
 		const auth = new Auth(did);
@@ -998,9 +1000,14 @@ export class App {
 		// Sign into new account
 		await this.login({ did, password: masterPassword });
 
+		if (!this.account) {
+			// return data;
+			throw new Error('account is null');
+		}
+
 		await this.api.activeAccount(
 			new ActiveAccountParams({
-				id: data.account.id,
+				id: this.account.id,
 				bflToken,
 				bflUser,
 				jws
@@ -1034,7 +1041,7 @@ export class App {
 		console.log(template.fields[0].value);
 
 		const item = await this.createItem({
-			name: account.name,
+			name: this.account.name,
 			vault,
 			fields: template?.fields.map(
 				(f) => new Field({ ...f, value: f.value || '' })

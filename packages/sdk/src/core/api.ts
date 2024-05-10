@@ -94,9 +94,6 @@ export class ActiveAccountParams extends Serializable {
 }
 
 export class CreateAccountResponse extends Serializable {
-	@AsSerializable(Account)
-	account!: Account;
-
 	mfa = '';
 
 	// refresh_token = '';

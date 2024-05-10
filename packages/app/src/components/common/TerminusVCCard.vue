@@ -3,10 +3,10 @@
 		class="vc-card row justify-between items-center"
 		:style="{ '--color': cardStyleRef.bgColor, width: '100%' }"
 	>
-		<div class="vc-card__layout column justify-between items-start">
+		<div class="vc-card__layout column justify-center items-start">
 			<img class="vc-card__brand" :src="brandRef" />
 			<div
-				class="vc-card__name"
+				class="vc-card__name q-mt-sm"
 				:class="item ? 'text-color-title text-h6' : 'login-subTitle'"
 			>
 				{{ nameRef }}
@@ -68,6 +68,11 @@ const props = defineProps({
 	type: {
 		type: Object as PropType<TERMINUS_VC_TYPE>,
 		required: false
+	},
+	subText: {
+		type: String,
+		required: false,
+		default: ''
 	}
 });
 
@@ -99,7 +104,7 @@ if (props.item) {
 }
 
 if (props.type) {
-	nameRef.value = t('add_vc');
+	nameRef.value = props.subText || t('add_vc');
 	avatarRef.value = '';
 
 	const card = cardList.find((value) => {

@@ -182,6 +182,8 @@ export const useScaleStore = defineStore('scale', {
 			this.hostPeerInfo = await (
 				platform as any as ConfigVPNInterface
 			).hostPeerInfo();
+
+			console.log('hostPeerInfo ===>', this.hostPeerInfo);
 			return this.hostPeerInfo;
 		}
 	}
