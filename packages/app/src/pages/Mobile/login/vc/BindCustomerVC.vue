@@ -17,13 +17,9 @@
 			>
 				{{ t('verify_using_gmail') }}
 			</div>
-			<!-- <terminus-v-c-card
-				style="margin-top: 12px"
-				:type="TERMINUS_VC_TYPE.TWITTER"
-				@click="request(TERMINUS_VC_TYPE.TWITTER)"
-			/> -->
 			<terminus-v-c-card
 				style="margin-top: 20px"
+				:sub-text="t('please_use_a_gmail_emailaddress')"
 				:type="TERMINUS_VC_TYPE.GOOGLE"
 				@click="request(TERMINUS_VC_TYPE.GOOGLE)"
 			/>
@@ -49,14 +45,12 @@ import {
 } from '../../../../utils/terminusBindUtils';
 import { useUserStore } from '../../../../stores/user';
 import TerminusTitleBar from '../../../../components/common/TerminusTitleBar.vue';
-// import { useMenuStore } from '../../../../stores/menu';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
 
 const $q = useQuasar();
 const { t } = useI18n();
 const router = useRouter();
 const userStore = useUserStore();
-// const menuStore = useMenuStore();
 
 async function request(request_type: TERMINUS_VC_TYPE) {
 	$q.loading.show();
@@ -69,7 +63,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 					!terminusName && userBindStatus < BIND_STATUS.OS_NONE;
 				if (bindVCAndSelectedName) {
 					await readySubmitPresentation(data, null, {
-						// data no use
 						onSuccess() {
 							router.replace({
 								path: '/bind_vc_success'
@@ -80,7 +73,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 						}
 					});
 				} else {
-					//router.replace('/home');
 					router.replace({ path: '/connectLoading' });
 				}
 			} else {
@@ -93,34 +85,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 	});
 	$q.loading.hide();
 }
-
-// let count = 0;
-
-// let startTime: Date | undefined = undefined;
-
-const googleTestUpdateCheck = () => {
-	// if (count === 0) {
-	// 	startTime = new Date();
-	// } else if (count >= 1) {
-	// 	let nextTime = new Date();
-	// 	if (
-	// 		nextTime.getMilliseconds() - (startTime?.getMilliseconds() || 0) >=
-	// 		5000
-	// 	) {
-	// 		startTime = nextTime;
-	// 		count = 0;
-	// 	}
-	// 	if (count === 3) {
-	// 		menuStore.updateGoogleTest(true);
-	// 		if (menuStore.googleTest) {
-	// 			notifyFailed('current is google test');
-	// 		}
-	// 		startTime = nextTime;
-	// 		count = 0;
-	// 	}
-	// }
-	// count++;
-};
 </script>
 
 <style lang="scss" scoped>

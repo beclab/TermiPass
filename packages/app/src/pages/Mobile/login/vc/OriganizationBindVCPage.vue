@@ -2,7 +2,7 @@
 	<div class="join-organization-root">
 		<BindTerminusVCContent class="join-organization-vc-root" :has-btn="false">
 			<template v-slot:desc>
-				<div v-html="descRef" />
+				<div v-html="descRef" class="q-mb-md" />
 			</template>
 			<template v-slot:content>
 				<terminus-v-c-card

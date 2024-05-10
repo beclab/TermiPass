@@ -58,7 +58,7 @@ export const onFirstFactor = async (
 	} catch (error) {
 		console.error('error ===>', error);
 		if (error.response) {
-			if (error.response.data) {
+			if (error.response.data && error.response.data.message) {
 				throw new Error(error.response.data.message);
 			}
 			throw new Error(error.message);

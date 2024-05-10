@@ -186,7 +186,9 @@ const requestCommonCallBack = async (
 		return Promise.reject(
 			new ErrorResponse(
 				axiosResponse,
-				`Request failed with status code ${axiosResponse.status}`
+				axiosResponse.data.message
+					? `${axiosResponse.data.message}`
+					: `Request failed with status code ${axiosResponse.status}`
 			)
 		);
 	}

@@ -1316,5 +1316,6 @@ If you want to create an organization, please refer to the steps listed in the T
 		bind_desc: 'Completed',
 		allocated_desc: 'Allocated'
 	},
-	verify_using_gmail: 'Verify using Gmail'
+	verify_using_gmail: 'Verify using Gmail',
+	please_use_a_gmail_emailaddress: 'Please use a "@gmail.com" email address.'
 };
