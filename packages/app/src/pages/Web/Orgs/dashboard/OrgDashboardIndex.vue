@@ -56,239 +56,251 @@
 			</div>
 		</div>
 
-		<q-list class="cardList row justify-start">
-			<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none">
-				<div class="listRow">
-					<div class="header q-px-md q-py-sm row justify-between">
-						<div class="items-center">
-							<span class="text-color-sub-title text-li-title">
-								<q-icon name="sym_r_share_reviews" size="18px" />
-								{{ t('invites') }}
-							</span>
-							<span class="q-ml-md text-color-sub-title">{{
-								org?.invites.length
-							}}</span>
-						</div>
-					</div>
-
-					<div class="body">
-						<q-scroll-area
-							style="height: 100%"
-							:thumb-style="scrollBarStyle.thumbStyle"
-						>
-							<div
-								class="text-color-sub-title column items-center justify-center"
-								style="height: 304px"
-								v-if="org?.invites.length == 0"
-							>
-								<img
-									class="q-mt-sm"
-									src="../../../../assets/layout/nodata.svg"
-								/>
-								<span class="q-mb-md text-grey-8" style="margin-top: 32px">
-									{{ t('no_data') }}
+		<q-scroll-area
+			style="height: calc(100% - 60px); width: 100%"
+			:thumb-style="scrollBarStyle.thumbStyle"
+		>
+			<q-list class="cardList row justify-start">
+				<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none">
+					<div class="listRow">
+						<div class="header q-px-md q-py-sm row justify-between">
+							<div class="items-center">
+								<span class="text-color-sub-title text-li-title">
+									<q-icon name="sym_r_share_reviews" size="18px" />
+									{{ t('invites') }}
 								</span>
+								<span class="q-ml-md text-color-sub-title">{{
+									org?.invites.length
+								}}</span>
 							</div>
-							<template
-								v-else
-								v-for="(invite, index) in org?.invites"
-								:key="'member' + index"
+						</div>
+
+						<div class="body">
+							<q-scroll-area
+								style="height: 100%"
+								:thumb-style="scrollBarStyle.thumbStyle"
 							>
 								<div
-									class="stretch q-px-lg q-py-sm"
-									@click="openInvite(invite)"
+									class="text-color-sub-title column items-center justify-center"
+									style="height: 304px"
+									v-if="org?.invites.length == 0"
 								>
-									<OrgInviteItem :invite="invite" />
+									<img
+										class="q-mt-sm"
+										src="../../../../assets/layout/nodata.svg"
+									/>
+									<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+										{{ t('no_data') }}
+									</span>
 								</div>
-								<q-separator v-if="index < org?.invites.length - 1" />
-							</template>
-						</q-scroll-area>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none">
-				<div class="listRow column justify-start">
-					<div class="header q-px-md q-py-sm row justify-between">
-						<div class="items-center">
-							<span class="text-color-sub-title text-li-title">
-								<q-icon name="sym_r_groups" size="18px" />
-								{{ t('members') }}
-							</span>
-							<span class="q-ml-md text-color-sub-title"
-								>{{ _availableMembers.length }}
-								{{ quota?.members !== -1 ? ` / ${quota?.members}` : '' }}</span
-							>
-						</div>
-					</div>
-
-					<div class="body">
-						<q-scroll-area
-							style="height: 100%"
-							:thumb-style="scrollBarStyle.thumbStyle"
-						>
-							<div
-								class="text-color-sub-title column items-center justify-center"
-								style="height: 304px"
-								v-if="_availableMembers.length == 0"
-							>
-								<img
-									class="q-mt-sm"
-									src="../../../../assets/layout/nodata.svg"
-								/>
-								<span class="q-mb-md text-grey-8" style="margin-top: 32px">
-									{{ t('no_data') }}
-								</span>
-							</div>
-							<template
-								v-else
-								v-for="(member, index) in _availableMembers"
-								:key="'member' + index"
-							>
-								<div
-									class="stretch q-px-lg q-py-sm row items-center justify-start"
-									v-if="member.status === OrgMemberStatus.Active"
-									@click="openMember(member)"
+								<template
+									v-else
+									v-for="(invite, index) in org?.invites"
+									:key="'member' + index"
 								>
-									<div class="q-mr-md avator">
-										<TerminusAvatar
-											:info="userStore.getUserTerminusInfo(member.id || '')"
-											:size="28"
-										/>
-									</div>
-									<div style="flex: 1">
-										<div class="did text-subtitle1">
-											{{ member.did }}
-										</div>
-										<div class="q-mt-xs">
-											<span class="text-grey-8">{{ member.name }}</span>
-											<span
-												class="tag owner text-subtitle3"
-												v-if="member.role === OrgRole.Owner"
-											>
-												{{ t('owner') }}
-											</span>
-											<span
-												class="tag admin text-subtitle3"
-												v-if="member.role === OrgRole.Admin"
-											>
-												{{ t('admin') }}
-											</span>
-											<span
-												class="tag provisioned text-subtitle3"
-												v-if="(member.status as string) === OrgMemberStatus.Provisioned"
-											>
-												{{ t('provisioned') }}
-											</span>
-											<span
-												class="tag suspended text-subtitle3"
-												v-if="org?.isSuspended(member)"
-											>
-												{{ t('isSuspended') }}
-											</span>
-										</div>
-									</div>
-								</div>
-								<q-separator v-if="index < _availableMembers.length - 1" />
-							</template>
-						</q-scroll-area>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none">
-				<div class="listRow column justify-start">
-					<div class="header q-px-md q-py-sm row justify-between">
-						<div class="items-center">
-							<span class="text-color-sub-title text-li-title">
-								<q-icon name="sym_r_apps" size="18px"> </q-icon>
-								{{ t('vaults') }}
-							</span>
-							<span class="q-ml-md text-color-sub-title"
-								>{{ org?.vaults.length }}
-								{{ quota?.vaults !== -1 ? ` / ${quota?.vaults}` : '' }}
-							</span>
-						</div>
-						<div>
-							<BtIcon src="add" :width="16" :height="16" @click="createVault()">
-								<q-tooltip>{{ t('add_vault') }}</q-tooltip>
-							</BtIcon>
-						</div>
-					</div>
-
-					<div class="body">
-						<q-scroll-area
-							style="height: 100%"
-							:thumb-style="scrollBarStyle.thumbStyle"
-						>
-							<div
-								class="text-color-sub-title column items-center justify-center"
-								style="height: 304px"
-								v-if="org?.vaults.length == 0"
-							>
-								<img
-									class="q-mt-sm"
-									src="../../../../assets/layout/nodata.svg"
-								/>
-								<span class="q-mb-md text-grey-8" style="margin-top: 32px">
-									{{ t('this_organization_does_not_have_any_vaults_yet') }}
-								</span>
-							</div>
-							<template
-								v-else
-								v-for="(vault, index) in org?.vaults"
-								:key="'vault' + index"
-							>
-								<div class="card-wrap full-width">
-									<q-card
-										clickable
-										v-ripple
-										@click="openVault(vault)"
-										flat
-										class="vaultsCard row items-center justify-start q-px-md q-py-sm"
+									<div
+										class="stretch q-px-lg q-py-sm"
+										@click="openInvite(invite)"
 									>
-										<q-card-section
-											class="row items-center justify-between q-pa-none"
-										>
-											<q-icon name="sym_r_deployed_code" size="24px" />
-										</q-card-section>
-										<q-card-section
-											class="column items-start justify-start q-pa-none q-ml-sm"
-										>
-											<div>{{ vault.name }}</div>
-											<div class="row items-center justify-start">
-												<div
-													class="groups row items-center justify-center q-mr-sm"
-												>
-													<q-icon
-														name="sym_r_groups_2"
-														size="20px"
-														class="q-mr-xs"
-													/>
-													{{ getGroups(vault)?.length }}
-												</div>
-												<div
-													class="members text-body3 row items-center justify-center"
-												>
-													<q-icon
-														name="sym_r_person"
-														size="20px"
-														class="q-mr-xs"
-													/>
-													{{ getMembers(vault)?.length }}
-												</div>
-											</div>
-										</q-card-section>
-									</q-card>
-								</div>
-								<q-separator v-if="index < org?.vaults.length - 1" />
-							</template>
-						</q-scroll-area>
+										<OrgInviteItem :invite="invite" />
+									</div>
+									<q-separator v-if="index < org?.invites.length - 1" />
+								</template>
+							</q-scroll-area>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none"></div>
-		</q-list>
+
+				<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none">
+					<div class="listRow column justify-start">
+						<div class="header q-px-md q-py-sm row justify-between">
+							<div class="items-center">
+								<span class="text-color-sub-title text-li-title">
+									<q-icon name="sym_r_groups" size="18px" />
+									{{ t('members') }}
+								</span>
+								<span class="q-ml-md text-color-sub-title"
+									>{{ _availableMembers.length }}
+									{{
+										quota?.members !== -1 ? ` / ${quota?.members}` : ''
+									}}</span
+								>
+							</div>
+						</div>
+
+						<div class="body">
+							<q-scroll-area
+								style="height: 100%"
+								:thumb-style="scrollBarStyle.thumbStyle"
+							>
+								<div
+									class="text-color-sub-title column items-center justify-center"
+									style="height: 304px"
+									v-if="_availableMembers.length == 0"
+								>
+									<img
+										class="q-mt-sm"
+										src="../../../../assets/layout/nodata.svg"
+									/>
+									<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+										{{ t('no_data') }}
+									</span>
+								</div>
+								<template
+									v-else
+									v-for="(member, index) in _availableMembers"
+									:key="'member' + index"
+								>
+									<div
+										class="stretch q-px-lg q-py-sm row items-center justify-start"
+										v-if="member.status === OrgMemberStatus.Active"
+										@click="openMember(member)"
+									>
+										<div class="q-mr-md avator">
+											<TerminusAvatar
+												:info="userStore.getUserTerminusInfo(member.id || '')"
+												:size="28"
+											/>
+										</div>
+										<div style="flex: 1">
+											<div class="did text-subtitle1">
+												{{ member.did }}
+											</div>
+											<div class="q-mt-xs">
+												<span class="text-grey-8">{{ member.name }}</span>
+												<span
+													class="tag owner text-subtitle3"
+													v-if="member.role === OrgRole.Owner"
+												>
+													{{ t('owner') }}
+												</span>
+												<span
+													class="tag admin text-subtitle3"
+													v-if="member.role === OrgRole.Admin"
+												>
+													{{ t('admin') }}
+												</span>
+												<span
+													class="tag provisioned text-subtitle3"
+													v-if="(member.status as string) === OrgMemberStatus.Provisioned"
+												>
+													{{ t('provisioned') }}
+												</span>
+												<span
+													class="tag suspended text-subtitle3"
+													v-if="org?.isSuspended(member)"
+												>
+													{{ t('isSuspended') }}
+												</span>
+											</div>
+										</div>
+									</div>
+									<q-separator v-if="index < _availableMembers.length - 1" />
+								</template>
+							</q-scroll-area>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none">
+					<div class="listRow column justify-start">
+						<div class="header q-px-md q-py-sm row justify-between">
+							<div class="items-center">
+								<span class="text-color-sub-title text-li-title">
+									<q-icon name="sym_r_apps" size="18px"> </q-icon>
+									{{ t('vaults') }}
+								</span>
+								<span class="q-ml-md text-color-sub-title"
+									>{{ org?.vaults.length }}
+									{{ quota?.vaults !== -1 ? ` / ${quota?.vaults}` : '' }}
+								</span>
+							</div>
+							<div>
+								<BtIcon
+									src="add"
+									:width="16"
+									:height="16"
+									@click="createVault()"
+								>
+									<q-tooltip>{{ t('add_vault') }}</q-tooltip>
+								</BtIcon>
+							</div>
+						</div>
+
+						<div class="body">
+							<q-scroll-area
+								style="height: 100%"
+								:thumb-style="scrollBarStyle.thumbStyle"
+							>
+								<div
+									class="text-color-sub-title column items-center justify-center"
+									style="height: 304px"
+									v-if="org?.vaults.length == 0"
+								>
+									<img
+										class="q-mt-sm"
+										src="../../../../assets/layout/nodata.svg"
+									/>
+									<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+										{{ t('this_organization_does_not_have_any_vaults_yet') }}
+									</span>
+								</div>
+								<template
+									v-else
+									v-for="(vault, index) in org?.vaults"
+									:key="'vault' + index"
+								>
+									<div class="card-wrap full-width">
+										<q-card
+											clickable
+											v-ripple
+											@click="openVault(vault)"
+											flat
+											class="vaultsCard row items-center justify-start q-px-md q-py-sm"
+										>
+											<q-card-section
+												class="row items-center justify-between q-pa-none"
+											>
+												<q-icon name="sym_r_deployed_code" size="24px" />
+											</q-card-section>
+											<q-card-section
+												class="column items-start justify-start q-pa-none q-ml-sm"
+											>
+												<div>{{ vault.name }}</div>
+												<div class="row items-center justify-start">
+													<div
+														class="groups row items-center justify-center q-mr-sm"
+													>
+														<q-icon
+															name="sym_r_groups_2"
+															size="20px"
+															class="q-mr-xs"
+														/>
+														{{ getGroups(vault)?.length }}
+													</div>
+													<div
+														class="members text-body3 row items-center justify-center"
+													>
+														<q-icon
+															name="sym_r_person"
+															size="20px"
+															class="q-mr-xs"
+														/>
+														{{ getMembers(vault)?.length }}
+													</div>
+												</div>
+											</q-card-section>
+										</q-card>
+									</div>
+									<q-separator v-if="index < org?.vaults.length - 1" />
+								</template>
+							</q-scroll-area>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6 q-pa-md q-pb-none"></div>
+			</q-list>
+		</q-scroll-area>
 	</div>
 </template>
 
@@ -445,11 +457,9 @@ export default defineComponent({
 .dash-itemlist {
 	width: 100%;
 	height: 100%;
-	overflow: scroll;
 
 	.cardList {
 		width: 100%;
-		overflow: scroll;
 
 		// display: grid;
 		// grid-template-columns: 48% 48%;
@@ -466,7 +476,6 @@ export default defineComponent({
 			}
 
 			.body {
-				overflow: scroll;
 				height: 304px;
 
 				.stretch {
