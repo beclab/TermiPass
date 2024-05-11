@@ -100,6 +100,11 @@ export default defineComponent({
 
 			try {
 				const res = await api.fetch(url, loading, currentItem);
+
+				if (!checkFetchData(url)) {
+					return false;
+				}
+
 				if (res.type == 'video') {
 					store.updateRequest(res);
 				} else {
@@ -115,6 +120,16 @@ export default defineComponent({
 				error.value = e;
 			} finally {
 				store.setLoading(false);
+			}
+		};
+
+		const checkFetchData = (url: string): boolean => {
+			const currentItem = store.currentItem;
+			const pathSplit = url.split('/');
+			if (pathSplit[3] === currentItem || pathSplit[3] === '') {
+				return true;
+			} else {
+				return false;
 			}
 		};
 
