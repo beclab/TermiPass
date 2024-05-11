@@ -1,30 +1,9 @@
 <template>
-	<div style="width: 100%; height: 60px">
-		<div class="searchWrap" v-if="filterShowing === 'search'">
-			<q-input
-				dense
-				class="searchInput q-px-sm"
-				v-model="filterInput"
-				debounce="500"
-				borderless
-				placeholder="Search"
-				@update:model-value="search"
-			>
-				<template v-slot:prepend>
-					<q-icon name="sym_r_search"> </q-icon>
-				</template>
-				<template v-slot:append>
-					<q-icon class="closeIcon" name="sym_r_close" @click="closeSearch">
-						<q-tooltip> {{ t('buttons.close') }} </q-tooltip>
-					</q-icon>
-				</template>
-			</q-input>
-		</div>
-
-		<div
-			class="row justify-between items-center"
-			v-if="filterShowing === 'default'"
-		>
+	<div
+		class="row justify-between items-center"
+		style="width: 100%; height: 60px"
+	>
+		<div class="row justify-between items-center">
 			<div class="row items-center q-pl-md">
 				<q-icon
 					v-if="isMobile"
@@ -51,17 +30,6 @@
 				<div class="text-body2 text-weight-bold">
 					{{ heading.title }}
 				</div>
-			</div>
-
-			<div class="row items-center q-py-xs q-my-md">
-				<q-icon
-					class="q-mr-md cursor-pointer"
-					name="sym_r_search"
-					size="24px"
-					@click="() => (filterShowing = 'search')"
-				>
-					<q-tooltip>{{ t('search') }}</q-tooltip>
-				</q-icon>
 			</div>
 		</div>
 	</div>
@@ -114,7 +82,6 @@ import { debounce, Invite } from '@didvault/sdk/src/core';
 import { scrollBarStyle } from '../../../../utils/contact';
 import { useMenuStore } from '../../../../stores/menu';
 import OrgInviteItem from './OrgInviteItem.vue';
-// import VaultsMenu from '../../../../layouts/TermipassLayout/VaultsMenu.vue';
 import { busOn, busOff } from '../../../../utils/bus';
 import { useI18n } from 'vue-i18n';
 
@@ -122,33 +89,22 @@ export default defineComponent({
 	name: 'OrgInvitesIndex',
 	components: {
 		OrgInviteItem
-		// VaultsMenu
 	},
 	setup() {
 		const $q = useQuasar();
 		const router = useRouter();
 		const route = useRoute();
 		const meunStore = useMenuStore();
-		const values = ref('');
-		const vaultItemRef = ref();
-		const showArrow = ref(false);
-		const arrowItemObj = ref({});
-		const contentStyle = ref({
-			height: 0
-		});
-		const checkBoxArr = ref([]);
-		const filterInput = ref('');
-		const filterShowing = ref('default');
 		const isMobile = ref(
 			process.env.PLATFORM == 'MOBILE' ||
 				process.env.PLATFORM == 'BEX' ||
 				$q.platform.is.mobile
 		);
-		const platform = ref(process.env.PLATFORM);
 		const org = ref();
 
 		const initOrg = () => {
 			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+			console.log('initOrginitOrg', org.value);
 		};
 
 		const heading = computed(function () {
@@ -160,13 +116,7 @@ export default defineComponent({
 
 		function _getItems() {
 			initOrg();
-			const memFilter = filterInput.value.toLowerCase();
-			console.log('org.valueorg.value', org.value);
-			const invites = memFilter
-				? org.value!.invites.filter(({ did }) =>
-						did.toLowerCase().includes(memFilter)
-				  )
-				: org.value!.invites;
+			const invites = org.value!.invites;
 			return invites;
 		}
 
@@ -187,14 +137,6 @@ export default defineComponent({
 
 		async function search() {
 			updateItems();
-		}
-
-		function closeSearch() {
-			if (filterInput?.value) {
-				filterInput.value = '';
-				updateItems();
-			}
-			filterShowing.value = 'default';
 		}
 
 		const goBack = () => {
@@ -224,21 +166,11 @@ export default defineComponent({
 			selectItem,
 			isSelected,
 			heading,
-			filterShowing,
-			filterInput,
 			org,
-			values,
-			showArrow,
-			arrowItemObj,
-			vaultItemRef,
-			contentStyle,
-			checkBoxArr,
 			search,
-			closeSearch,
 			isMobile,
 			goBack,
 			scrollBarStyle,
-			platform,
 			t
 		};
 	}

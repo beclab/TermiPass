@@ -1,9 +1,6 @@
 <template>
 	<div class="member_wrap row items-center justify-center">
-		<div
-			class="stretch row items-center justify-start"
-			:class="isSelected ? 'memberActive' : ''"
-		>
+		<div class="stretch row items-center justify-start">
 			<div class="q-mr-md avator">
 				<TerminusAvatar
 					:info="userStore.getUserTerminusInfo(member.id || '')"
@@ -14,7 +11,7 @@
 				<div class="did text-subtitle2">{{ member.name }}</div>
 				<div>
 					<!-- TODO: snowning.com error-->
-					<span>@{{ getCurrentDomain }}</span>
+					<span>@{{ userStore.getCurrentDomain() }}</span>
 					<span
 						class="tag text-3ubtitle3 owner"
 						v-if="member.role === OrgRole.Owner"
@@ -43,7 +40,6 @@ import { app } from '../../../../globals';
 import { useMenuStore } from '../../../../stores/menu';
 import { useUserStore } from '../../../../stores/user';
 import { useI18n } from 'vue-i18n';
-import { TerminusDefaultDomain } from '@bytetrade/core';
 
 export default defineComponent({
 	name: 'MemberItem',
@@ -74,23 +70,13 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const getCurrentDomain = computed(() => {
-			const current_user = userStore.current_user;
-			if (current_user && current_user.name.indexOf('@')) {
-				return current_user.name.split('@')[1];
-			} else {
-				return TerminusDefaultDomain;
-			}
-		});
-
 		return {
 			org,
 			OrgMemberStatus,
 			OrgRole,
 			groups,
 			userStore,
-			t,
-			getCurrentDomain
+			t
 		};
 	}
 });
@@ -99,19 +85,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 .member_wrap {
 	width: 94%;
-	height: 80px;
 
 	.stretch {
 		width: 96%;
-		height: 64px;
+		height: 58px;
 		border-radius: 8px;
-		padding-left: 8px;
-		&.memberActive {
-			background: $grey-1;
-		}
-		&:hover {
-			background: $grey-1;
-		}
 		.avator {
 			width: 28px;
 			height: 28px;

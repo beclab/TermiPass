@@ -141,11 +141,11 @@ export const useMenuStore = defineStore('menu', {
 						key: VaultMenuItem.TEAMS,
 						icon: 'sym_r_groups',
 						children: [
-							{
-								label: OrgMenu.DASHBOARD,
-								key: OrgMenu.DASHBOARD,
-								icon: 'sym_r_dashboard'
-							},
+							// {
+							// 	label: OrgMenu.DASHBOARD,
+							// 	key: OrgMenu.DASHBOARD,
+							// 	icon: 'sym_r_dashboard'
+							// },
 							{
 								label: OrgMenu.INVITES,
 								key: OrgMenu.INVITES,
@@ -268,6 +268,13 @@ export const useMenuStore = defineStore('menu', {
 				const elChildren: any = teamsMenus.children[0];
 				elChildren.label = orgs[0].name;
 				elChildren.key = orgs[0].name;
+
+				if (orgs[0].owner.did !== app.account?.did) {
+					elChildren.children = elChildren.children.filter(
+						(cell) => cell.label !== OrgMenu.INVITES
+					);
+				}
+
 				for (let j = 0; j < elChildren.children.length; j++) {
 					const elTag: any = elChildren.children[j];
 					elTag.org_id = orgs[0].id;

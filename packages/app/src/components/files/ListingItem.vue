@@ -156,13 +156,14 @@ export default defineComponent({
 			}
 
 			if ((props.type == 'folder' || !props.type) && props.fileSize) {
-				return humanStorageSize(props.fileSize) === '4.0KB'
-					? '0KB'
-					: humanStorageSize(props.fileSize);
+				return '-';
+				// return humanStorageSize(props.fileSize) === '4.0KB'
+				// 	? '0KB'
+				// 	: humanStorageSize(props.fileSize);
 			}
 
 			return humanStorageSize(props.size) === '4.0KB'
-				? '0KB'
+				? '-'
 				: humanStorageSize(props.size);
 		};
 
