@@ -404,6 +404,6 @@ const openPopupMenu = () => {
 	height: calc(100vh - 73px) !important;
 }
 .files-content-win {
-	height: calc(100vh - 95px) !important;
+	height: calc(100vh - 145px) !important;
 }
 </style>

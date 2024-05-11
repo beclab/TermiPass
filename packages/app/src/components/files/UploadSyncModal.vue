@@ -199,7 +199,6 @@ onUnmounted(() => {
 	}
 
 	.uploadContent {
-		overflow-y: scroll;
 		transition: height 0.3s;
 
 		.uploadItem {

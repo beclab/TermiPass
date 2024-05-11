@@ -19,6 +19,7 @@ import OrgInvitesIndex from './invites/OrgInvitesIndex.vue';
 import OrgMembersIndex from './members/OrgMembersIndex.vue';
 import OrgGroupsIndex from './groups/OrgGroupsIndex.vue';
 import OrgSettingsIndex from './settings/OrgSettingsIndex.vue';
+import { useQuasar } from 'quasar';
 
 export default defineComponent({
 	name: 'OrgIndexPage',
@@ -34,8 +35,13 @@ export default defineComponent({
 		const Route = useRoute();
 		const orgMode = ref(Route.params.org_mode);
 
+		const $q = useQuasar();
+
 		const orgHeight = computed(() => {
 			if (process.env.PLATFORM === 'DESKTOP') {
+				if ($q.platform.is.win) {
+					return 'calc(100vh - 40px) !important';
+				}
 				return 'calc(100vh - 16px) !important';
 			} else {
 				return '100vh !important';
@@ -58,6 +64,9 @@ export default defineComponent({
 
 		const myTweak = () => {
 			if (process.env.PLATFORM === 'DESKTOP') {
+				if ($q.platform.is.win) {
+					return { height: 'calc(100vh - 40px) !important' };
+				}
 				return { height: 'calc(100vh - 16px) !important' };
 			} else {
 				return { height: '100vh !important' };
