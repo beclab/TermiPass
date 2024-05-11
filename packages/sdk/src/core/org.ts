@@ -61,6 +61,10 @@ export enum OrgMemberStatus {
  * Represents an [[Account]]s membership to an [[Org]]
  */
 export class OrgMember extends Serializable {
+	get kind(): string {
+		return 'orgmember';
+	}
+
 	get id() {
 		return this.accountId;
 	}
@@ -113,6 +117,7 @@ export class OrgMember extends Serializable {
 		status
 	}: Partial<OrgMember> = {}) {
 		super();
+
 		Object.assign(this, {
 			accountId,
 			name,
