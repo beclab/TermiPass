@@ -1,30 +1,9 @@
 <template>
-	<div style="width: 100%; height: 60px">
-		<div class="searchWrap" v-if="filterShowing === 'search'">
-			<q-input
-				class="searchInput"
-				v-model="filterInput"
-				debounce="500"
-				borderless
-				placeholder="Search"
-				@update:model-value="search"
-				input-style="height: 36px;lineHeight: 36px"
-			>
-				<template v-slot:prepend>
-					<q-icon class="searchIcon" name="search" />
-				</template>
-				<template v-slot:append>
-					<q-icon class="closeIcon" name="close" @click="closeSearch">
-						<q-tooltip> {{ t('buttons.close') }} </q-tooltip>
-					</q-icon>
-				</template>
-			</q-input>
-		</div>
-
-		<div
-			class="row items-center justify-between"
-			v-if="filterShowing === 'default'"
-		>
+	<div
+		class="row justify-between items-center"
+		style="width: 100%; height: 60px"
+	>
+		<div class="row items-center justify-between">
 			<div class="row items-center q-pl-md">
 				<q-icon
 					v-if="isMobile"
@@ -52,17 +31,6 @@
 					{{ heading.title }}
 				</div>
 			</div>
-
-			<div class="row items-center q-py-xs q-my-md">
-				<q-icon
-					class="q-mr-md"
-					name="sym_r_search"
-					size="24px"
-					@click="() => (filterShowing = 'search')"
-				>
-					<q-tooltip>{{ t('search') }}</q-tooltip>
-				</q-icon>
-			</div>
 		</div>
 	</div>
 	<q-list style="width: 100%; height: calc(100% - 60px); overflow-y: scroll">
@@ -72,26 +40,29 @@
 			:thumb-style="scrollBarStyle.thumbStyle"
 		>
 			<template v-for="(item, index) in itemList" :key="index">
-				<q-card
-					v-if="item.status === OrgMemberStatus.Active"
-					clickable
-					v-ripple
-					@click="selectItem(item as OrgMember)"
-					:active="isSelected(item as OrgMember)"
-					active-class="text-blue"
-					flat
-					borderless
-					dense
-					class="member_card col-6 full-width q-pa-none q-mx-sm"
-				>
-					<q-card-section class="row items-center justify-center q-pa-none">
-						<OrgMemberItem
-							:member="(item as OrgMember)"
-							:isSelected="isSelected(item as OrgMember) ? true : false"
-						/>
-					</q-card-section>
-					<q-separator v-if="index < itemList.length - 2" />
-				</q-card>
+				<div class="card-wrap full-width">
+					<q-card
+						v-if="item.status === OrgMemberStatus.Active"
+						clickable
+						v-ripple
+						@click="selectItem(item as OrgMember)"
+						:active="isSelected(item as OrgMember)"
+						active-class="text-blue"
+						flat
+						borderless
+						dense
+						class="memberCard full-widthrow items-center justify-start q-my-sm q-pa-xs"
+						:class="isSelected(item) ? 'memberActive' : ''"
+					>
+						<q-card-section class="row items-center justify-between q-pa-none">
+							<OrgMemberItem
+								:member="(item as OrgMember)"
+								:isSelected="isSelected(item as OrgMember) ? true : false"
+							/>
+							<q-separator />
+						</q-card-section>
+					</q-card>
+				</div>
 			</template>
 		</q-scroll-area>
 
@@ -116,7 +87,6 @@ import { debounce, OrgMember, OrgMemberStatus } from '@didvault/sdk/src/core';
 import { useMenuStore } from '../../../../stores/menu';
 import { scrollBarStyle } from '../../../../utils/contact';
 import OrgMemberItem from './OrgMemberItem.vue';
-// import VaultsMenu from '../../../../layouts/TermipassLayout/VaultsMenu.vue';
 import { busOn, busOff } from '../../../../utils/bus';
 import { useI18n } from 'vue-i18n';
 
@@ -124,29 +94,17 @@ export default defineComponent({
 	name: 'OrgMembersIndex',
 	components: {
 		OrgMemberItem
-		// VaultsMenu
 	},
 	setup() {
 		const $q = useQuasar();
 		const meunStore = useMenuStore();
 		const router = useRouter();
 		const route = useRoute();
-		const values = ref('');
-		const vaultItemRef = ref();
-		const showArrow = ref(false);
-		const arrowItemObj = ref({});
-		const contentStyle = ref({
-			height: 0
-		});
-		const checkBoxArr = ref([]);
-		const filterInput = ref('');
-		const filterShowing = ref('default');
 		const isMobile = ref(
 			process.env.PLATFORM == 'MOBILE' ||
 				process.env.PLATFORM == 'BEX' ||
 				$q.platform.is.mobile
 		);
-		const platform = ref(process.env.PLATFORM);
 		const org = ref();
 
 		const initOrg = () => {
@@ -162,17 +120,7 @@ export default defineComponent({
 
 		function _getItems() {
 			initOrg();
-			const members_hasid = org.value!.members.filter((org) => org.id);
-
-			const memFilter = filterInput.value.toLowerCase();
-			const members = memFilter
-				? members_hasid.filter(
-						({ name, did }) =>
-							did.toLowerCase().includes(memFilter) ||
-							name.toLowerCase().includes(memFilter)
-				  )
-				: members_hasid;
-			return members;
+			return org.value!.members.filter((org) => org.id);
 		}
 
 		async function selectItem(item: OrgMember) {
@@ -192,14 +140,6 @@ export default defineComponent({
 
 		async function search() {
 			updateItems();
-		}
-
-		function closeSearch() {
-			if (filterInput?.value) {
-				filterInput.value = '';
-				updateItems();
-			}
-			filterShowing.value = 'default';
 		}
 
 		const goBack = () => {
@@ -227,24 +167,13 @@ export default defineComponent({
 			selectItem,
 			isSelected,
 			search,
-			closeSearch,
-
 			heading,
 			itemList,
-			filterShowing,
-			filterInput,
 			org,
-			values,
-			showArrow,
-			arrowItemObj,
-			vaultItemRef,
-			contentStyle,
-			checkBoxArr,
 			OrgMemberStatus,
 			isMobile,
 			goBack,
 			scrollBarStyle,
-			platform,
 			t
 		};
 	}
@@ -254,70 +183,27 @@ export default defineComponent({
 <style lang="scss" scoped>
 .itemWrap {
 	height: 100%;
+	.card-wrap {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-bottom: 1px solid #e0e0e0;
 
-	.itemlist {
-		height: 100%;
-		border-right: 1px solid #e0e0e0;
-
-		.searchWrap {
-			height: 56px;
-			line-height: 56px;
-			text-align: center;
-
-			.searchInput {
-				width: 90%;
-				height: 36px;
-				line-height: 36px;
-				border: 1px solid $blue;
-				border-radius: 10px;
-				margin: 17px auto;
-				display: inline-block;
-
-				.searchIcon {
-					height: 36px;
-					margin-left: 10px;
-					margin-bottom: 20px;
-				}
-
-				.closeIcon {
-					height: 36px;
-					margin-right: 10px;
-					margin-bottom: 20px;
-				}
-			}
-		}
-
-		.checkOperate {
-			border-radius: 4px;
-			padding: 4px;
-		}
-
-		.item-unit {
-			border-radius: 5px;
-			padding: 4px 20px;
-			white-space: nowrap;
-			position: relative;
-
-			.item-unit-content {
-				white-space: nowrap;
-			}
-
-			.hideCopied {
-				position: absolute;
-				width: 100%;
-				height: 100%;
-				opacity: 0;
-				left: 0;
-				top: 0;
-			}
-		}
-
-		.member_card {
+		.memberCard {
+			width: 90%;
 			border: 0;
 			border-radius: 0;
 			box-sizing: border-box;
 			position: relative;
+			border-radius: 8px;
 			cursor: pointer;
+
+			&:hover {
+				background: $grey-1;
+			}
+			&.memberActive {
+				background: $grey-1;
+			}
 		}
 	}
 }

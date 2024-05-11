@@ -118,8 +118,6 @@ export default defineComponent({
 		const router = useRouter();
 		const $q = useQuasar();
 		const meunStore = useMenuStore();
-		const now = new Date();
-		const nameRef = ref();
 		const invite = ref();
 		const isMobile = ref(
 			process.env.PLATFORM == 'MOBILE' ||
@@ -185,6 +183,7 @@ export default defineComponent({
 				}
 				invite.value =
 					org.value && org.value.getInvite(route.params.org_type as string);
+
 				if (newVaule) {
 					updateSecert();
 				}
@@ -200,7 +199,12 @@ export default defineComponent({
 						invite.value!.purpose
 					)
 				)[0];
-				secret.value = newInvite && newInvite.secret!;
+				if (newInvite) {
+					router.replace({
+						path: '/org/Invites/' + (newInvite.id ? newInvite.id : '')
+					});
+					secret.value = newInvite.secret!;
+				}
 			} catch (e) {
 				notifyFailed(e.message);
 			}
@@ -222,9 +226,9 @@ export default defineComponent({
 			}
 		}
 
-		function stateUpdate() {
-			initOrg();
-			invite.value = getInvite();
+		async function stateUpdate() {
+			await initOrg();
+			invite.value = await getInvite();
 		}
 
 		const goBack = () => {
@@ -232,7 +236,8 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			busOn('appSubscribe', stateUpdate);
+			stateUpdate();
+			busOn('orgSubscribe', stateUpdate);
 			invite.value =
 				org.value && org.value.getInvite(route.params.org_type as string);
 			updateSecert();
@@ -243,7 +248,7 @@ export default defineComponent({
 		});
 
 		onUnmounted(() => {
-			busOff('appSubscribe', stateUpdate);
+			busOff('orgSubscribe', stateUpdate);
 		});
 
 		let updateItems = debounce(() => {
@@ -258,9 +263,7 @@ export default defineComponent({
 			onConfirm,
 			org,
 			invite,
-			now,
 			secret,
-			nameRef,
 			status,
 			isMobile,
 			goBack,

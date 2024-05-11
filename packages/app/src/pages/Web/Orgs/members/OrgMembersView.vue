@@ -15,7 +15,7 @@
 						</div>
 						<!-- TODO:  snowning.com error -->
 						<div class="text-caption text-grey-8">
-							@{{ TerminusDefaultDomain }}
+							@{{ userStore.getCurrentDomain() }}
 						</div>
 					</div>
 				</div>
@@ -287,6 +287,7 @@ import { formatDateFromNow, formatDateTime } from '@didvault/sdk/src/util';
 import { app } from '../../../../globals';
 import { useQuasar } from 'quasar';
 import { useMenuStore } from '../../../../stores/menu';
+import { useUserStore } from '../../../../stores/user';
 import { scrollBarStyle } from '../../../../utils/contact';
 import {
 	notifyFailed,
@@ -294,7 +295,6 @@ import {
 } from '../../../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
 import { BtDialog } from '@bytetrade/ui';
-import { TerminusDefaultDomain } from '@bytetrade/core';
 import { busOn, busOff } from '../../../../utils/bus';
 
 export default defineComponent({
@@ -307,6 +307,7 @@ export default defineComponent({
 		const route = useRoute();
 		const router = useRouter();
 		const meunStore = useMenuStore();
+		const userStore = useUserStore();
 		const now = new Date();
 		const nameRef = ref();
 		let _vaults = ref<{ id: string; readonly: boolean; auth: string }[]>([]);
@@ -790,7 +791,7 @@ export default defineComponent({
 			goBack,
 			scrollBarStyle,
 			t,
-			TerminusDefaultDomain
+			userStore
 		};
 	}
 });

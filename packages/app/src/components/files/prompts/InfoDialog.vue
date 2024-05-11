@@ -82,6 +82,10 @@ const show = ref(true);
 const store = useDataStore();
 
 const humanSize = computed(function () {
+	if (fileType.value === 'folder') {
+		return '-';
+	}
+
 	if (store.selectedCount === 0) {
 		return humanStorageSize(store.req.size);
 	}
@@ -96,14 +100,15 @@ const humanSize = computed(function () {
 });
 
 const humanNumber = computed(function () {
-	if (store.selectedCount === 0) {
-		return 0;
-	}
-	const item = store.req.items[store.selected[0]];
-	let folder = `${item.numDirs} ${item.numDirs > 1 ? 'folders, ' : 'folder, '}`;
-	let file = `${item.numFiles} ${item.numFiles > 1 ? 'files' : 'file'}`;
+	return '-';
+	// if (store.selectedCount === 0) {
+	// 	return 0;
+	// }
+	// const item = store.req.items[store.selected[0]];
+	// let folder = `${item.numDirs} ${item.numDirs > 1 ? 'folders, ' : 'folder, '}`;
+	// let file = `${item.numFiles} ${item.numFiles > 1 ? 'files' : 'file'}`;
 
-	return `${item.numDirs > 0 ? folder : ''} ${file}`;
+	// return `${item.numDirs > 0 ? folder : ''} ${file}`;
 });
 
 const name = computed(function () {

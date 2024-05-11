@@ -15,7 +15,7 @@
 	<div v-else class="orgItemView">
 		<div class="header">
 			<div class="row items-center justify-between q-pa-md">
-				<div :class="['row', 'col-11', 'items-center', 'view-hearder']">
+				<div :class="['row', 'items-center', 'view-hearder']">
 					<div class="hearder-input row items-center">
 						<q-icon
 							v-if="isMobile"
@@ -32,14 +32,19 @@
 							ref="nameRef"
 							placeholder="Enter Item Name"
 							input-class="text-body3"
-							style="width: 90%"
+							style="width: 100%"
 						/>
 						<div v-else class="text text-subtitle1" @click="onEdit">
 							{{ name ? name : t('new_item') }}
 						</div>
 					</div>
 				</div>
-				<div class="row justify-center col-1 view-option" v-if="!editing_t1">
+				<div
+					class="row items-center justify-between view-option"
+					v-if="!editing_t1"
+				>
+					<q-icon name="sym_r_edit_note" size="24px" @click="onEdit" />
+
 					<q-icon name="sym_r_more_horiz" size="24px">
 						<q-menu class="popup-menu">
 							<q-list dense padding>
@@ -90,7 +95,7 @@
 												{{ vault.did }}
 											</div>
 											<div class="text-subtitle2 member-section">
-												{{ vault.name }}
+												{{ userStore.getCurrentDomain() }}
 											</div>
 										</q-item>
 										<q-separator v-if="index < _availableMembers.length - 1" />
@@ -132,7 +137,7 @@
 											{{ member.did }}
 										</div>
 										<div class="text-caption text-grey-8">
-											{{ member.name }}
+											{{ userStore.getCurrentDomain() }}
 										</div>
 									</div>
 								</div>
@@ -594,6 +599,7 @@ export default defineComponent({
 	display: flex;
 	flex-direction: column;
 	.view-hearder {
+		width: calc(100% - 60px);
 		border-radius: 10px;
 		.hearder-input {
 			height: 40px;
@@ -606,6 +612,7 @@ export default defineComponent({
 	}
 
 	.view-option {
+		width: 60px;
 		cursor: pointer;
 	}
 

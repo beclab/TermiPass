@@ -622,7 +622,6 @@ export class App {
 	state_id: string | undefined = undefined;
 
 	async saveState() {
-		console.log('saveState ' + this.state_id);
 		if (this.state_id) {
 			// console.log(getPlatform());
 			await this.storage.saveID(this.state_id, this.state);
@@ -1604,7 +1603,7 @@ export class App {
 			)) {
 				member.status = OrgMemberStatus.Suspended;
 				const invite = new Invite(member.did, 'confirm_membership');
-				await invite.initialize(org, this.account!);
+				await invite.initialize(org, this.account!, 720);
 				org.invites.push(invite);
 			}
 

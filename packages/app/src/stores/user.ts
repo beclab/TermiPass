@@ -666,6 +666,15 @@ export const useUserStore = defineStore('user', {
 				terminusName: this.current_user?.name || ''
 			};
 			return sss;
+		},
+
+		getCurrentDomain() {
+			const current_user = this.current_user;
+			if (current_user && current_user.name.indexOf('@')) {
+				return current_user.name.split('@')[1];
+			} else {
+				return TerminusDefaultDomain;
+			}
 		}
 	}
 });

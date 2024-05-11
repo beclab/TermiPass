@@ -1,30 +1,6 @@
 <template>
 	<div style="width: 100%; height: 60px">
-		<div class="searchWrap" v-if="filterShowing === 'search'">
-			<q-input
-				class="searchInput"
-				v-model="filterInput"
-				debounce="500"
-				borderless
-				dense
-				placeholder="Search"
-				@update:model-value="search"
-			>
-				<template v-slot:prepend>
-					<q-icon class="searchIcon q-ml-sm" name="search"> </q-icon>
-				</template>
-				<template v-slot:append>
-					<q-icon class="closeIcon q-mr-sm" name="close" @click="closeSearch">
-						<q-tooltip>{{ t('buttons.close') }}</q-tooltip>
-					</q-icon>
-				</template>
-			</q-input>
-		</div>
-
-		<div
-			class="row items-center justify-between"
-			v-if="filterShowing === 'default'"
-		>
+		<div class="row items-center justify-between">
 			<div class="row items-center q-pl-md">
 				<q-icon
 					v-if="isMobile"
@@ -56,15 +32,6 @@
 			<div class="row items-center q-py-xs q-my-md">
 				<q-icon
 					class="q-mr-md cursor-pointer"
-					name="sym_r_search"
-					size="24px"
-					@click="() => (filterShowing = 'search')"
-				>
-					<q-tooltip>{{ t('search') }}</q-tooltip>
-				</q-icon>
-
-				<q-icon
-					class="q-mr-md cursor-pointer"
 					name="sym_r_add"
 					size="24px"
 					clickable
@@ -92,7 +59,7 @@
 							active-class="text-blue"
 							flat
 							class="vaultsCard row items-center justify-start q-my-sm q-pa-md"
-							:class="isSelected(item) ? 'vaultCardActive' : ''"
+							:class="isSelected(item) ? 'vaultActive' : ''"
 						>
 							<q-card-section
 								class="row items-center justify-between q-pa-none"
@@ -108,7 +75,7 @@
 										class="members text-body3 row items-center justify-center"
 									>
 										<q-icon name="sym_r_person" size="20px" class="q-mr-xs" />
-										{{ getMembers(item)?.length }}
+										{{ org?.getMembersForVault(item)?.length }}
 									</div>
 								</div>
 							</q-card-section>
@@ -147,17 +114,6 @@ export default defineComponent({
 	setup() {
 		const router = useRouter();
 		const meunStore = useMenuStore();
-		const values = ref('');
-		const vaultItemRef = ref();
-		const showArrow = ref(false);
-		const arrowItemObj = ref({});
-		const contentStyle = ref({
-			height: 0
-		});
-		const checkBoxArr = ref([]);
-		const filterInput = ref('');
-		const filterShowing = ref('default');
-		// const platform = ref(process.env.PLATFORM);
 		const $q = useQuasar();
 		const isMobile = ref(
 			process.env.PLATFORM == 'MOBILE' ||
@@ -169,6 +125,8 @@ export default defineComponent({
 
 		const initOrg = () => {
 			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
+
+			console.log('initOrgorgvalue', org.value);
 		};
 
 		const heading = computed(function () {
@@ -178,8 +136,8 @@ export default defineComponent({
 			};
 		});
 
-		const getMembers = (vault) => {
-			return org.value?.getMembersForVault(vault);
+		const getMembers = async (vault) => {
+			return await org.value?.getMembersForVault(vault);
 		};
 
 		async function onCreate() {
@@ -188,11 +146,7 @@ export default defineComponent({
 			});
 		}
 		function _getItems() {
-			const memFilter = filterInput.value?.toLowerCase();
-			const vault = app.vaults.filter(
-				({ name, id }) =>
-					name?.toLowerCase().includes(memFilter) && app.mainVault?.id != id
-			);
+			const vault = app.vaults.filter(({ id }) => app.mainVault?.id != id);
 			return vault;
 		}
 		async function selectItem(item: Vault) {
@@ -216,20 +170,13 @@ export default defineComponent({
 			updateItems();
 		}
 
-		function closeSearch() {
-			if (filterInput?.value) {
-				filterInput.value = '';
-				updateItems();
-			}
-			filterShowing.value = 'default';
-		}
-
 		const goBack = () => {
 			router.go(-1);
 		};
 
 		//let unsubscribe : any;
 		onMounted(() => {
+			stateUpdate();
 			busOn('orgSubscribe', stateUpdate);
 			meunStore.$subscribe(() => {
 				updateItems();
@@ -253,18 +200,8 @@ export default defineComponent({
 			isSelected,
 			translate,
 			heading,
-			filterShowing,
-			filterInput,
 			org,
-			values,
-			showArrow,
-			arrowItemObj,
-			vaultItemRef,
-			contentStyle,
-			checkBoxArr,
 			search,
-			closeSearch,
-			// getGroups,
 			getMembers,
 			goBack,
 			scrollBarStyle,
@@ -333,6 +270,10 @@ export default defineComponent({
 			border: 1px solid $grey-2;
 			border-radius: 4px;
 			padding: 0px 6px;
+		}
+
+		&.vaultActive {
+			background: $grey-1;
 		}
 	}
 }
