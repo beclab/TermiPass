@@ -1,5 +1,5 @@
 <template>
-	<div v-if="member && org" class="orgMemberView">
+	<div v-if="member && org" class="orgMemberView bg-white">
 		<div class="header">
 			<div class="row justify-between q-pa-md">
 				<div :class="['row', 'items-center', 'view-hearder']">
@@ -264,7 +264,7 @@
 		</div>
 	</div>
 	<div
-		class="orgMemberView text-color-sub-title row items-center justify-center"
+		class="orgMemberView text-color-sub-title row items-center justify-center bg-white"
 		v-else
 	>
 		<BtIcon class="q-mb-lg" src="itemSelect" :width="215" :height="148" />

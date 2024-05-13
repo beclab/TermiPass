@@ -544,7 +544,7 @@ export class App {
 					count.report++;
 				}
 
-				if (vault.id === this.account?.mainVault.id) {
+				if (vault.owner === this.account?.id) {
 					count.myvault++;
 				}
 			}

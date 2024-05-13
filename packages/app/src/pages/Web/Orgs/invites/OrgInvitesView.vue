@@ -1,5 +1,5 @@
 <template>
-	<div v-if="invite" class="inviteItemView">
+	<div v-if="invite" class="inviteItemView bg-white">
 		<div class="row justify-between header items-center">
 			<q-icon
 				v-if="isMobile"
@@ -76,7 +76,7 @@
 	</div>
 
 	<div
-		class="inviteItemView text-color-sub-title row items-center justify-center"
+		class="inviteItemView text-color-sub-title row items-center justify-center bg-white"
 		v-else
 	>
 		<img src="../../../../assets/layout/nodata.svg" />

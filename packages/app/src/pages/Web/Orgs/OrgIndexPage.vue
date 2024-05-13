@@ -1,10 +1,9 @@
 <template>
-	<q-page class="column orgs bg-white" :style-fn="myTweak">
+	<q-page class="column orgs" :style-fn="myTweak">
 		<OrgDashboardIndex v-if="orgMode === OrgMenu.DASHBOARD" />
 		<OrgVaultsIndex v-if="orgMode === OrgMenu.VAULTES" />
 		<OrgInvitesIndex v-if="orgMode === OrgMenu.INVITES" />
 		<OrgMembersIndex v-if="orgMode === OrgMenu.MEMBERS" />
-		<OrgGroupsIndex v-if="orgMode === OrgMenu.GROUPS" />
 		<OrgSettingsIndex v-if="orgMode === OrgMenu.SETTINGS" />
 	</q-page>
 </template>
@@ -17,7 +16,6 @@ import OrgDashboardIndex from './dashboard/OrgDashboardIndex.vue';
 import OrgVaultsIndex from './vaults/OrgVaultsIndex.vue';
 import OrgInvitesIndex from './invites/OrgInvitesIndex.vue';
 import OrgMembersIndex from './members/OrgMembersIndex.vue';
-import OrgGroupsIndex from './groups/OrgGroupsIndex.vue';
 import OrgSettingsIndex from './settings/OrgSettingsIndex.vue';
 import { useQuasar } from 'quasar';
 
@@ -28,7 +26,6 @@ export default defineComponent({
 		OrgVaultsIndex,
 		OrgInvitesIndex,
 		OrgMembersIndex,
-		OrgGroupsIndex,
 		OrgSettingsIndex
 	},
 	setup() {

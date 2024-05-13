@@ -1,17 +1,22 @@
 <template>
-	<div class="row itemWrap">
-		<div
-			class="column col-6"
-			:style="{
-				borderRight: `${!$q.platform.is.mobile ? '1px solid #e0e0e0' : 0} `
-			}"
+	<div class="row itemWrap items-start justify-between">
+		<q-splitter
+			v-model="meunStore.splitterModel"
+			style="height: 100%; width: 100%"
+			:limits="[40, 60]"
+			separator-class="separator-class"
+			before-class="before-class"
+			after-class="after-class"
+			@update:model-value="updateSplitter"
 		>
-			<OrgVaultsList />
-		</div>
+			<template v-slot:before>
+				<OrgVaultsList />
+			</template>
 
-		<div class="col-6">
-			<OrgVaultsView />
-		</div>
+			<template v-slot:after>
+				<OrgVaultsView />
+			</template>
+		</q-splitter>
 	</div>
 </template>
 
@@ -20,6 +25,12 @@ import OrgVaultsList from './OrgVaultsList.vue';
 import OrgVaultsView from './OrgVaultsView.vue';
 import { useQuasar } from 'quasar';
 const $q = useQuasar();
+import { useMenuStore } from 'src/stores/menu';
+const meunStore = useMenuStore();
+
+const updateSplitter = (value: number) => {
+	meunStore.setSplitterModel(value);
+};
 </script>
 
 <style lang="scss" scoped>

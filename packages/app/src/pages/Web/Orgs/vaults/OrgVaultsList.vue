@@ -1,5 +1,5 @@
 <template>
-	<div style="width: 100%; height: 60px">
+	<div class="bg-white" style="width: 100%; height: 60px">
 		<div class="row items-center justify-between">
 			<div class="row items-center q-pl-md">
 				<q-icon
@@ -42,7 +42,10 @@
 			</div>
 		</div>
 	</div>
-	<q-list style="width: 100%; height: calc(100% - 60px)">
+	<q-list
+		class="bg-white"
+		style="width: 100%; height: calc(100% - 60px); overflow: hidden"
+	>
 		<template v-if="itemList.length > 0">
 			<q-scroll-area
 				style="height: 100%"
@@ -125,8 +128,6 @@ export default defineComponent({
 
 		const initOrg = () => {
 			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
-
-			console.log('initOrgorgvalue', org.value);
 		};
 
 		const heading = computed(function () {

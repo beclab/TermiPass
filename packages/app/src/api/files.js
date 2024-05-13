@@ -136,7 +136,8 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 		if (node) {
 			opts.headers = {
 				...opts.headers,
-				'X-Terminus-Node': node
+				'X-Terminus-Node': node,
+				timeout: 100000
 			};
 			res = await fetchURL(`/api/paste/AppData${path}`, opts);
 		}
@@ -144,7 +145,8 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 		if (terminusNode) {
 			opts.headers = {
 				...opts.headers,
-				'X-Terminus-Node': terminusNode
+				'X-Terminus-Node': terminusNode,
+				timeout: 100000
 			};
 		}
 		res = await fetchURL(`/api/paste${fromUrl}`, opts);

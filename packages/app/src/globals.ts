@@ -172,7 +172,6 @@ export interface ClientSchema {
 export enum OrgMenu {
 	DASHBOARD = 'Dashboard',
 	MEMBERS = 'Members',
-	GROUPS = 'Groups',
 	VAULTES = 'Vaults',
 	SETTINGS = 'Settings',
 	INVITES = 'Invites'
