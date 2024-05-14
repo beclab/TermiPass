@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="row justify-between items-center"
+		class="row justify-between items-center bg-white"
 		style="width: 100%; height: 60px"
 	>
 		<div class="row justify-between items-center">
@@ -34,7 +34,10 @@
 		</div>
 	</div>
 
-	<q-list style="width: 100%; height: calc(100% - 60px); overflow: hidden">
+	<q-list
+		class="bg-white"
+		style="width: 100%; height: calc(100% - 60px); overflow: hidden"
+	>
 		<q-scroll-area
 			v-if="itemList.length > 0"
 			style="height: 100%"

@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="orgItemView text-color-sub-title row items-center justify-center"
+		class="orgItemView text-color-sub-title row items-center justify-center bg-white"
 		v-if="isBlank"
 	>
 		<img
@@ -12,7 +12,7 @@
 			{{ t('no_vault_selected') }}
 		</span>
 	</div>
-	<div v-else class="orgItemView">
+	<div v-else class="orgItemView bg-white">
 		<div class="header">
 			<div class="row items-center justify-between q-pa-md">
 				<div :class="['row', 'items-center', 'view-hearder']">
@@ -213,7 +213,7 @@ import { OrgMember } from '@didvault/sdk/src/core';
 import { formatDateFromNow, formatDateTime } from '@didvault/sdk/src/util';
 import { OrgMemberStatus } from '@didvault/sdk/src/core';
 import { app } from '../../../../globals';
-import { Dialog, useQuasar } from 'quasar';
+import { useQuasar, Dialog } from 'quasar';
 import { useMenuStore } from '../../../../stores/menu';
 import { scrollBarStyle } from '../../../../utils/contact';
 import { useUserStore } from '../../../../stores/user';
@@ -223,6 +223,7 @@ import {
 	notifySuccess
 } from '../../../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
+import DeleteVault from './DeleteVault.vue';
 
 export default defineComponent({
 	name: 'OrgVaultsView',
@@ -404,6 +405,7 @@ export default defineComponent({
 
 		function onCancel() {
 			editing_t1.value = false;
+			router.go(-1);
 			clearChanges();
 		}
 
@@ -411,15 +413,7 @@ export default defineComponent({
 			const confirmed = await new Promise((resolve) =>
 				Dialog.create({
 					title: t('delete_vault'),
-					message: t('delete_vault_message'),
-					prompt: {
-						model: '',
-						placeholder: t('type_delete_to_confirm'),
-						type: 'text',
-						isValid: (val) => val.toLowerCase() === 'delete'
-					},
-					cancel: true,
-					persistent: true
+					component: DeleteVault
 				})
 					.onOk((data) => {
 						if (data.toLowerCase() === 'delete') {
@@ -432,6 +426,7 @@ export default defineComponent({
 						resolve(false);
 					})
 			);
+
 			if (confirmed) {
 				await app.deleteVault(route.params.org_type as string);
 				notifySuccess(t('delete_vault_success'));
@@ -591,6 +586,12 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style>
+.prompt-name {
+	white-space: normal !important;
+}
+</style>
 
 <style lang="scss" scoped>
 .orgItemView {

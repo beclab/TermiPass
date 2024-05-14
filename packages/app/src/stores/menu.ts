@@ -22,7 +22,6 @@ export type DataState = {
 	org_id: string;
 	org_dashboard: boolean;
 	org_members: boolean;
-	org_groups: boolean;
 	org_vaults: boolean;
 	org_settings: boolean;
 	org_invites: boolean;
@@ -69,7 +68,6 @@ export const useMenuStore = defineStore('menu', {
 			org_id: '',
 			org_dashboard: false,
 			org_members: false,
-			org_groups: false,
 			org_vaults: false,
 			org_settings: false,
 			org_invites: false,
@@ -409,7 +407,6 @@ export const useMenuStore = defineStore('menu', {
 			this.org_id = '';
 			this.org_dashboard = false;
 			this.org_members = false;
-			this.org_groups = false;
 			this.org_vaults = false;
 			this.org_settings = false;
 			this.org_invites = false;
@@ -443,8 +440,6 @@ export const useMenuStore = defineStore('menu', {
 			this.org_id = org_id;
 			if (mode == OrgMenu.DASHBOARD) {
 				this.org_dashboard = true;
-			} else if (mode == OrgMenu.GROUPS) {
-				this.org_groups = true;
 			} else if (mode == OrgMenu.MEMBERS) {
 				this.org_members = true;
 			} else if (mode == OrgMenu.VAULTES) {

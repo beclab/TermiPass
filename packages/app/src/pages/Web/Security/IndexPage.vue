@@ -257,7 +257,7 @@ export default defineComponent({
 
 	.scroll-containe {
 		height: calc(100vh - 100px);
-		overflow: scroll;
+		overflow: hidden;
 		.containe {
 			.reportCard {
 				box-shadow: none;
