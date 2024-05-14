@@ -124,7 +124,9 @@ app.whenReady().then(() => {
 		/**
 		 * 注册文件服务
 		 */
-		registerFilesService();
+		registerFilesService((updateTray) => {
+			Tray.setImage(updateTray);
+		});
 	}
 
 	if (platform !== 'win32' && !process.env.MOCKTEST) {

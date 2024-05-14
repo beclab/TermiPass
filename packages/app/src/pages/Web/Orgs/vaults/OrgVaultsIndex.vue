@@ -23,8 +23,6 @@
 <script lang="ts" setup>
 import OrgVaultsList from './OrgVaultsList.vue';
 import OrgVaultsView from './OrgVaultsView.vue';
-import { useQuasar } from 'quasar';
-const $q = useQuasar();
 import { useMenuStore } from 'src/stores/menu';
 const meunStore = useMenuStore();
 

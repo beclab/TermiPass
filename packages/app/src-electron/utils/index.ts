@@ -107,3 +107,5 @@ export const getFileIcon = async (path: string): Promise<string> => {
 
 	return icon.toDataURL();
 };
+
+export type UpdateTrayImg = (imgName: string) => void;

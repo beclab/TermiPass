@@ -67,4 +67,7 @@ export type BusEventName =
 
 	// app
 	| 'appSubscribe'
-	| 'orgSubscribe';
+	| 'orgSubscribe'
+
+	// others
+	| 'runTask';

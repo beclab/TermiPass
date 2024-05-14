@@ -57,8 +57,6 @@ const router = useRouter();
 let canvas: any;
 let ctx: any;
 
-const returnV = ref(true);
-
 const startScan = async () => {
 	try {
 		const result = await getNativeAppPlatform().scanQR();

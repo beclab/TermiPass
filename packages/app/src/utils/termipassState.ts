@@ -7,7 +7,8 @@ import {
 	NetworkUpdateMode,
 	NetworkErrorMode,
 	busOn,
-	networkErrorModeString
+	networkErrorModeString,
+	busEmit
 } from './bus';
 import { useDeviceStore } from 'src/stores/device';
 import { useScaleStore } from 'src/stores/scale';
@@ -563,8 +564,9 @@ export class TermiPassState {
 				);
 			}
 		},
-		runloopTasks: async () => {
+		runloopTasks: async (ms: number) => {
 			this.actions.checkVPNStatusTask();
+			busEmit('runTask', ms);
 		}
 	};
 
@@ -643,8 +645,9 @@ export class TermiPassState {
 		if (this.terminusCheckingRunLoopTimer) {
 			return;
 		}
+		const ms = 1000;
 		this.terminusCheckingRunLoopTimer = setInterval(() => {
-			this.actions.runloopTasks();
+			this.actions.runloopTasks(ms);
 			if (!this.checkEnable || !this.needChecking()) {
 				return;
 			}

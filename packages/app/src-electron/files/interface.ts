@@ -3,7 +3,8 @@ import { Worker } from 'worker_threads';
 import {
 	IPCFilesEventName,
 	IFilesLoginAccountInterface as LoginAccountInterface,
-	IFilesRepoAddSyncInterface as RepoAddSyncInterface
+	IFilesRepoAddSyncInterface as RepoAddSyncInterface,
+	IFilesSyncStatus as FilesSyncStatus
 } from '../../src/platform/electron/interface';
 
 import { ipcRendererInvoke, ipcRendererListener } from '../utils/preload';
@@ -34,6 +35,8 @@ export const ipcFilesMainHandle = <T>(
 export type IFilesLoginAccountInterface = LoginAccountInterface;
 
 export type IFilesRepoAddSyncInterface = RepoAddSyncInterface;
+
+export type IFilesSyncStatus = FilesSyncStatus;
 
 const resolveCallback: Map<string, (value: any) => void> = new Map();
 const dealMessageResultBlockMap: Map<string, (value: any) => void> = new Map();

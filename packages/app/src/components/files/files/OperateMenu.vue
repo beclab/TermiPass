@@ -293,16 +293,20 @@ const handle = (e: any, item: any) => {
 					return '';
 				}
 
-				if (isElectron && data && data.length > 0) {
+				if (isElectron && data && data.url && data.url.length > 0) {
 					const savePath = await window.electron.api.download.getDownloadPath();
+					console.log(savePath);
+
 					const formData: INewDownloadFile = {
-						url: data,
+						url: data.url,
 						fileName: dataStore.req.items[dataStore.selected[0]].isDir
 							? dataStore.req.items[dataStore.selected[0]].name + '.zip'
 							: dataStore.req.items[dataStore.selected[0]].name,
 						path: savePath,
 						totalBytes: dataStore.req.items[dataStore.selected[0]].size
 					};
+					console.log(formData);
+
 					await window.electron.api.download.newDownloadFile(formData);
 				}
 				return;

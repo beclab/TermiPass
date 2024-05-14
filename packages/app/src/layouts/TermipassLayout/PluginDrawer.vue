@@ -60,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useMenuStore } from '../../stores/files-menu';
 import { useUserStore } from '../../stores/user';
 import { useRoute, useRouter } from 'vue-router';
@@ -101,11 +101,7 @@ const menus = ref([
 const activeItem = ref<string | null>('Chat');
 
 onMounted(async () => {
-	await menuStore.fifterMenu();
-});
-
-onUnmounted(() => {
-	menuStore.closeSync();
+	menuStore.fifterMenu();
 });
 
 const showMenuIcon = (name: string) => {

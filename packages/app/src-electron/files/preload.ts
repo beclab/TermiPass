@@ -1,7 +1,8 @@
 import {
 	ipcFilesRendererInvoke,
 	IFilesLoginAccountInterface,
-	IFilesRepoAddSyncInterface
+	IFilesRepoAddSyncInterface,
+	IFilesSyncStatus
 } from './interface';
 
 /* seafile */
@@ -62,6 +63,10 @@ const removeCurrentAccount = async (
 	return await ipcFilesRendererInvoke('removeCurrentAccount', data);
 };
 
+const updateSyncStatus = async (status: IFilesSyncStatus): Promise<boolean> => {
+	return await ipcFilesRendererInvoke('updateSyncStatus', status);
+};
+
 export const registerFilesMethods = {
 	loginAccount,
 	setAutoSyncEnable,
@@ -74,5 +79,6 @@ export const registerFilesMethods = {
 	repoSyncInfo,
 	defaultSyncSavePath,
 	selectSyncSavePath,
-	removeCurrentAccount
+	removeCurrentAccount,
+	updateSyncStatus
 };

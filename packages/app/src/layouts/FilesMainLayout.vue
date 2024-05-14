@@ -144,7 +144,7 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { users } from '../api';
 import { useDataStore } from '../stores/data';
@@ -201,10 +201,6 @@ onMounted(async () => {
 			type: 'Files'
 		});
 	});
-});
-
-onUnmounted(() => {
-	menuStore.closeSync();
 });
 
 const checkMenuPath = (path) => {

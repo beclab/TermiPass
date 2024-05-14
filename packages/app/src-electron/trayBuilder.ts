@@ -95,30 +95,31 @@ export class TrayBuilder {
 		this.mainWindow = mainWD;
 	};
 
-	/**
-	 * 状态优先 4种状态 从上到下
-	 * 开关关闭 -> 暂停
-	 * 有任何同步中的repo -> 同步中
-	 * 有任何错误的repo => 错误
-	 * 同步完成
-	 */
 	setImage = (iconName: string) => {
 		if (!this.tray) {
 			return;
 		}
-
-		this.tray.setImage(path.join(__dirname, `icons/${iconName}.png`));
+		let plat = '';
+		if (platform == 'win32') {
+			plat = '/win';
+		} else if (platform == 'darwin') {
+			plat = '/mac';
+		}
+		if (!plat) {
+			this.tray.setImage(path.join(__dirname, 'icons/icon2.png'));
+			return;
+		}
+		this.tray.setImage(path.join(__dirname, `icons${plat}/${iconName}.png`));
 	};
 
 	getIcon = () => {
 		if (platform == 'win32') {
-			return path.join(__dirname, 'icons/icon2.png');
+			return path.join(__dirname, 'icons/win/trayTemplate.png');
 		}
-		// if (nativeTheme.shouldUseDarkColors) {
-		// 	return path.join(__dirname, 'icons/tray-dark.png');
-		// } else {
-		// 	return path.join(__dirname, 'icons/tray-white.png');
-		// }
-		return path.join(__dirname, 'icons/trayDarkTemplate.png');
+		if (platform == 'darwin') {
+			return path.join(__dirname, 'icons/mac/trayTemplate.png');
+		}
+
+		return path.join(__dirname, 'icons/icon2.png');
 	};
 }
