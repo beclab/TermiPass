@@ -726,9 +726,9 @@ If you want to create an organization, please refer to the steps listed in the T
 	confirm_bind_domain_bingding_desc:
 		"Please set up your organization's email binding rules. Please note: We only support gmail and Google Workspace emails. You can add and manage more email suffixes and member email addresses on Terminus Cloud later.",
 	confirm_bind_domain_text_record_desc:
-		'Your domain name has not been configured with TXT records. Please add a TXT record to your domain name to prove ownership of it.<br><br>TXT record information is as follows:',
+		'Please add the following TXT information to verify ownership',
 	confirm_bind_domain_cname_record_desc:
-		'Your domain name has not been configured with NS records. Please add NS records for your domain name. After successful addition, Terminus Space will obtain the DNS authority of the domain name.<br><br>NS record information is as follows:',
+		'Please add the following NS (Name Server) information to {domain}',
 	confirm_bind_domain_common_desc:
 		'Confirm that you want to bind this domain name, please click the button to continue.',
 	enter_domain_name_organization_want_to_join:

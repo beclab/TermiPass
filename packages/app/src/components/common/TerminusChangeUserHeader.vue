@@ -1,6 +1,10 @@
 <template>
 	<div class="row items-center justify-end header-content">
-		<div class="scan-icon row items-center justify-center" @click="scanQrCode">
+		<div
+			v-if="scan"
+			class="scan-icon row items-center justify-center"
+			@click="scanQrCode"
+		>
 			<q-img src="../../assets/common/scan_qr.svg" width="24px" />
 		</div>
 
@@ -17,6 +21,15 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/user';
+
+const props = defineProps({
+	scan: {
+		type: Boolean,
+		required: false,
+		default: true
+	}
+});
+
 const userStore = useUserStore();
 
 const router = useRouter();
@@ -26,6 +39,9 @@ const enterAccounts = () => {
 };
 
 const scanQrCode = () => {
+	if (!props.scan) {
+		return;
+	}
 	router.push({
 		path: '/scanQrCode'
 	});

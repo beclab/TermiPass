@@ -10,6 +10,7 @@ import { app } from 'src/globals';
 import { addAxiosProxyGlobalRequestInterceptor } from '../../httpProxy';
 import AllowCrossWebsiteDialog from '../../../components/ios/AllowCrossWebsiteDialog.vue';
 import { i18n } from '../../../boot/i18n';
+import { useUserStore } from 'src/stores/user';
 
 export class IOSMobilePlatform extends CapacitorPlatform {
 	//
@@ -60,21 +61,24 @@ export class IOSMobilePlatform extends CapacitorPlatform {
 		}
 		busOn('appStateChange', this.iOSStateChange);
 
-		const showCrossSiteTracking =
-			await iOSPlugins.iOSAppSettingsPlugin.showAllowCrossSiteTracking();
-		if (showCrossSiteTracking.value) {
-			this.quasar
-				?.dialog({
-					component: AllowCrossWebsiteDialog,
-					componentProps: {
-						title: i18n.global.t('tips'),
-						message: i18n.global.t('ios.allow_cross_website_message'),
-						btnTitle: i18n.global.t('go_to_open')
-					}
-				})
-				.onOk(() => {
-					iOSPlugins.iOSAppSettingsPlugin.jumpToAppSettings();
-				});
+		const userStore = useUserStore();
+		if (userStore.current_user?.setup_finished) {
+			const showCrossSiteTracking =
+				await iOSPlugins.iOSAppSettingsPlugin.showAllowCrossSiteTracking();
+			if (showCrossSiteTracking.value) {
+				this.quasar
+					?.dialog({
+						component: AllowCrossWebsiteDialog,
+						componentProps: {
+							title: i18n.global.t('tips'),
+							message: i18n.global.t('ios.allow_cross_website_message'),
+							btnTitle: i18n.global.t('go_to_open')
+						}
+					})
+					.onOk(() => {
+						iOSPlugins.iOSAppSettingsPlugin.jumpToAppSettings();
+					});
+			}
 		}
 	}
 

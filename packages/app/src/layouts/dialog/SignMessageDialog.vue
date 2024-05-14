@@ -104,7 +104,6 @@ import { notifySuccess, notifyFailed } from '../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
 import { i18n } from '../../boot/i18n';
 import { StatusBar } from '@capacitor/status-bar';
-import { useMenuStore } from '../../stores/menu';
 import { generateStringEllipsis } from '../../utils/utils';
 import { getRequireImage } from '../../utils/imageUtils';
 
@@ -115,7 +114,6 @@ const props = defineProps({
 	}
 });
 const $q = useQuasar();
-const menuStore = useMenuStore();
 
 const sign_id = props.body.message?.id;
 
@@ -132,17 +130,16 @@ const onDialogHide = () => {
 	emit('hide');
 };
 
-let androidHideOverlay = false;
+let hideOverlay = false;
 
 onMounted(async () => {
 	if ($q.platform.is.android) {
 		const status = await StatusBar.getInfo();
 		if (!status.overlays) {
-			androidHideOverlay = true;
+			hideOverlay = true;
 			StatusBar.setOverlaysWebView({ overlay: true });
 		}
 	}
-	menuStore.changeSafeArea(false);
 	busOn('cancel_sign', (data) => {
 		if (data == sign_id) {
 			emit('hide');
@@ -156,11 +153,10 @@ onUnmounted(() => {
 
 onBeforeUnmount(() => {
 	if ($q.platform.is.android) {
-		if (androidHideOverlay) {
+		if (hideOverlay) {
 			StatusBar.setOverlaysWebView({ overlay: false });
 		}
 	}
-	menuStore.changeSafeArea(true);
 });
 
 const onOKClick = async () => {
