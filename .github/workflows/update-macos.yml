@@ -114,6 +114,15 @@ jobs:
                   tag-name: ${{ steps.get-latest-tag.outputs.tag }}
                   asset-name: TermiPass.dmg
                   file: 'packages/app/dist/electron/Packaged/TermiPass-${{ steps.get-version.outputs.version }}.dmg'
+
+            - name: Release Update zip
+              uses: djnicholson/release-action@v2.11
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  release-name: darwin-update-arm.zip Release
+                  tag-name: ${{ steps.get-latest-tag.outputs.tag }}
+                  asset-name: darwin-update-arm.zip
+                  file: 'packages/app/dist/electron/Packaged/TermiPass-${{ steps.get-version.outputs.version }}-mac.zip'
             
             # - name: Build windows
             #   run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin/python quasar build -m electron -T win

@@ -45,8 +45,6 @@ import { WizardInfo } from './wizard';
 import { userBindTerminus } from '../BindTerminusBusiness';
 import { base64ToString, UserItem } from '@didvault/sdk/src/core';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
-import { ref } from 'vue';
-
 const $q = useQuasar();
 const userStore = useUserStore();
 const menuStore = useMenuStore();

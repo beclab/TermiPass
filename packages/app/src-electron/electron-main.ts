@@ -9,6 +9,12 @@ import { registerStoreService } from './store/main';
 import { registerTransferService } from './transfer/main';
 import { registerWindowsService } from './windows/main';
 import { registerSettingsService } from './settings/main';
+import { updateElectronApp } from 'update-electron-app';
+
+updateElectronApp({
+	updateInterval: '1 hour',
+	logger: require('electron-log')
+});
 
 // 禁用 Electron 的 crashReporter
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
@@ -48,7 +54,7 @@ function createWindow() {
 		minWidth: 1128,
 		minHeight: 768,
 		useContentSize: true,
-		show: true,
+		show: false,
 		frame: true,
 		fullscreenable: true,
 		resizable: true,
@@ -73,9 +79,13 @@ function createWindow() {
 	if (platform === 'win32') {
 		connectUtilityIsolatedWrold();
 	}
+	mainWindow.on('ready-to-show', () => {
+		mainWindow?.show();
+	});
 
-	// mainWindow.loadURL(process.env.APP_URL!);
-	mainWindow.loadFile(path.join(__dirname, 'index.html'));
+	mainWindow.loadURL(process.env.APP_URL!);
+	// mainWindow.loadFile(path.join(__dirname, 'index.html'));
+	mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', () => {
 		mainWindow = undefined;
