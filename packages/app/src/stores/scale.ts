@@ -147,8 +147,8 @@ export const useScaleStore = defineStore('scale', {
 
 					setTimeout(() => {
 						if (this.vpnStatus == TermiPassVpnStatus.connecting) {
-							this.vpnStatus = TermiPassVpnStatus.Invalid;
 							this.reset();
+							this.vpnStatus = TermiPassVpnStatus.Invalid;
 						}
 					}, 30000);
 				}

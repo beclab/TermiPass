@@ -111,7 +111,7 @@
 
 <script lang="ts" setup>
 import { useQuasar } from 'quasar';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDataStore } from '../../stores/data';
 import { syncStatusInfo, useMenuStore } from '../../stores/files-menu';
@@ -134,12 +134,8 @@ const platform = ref(process.env.PLATFORM);
 const { t } = useI18n();
 
 onMounted(async () => {
-	await menuStore.fifterMenu();
+	menuStore.fifterMenu();
 	await sync.getSyncMenu();
-});
-
-onUnmounted(() => {
-	menuStore.closeSync();
 });
 
 const selectHandler = (value) => {

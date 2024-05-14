@@ -161,7 +161,7 @@ export interface DataState {
 	sharedItems: SharedItemsType[] | any;
 	syncReposLastStatusMap: object;
 	syncRepoIdsList: string[];
-	syncReposTimer: any;
+	syncRepoIdsUpdating: boolean;
 	avtiveItem: any;
 	syncStatus: boolean;
 	canForward: boolean;

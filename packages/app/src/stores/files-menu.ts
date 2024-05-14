@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { app } from '../globals';
 import { shareToUser } from '../api';
 import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
+import { busOn } from 'src/utils/bus';
+import { IFilesSyncStatus } from 'src/platform/electron/interface';
 
 export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
 	[SYNC_STATE.ING]: {
@@ -30,12 +32,15 @@ export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
 	}
 };
 
+let registerSyncStatusTask = false;
+
 export const useMenuStore = defineStore('filesMenu', {
 	state: () => {
 		return {
 			showShareUser: false,
 			shareRepoInfo: null,
 			syncReposLastStatusMap: {},
+			syncRepoIdsUpdating: false,
 			syncRepoIdsList: [],
 			syncReposTimer: undefined,
 			canForward: false,
@@ -196,11 +201,10 @@ export const useMenuStore = defineStore('filesMenu', {
 			if (!window.electron) {
 				return;
 			}
-
 			if (repo_ids.length == 0) {
 				return;
 			}
-
+			this.syncRepoIdsUpdating = true;
 			for (let index = 0; index < repo_ids.length; index++) {
 				const repo_id = repo_ids[index];
 				if (this.syncRepoIdsList.find((e) => e === repo_id)) {
@@ -209,73 +213,99 @@ export const useMenuStore = defineStore('filesMenu', {
 
 				this.syncRepoIdsList.push(repo_id);
 			}
-			this.checkRepoSyncStatus();
+			this.syncRepoIdsUpdating = false;
+			if (registerSyncStatusTask) {
+				return;
+			}
+			busOn('runTask', () => {
+				this.checkRepoSyncStatus();
+			});
+			registerSyncStatusTask = true;
 		},
 		async checkRepoSyncStatus() {
-			if (this.syncReposTimer) {
-				clearInterval(this.syncReposTimer);
-			}
-			this.syncReposTimer = setInterval(async () => {
-				for (let index = 0; index < this.syncRepoIdsList.length; index++) {
-					const repo_id = this.syncRepoIdsList[index];
+			for (let index = 0; index < this.syncRepoIdsList.length; index++) {
+				if (this.syncRepoIdsUpdating) {
+					return;
+				}
+				const repo_id = this.syncRepoIdsList[index];
 
-					const repoSyncInfo = await window.electron.api.files.repoSyncInfo(
-						repo_id
-					);
-					if (repoSyncInfo.length == 0 || repoSyncInfo == 'repo not in sync') {
-						if (
-							!this.syncReposLastStatusMap[repo_id] ||
-							this.syncReposLastStatusMap[repo_id].status != SYNC_STATE.DISABLE
-						) {
-							this.syncReposLastStatusMap[repo_id] = {
-								status: SYNC_STATE.DISABLE
-							};
-						}
-						continue;
+				const repoSyncInfo = await window.electron.api.files.repoSyncInfo(
+					repo_id
+				);
+				if (repoSyncInfo.length == 0 || repoSyncInfo == 'repo not in sync') {
+					if (
+						!this.syncReposLastStatusMap[repo_id] ||
+						this.syncReposLastStatusMap[repo_id].status != SYNC_STATE.DISABLE
+					) {
+						this.syncReposLastStatusMap[repo_id] = {
+							status: SYNC_STATE.DISABLE
+						};
 					}
-					const infoObject = JSON.parse(repoSyncInfo);
+					continue;
+				}
+				const infoObject = JSON.parse(repoSyncInfo);
 
-					let info = infoObject.info;
-					if (typeof info == 'string') {
-						info = JSON.parse(info);
-					}
+				let info = infoObject.info;
+				if (typeof info == 'string') {
+					info = JSON.parse(info);
+				}
 
-					if (infoObject.type == 'clone') {
+				if (infoObject.type == 'clone') {
+					this.syncReposLastStatusMap[repo_id] = {
+						status: SYNC_STATE.ING,
+						percent: info.percentage
+					};
+				} else if (infoObject.type == 'local') {
+					if (info.sync_state == SYNC_STATE.ING) {
+						const percent =
+							info.transfer_percentage > 100 || info.transfer_percentage < 0
+								? 0
+								: info.transfer_percentage;
+
 						this.syncReposLastStatusMap[repo_id] = {
 							status: SYNC_STATE.ING,
-							percent: info.percentage
+							percent
 						};
-					} else if (infoObject.type == 'local') {
-						if (info.sync_state == SYNC_STATE.ING) {
-							const percent =
-								info.transfer_percentage > 100 || info.transfer_percentage < 0
-									? 0
-									: info.transfer_percentage;
-
-							this.syncReposLastStatusMap[repo_id] = {
-								status: SYNC_STATE.ING,
-								percent
-							};
-						} else {
-							if (
-								this.syncReposLastStatusMap[repo_id] &&
-								this.syncReposLastStatusMap[repo_id].status == info.sync_state
-							) {
-								continue;
-							}
-							this.syncReposLastStatusMap[repo_id] = {
-								status: info.sync_state
-							};
+					} else {
+						if (
+							this.syncReposLastStatusMap[repo_id] &&
+							this.syncReposLastStatusMap[repo_id].status == info.sync_state
+						) {
+							continue;
 						}
+						this.syncReposLastStatusMap[repo_id] = {
+							status: info.sync_state
+						};
 					}
 				}
-			}, 1000);
-		},
-		closeSync() {
-			if (this.syncReposTimer) {
-				clearInterval(this.syncReposTimer);
+			}
+
+			if (window.electron) {
+				const status: IFilesSyncStatus = {
+					syncing: false,
+					error: false,
+					pause: !this.syncStatus,
+					done: false
+				};
+				Object.values(this.syncReposLastStatusMap).forEach((e) => {
+					if (
+						e.status == SYNC_STATE.ING ||
+						e.status == SYNC_STATE.INIT ||
+						e.status == SYNC_STATE.WAITING
+					) {
+						status.syncing = true;
+					}
+					if (e.status == SYNC_STATE.DONE) {
+						status.done = true;
+					}
+					if (e.status == SYNC_STATE.ERROR) {
+						status.error = true;
+					}
+				});
+				window.electron.api.files.updateSyncStatus(status);
 			}
 		},
+
 		async updateSyncStatus() {
 			if (window.electron) {
 				this.syncStatus = !this.syncStatus;

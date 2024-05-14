@@ -24,7 +24,6 @@ import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useDataStore } from '../stores/data';
 
-import { useMenuStore } from '../stores/files-menu';
 import { hideHeaderOpt } from './../utils/file';
 import { bytetrade } from '@bytetrade/core';
 
@@ -33,8 +32,6 @@ import { getAppPlatform } from '../platform/appPlatform';
 
 const Route = useRoute();
 const store = useDataStore();
-const menuStore = useMenuStore();
-
 const fileTitle = ref(store.currentItem);
 const isSeahub = ref(false);
 const hideOption = ref(false);
@@ -65,7 +62,6 @@ onMounted(async () => {
 
 onUnmounted(() => {
 	getAppPlatform().homeUnMounted();
-	menuStore.closeSync();
 });
 
 watch(

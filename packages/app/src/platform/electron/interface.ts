@@ -18,7 +18,8 @@ export type IPCFilesEventName =
 	| 'repoSyncInfo'
 	| 'defaultSyncSavePath'
 	| 'selectSyncSavePath'
-	| 'removeCurrentAccount';
+	| 'removeCurrentAccount'
+	| 'updateSyncStatus';
 
 export type IPCDownloadEventName =
 	| 'newDownloadFile'
@@ -134,6 +135,13 @@ export interface IAppInfo {
 	version: string;
 }
 
+export interface IFilesSyncStatus {
+	syncing: boolean;
+	error: boolean;
+	pause: boolean;
+	done: boolean;
+}
+
 declare global {
 	interface Window {
 		winapi: { getCookie };
@@ -163,6 +171,7 @@ declare global {
 					removeCurrentAccount: (
 						data: IFilesLoginAccountInterface
 					) => Promise<boolean>;
+					updateSyncStatus: (status: IFilesSyncStatus) => void;
 				};
 				download: {
 					newDownloadFile: (

@@ -4,14 +4,17 @@ import {
 	IFilesLoginAccountInterface,
 	filesMainHandleCallBack,
 	filesWorkerInit,
-	IFilesRepoAddSyncInterface
+	IFilesRepoAddSyncInterface,
+	IFilesSyncStatus
 } from './interface';
 
-export const registerFilesService = () => {
-	listenerEvent();
+import { UpdateTrayImg } from '../utils';
+
+export const registerFilesService = (updateTray: UpdateTrayImg) => {
+	listenerEvent(updateTray);
 };
 
-const listenerEvent = async () => {
+const listenerEvent = async (updateTray: UpdateTrayImg) => {
 	filesWorkerInit();
 
 	ipcFilesMainHandle(
@@ -118,4 +121,16 @@ const listenerEvent = async () => {
 		async (_event, data: IFilesLoginAccountInterface) =>
 			filesMainHandleCallBack('removeCurrentAccount', data, data.username)
 	);
+
+	ipcFilesMainHandle('updateSyncStatus', (_, status: IFilesSyncStatus) => {
+		let imageName = '';
+		if (status.pause) {
+			imageName = 'Pause';
+		} else if (status.syncing) {
+			imageName = 'Syncing';
+		} else if (status.done) {
+			imageName = 'Done';
+		}
+		updateTray('tray' + imageName + 'Template');
+	});
 };
