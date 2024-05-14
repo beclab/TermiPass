@@ -9,9 +9,9 @@
 		/>
 		<span class="text-white text-h5 scan-title">{{ t('scan_qr_code') }}</span>
 		<div class="img-box" />
-		<span class="text-white text-h6 scan-label">{{
+		<!-- <span class="text-white text-h6 scan-label">{{
 			t('scan_qr_code_to_activate')
-		}}</span>
+		}}</span> -->
 		<canvas id="myCanvas" />
 
 		<q-btn
@@ -45,6 +45,7 @@ import { WizardInfo } from './wizard';
 import { userBindTerminus } from '../BindTerminusBusiness';
 import { base64ToString, UserItem } from '@didvault/sdk/src/core';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
+import { ref } from 'vue';
 
 const $q = useQuasar();
 const userStore = useUserStore();
@@ -56,13 +57,17 @@ const router = useRouter();
 let canvas: any;
 let ctx: any;
 
+const returnV = ref(true);
+
 const startScan = async () => {
 	try {
 		const result = await getNativeAppPlatform().scanQR();
 		await getNativeAppPlatform().stopScanQR();
 		if (result && result.length) {
 			resoleScanResult(result, () => {
-				startScan();
+				setTimeout(() => {
+					startScan();
+				}, 1000);
 			});
 		} else {
 			setTimeout(() => {
@@ -148,6 +153,24 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 		!result.startsWith('active-vault' + '://') &&
 		!result.startsWith('active_vault' + '://')
 	) {
+		const item = getNativeAppPlatform().scanQRProtocolList.find((e) =>
+			result.startsWith(e.protocol)
+		);
+		if (item && (await item.canResponseQRContent(result))) {
+			const scanResult = await item.method(result);
+			if (!scanResult) {
+				if (failCallBack) {
+					failCallBack();
+				}
+				return;
+			}
+			goBack();
+			if (item.success) {
+				item.success();
+			}
+			return;
+		}
+
 		notifyFailed(t('qr_code_error'));
 		if (failCallBack) {
 			failCallBack();
@@ -160,6 +183,8 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 	try {
 		getNativeAppPlatform().hookServerHttp = false;
 		const obj: WizardInfo = JSON.parse(base64ToString(content));
+		console.log('obj ===>');
+		console.log(obj);
 
 		if (obj.username?.split('@').length != 2) {
 			notifyFailed(
@@ -172,6 +197,9 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 			}
 			return;
 		}
+		console.log(obj.username);
+		console.log(userStore.current_user?.name);
+		console.log(obj.username !== userStore.current_user?.name);
 
 		if (obj.username !== userStore.current_user?.name) {
 			notifyFailed(
@@ -184,6 +212,10 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 			}
 			return;
 		}
+
+		// if (returnV.value) {
+		// 	return;
+		// }
 
 		$q.loading.show();
 

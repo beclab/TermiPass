@@ -138,7 +138,9 @@
 							<q-icon name="sym_r_content_copy" size="20px" class="icon" />
 						</div>
 					</div>
-					<div v-else-if="domain && domain.status == 'WAIT_CNAME_RESOLVE'">
+					<div
+						v-else-if="domain && domain.status == DOMAIN_STATUS.WAIT_NS_RESOLVE"
+					>
 						<div
 							v-for="item in ns"
 							:key="item"
@@ -228,7 +230,7 @@ onMounted(async () => {
 	domainName.value = Encoder.bytesToString(Encoder.base64UrlToBytes(base));
 	domain.value = await cloudStore.selectDomain(domainName.value);
 
-	if (domain.value && domain.value.status == 'WAIT_CNAME_RESOLVE') {
+	if (domain.value && domain.value.status == DOMAIN_STATUS.WAIT_NS_RESOLVE) {
 		try {
 			let jsonString = domain.value.ns!.replace('[', '');
 			jsonString = jsonString.replace(']', '');
@@ -349,7 +351,7 @@ const btnStatusRef = computed(function () {
 	}
 	if (
 		domain.value.status == DOMAIN_STATUS.WAIT_TXT_RESOLVE ||
-		domain.value.status == 'WAIT_CNAME_RESOLVE'
+		domain.value.status == DOMAIN_STATUS.WAIT_NS_RESOLVE
 	) {
 		return ConfirmButtonStatus.normal;
 	}
@@ -381,7 +383,7 @@ const btnTitle = computed(function () {
 	}
 	if (
 		domain.value.status == DOMAIN_STATUS.WAIT_TXT_RESOLVE ||
-		domain.value.status == 'WAIT_CNAME_RESOLVE'
+		domain.value.status == DOMAIN_STATUS.WAIT_NS_RESOLVE
 	) {
 		return t('i_got_it');
 	}
@@ -413,8 +415,10 @@ const desc = computed(function () {
 		return t('confirm_bind_domain_text_record_desc');
 	}
 
-	if (domain.value.status == 'WAIT_CNAME_RESOLVE') {
-		return t('confirm_bind_domain_cname_record_desc');
+	if (domain.value.status == DOMAIN_STATUS.WAIT_NS_RESOLVE) {
+		return t('confirm_bind_domain_cname_record_desc', {
+			domain: domain.value.domain
+		});
 	}
 
 	if (
@@ -441,7 +445,7 @@ const confirmAction = () => {
 	}
 	if (
 		domain.value.status == DOMAIN_STATUS.WAIT_TXT_RESOLVE ||
-		domain.value.status == 'WAIT_CNAME_RESOLVE'
+		domain.value.status == DOMAIN_STATUS.WAIT_NS_RESOLVE
 	) {
 		router.go(-1);
 		return;

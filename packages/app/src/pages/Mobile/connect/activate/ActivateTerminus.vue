@@ -56,7 +56,7 @@
 				$q.platform.is.ios ? 'calc(env(safe-area-inset-top) + 20px);' : '57px'
 			}`"
 		>
-			<TerminusChangeUserHeader />
+			<TerminusChangeUserHeader :scan="false" />
 		</div>
 	</div>
 </template>
