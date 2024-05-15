@@ -121,7 +121,7 @@ jobs:
                   token: ${{ secrets.GITHUB_TOKEN }}
                   release-name: darwin-update-arm.zip Release
                   tag-name: ${{ steps.get-latest-tag.outputs.tag }}
-                  asset-name: darwin-update-arm.zip
+                  asset-name: TermiPass-darwin-x64-update.zip
                   file: 'packages/app/dist/electron/Packaged/TermiPass-${{ steps.get-version.outputs.version }}-mac.zip'
             
             # - name: Build windows
