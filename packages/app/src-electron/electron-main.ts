@@ -9,16 +9,16 @@ import { registerStoreService } from './store/main';
 import { registerTransferService } from './transfer/main';
 import { registerWindowsService } from './windows/main';
 import { registerSettingsService } from './settings/main';
-import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+// import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
 
-updateElectronApp({
-	updateInterval: '1 hour',
-	logger: require('electron-log'),
-	updateSource: {
-		type: UpdateSourceType.ElectronPublicUpdateService,
-		repo: 'beclab/TermiPass'
-	}
-});
+// updateElectronApp({
+// 	updateInterval: '1 hour',
+// 	logger: require('electron-log'),
+// 	updateSource: {
+// 		type: UpdateSourceType.ElectronPublicUpdateService,
+// 		repo: 'beclab/TermiPass'
+// 	}
+// });
 
 // 禁用 Electron 的 crashReporter
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
@@ -89,7 +89,7 @@ function createWindow() {
 
 	mainWindow.loadURL(process.env.APP_URL!);
 	// mainWindow.loadFile(path.join(__dirname, 'index.html'));
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', () => {
 		mainWindow = undefined;
