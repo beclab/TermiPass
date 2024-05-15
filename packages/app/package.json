@@ -1,6 +1,6 @@
 {
 	"name": "@didvault/app",
-	"version": "0.4.59",
+	"version": "0.4.60",
 	"description": "DID APP",
 	"productName": "TermiPass",
 	"author": "TermiPass <billpengpeng@gmail.com>",
@@ -140,7 +140,8 @@
 		"workbox-precaching": "6.2.0",
 		"workbox-sw": "6.1.5",
 		"workbox-window": "6.1.5",
-		"zxcvbn": "4.4.2"
+		"zxcvbn": "4.4.2",
+		"@tigerconnect/ffi-napi": "^4.0.3-tc3"
 	},
 	"devDependencies": {
 		"@electron/notarize": "^2.3.0",
