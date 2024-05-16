@@ -26,7 +26,7 @@
 			>
 				<template #extra-MyLibraries>
 					<q-btn
-						class="btn-size-sm btn-no-text btn-no-border text-grey-8"
+						class="btn-size-xs btn-no-text btn-no-border text-grey-8"
 						icon="sym_r_add_circle"
 						@click="handleNewLib($event)"
 					>
@@ -42,7 +42,7 @@
 					>
 						<q-btn
 							v-if="menuStore.syncStatus"
-							class="btn-size-sm btn-no-text btn-no-border text-grey-8"
+							class="btn-size-xs btn-no-text btn-no-border text-grey-5"
 							icon="sym_r_pause_circle"
 							@click="menuStore.updateSyncStatus"
 						>
@@ -51,8 +51,8 @@
 
 						<q-btn
 							v-if="!menuStore.syncStatus"
-							class="btn-size-sm btn-no-text btn-no-border text-green"
-							icon="sym_r_sync"
+							class="btn-size-xs btn-no-text btn-no-border text-grey-5"
+							icon="sym_r_autoplay"
 							@click="menuStore.updateSyncStatus"
 						>
 							<q-tooltip> {{ t('files.click_to_continue') }}</q-tooltip>
@@ -73,15 +73,11 @@
 							"
 							:name="syncStatusInfo[getSyncStatus(menu.id)].icon"
 							size="12px"
-							:color="syncStatusInfo[getSyncStatus(menu.id)].color"
-							style="
-								position: absolute;
-								left: -1.5px;
-								top: 10px;
-								cursor: pointer;
-								background: white;
-								border-radius: 12px;
-							"
+							color="white"
+							class="sync-icon"
+							:style="{
+								background: syncStatusInfo[getSyncStatus(menu.id)].color
+							}"
 						>
 						</q-icon>
 					</q-icon>
@@ -219,5 +215,14 @@ const getSyncStatus = (repo_id: string) => {
 	.title-active {
 		color: $title;
 	}
+}
+
+.sync-icon {
+	position: absolute;
+	left: -1.5px;
+	top: 12px;
+	cursor: pointer;
+	border-radius: 12px;
+	font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 20;
 }
 </style>

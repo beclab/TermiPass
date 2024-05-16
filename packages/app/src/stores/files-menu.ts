@@ -8,27 +8,27 @@ import { IFilesSyncStatus } from 'src/platform/electron/interface';
 export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
 	[SYNC_STATE.ING]: {
 		icon: 'sym_r_sync',
-		color: 'blue'
+		color: '#3377ff'
 	},
 	[SYNC_STATE.INIT]: {
 		icon: 'sym_r_sync',
-		color: 'blue'
+		color: '#3377ff'
 	},
 	[SYNC_STATE.WAITING]: {
 		icon: 'sym_r_sync',
-		color: 'blue'
+		color: '#3377ff'
 	},
 	[SYNC_STATE.DONE]: {
-		icon: 'sym_r_check_circle',
-		color: 'green'
+		icon: 'sym_r_check_small',
+		color: '#19C553'
 	},
 	[SYNC_STATE.ERROR]: {
-		icon: 'sym_r_sync_problem',
-		color: 'red'
+		icon: 'sym_r_exclamation',
+		color: '#FF4D4D'
 	},
 	[-1]: {
-		icon: 'sym_r_pause_circle',
-		color: 'yellow'
+		icon: 'sym_r_pause',
+		color: '#ADADAD'
 	}
 };
 
