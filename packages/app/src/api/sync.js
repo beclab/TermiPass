@@ -31,7 +31,7 @@ export async function getSyncMenu() {
 			label: el.repo_name,
 			key: el.repo_id,
 			name: el.repo_name,
-			icon: 'sym_r_folder_shared',
+			icon: 'sym_r_folder_supervised',
 			id: el.repo_id,
 			defaultHide: true,
 			...el
@@ -52,7 +52,7 @@ export async function getSyncMenu() {
 		mineChildren.push({
 			label: el.repo_name,
 			key: el.repo_id,
-			icon: 'sym_r_stop_screen_share',
+			icon: 'sym_r_folder',
 			id: el.repo_id,
 			name: el.repo_name,
 			shard_user_hide_flag: hasShare ? false : true,
