@@ -447,49 +447,131 @@ export async function getContentUrlByPath(filePath) {
 	return await store.api.getFileDownloadLink(store.repo.repo_id, filePath);
 }
 
+const RETRY_TIMER = 3;
+const SIZE = 8 * 1024 * 1024;
+
 export async function uploadPost(
 	url,
 	content = '',
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	overwrite = false,
-	onupload
+	onupload,
+	timer = RETRY_TIMER
+) {
+	const newurl = removePrefix(decodeURIComponent(url));
+
+	let fileInfo = null;
+	let appNode = null;
+
+	if (checkAppData(newurl)) {
+		const { path, node } = getAppDataPath(newurl);
+		appNode = node;
+		if (node) {
+			fileInfo = await getUploadInfo(path, `/appdata`, content);
+		} else {
+			return false;
+		}
+	} else {
+		fileInfo = await getUploadInfo(newurl, '/data', content);
+	}
+
+	const fileChunkList = await createFileChunk(fileInfo, content);
+
+	const exportProgress = (e) => {
+		if (typeof onupload === 'function') {
+			onupload(e);
+		}
+	};
+
+	return new Promise(async (resolve, reject) => {
+		for (let i = 0; i < fileChunkList.length; i++) {
+			const chunkFile = fileChunkList[i];
+			try {
+				const res = await uploadChunks(
+					fileInfo,
+					chunkFile,
+					i,
+					exportProgress,
+					appNode
+				);
+				if (res.message === 'File uploaded successfully') {
+					resolve();
+				}
+			} catch (error) {
+				if (timer === 1) {
+					exportProgress({
+						loaded: -1,
+						total: fileInfo.file_size,
+						lengthComputable: true
+					});
+				}
+				if (timer <= 0) {
+					reject();
+					return;
+				}
+
+				await errorRetry(url, content, overwrite, onupload, timer);
+				return;
+			}
+		}
+		resolve();
+	});
+}
+
+export async function errorRetry(
+	url,
+	content = '',
+	overwrite = false,
+	onupload,
+	timer
+) {
+	timer = timer - 1;
+	await uploadPost(url, content, overwrite, onupload, timer);
+}
+
+export async function uploadChunks(
+	fileInfo,
+	chunkFile,
+	i,
+	exportProgress,
+	node
 ) {
 	const store = useDataStore();
 	const baseURL = store.baseURL();
-	url = removePrefix(decodeURIComponent(url));
 
 	return new Promise(async (resolve, reject) => {
 		let request = new XMLHttpRequest();
 		let params = new FormData();
+		const offset = fileInfo.offset + SIZE * i;
 
-		if (checkAppData(url)) {
-			const { path, node } = getAppDataPath(url);
-
-			if (node) {
-				const fileInfo = await getUploadInfo(path, `/appdata`, content);
-				params.append('file', content);
-				params.append('upload_offset', fileInfo.offset);
-				request.open('PATCH', `${baseURL}/upload/${fileInfo.id}`, true);
-				request.setRequestHeader('X-Terminus-Node', node);
-			}
-		} else {
-			const fileInfo = await getUploadInfo(url, '/data', content);
-			params.append('file', content);
-			params.append('upload_offset', fileInfo.offset);
-			request.open('PATCH', `${baseURL}/upload/${fileInfo.id}`, true);
+		params.append('file', chunkFile.file);
+		params.append('upload_offset', offset);
+		request.open('PATCH', `${baseURL}/upload/${fileInfo.id}`, true);
+		if (node) {
+			request.setRequestHeader('X-Terminus-Node', node);
 		}
 
-		if (typeof onupload === 'function') {
-			request.upload.onprogress = onupload;
-		}
-
+		request.timeout = 100000;
 		request.onload = () => {
 			if (request.status === 200) {
-				resolve(request.responseText);
+				resolve(JSON.parse(request.responseText));
 			} else if (request.status === 409) {
 				reject(request.status);
 			} else {
 				reject(request.responseText);
+			}
+		};
+
+		request.upload.onprogress = function (e) {
+			const event = {
+				loaded: e.loaded,
+				total: e.total,
+				lengthComputable: e.lengthComputable
+			};
+
+			if (event.lengthComputable) {
+				event.loaded += offset;
+				event.total = fileInfo.file_size;
+				exportProgress(event);
 			}
 		};
 
@@ -499,6 +581,17 @@ export async function uploadPost(
 
 		request.send(params);
 	});
+}
+
+export async function createFileChunk(fileInfo, file, size = SIZE) {
+	const fileChunkList = [];
+	let cur = fileInfo.offset;
+	while (cur < file.size) {
+		fileChunkList.push({ file: file.slice(cur, cur + size) });
+		cur += size;
+	}
+
+	return fileChunkList;
 }
 
 export async function getUploadInfo(url, prefix, content = '') {

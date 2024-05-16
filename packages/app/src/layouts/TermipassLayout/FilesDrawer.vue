@@ -25,13 +25,13 @@
 				"
 			>
 				<template #extra-MyLibraries>
-					<q-icon
-						size="24px"
-						name="sym_r_add_circle"
+					<q-btn
+						class="btn-size-sm btn-no-text btn-no-border text-grey-8"
+						icon="sym_r_add_circle"
 						@click="handleNewLib($event)"
 					>
-						<q-tooltip>{{ t('files.new_library') }}</q-tooltip>
-					</q-icon>
+						<q-tooltip> {{ t('files.new_library') }}</q-tooltip>
+					</q-btn>
 				</template>
 
 				<template #extra-Sync>
@@ -40,27 +40,23 @@
 						side
 						v-if="$q.platform.is.electron"
 					>
-						<q-icon
-							name="sym_r_pause_circle"
+						<q-btn
 							v-if="menuStore.syncStatus"
-							size="24px"
-							class="cursor-pointer"
+							class="btn-size-sm btn-no-text btn-no-border text-grey-8"
+							icon="sym_r_pause_circle"
 							@click="menuStore.updateSyncStatus"
 						>
 							<q-tooltip> {{ t('files.click_to_pause') }}</q-tooltip>
-						</q-icon>
-						<q-icon
-							name="sym_r_sync"
+						</q-btn>
+
+						<q-btn
 							v-if="!menuStore.syncStatus"
-							color="green"
-							size="24px"
-							class="cursor-pointer"
+							class="btn-size-sm btn-no-text btn-no-border text-green"
+							icon="sym_r_sync"
 							@click="menuStore.updateSyncStatus"
 						>
-							<q-tooltip>
-								{{ t('files.click_to_continue') }}
-							</q-tooltip>
-						</q-icon>
+							<q-tooltip> {{ t('files.click_to_continue') }}</q-tooltip>
+						</q-btn>
 					</q-item-section>
 				</template>
 

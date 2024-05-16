@@ -71,7 +71,7 @@
 					<span class="text-red"> {{ t('error') }} </span>
 				</div>
 
-				<div
+				<!-- <div
 					class="row items-center justify-center"
 					v-else-if="item.status !== 0 && item.progress === 100"
 				>
@@ -83,11 +83,11 @@
 						color="light-blue"
 						class="q-ml-xs"
 					/>
-				</div>
+				</div> -->
 
 				<div
 					class="row items-center justify-center"
-					v-else-if="item.status === 0"
+					v-else-if="item.status === 0 || item.progress === 100"
 				>
 					<q-icon
 						class="forword"

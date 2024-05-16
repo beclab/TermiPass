@@ -150,11 +150,12 @@ export const useFilesUploadStore = defineStore('upload', {
 				store.setReload(true);
 			}
 			this.setProgress({ id: item.id, loaded: item.file.size });
-
 			for (let i = 0; i < this.uploadQueue.length; i++) {
 				const el = this.uploadQueue[i];
 				if (item.id === el.id) {
 					el.status = 0;
+					el.progressSize = el.size;
+					el.progressFormat = el.sizeFormat;
 					break;
 				}
 			}
@@ -188,11 +189,16 @@ export const useFilesUploadStore = defineStore('upload', {
 					this.finishUpload(item);
 				} else {
 					const onUpload = throttle(
-						(event: any) =>
+						(event: any) => {
 							this.setProgress({
 								id: item.id,
 								loaded: event.loaded
-							}),
+							});
+
+							if (event.loaded >= event.total) {
+								this.finishUpload(item);
+							}
+						},
 						100,
 						{ leading: true, trailing: false }
 					);
