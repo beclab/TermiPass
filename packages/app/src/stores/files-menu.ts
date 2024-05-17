@@ -138,6 +138,14 @@ export const useMenuStore = defineStore('filesMenu', {
 		// path: '/Files/Seahub/' + item.label + '/',
 		currentItemDefaultPath(): string {
 			return '/Files/Seahub/' + this.avtiveItem.label + '/';
+		},
+		reposHasSync(): boolean {
+			return Object.values(this.syncReposLastStatusMap).find(
+				(e) =>
+					e.status &&
+					e.status > SYNC_STATE.DISABLE &&
+					e.status != SYNC_STATE.UNKNOWN
+			);
 		}
 	},
 

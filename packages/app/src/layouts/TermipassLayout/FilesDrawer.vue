@@ -38,7 +38,7 @@
 					<q-item-section
 						class="text-subtitle1 q-pr-none"
 						side
-						v-if="$q.platform.is.electron"
+						v-if="$q.platform.is.electron && menuStore.reposHasSync"
 					>
 						<q-btn
 							v-if="menuStore.syncStatus"
