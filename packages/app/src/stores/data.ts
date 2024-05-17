@@ -20,7 +20,9 @@ export type DataState = {
 	showConfirm: any;
 	currentItem: string;
 	showUploadModal: boolean;
-
+	hideUploadModal: boolean;
+	isUploadProgressDialogShow: boolean;
+	hideSyncUploadModal: boolean;
 	copyFiles: any;
 	copyFrom: CopyFromMode;
 
@@ -60,6 +62,9 @@ export const useDataStore = defineStore('data', {
 			showConfirm: null,
 			currentItem: 'Home',
 			showUploadModal: false,
+			hideUploadModal: false,
+			isUploadProgressDialogShow: false,
+			hideSyncUploadModal: false,
 			copyFiles: [],
 			activeMenu: MenuItem.HOME,
 			activeSort: {

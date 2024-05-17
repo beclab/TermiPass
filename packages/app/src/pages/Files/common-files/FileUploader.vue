@@ -12,7 +12,9 @@
 	</div>
 
 	<UploadSyncModal
-		v-if="isUploadProgressDialogShow"
+		v-if="
+			dataStore.isUploadProgressDialogShow && !dataStore.hideSyncUploadModal
+		"
 		:uploadFileList="uploadFileList"
 		:totalProgress="totalProgress"
 		:allFilesUploaded="allFilesUploaded"
@@ -61,7 +63,6 @@ const dataStore = useDataStore();
 const retryFileList = ref<any[]>([]);
 const uploadFileList = ref<any[]>([]);
 const totalProgress = ref(0);
-const isUploadProgressDialogShow = ref(false);
 // const isUploadRemindDialogShow = ref(false);
 // const currentResumableFile = ref(null);
 const allFilesUploaded = ref(false);
@@ -80,15 +81,6 @@ const uploadObj = reactive<uploadObjType>({
 	resumableUploadFileBlockSize: 5,
 	simultaneousUploads: 3
 });
-
-watch(
-	() => route.query.id,
-	(newVal) => {
-		if (!newVal) {
-			isUploadProgressDialogShow.value = false;
-		}
-	}
-);
 
 onMounted(() => {
 	resumable = new Resumablejs({
@@ -143,7 +135,7 @@ const bindEventHandler = () => {
 	resumable.on('chunkingComplete', onChunkingComplete.bind(this));
 	resumable.on('fileAdded', onFileAdded.bind(this));
 	resumable.on('filesAddedComplete', filesAddedComplete.bind(this));
-	resumable.on('fileProgress', onFileProgress.bind(this));
+	// resumable.on('fileProgress', onFileProgress.bind(this));
 	resumable.on('fileSuccess', onFileUploadSuccess.bind(this));
 	resumable.on('progress', onProgress.bind(this));
 	resumable.on('complete', onComplete.bind(this));
@@ -266,7 +258,7 @@ const resumableUpload = (resumableFile) => {
 
 const filesAddedComplete = (resumable, files) => {
 	if (files.length === 0) {
-		isUploadProgressDialogShow.value = true;
+		dataStore.isUploadProgressDialogShow = true;
 		totalProgress.value = 100;
 	}
 };
@@ -275,16 +267,16 @@ const setUploadFileList = () => {
 	let uploadFileListTemp = resumable.files;
 
 	uploadFileList.value = uploadFileListTemp;
-	isUploadProgressDialogShow.value = true;
+	dataStore.isUploadProgressDialogShow = true;
 };
 
-const onFileProgress = (resumableFile) => {
-	console.info('onFileProgress', resumableFile);
-	// let uploadFileListTemp = uploadFileList.value.map((item) => {
-	// 	return item;
-	// });
-	// uploadFileList.value = uploadFileListTemp;
-};
+// const onFileProgress = (resumableFile) => {
+// console.info('onFileProgress', resumableFile);
+// let uploadFileListTemp = uploadFileList.value.map((item) => {
+// 	return item;
+// });
+// uploadFileList.value = uploadFileListTemp;
+// };
 
 const onProgress = () => {
 	let progress = Math.round(resumable.progress() * 100);
@@ -485,7 +477,7 @@ const onCloseUploadDialog = () => {
 	resumable.files = [];
 	// reset upload link loaded
 	isUploadLinkLoaded.value = false;
-	isUploadProgressDialogShow.value = false;
+	dataStore.isUploadProgressDialogShow = false;
 	uploadFileList.value = [];
 };
 </script>

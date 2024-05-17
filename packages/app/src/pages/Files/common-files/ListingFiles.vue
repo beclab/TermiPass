@@ -308,6 +308,19 @@ export default defineComponent({
 					route.path.slice(
 						route.path.indexOf(currentItem) + currentItem.length
 					) || '/';
+
+				if (route.query.id) {
+					store.hideSyncUploadModal = false;
+					if (store.showUploadModal) {
+						store.hideUploadModal = true;
+					}
+				} else {
+					store.hideUploadModal = false;
+
+					if (store.isUploadProgressDialogShow) {
+						store.hideSyncUploadModal = true;
+					}
+				}
 			}
 		);
 

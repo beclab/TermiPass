@@ -135,7 +135,6 @@ const selectHandler = (value) => {
 		return false;
 	}
 	if (value.item.repo_id) {
-		store.showUploadModal = false;
 		changeItemMenu(value.item.label, value.item.id, value.item);
 	} else {
 		seahubStore.setRepoId({ id: '', name: '' });

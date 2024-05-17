@@ -10,8 +10,7 @@ import {
 import { useSeahubStore } from '../stores/seahub';
 import { formatAppDataNode } from '../utils/appdata';
 import { seahubGetRepos } from './sync';
-// import { notifyHide } from '../utils/notifyRedefinedUtil';
-// let notif = null;
+import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
 
 import axios from 'axios';
 
@@ -23,14 +22,6 @@ export async function fetch(url, loading, curItem) {
 	url = decodeURIComponent(removePrefix(url));
 
 	let res = '';
-
-	// notif && notif();
-	// notifyHide();
-
-	// if (loading) {
-	// 	notifyWaitingShow('Data Loading...');
-	// }
-
 	let data;
 
 	try {
@@ -151,6 +142,14 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 		}
 		res = await fetchURL(`/api/paste${fromUrl}`, opts);
 	}
+
+	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {
+		return BtNotify.show({
+			type: NotifyDefinedType.FAILED,
+			message: res.data.split('\n')[0]
+		});
+	}
+
 	return res;
 }
 
