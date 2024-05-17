@@ -130,6 +130,8 @@ export class TermiPassState {
 
 	private srpTokenCheck = false;
 
+	private srpTokenChecking = false;
+
 	private appIsActive = true;
 
 	private getVPNHostPeerInfoCount = 0;
@@ -310,6 +312,12 @@ export class TermiPassState {
 				return;
 			}
 
+			if (this.srpTokenChecking) {
+				return;
+			}
+
+			this.srpTokenChecking = true;
+
 			this.srpTokenCheck = false;
 			const termipassStore = useTermipassStore();
 
@@ -337,6 +345,7 @@ export class TermiPassState {
 						result: checkResult,
 						checkItem: 'srpToken'
 					});
+					this.srpTokenChecking = false;
 					return;
 				}
 			}
@@ -393,6 +402,7 @@ export class TermiPassState {
 				result: checkResult,
 				checkItem: 'srpToken'
 			});
+			this.srpTokenChecking = false;
 		},
 		getTerminusInfo: async (addHistory = false, isPing = false) => {
 			if (this.stateMachine.state() < TermipassActionStatus.UserSetupFinished) {
@@ -447,7 +457,7 @@ export class TermiPassState {
 			} catch (e) {
 				const termipassStore = useTermipassStore();
 				checkResult.description = e.message;
-				if (e.response || process.env.PLATFORM == 'BEX') {
+				if (!isPing && (e.response || process.env.PLATFORM == 'BEX')) {
 					if (
 						process.env.PLATFORM == 'BEX' ||
 						e.response.status == 525 ||

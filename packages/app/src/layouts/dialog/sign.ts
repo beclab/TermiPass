@@ -8,7 +8,7 @@ import { PrivateJwk, GetResponseResponse } from '@bytetrade/core';
 import { PrivateKey } from '@trustwallet/wallet-core/dist/src/wallet-core';
 
 import { i18n } from '../../boot/i18n';
-import { TermipassConfig } from '../../utils/constants';
+import { TermipassConfig } from '../../utils/config';
 
 function getFullyQualifiedVerificationMethodID(did: string): string {
 	const [, , id] = did.split(':');

@@ -683,21 +683,21 @@ module.exports = configure(function (ctx) {
 					signIgnore: ['./Library/*']
 				},
 				afterSign: async (context) => {
-					const { electronPlatformName, appOutDir } = context;
-					if (electronPlatformName !== 'darwin') {
-						return;
-					}
-					const macosConfig = require('./build/mac/notarize');
-					console.log('macos notarize');
-					const appName = context.packager.appInfo.productFilename;
-					return await notarize({
-						appBundleId: 'com.terminus.planetam',
-						appPath: `${appOutDir}/${appName}.app`,
-						appleId: macosConfig.appleId,
-						appleIdPassword: macosConfig.appleIdPassword,
-						tool: 'notarytool',
-						teamId: macosConfig.teamId
-					});
+					// const { electronPlatformName, appOutDir } = context;
+					// if (electronPlatformName !== 'darwin') {
+					// 	return;
+					// }
+					// const macosConfig = require('./build/mac/notarize');
+					// console.log('macos notarize');
+					// const appName = context.packager.appInfo.productFilename;
+					// return await notarize({
+					// 	appBundleId: 'com.terminus.planetam',
+					// 	appPath: `${appOutDir}/${appName}.app`,
+					// 	appleId: macosConfig.appleId,
+					// 	appleIdPassword: macosConfig.appleIdPassword,
+					// 	tool: 'notarytool',
+					// 	teamId: macosConfig.teamId
+					// });
 				},
 				win: {
 					// target: 'nsis',

@@ -6,7 +6,7 @@ import { updateUIToAddWeb } from '../addItem';
 import { addAxiosProxyGlobalRequestInterceptor } from '../../httpProxy';
 import AndroidPlugins from './androidPlugins';
 import { useUserStore } from '../../../stores/user';
-import { TermipassConfig } from 'src/utils/constants';
+import { TermipassConfig } from '../../../utils/config';
 
 export enum AUTO_FILL_TYPE {
 	FRAMEWORK = 'AUTOFILL_FRAMEWORK',
