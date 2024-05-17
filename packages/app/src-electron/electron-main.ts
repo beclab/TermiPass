@@ -9,17 +9,17 @@ import { registerStoreService } from './store/main';
 import { registerTransferService } from './transfer/main';
 import { registerWindowsService } from './windows/main';
 import { registerSettingsService } from './settings/main';
-import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
+// import { updateElectronApp, UpdateSourceType } from 'update-electron-app';
 
-updateElectronApp({
-	updateInterval: '1 hour',
-	logger: require('electron-log'),
-	updateSource: {
-		type: UpdateSourceType.ElectronPublicUpdateService,
-		repo: 'beclab/TermiPass',
-		host: 'https://update.electronjs.org'
-	}
-});
+// updateElectronApp({
+// 	updateInterval: '1 hour',
+// 	logger: require('electron-log'),
+// 	updateSource: {
+// 		type: UpdateSourceType.ElectronPublicUpdateService,
+// 		repo: 'beclab/TermiPass',
+// 		host: 'https://update.electronjs.org'
+// 	}
+// });
 
 // 禁用 Electron 的 crashReporter
 app.commandLine.appendSwitch('disable-renderer-backgrounding');

@@ -145,10 +145,6 @@ export enum SortTpe {
 	modified = 'modify'
 }
 
-export const TermipassConfig = {
-	jwt_payload_nbf_sub_second: 0
-};
-
 export {
 	name,
 	disableExternal,
