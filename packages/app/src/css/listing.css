@@ -97,9 +97,6 @@ body.rtl #listing {
 
 #listing.mosaic {
 	padding-top: 1em;
-	margin: 0 -0.5em;
-	padding-left: 2rem;
-	padding-right: 2rem;
 }
 
 #listing.mosaic .item {
@@ -223,8 +220,8 @@ body.rtl #listing {
 	float: left;
 	width: calc(100% - 380px);
 	overflow: hidden;
-  text-overflow:ellipsis;
-  white-space: nowrap;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 #listing.list .item .size {

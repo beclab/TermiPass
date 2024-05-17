@@ -26,7 +26,7 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 	}
 	const instance = axiosInstanceProxy({
 		baseURL: baseURL,
-		timeout: opts.timeout || 10000
+		timeout: opts.timeout || 100000
 	});
 	headers = {
 		'Access-Control-Allow-Origin': '*',

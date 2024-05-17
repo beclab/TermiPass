@@ -1,5 +1,10 @@
 <template>
-	<div class="uploadModal">
+	<div
+		class="uploadModal"
+		:style="{
+			visibility: dataState.hideSyncUploadModal ? 'hidden' : 'visible'
+		}"
+	>
 		<div class="uploadHeader row items-center justify-between">
 			<div class="row items-center justify-center" v-if="!allFilesUploaded">
 				<img
@@ -159,7 +164,12 @@ const closeUploadModal = () => {
 	}, 300);
 };
 
-const forWord = async (item: { relativePath: any }) => {
+const forWord = async (item: {
+	url: string;
+	fileName: string;
+	path: string;
+	relativePath: any;
+}) => {
 	item.url = route.path + item.fileName;
 	item.path = route.path.slice(6) + item.fileName + '/';
 	item = await seahub.formatFileContent(item);

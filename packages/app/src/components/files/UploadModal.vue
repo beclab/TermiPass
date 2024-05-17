@@ -1,5 +1,9 @@
 <template>
-	<div class="uploadModal" v-if="showUploadModal">
+	<div
+		class="uploadModal"
+		v-if="showUploadModal && !store.hideUploadModal"
+		:style="{ visibility: store.hideUploadModal ? 'hidden' : 'visible' }"
+	>
 		<div class="uploadHeader row items-center justify-between">
 			<div
 				class="row items-center justify-center"
@@ -199,6 +203,7 @@ export default defineComponent({
 			forWord,
 			filesIcon,
 			closeUploadModal,
+			store,
 			showUpload,
 			uploadSrore,
 			uploadQueue,
