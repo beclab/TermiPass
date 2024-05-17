@@ -13,7 +13,7 @@ import {
 import { VaultItem, VaultType, uuid } from '@didvault/sdk/src/core';
 import { i18n } from 'src/boot/i18n';
 import { GeneralJwsSigner } from 'src/jose/jws/general/signer';
-import { TermipassConfig } from './constants';
+import { TermipassConfig } from './config';
 
 export interface VCCardInfo {
 	type: string;
