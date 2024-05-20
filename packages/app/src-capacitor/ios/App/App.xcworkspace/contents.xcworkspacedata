@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "group:shell"
+      name = "shell">
+      <FileRef
+         location = "group:build_config.txt">
+      </FileRef>
+      <FileRef
+         location = "group:build.sh">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:BundleResources/BundleResources.xcodeproj">
    </FileRef>

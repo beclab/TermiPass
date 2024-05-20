@@ -137,7 +137,6 @@ const handleItem = (label: string) => {
 	}
 };
 
-/// 监听Route 显示/隐藏 底部导航栏
 watch(
 	() => route.meta,
 	() => {

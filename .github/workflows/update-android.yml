@@ -53,6 +53,12 @@ jobs:
             - run: npm i -g @quasar/cli
             - run: npm install
 
+            - name: Update Package Json
+              run: node updateVersion.js 
+              working-directory: ./packages/app/build/
+              env:
+                TAG_VERSION: ${{ steps.get-version.outputs.version }}
+
             - name: Build
               run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T android
 

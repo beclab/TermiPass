@@ -440,9 +440,7 @@ export class TermiPassState {
 						'Content-Type': 'application/json'
 					}
 				});
-				const data = await instance.get(baseUrl + '/api/terminus-info', {
-					timeout: 5000
-				});
+				const data = await instance.get(baseUrl + '/api/terminus-info', {});
 				const terminusInfo: TerminusInfo = data.data.data;
 
 				termipassStore.reactivation = false;

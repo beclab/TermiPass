@@ -143,7 +143,7 @@ const onConfirm = async () => {
 		await userStore.save();
 
 		if (process.env.PLATFORM == 'DESKTOP') {
-			router.replace({ path: '/Files/Home' });
+			router.replace({ path: '/Files/Home/' });
 		} else {
 			router.replace({ path: '/home' });
 		}

@@ -67,6 +67,16 @@ jobs:
                 npm install
             - run: npm i -g @quasar/cli
 
+            - name: Update Package Json
+              run: node updateVersion.js 
+              working-directory: ./packages/app/build/
+              env:
+                TAG_VERSION: ${{ steps.get-version.outputs.version }}
+
+            - name: Setup plist version
+              run: chmod +x config.sh; ./config.sh
+              working-directory: ./packages/app/src-capacitor/ios/app/shell
+
             - name: Build iOS
               run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T ios --skip-pkg
 
