@@ -54,10 +54,6 @@ jobs:
                 npm install
             - run: npm i -g @quasar/cli
             
-            - name: Get package version
-              id: get-version
-              run: echo "::set-output name=version::$(node -e 'console.log(require("./packages/app/package.json").version)')"
-
             - name: Install the Apple certificate and provisioning profile
               env:
                 BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_DEVELOPER_ID_CERTIFICATE_BASE64 }}
@@ -106,6 +102,10 @@ jobs:
 
             - name: Show
               run: ls -a packages/app/dist/electron/Packaged/
+            
+            - name: Get package version
+              id: get-version
+              run: echo "::set-output name=version::$(node -e 'console.log(require("./packages/app/package.json").version)')"
 
             - name: Release dmg
               uses: djnicholson/release-action@v2.11
