@@ -12,11 +12,18 @@ module.exports = class UpdatePackageVersionByLatestTag {
 			() => {
 				console.log('this.paths ===>');
 				console.log(this.paths);
-				const latestTag = execSync(
-					'git describe --tags `git rev-list --tags --max-count=1`'
-				)
-					.toString()
-					.replace('\n', '');
+				let latestTag = '';
+				try {
+					latestTag = execSync(
+						'git describe --tags `git rev-list --tags --max-count=1`'
+					)
+						.toString()
+						.replace('\n', '');
+				} catch (error) {
+					console.log('get latestTag error');
+					console.log(error);
+					return;
+				}
 				console.log(latestTag);
 
 				const regex = /^v(\d+)\.(\d+)\.(\d+)$/;
