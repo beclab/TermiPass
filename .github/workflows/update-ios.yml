@@ -68,17 +68,16 @@ jobs:
             - run: npm i -g @quasar/cli
 
             - name: Update Package Json
-              run: node updateVersion.js 
+              run: node updateVersion.js;node updateCapacitorVersion.js;
               working-directory: ./packages/app/build/
               env:
                 TAG_VERSION: ${{ steps.get-version.outputs.version }}
 
-            - name: Setup plist version
-              run: chmod +x config.sh; ./config.sh
-              working-directory: ./packages/app/src-capacitor/ios/app/shell
-
             - name: Build iOS
-              run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T ios --skip-pkg
+              run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T ios --skip-pkg; 
+
+            - name: Setup plist version
+              run: cd packages/app/src-capacitor/ios/app/shell/;chmod +x config.sh; ./config.sh;
 
             - name: Install the Apple certificate and provisioning profile
               env:

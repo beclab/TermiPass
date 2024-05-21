@@ -54,7 +54,7 @@ jobs:
             - run: npm install
 
             - name: Update Package Json
-              run: node updateVersion.js 
+              run: node updateVersion.js;node updateCapacitorVersion.js;
               working-directory: ./packages/app/build/
               env:
                 TAG_VERSION: ${{ steps.get-version.outputs.version }}

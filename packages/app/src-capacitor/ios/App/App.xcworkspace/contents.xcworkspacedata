@@ -5,10 +5,10 @@
       location = "group:shell"
       name = "shell">
       <FileRef
-         location = "group:build_config.txt">
+         location = "group:config.sh">
       </FileRef>
       <FileRef
-         location = "group:build.sh">
+         location = "group:build_config.txt">
       </FileRef>
    </Group>
    <FileRef
