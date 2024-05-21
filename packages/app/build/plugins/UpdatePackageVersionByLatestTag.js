@@ -12,11 +12,7 @@ module.exports = class UpdatePackageVersionByLatestTag {
 			() => {
 				console.log('this.paths ===>');
 				console.log(this.paths);
-				const latestTagCommit = execSync(`git rev-list --tags --max-count=1`)
-					.toString()
-					.replace('\n', '');
-				console.log('latestTagCommit ===>', latestTagCommit);
-				const latestTag = execSync(`git describe --tags ${latestTagCommit}`)
+				const latestTag = execSync(`git describe --tags --abbrev=0`)
 					.toString()
 					.replace('\n', '');
 				console.log(latestTag);
