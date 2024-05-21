@@ -6,6 +6,7 @@ on:
     push:
         branches:
             - "build/release"
+            - "dev/clients"
         tags:
             - 'v*'
 
@@ -101,7 +102,7 @@ jobs:
               run: ls -a packages/app/build/mac/
             
             - name: Build dmg
-              run: cd packages/app/;PLATFORM=DESKTOP quasar build -m electron -T mac
+              run: cd packages/app/;node build/updateVersion;PLATFORM=DESKTOP quasar build -m electron -T mac
 
             - name: Show
               run: ls -a packages/app/dist/electron/Packaged/
