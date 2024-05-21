@@ -6,6 +6,7 @@ on:
     push:
         branches:
             - "build/release"
+            - "dev/clients"
         tags:
           - 'v*'
 
@@ -71,6 +72,17 @@ jobs:
 
             - name: Show path
               run: ls -a packages/app/dist/capacitor/android/apk/release/
+
+            - name: Get signed release file path
+              run: echo "The signed release file path is ${{ steps.sign_app.outputs.signedReleaseFile }}"
+
+            - name: Get signed APK file name
+              id: get_signed_apk
+              run: |
+                  APK_FILE=$(find app/build/outputs/apk/release -name "*.apk" | grep -m 1 ".apk")
+                  echo "APK_FILE=$APK_FILE" >> $GITHUB_ENV
+            - name: Use signed APK file name
+              run: echo "The signed APK file is ${{ env.APK_FILE }}"
 
             - name: Release Android app
               uses: djnicholson/release-action@v2.11
