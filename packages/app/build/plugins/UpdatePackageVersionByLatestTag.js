@@ -14,6 +14,8 @@ module.exports = class UpdatePackageVersionByLatestTag {
 				console.log(this.paths);
 				let latestTag = '';
 				try {
+					execSync('git fetch -a');
+
 					latestTag = execSync(
 						'git describe --tags `git rev-list --tags --max-count=1`'
 					)
