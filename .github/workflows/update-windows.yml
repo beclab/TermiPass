@@ -6,6 +6,7 @@ on:
     push:
         branches:
             - "build/release"
+            - "dev/clients"
         tags:
           - 'v*'
 
@@ -54,7 +55,7 @@ jobs:
               working-directory: ./packages/app
               
             - name: Build
-              run: quasar build -m electron -T win
+              run: node build/updateVersion;quasar build -m electron -T win
               working-directory: ./packages/app
               env:
                 PLATFORM: DESKTOP
