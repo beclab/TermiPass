@@ -53,12 +53,6 @@ jobs:
                 npm install
             - run: npm i -g @quasar/cli
             
-            - name: Update Package Json
-              run: node updateVersion.js 
-              working-directory: ./packages/app/build/
-              env:
-                TAG_VERSION: ${{ steps.get-version.outputs.version }}
-
             - name: Get package version
               id: get-version
               run: echo "::set-output name=version::$(node -e 'console.log(require("./packages/app/package.json").version)')"

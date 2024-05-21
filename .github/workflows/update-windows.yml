@@ -52,12 +52,6 @@ jobs:
             - name: format
               run: npm run format
               working-directory: ./packages/app
-
-            - name: Update Package Json
-              run: node updateVersion.js 
-              working-directory: ./packages/app/build/
-              env:
-                TAG_VERSION: ${{ steps.get-version.outputs.version }}
               
             - name: Build
               run: quasar build -m electron -T win

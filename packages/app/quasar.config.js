@@ -164,6 +164,18 @@ module.exports = configure(function (ctx) {
 
 				chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
 
+				if (isMobile || isElectron || isBex) {
+					const updatePackageVersionByLatestTag = require('./build/plugins/UpdatePackageVersionByLatestTag');
+					chain
+						.plugin('update-package-json')
+						.use(updatePackageVersionByLatestTag, [['src-bex/manifest.json']]);
+				}
+
+				if (isMobile) {
+					const CapacitorUpdateVersionCode = require('./build/plugins/CapacitorUpdateVersionCode');
+					chain.plugin('update-package-json').use(CapacitorUpdateVersionCode);
+				}
+
 				if (!ctx.dev) {
 					// if (!isBex) {
 					// 	chain.optimization.minimizer('js').tap((args) => {
