@@ -16,9 +16,11 @@ module.exports = class UpdatePackageVersionByLatestTag {
 				try {
 					execSync('git fetch -a');
 
-					latestTag = execSync(
-						'git describe --tags `git rev-list --tags --max-count=1`'
-					)
+					const lastCommit = execSync('git rev-list --tags --max-count=1')
+						.toString()
+						.replace('\n', '');
+
+					latestTag = execSync(`git describe --tags ${lastCommit}`)
 						.toString()
 						.replace('\n', '');
 				} catch (error) {
