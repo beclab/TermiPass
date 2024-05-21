@@ -6,7 +6,7 @@ module.exports = class CapacitorUpdateVersionCode {
 	apply(compiler) {
 		compiler.hooks.environment.tap('CapacitorUpdateVersionCode', () => {
 			const tagsOutput = execSync('git tag').toString();
-			const numberOfTags = tagsOutput.trim().split('\n').length + 10;
+			const numberOfTags = tagsOutput.trim().split('\n').length;
 
 			const capacitorPackageJsonUrl = path.join(
 				process.cwd(),

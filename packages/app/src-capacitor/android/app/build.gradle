@@ -1,3 +1,5 @@
+import groovy.json.JsonSlurper
+
 apply plugin: 'com.android.application'
 
 static def gitVersionCode() {
@@ -25,6 +27,24 @@ static def buildTime() {
     return new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone("GMT+8",))
 }
 
+def getPackageVersionCode() {
+    def packageJsonFile = file('../../package.json')
+    //logger.lifecycle(packageJsonFile.text)
+    Map myJson =  new JsonSlurper().parseText(packageJsonFile.text)
+    def result = Integer.parseInt(myJson.get('versionCode')) + rootProject.ext.resubmitVersion
+    logger.lifecycle("packageCode: ${myJson.get('versionCode')} resubmitVersion : ${rootProject.ext.resubmitVersion}")
+    logger.lifecycle("versionCode: ${result}")
+    return result
+}
+
+def getPackageVersionName() {
+    def packageJsonFile = file('../../package.json')
+    Map myJson =  new JsonSlurper().parseText(packageJsonFile.text)
+    def result = myJson.get('version').toString()
+    logger.lifecycle("versionName: ${result}")
+    return result
+}
+
 android {
     namespace "com.terminus.planeta"
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -32,10 +52,10 @@ android {
         applicationId "com.terminus.planeta"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode gitVersionCode()
-        versionName gitVersionTag()
+        versionCode getPackageVersionCode()
+        versionName getPackageVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        setProperty("archivesBaseName", "TermiPass_${versionCode}_${versionName}_${buildTime()}")
+        setProperty("archivesBaseName", "TermiPass_${versionCode}_v${versionName}_${buildTime()}")
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
@@ -77,13 +97,6 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding true
-    }
-
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            output.setVersionNameOverride(gitVersionTag())
-            output.setVersionCodeOverride(gitVersionCode())
-        }
     }
 }
 
