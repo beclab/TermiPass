@@ -141,7 +141,8 @@
 		"workbox-sw": "6.1.5",
 		"workbox-window": "6.1.5",
 		"zxcvbn": "4.4.2",
-		"@tigerconnect/ffi-napi": "^4.0.3-tc3"
+		"@tigerconnect/ffi-napi": "^4.0.3-tc3",
+		"node-gyp-build": "4.7.1"
 	},
 	"devDependencies": {
 		"@electron/notarize": "^2.3.0",

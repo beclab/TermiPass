@@ -16,6 +16,7 @@ jobs:
             - name: Check out the repo
               uses: actions/checkout@v3
 
+
             - name: Set up JDK 17
               uses: actions/setup-java@v3
               with:
@@ -53,6 +54,7 @@ jobs:
             - run: npm i -g @quasar/cli
             - run: npm install
 
+
             - name: Build
               run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T android
 
@@ -71,11 +73,28 @@ jobs:
             - name: Show path
               run: ls -a packages/app/dist/capacitor/android/apk/release/
 
+            - name: Get signed release file path and extract filename
+              id: get_signed_release_file_and_filename
+              run: |
+                SIGNED_RELEASE_FILE=${{ steps.sign_app.outputs.signedReleaseFile }}
+                echo "SIGNED_RELEASE_FILE=${SIGNED_RELEASE_FILE}" >> $GITHUB_ENV
+                FILENAME=$(basename "${SIGNED_RELEASE_FILE}")
+                echo "FILENAME=${FILENAME}" >> $GITHUB_ENV
+
+            - name: Rename signed APK
+              run: |
+                ORIGINAL_FILE=${{ env.SIGNED_RELEASE_FILE }}
+                RENAMED_FILE=$(echo "$ORIGINAL_FILE" | sed 's/-release-unsigned-signed//')
+                mv "$ORIGINAL_FILE" "$RENAMED_FILE"
+                echo "RENAMED_FILE=$RENAMED_FILE" >> $GITHUB_ENV
+                RENAMED_FILENAME=$(basename "${RENAMED_FILE}")
+                echo "RENAMED_FILENAME=${RENAMED_FILENAME}" >> $GITHUB_ENV
+
             - name: Release Android app
               uses: djnicholson/release-action@v2.11
               with:
                 token: ${{ secrets.GITHUB_TOKEN }}
                 release-name: TermiPass-apk Release
                 tag-name: ${{ steps.get-latest-tag.outputs.tag }}
-                asset-name: TermiPass.apk
-                file: ${{steps.sign_app.outputs.signedReleaseFile}}
+                asset-name: ${{ env.RENAMED_FILENAME }}
+                file: ${{ env.RENAMED_FILE }}

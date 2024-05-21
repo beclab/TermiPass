@@ -1,4 +1,49 @@
+import groovy.json.JsonSlurper
+
 apply plugin: 'com.android.application'
+
+static def gitVersionCode() {
+    def cmd = 'git tag --list'
+    cmd.execute().text.trim().split("\n").size()
+}
+
+static def gitVersionTag() {
+    def cmd = 'git describe --tags'
+    def version = cmd.execute().text.trim()
+
+    def pattern = "-(\\d+)-g"
+    def matcher = version =~ pattern
+
+    if (matcher) {
+        version = version.substring(0, matcher.start()) + "." + matcher[0][1]
+    } else {
+        version = version + ".0"
+    }
+
+    return version
+}
+
+static def buildTime() {
+    return new Date().format("yyyy-MM-dd_HH-mm", TimeZone.getTimeZone("GMT+8",))
+}
+
+def getPackageVersionCode() {
+    def packageJsonFile = file('../../package.json')
+    //logger.lifecycle(packageJsonFile.text)
+    Map myJson =  new JsonSlurper().parseText(packageJsonFile.text)
+    def result = Integer.parseInt(myJson.get('versionCode')) + rootProject.ext.resubmitVersion
+    logger.lifecycle("packageCode: ${myJson.get('versionCode')} resubmitVersion : ${rootProject.ext.resubmitVersion}")
+    logger.lifecycle("versionCode: ${result}")
+    return result
+}
+
+def getPackageVersionName() {
+    def packageJsonFile = file('../../package.json')
+    Map myJson =  new JsonSlurper().parseText(packageJsonFile.text)
+    def result = myJson.get('version').toString()
+    logger.lifecycle("versionName: ${result}")
+    return result
+}
 
 android {
     namespace "com.terminus.planeta"
@@ -7,9 +52,10 @@ android {
         applicationId "com.terminus.planeta"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        versionCode getPackageVersionCode()
+        versionName getPackageVersionName()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        setProperty("archivesBaseName", "TermiPass_${versionCode}_v${versionName}_${buildTime()}")
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
@@ -52,21 +98,6 @@ android {
         buildConfig = true
         viewBinding true
     }
-
-    applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                if (variant.buildType.name == 'debug' || variant.buildType.name == 'release') {
-                    outputFileName = "TermiPass_${variant.buildType.name}_v${variant.versionCode}_${buildTime()}.apk"
-                }
-            }
-        }
-    }
-}
-
-static def buildTime() {
-    return new Date().format("yyyy-MM-dd HH:mm", TimeZone.getTimeZone("GMT+8",))
 }
 
 repositories {

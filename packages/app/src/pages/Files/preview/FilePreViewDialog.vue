@@ -81,7 +81,7 @@
 					>
 					</BtLoading>
 					<template v-else>
-						<component :is="currentView"></component>
+						<component :is="currentView" v-if="reloadFinished"></component>
 					</template>
 
 					<button
@@ -124,6 +124,7 @@ import { files as api, seahub } from '../../../api';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
 import { checkSeahub } from '../../../utils/file';
+import { nextTick } from 'process';
 
 const dialog = ref(false);
 
@@ -142,6 +143,7 @@ const $router = useRouter();
 const size = ref(humanStorageSize(store.req.size ?? 0));
 
 const currentView = ref();
+const reloadFinished = ref(true);
 
 const $q = useQuasar();
 
@@ -272,6 +274,7 @@ watch(
 		}
 		title.value = store.req.name;
 		currentView.value = undefined;
+		reloadFinished.value = false;
 
 		if (
 			newVal.type === 'text' ||
@@ -279,7 +282,7 @@ watch(
 			newVal.type === 'textImmutable'
 		) {
 			store.preview.isEditEnable = true;
-			return (currentView.value = FileEditor);
+			currentView.value = FileEditor;
 		} else {
 			store.preview.isEditEnable = false;
 
@@ -294,11 +297,14 @@ watch(
 				newVal.type == 'pdf'
 			) {
 				isDark.value = true;
-				return (currentView.value = FilePreview);
+				currentView.value = FilePreview;
+			} else {
+				currentView.value = FileUnavailable;
 			}
-
-			return (currentView.value = FileUnavailable);
 		}
+		nextTick(() => {
+			reloadFinished.value = true;
+		});
 	},
 	{
 		deep: true

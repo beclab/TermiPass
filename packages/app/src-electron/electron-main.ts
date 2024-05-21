@@ -21,7 +21,6 @@ import { registerSettingsService } from './settings/main';
 // 	}
 // });
 
-// 禁用 Electron 的 crashReporter
 app.commandLine.appendSwitch('disable-renderer-backgrounding');
 app.commandLine.appendSwitch('disable-background-timer-throttling');
 app.commandLine.appendSwitch('disable-renderer-process-reuse');
