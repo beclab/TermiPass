@@ -8,7 +8,7 @@ module.exports = class CapacitorUpdateVersionCode {
 			try {
 				const tagsOutput = execSync('git tag').toString();
 				const numberOfTags = tagsOutput.trim().split('\n').length;
-
+				console.log('numberOfTags ===>', numberOfTags);
 				if (numberOfTags < 10) {
 					return;
 				}

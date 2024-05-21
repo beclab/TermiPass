@@ -6,10 +6,8 @@ on:
     push:
         branches:
             - "build/release"
-            - "dev/clients"
         tags:
           - 'v*'
-          - 'test*'
 
 jobs:
     update_chrome_extension:

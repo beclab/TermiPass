@@ -6,7 +6,7 @@ on:
     push:
         branches:
             - "build/release"
-            # - "dev/clients"
+            - "dev/clients"
         tags:
           - 'v*'
 
