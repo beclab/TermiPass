@@ -58,7 +58,7 @@ jobs:
               run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T android --skip-pkg
 
             - name: Build unsigned apk
-              run: cd src-capacitor/android;./gradlew assembleRelease
+              run: cd packages/app/src-capacitor/android;./gradlew assembleRelease
 
             - uses: r0adkll/sign-android-release@v1
               name: Sign app
