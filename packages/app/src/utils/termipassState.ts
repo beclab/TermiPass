@@ -460,7 +460,8 @@ export class TermiPassState {
 						process.env.PLATFORM == 'BEX' ||
 						e.response.status == 525 ||
 						e.response.status == 522 ||
-						e.response.status == 530
+						e.response.status == 530 ||
+						e.response.status > 1000
 					) {
 						if (this.currentUser.tailscale_activated) {
 							const scaleStore = useScaleStore();
