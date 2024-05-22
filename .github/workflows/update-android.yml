@@ -49,20 +49,21 @@ jobs:
                 key: ${{ runner.os }}-node-${{ hashFiles('**/packagge-lock.json')}}
                 restore-keys: |
                     ${{ runner.os }}-node-
-
             
             - run: npm i -g @quasar/cli
             - run: npm install
 
+            - name: Build resource
+              run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T android --skip-pkg
 
-            - name: Build
-              run: cd packages/app/;PLATFORM=MOBILE quasar build -m capacitor -T android
+            - name: Build unsigned apk
+              run: cd packages/app/src-capacitor/android;./gradlew assembleRelease
 
             - uses: r0adkll/sign-android-release@v1
               name: Sign app
               id: sign_app
               with:
-                releaseDirectory: packages/app/dist/capacitor/android/apk/release
+                releaseDirectory: packages/app/src-capacitor/android/app/build/outputs/apk/release
                 signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
                 alias: ${{ secrets.ANDROID_ALIAS }}
                 keyStorePassword: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
@@ -71,7 +72,7 @@ jobs:
                 BUILD_TOOLS_VERSION: "33.0.1"
 
             - name: Show path
-              run: ls -a packages/app/dist/capacitor/android/apk/release/
+              run: ls -a packages/app/src-capacitor/android/app/build/outputs/apk/release
 
             - name: Get signed release file path and extract filename
               id: get_signed_release_file_and_filename
