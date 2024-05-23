@@ -54,7 +54,7 @@ jobs:
               working-directory: ./packages/app
               
             - name: Build
-              run: node build/updateVersion;quasar build -m electron -T win
+              run: quasar build -m electron -T win
               working-directory: ./packages/app
               env:
                 PLATFORM: DESKTOP
