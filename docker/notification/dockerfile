@@ -5,16 +5,16 @@ WORKDIR /server_dist
 # Only copy over the packages files of all required packages.
 # This will ensure that we don't have to install all dependencies
 # again if any source files change.
-COPY ../../package*.json ../../lerna.json ../../tsconfig.json ./
-COPY ../../packages/notification/package*.json ./packages/notification/
+COPY package*.json lerna.json tsconfig.json ./
+COPY packages/notification/package*.json ./packages/notification/
 # Install dependencies and bootstrap packages
 RUN npm ci --unsafe-perm
 
 # Now copy over source files and assets
-COPY ../../packages/notification/src ./packages/notification/src
-COPY ../../packages/notification/tsconfig.json ./packages/notification/
-COPY ../../assets/ ./assets
-COPY ../../packages/notification/webpack.config.js ./packages/notification/webpack.config.js
+COPY packages/notification/src ./packages/notification/src
+COPY packages/notification/tsconfig.json ./packages/notification/
+COPY assets/ ./assets
+COPY packages/notification/webpack.config.js ./packages/notification/webpack.config.js
 
 RUN npm run notification:build
 
