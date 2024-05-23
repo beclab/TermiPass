@@ -1,6 +1,6 @@
 {
   "name": "@didvault/app",
-  "version": "0.4.61",
+  "version": "0.4.63",
   "description": "DID APP",
   "author": "TermiPass <billpengpeng@gmail.com>",
   "private": true,
@@ -24,5 +24,5 @@
     "@capgo/capacitor-native-biometric": "^5.0.1",
     "@codetrix-studio/capacitor-google-auth": "^3.3.6"
   },
-  "versionCode": "14"
+  "versionCode": "13"
 }
