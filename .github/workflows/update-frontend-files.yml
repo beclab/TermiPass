@@ -46,6 +46,6 @@ jobs:
               uses: docker/build-push-action@v2
               with:
                 context: .
-                file: docker_files/Dockerfile-frontend
+                file: docker/Dockerfile-frontend
                 push: true
                 tags: beclab/files-frontend:${{ steps.get-latest-tag.outputs.tag }}

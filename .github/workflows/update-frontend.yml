@@ -48,6 +48,6 @@ jobs:
               uses: docker/build-push-action@v2
               with:
                 context: .
-                file: docker_files/Dockerfile-vault
+                file: docker/Dockerfile-vault
                 push: true
                 tags: beclab/vault-frontend:${{ steps.get-latest-tag.outputs.tag }}
