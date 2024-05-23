@@ -1,9 +1,7 @@
 package com.terminus.planeta.plugins
 
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.terminus.planeta.accessibility.AccessibilityHelper.tempCredential
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.PluginMethod
@@ -27,35 +25,20 @@ import com.terminus.planeta.utils.Constants
 class AccessibilityPlugin : Plugin() {
 
     private val TAG: String = AutofillFrameworkPlugin::class.java.simpleName
-    private lateinit var receiver: IntentReceiver
 
-    override fun load() {
-        receiver = IntentReceiver(Constants.ACTION_AUTOFILL_ACCESSIBILITY,
-            object : OnSendIntentDataListener {
-                override fun onSendData(json: JSObject) {
-                    notifyListeners("onAutofillAccessibility", json, true)
+    override fun handleOnNewIntent(intent: Intent?) {
+        super.handleOnNewIntent(intent)
+        intent?.let {
+            if (Constants.ACTION_AUTOFILL_ACCESSIBILITY == it.action) {
+                val json = JSObject().apply {
+                    put(
+                        Constants.AUTOFILL_EXTRA_URI,
+                        intent.getStringExtra(Constants.AUTOFILL_EXTRA_URI)
+                    )
                 }
-
-            },
-            object : OnHandleIntentListener {
-                override fun onHandleIntent(intent: Intent): JSObject {
-                    return JSObject().apply {
-                        put(
-                            Constants.AUTOFILL_EXTRA_URI,
-                            intent.getStringExtra(Constants.AUTOFILL_EXTRA_URI)
-                        )
-                    }
-                }
-
-            })
-        LocalBroadcastManager.getInstance(context).registerReceiver(receiver, IntentFilter(Constants.ACTION_AUTOFILL_ACCESSIBILITY))
-    }
-
-    override fun handleOnDestroy() {
-        receiver.let {
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver)
+                notifyListeners("onAutofillAccessibility", json, true)
+            }
         }
-        super.handleOnDestroy()
     }
 
     @PluginMethod
