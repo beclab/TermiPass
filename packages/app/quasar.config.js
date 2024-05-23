@@ -12,7 +12,9 @@
 const path = require('path');
 const fs = require('fs');
 const { configure } = require('quasar/wrappers');
-const { notarize } = require('@electron/notarize');
+
+const macConfig = require('./build/electron/mac/buildConfig');
+const winConfig = require('./build/electron/win/buildConfig');
 
 const extensionPlaceholder = 'webos_app_plugin_id';
 
@@ -154,15 +156,13 @@ module.exports = configure(function (ctx) {
 			// "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
 			chainWebpack(chain) {
 				const nodePolyfillWebpackPlugin = require('node-polyfill-webpack-plugin');
+				chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
 
 				const CopyWebpackPlugin = require('./build/plugins/CopyFilePlugin');
-				//let packagePath = '';
 				let wasmRoot = `./dist/${ctx.modeName}/`;
 				const isBex = ctx.modeName === 'bex';
 				const isMobile = ctx.modeName === 'capacitor';
 				const isElectron = ctx.modeName === 'electron';
-
-				chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
 
 				if (!ctx.dev) {
 					if (isMobile || isBex) {
@@ -652,234 +652,15 @@ module.exports = configure(function (ctx) {
 
 		// Full list of options: https://v2.quasar.dev/quasar-cli-webpack/developing-electron-apps/configuring-electron
 		electron: {
-			bundler: 'builder', // 'packager' or 'builder'
-
-			packager: {
-				// https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-				// OS X / Mac App Store
-				// appBundleId: '',
-				// appCategoryType: '',
-				// osxSign: '',
-				// protocol: 'myapp://path',
-				// Windows only
-				// win32metadata: { ... }
-			},
+			bundler: 'builder',
 
 			builder: {
 				// https://www.electron.build/configuration/configuration
 				appId: 'com.terminus.planetam',
-				mac: {
-					target: ['dmg', 'zip'],
-					minimumSystemVersion: '10.15',
-					asar: true,
-					extraFiles: [
-						{
-							from: './build/mac/Library/',
-							to: 'Library/'
-						},
-						{
-							from: './build/mac/Frameworks/',
-							to: 'Frameworks/'
-						},
-						{
-							from: './build/mac/Resources/',
-							to: 'Resources/'
-						}
-					],
-					provisioningProfile: 'build/mac/PlanetaMacDev.provisionprofile',
-					entitlements: 'build/mac/entitlements.mac.plist',
-					entitlementsInherit: 'build/mac/entitlements.mac.inherit.plist',
-					hardenedRuntime: true,
-					asarUnpack: ['./*.node'],
-					signIgnore: ['./Library/*']
-				},
-				afterSign: async (context) => {
-					const { electronPlatformName, appOutDir } = context;
-					if (electronPlatformName !== 'darwin') {
-						return;
-					}
-					const macosConfig = require('./build/mac/notarize');
-					console.log('macos notarize');
-					const appName = context.packager.appInfo.productFilename;
-					return await notarize({
-						appBundleId: 'com.terminus.planetam',
-						appPath: `${appOutDir}/${appName}.app`,
-						appleId: macosConfig.appleId,
-						appleIdPassword: macosConfig.appleIdPassword,
-						tool: 'notarytool',
-						teamId: macosConfig.teamId
-					});
-				},
-				win: {
-					// target: 'nsis',
-					// signingHashAlgorithms: ['sha256'],
-					// signDlls: false
-					target: 'nsis',
-					//					requestedExecutionLevel: 'requireAdministrator',
-					signingHashAlgorithms: ['sha256'],
-					signDlls: false,
-					extraFiles: [
-						{
-							from: './tailscale-ffi.dll',
-							to: './tailscale-ffi.dll'
-						},
-						{
-							from: './build/win/wintun.dll',
-							to: './wintun.dll'
-						},
-						{
-							from: './build/win/tailscaled.exe',
-							to: './tailscaled.exe'
-						},
-						{
-							from: './build/win/files/event.dll',
-							to: './event.dll'
-						},
-						{
-							from: './build/win/files/getopt.dll',
-							to: './getopt.dll'
-						},
-						{
-							from: './build/win/files/glib-2.dll',
-							to: './glib-2.dll'
-						},
-						{
-							from: './build/win/files/gobject-2.dll',
-							to: './gobject-2.dll'
-						},
-						{
-							from: './build/win/files/jansson.dll',
-							to: './jansson.dll'
-						},
-						{
-							from: './build/win/files/libcurl.dll',
-							to: './libcurl.dll'
-						},
-						{
-							from: './build/win/files/libffi.dll',
-							to: './libffi.dll'
-						},
-						{
-							from: './build/win/files/libiconv.dll',
-							to: './libiconv.dll'
-						},
-						{
-							from: './build/win/files/libcharset.dll',
-							to: './libcharset.dll'
-						},
-						{
-							from: './build/win/files/libcrypto-3-x64.dll',
-							to: './libcrypto-3-x64.dll'
-						},
-						{
-							from: './build/win/files/libintl.dll',
-							to: './libintl.dll'
-						},
-						{
-							from: './build/win/files/libsearpc.dll',
-							to: './libsearpc.dll'
-						},
-						{
-							from: './build/win/files/libssl-3-x64.dll',
-							to: './libssl-3-x64.dll'
-						},
-						{
-							from: './build/win/files/opengl32sw.dll',
-							to: './opengl32sw.dll'
-						},
-						{
-							from: './build/win/files/pcre.dll',
-							to: './pcre.dll'
-						},
-						{
-							from: './build/win/files/pthreadVC3.dll',
-							to: './pthreadVC3.dll'
-						},
-						{
-							from: './build/win/files/sqlite3.dll',
-							to: './sqlite3.dll'
-						},
-						{
-							from: './build/win/files/uv.dll',
-							to: './uv.dll'
-						},
-						{
-							from: './build/win/files/websockets.dll',
-							to: './websockets.dll'
-						},
-						{
-							from: './build/win/files/WinSparkle.dll',
-							to: './WinSparkle.dll'
-						},
-						{
-							from: './build/win/files/zlib1.dll',
-							to: './zlib1.dll'
-						},
-						{
-							from: './build/win/files/seaf-daemon.exe',
-							to: './seaf-daemon.exe'
-						},
-						{
-							from: './build/win/files/addon-dlls/ffi-8.dll',
-							to: './resources/app.asar.unpacked/ffi-8.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/glib-2.0-0.dll',
-							to: './resources/app.asar.unpacked/glib-2.0-0.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/gobject-2.0-0.dll',
-							to: './resources/app.asar.unpacked/gobject-2.0-0.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/iconv-2.dll',
-							to: './resources/app.asar.unpacked/iconv-2.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/intl-8.dll',
-							to: './resources/app.asar.unpacked/intl-8.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/jansson.dll',
-							to: './resources/app.asar.unpacked/jansson.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/libcurl.dll',
-							to: './resources/app.asar.unpacked/libcurl.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/libsearpc.dll',
-							to: './resources/app.asar.unpacked/libsearpc.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/pcre2-8.dll',
-							to: './resources/app.asar.unpacked/pcre2-8.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/pthreadVC3.dll',
-							to: './resources/app.asar.unpacked/pthreadVC3.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/sqlite3.dll',
-							to: './resources/app.asar.unpacked/sqlite3.dll'
-						},
-						{
-							from: './build/win/files/addon-dlls/zlib1.dll',
-							to: './resources/app.asar.unpacked/zlib1.dll'
-						}
-					],
-					asarUnpack: ['./*.node']
-				},
-				nsis: {
-					// "oneClick": false,
-					perMachine: true,
-					// "deleteAppDataOnUninstall": true,
-					include: './build/win/installer.nsh'
-				}
-				// afterPack: async (context) => {
-				// your code
-
-				// }
+				mac: macConfig.mac,
+				win: winConfig.win,
+				nsis: winConfig.nsis,
+				afterSign: require('./build/electron/afterSign')
 			},
 
 			// "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
@@ -889,10 +670,12 @@ module.exports = configure(function (ctx) {
 			},
 
 			// "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-			chainWebpackPreload(/* chain */) {
+			chainWebpackPreload(/*chain*/) {
 				// do something with the Electron main process Webpack cfg
 				// extendWebpackPreload also available besides this chainWebpackPreload
-			}
+			},
+
+			extendPackageJson: require('./build/electron/extendPackageJson')
 		},
 		sourceFiles: {
 			indexHtmlTemplate:
