@@ -29,6 +29,6 @@ jobs:
               uses: docker/build-push-action@v2
               with:
                 context: .
-                file: Dockerfile-server
+                file: docker_files/Dockerfile-server
                 push: true
                 tags: beclab/vault-server:${{ steps.get-latest-tag.outputs.tag }}

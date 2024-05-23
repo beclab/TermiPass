@@ -5,23 +5,23 @@ WORKDIR /server_dist
 # Only copy over the packages files of all required packages.
 # This will ensure that we don't have to install all dependencies
 # again if any source files change.
-COPY package*.json lerna.json tsconfig.json ./
-COPY packages/server/package*.json ./packages/server/
-COPY packages/sdk/package*.json ./packages/sdk/
-COPY packages/locale/package*.json ./packages/locale/
+COPY ../package*.json ../lerna.json ../tsconfig.json ./
+COPY ../packages/server/package*.json ./packages/server/
+COPY ../packages/sdk/package*.json ./packages/sdk/
+COPY ../packages/locale/package*.json ./packages/locale/
 # Install dependencies and bootstrap packages
 RUN npm ci --unsafe-perm
 
 # Now copy over source files and assets
-COPY packages/server/src ./packages/server/src
-COPY packages/sdk/src ./packages/sdk/src
-COPY packages/locale/src ./packages/locale/src
-COPY packages/locale/res ./packages/locale/res
-COPY packages/server/tsconfig.json ./packages/server/
-COPY packages/sdk/tsconfig.json ./packages/sdk/
-COPY packages/locale/tsconfig.json ./packages/locale/
-COPY assets/ ./assets
-COPY packages/server/webpack.config.js ./packages/server/webpack.config.js
+COPY ../packages/server/src ./packages/server/src
+COPY ../packages/sdk/src ./packages/sdk/src
+COPY ../packages/locale/src ./packages/locale/src
+COPY ../packages/locale/res ./packages/locale/res
+COPY ../packages/server/tsconfig.json ./packages/server/
+COPY ../packages/sdk/tsconfig.json ./packages/sdk/
+COPY ../packages/locale/tsconfig.json ./packages/locale/
+COPY ../assets/ ./assets
+COPY ../packages/server/webpack.config.js ./packages/server/webpack.config.js
 
 RUN npm run server:build
 
