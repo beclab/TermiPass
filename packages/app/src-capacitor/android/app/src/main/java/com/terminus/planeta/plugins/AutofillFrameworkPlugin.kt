@@ -5,14 +5,10 @@ import com.getcapacitor.PluginMethod
 import com.getcapacitor.PluginCall
 import com.terminus.planeta.autofill.AutofillAppCredential
 import android.app.assist.AssistStructure
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.util.Log
 import android.view.autofill.AutofillManager
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.terminus.planeta.autofill.AutofillUtils
 import com.terminus.planeta.autofill.DataSetAdapter.setDateSetResult
 import com.getcapacitor.JSObject
@@ -31,78 +27,36 @@ import com.terminus.planeta.utils.Constants
 @CapacitorPlugin(name = "AutofillFrameworkPlugin")
 class AutofillFrameworkPlugin : Plugin() {
 
-    private val TAG: String = AutofillFrameworkPlugin::class.java.simpleName
-    private lateinit var receiver: FrameworkIntentReceiver
-
-    override fun load() {
-        Log.d(TAG, "load")
-        val filter = IntentFilter().apply {
-            addAction(Constants.ACTION_AUTOFILL_FRAMEWORK)
-            addAction(Constants.ACTION_AUTOFILL_FRAMEWORK_SAVE)
-        }
-        receiver = FrameworkIntentReceiver(object : OnFrameworkSendDataListener {
-            override fun onAutoFill(json: JSObject) {
-                Log.d(TAG, "onAutoFill: $json")
+    override fun handleOnNewIntent(intent: Intent?) {
+        super.handleOnNewIntent(intent)
+        intent?.let {
+            if (Constants.ACTION_AUTOFILL_FRAMEWORK == it.action) {
+                val json = JSObject().apply {
+                    put(
+                        Constants.AUTOFILL_EXTRA_URI,
+                        intent.getStringExtra(Constants.AUTOFILL_EXTRA_URI)
+                    )
+                }
+                Log.d("AutofillFrameworkPlugin", "handle intent: $json")
                 notifyListeners("onAutofillFramework", json, true)
-            }
-
-            override fun onSaveData(json: JSObject) {
+            } else if (Constants.ACTION_AUTOFILL_FRAMEWORK_SAVE == it.action) {
+                val json = JSObject().apply {
+                    put(
+                        Constants.AUTOFILL_EXTRA_URI,
+                        intent.getStringExtra(Constants.AUTOFILL_EXTRA_URI)
+                    )
+                    put(
+                        Constants.FRAMEWORK_SAVE_TYPE,
+                        intent.getStringExtra(Constants.FRAMEWORK_SAVE_TYPE)
+                    )
+                    put(
+                        Constants.FRAMEWORK_SAVE_DATA,
+                        intent.getStringExtra(Constants.FRAMEWORK_SAVE_DATA)
+                    )
+                }
                 notifyListeners("onAutofillFrameworkSave", json, true)
             }
-
-        })
-        LocalBroadcastManager.getInstance(context).registerReceiver(receiver,filter)
-    }
-
-    interface OnFrameworkSendDataListener {
-        fun onAutoFill(json: JSObject)
-        fun onSaveData(json: JSObject)
-    }
-
-    class FrameworkIntentReceiver(sendListener: OnFrameworkSendDataListener) :
-        BroadcastReceiver() {
-
-        private var sendIntentListener: OnFrameworkSendDataListener = sendListener
-
-        override fun onReceive(context: Context?, intent: Intent?) {
-            Log.d("AutofillFrameworkPlugin", "onReceive: " + intent?.action)
-
-            intent?.let {
-                if (Constants.ACTION_AUTOFILL_FRAMEWORK == it.action) {
-                    val json = JSObject().apply {
-                        put(
-                            Constants.AUTOFILL_EXTRA_URI,
-                            intent.getStringExtra(Constants.AUTOFILL_EXTRA_URI)
-                        )
-                    }
-                    Log.d("AutofillFrameworkPlugin", "handle intent: $json")
-                    sendIntentListener.onAutoFill(json)
-                } else if (Constants.ACTION_AUTOFILL_FRAMEWORK_SAVE == it.action) {
-                    val json = JSObject().apply {
-                        put(
-                            Constants.AUTOFILL_EXTRA_URI,
-                            intent.getStringExtra(Constants.AUTOFILL_EXTRA_URI)
-                        )
-                        put(
-                            Constants.FRAMEWORK_SAVE_TYPE,
-                            intent.getStringExtra(Constants.FRAMEWORK_SAVE_TYPE)
-                        )
-                        put(
-                            Constants.FRAMEWORK_SAVE_DATA,
-                            intent.getStringExtra(Constants.FRAMEWORK_SAVE_DATA)
-                        )
-                    }
-                    sendIntentListener.onSaveData(json);
-                }
-            }
         }
-    }
-
-    override fun handleOnDestroy() {
-        receiver.let {
-            LocalBroadcastManager.getInstance(context).unregisterReceiver(receiver)
-        }
-        super.handleOnDestroy()
     }
 
     @PluginMethod
