@@ -63,7 +63,7 @@ const startScan = async () => {
 			resoleScanResult(result, () => {
 				setTimeout(() => {
 					startScan();
-				}, 1000);
+				}, 2000);
 			});
 		} else {
 			setTimeout(() => {
