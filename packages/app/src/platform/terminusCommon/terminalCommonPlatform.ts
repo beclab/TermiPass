@@ -205,7 +205,7 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 				return;
 			}
 			const platform = getPlatform() as TerminusCommonPlatform;
-			if (!this.isOnHomePage) {
+			if (!platform.isOnHomePage) {
 				return;
 			}
 			userStore.password = undefined;
