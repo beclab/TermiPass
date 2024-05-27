@@ -88,7 +88,7 @@ const onConfirm = async () => {
 	$q.loading.show();
 
 	try {
-		await loginTerminus(user, wizard.password!, false);
+		await loginTerminus(user, wizard.password!, true);
 	} catch (e) {
 		$q.loading.hide();
 		notifyFailed(e.message);
@@ -115,7 +115,7 @@ const onConfirm = async () => {
 	await userStore.save();
 
 	try {
-		await loginTerminus(user, newPassword, true);
+		// await loginTerminus(user, newPassword, true);
 		busEmit('account_update', true);
 
 		user.terminus_id = userStore.getUserTerminusInfo(user.id).terminusId;

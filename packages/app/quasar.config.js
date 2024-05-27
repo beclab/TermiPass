@@ -165,7 +165,7 @@ module.exports = configure(function (ctx) {
 				const isElectron = ctx.modeName === 'electron';
 
 				if (!ctx.dev) {
-					if (isMobile || isBex) {
+					if (isMobile || isBex || isElectron) {
 						const updatePackageVersionByLatestTag = require('./build/plugins/UpdatePackageVersionByLatestTag');
 
 						let updateJsonFile = [];
@@ -196,19 +196,6 @@ module.exports = configure(function (ctx) {
 
 					if (isElectron) {
 						copyFileArray.push({
-							fromPath: path.resolve('./src-electron/'),
-							fromName: 'tailscale.js',
-							toPath: path.resolve(wasmRoot),
-							toName: 'tailscale.js'
-						});
-						copyFileArray.push({
-							fromPath: path.resolve('./src-electron/'),
-							fromName: 'networkMonitor.js',
-							toPath: path.resolve(wasmRoot),
-							toName: 'networkMonitor.js'
-						});
-
-						copyFileArray.push({
 							fromPath: path.resolve('./src-electron/files/'),
 							fromName: 'filesAsync.js',
 							toPath: path.resolve(wasmRoot),
@@ -229,6 +216,18 @@ module.exports = configure(function (ctx) {
 								fromName: 'DesktopAddon.node',
 								toPath: path.resolve(wasmRoot),
 								toName: 'DesktopAddon.node'
+							});
+							copyFileArray.push({
+								fromPath: path.resolve('./src-electron/'),
+								fromName: 'tailscale.js',
+								toPath: path.resolve(wasmRoot),
+								toName: 'tailscale.js'
+							});
+							copyFileArray.push({
+								fromPath: path.resolve('./src-electron/'),
+								fromName: 'networkMonitor.js',
+								toPath: path.resolve(wasmRoot),
+								toName: 'networkMonitor.js'
 							});
 						}
 					}
