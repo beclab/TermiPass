@@ -38,7 +38,7 @@ def getPackageVersionCode() {
 }
 
 def getPackageVersionName() {
-    def packageJsonFile = file('../../package.json')
+    def packageJsonFile = file('../../../package.json')
     Map myJson =  new JsonSlurper().parseText(packageJsonFile.text)
     def result = myJson.get('version').toString()
     logger.lifecycle("versionName: ${result}")
