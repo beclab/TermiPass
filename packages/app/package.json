@@ -51,6 +51,7 @@
 		"@seafile/resumablejs": "^1.1.16",
 		"@simplewebauthn/browser": "5.4.0",
 		"@simplewebauthn/typescript-types": "5.4.0",
+		"@tigerconnect/ffi-napi": "^4.0.3-tc3",
 		"@tiptap/core": "2.0.0-beta.182",
 		"@tiptap/starter-kit": "2.0.0-beta.191",
 		"@trustwallet/wallet-core": "3.1.28",
@@ -140,8 +141,7 @@
 		"workbox-precaching": "6.2.0",
 		"workbox-sw": "6.1.5",
 		"workbox-window": "6.1.5",
-		"zxcvbn": "4.4.2",
-		"@tigerconnect/ffi-napi": "^4.0.3-tc3"
+		"zxcvbn": "4.4.2"
 	},
 	"devDependencies": {
 		"@electron/notarize": "^2.3.0",
@@ -151,6 +151,7 @@
 		"@types/node": "^12.20.21",
 		"@typescript-eslint/eslint-plugin": "^5.10.0",
 		"@typescript-eslint/parser": "^5.10.0",
+		"css-minimizer-webpack-plugin": "^7.0.0",
 		"electron": "^24.2.0",
 		"electron-builder": "^23.6.0",
 		"electron-packager": "^15.5.2",
@@ -162,6 +163,7 @@
 		"node-polyfill-webpack-plugin": "^1.1.4",
 		"prettier": "^2.5.1",
 		"string-replace-loader": "^3.1.0",
+		"terser-webpack-plugin": "^5.3.10",
 		"tsconfig-paths-webpack-plugin": "^4.0.0",
 		"workbox-webpack-plugin": "^6.5.4"
 	},
