@@ -64,6 +64,7 @@ export class PlatformAjaxSender implements Sender {
 				if (
 					e.response.status == 525 ||
 					e.response.status == 530 ||
+					e.response.status == 522 ||
 					e.response.status > 1000
 				) {
 					throw new Err(ErrorCode.SERVER_NOT_EXIST);

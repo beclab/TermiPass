@@ -22,8 +22,8 @@
 						class="text-subtitle2"
 						:style="
 							user.name && user.id == userStore.current_user?.id
-								? 'width: 100%'
-								: 'width: 60%'
+								? 'max-width: 40%'
+								: 'max-width: 100%'
 						"
 						style="text-align: left"
 						:class="{
@@ -35,7 +35,7 @@
 						{{ user.name ? user.local_name : t('terminus_name_not_created') }}
 					</div>
 					<div
-						style="max-width: 40%"
+						style="max-width: 60%"
 						v-if="user.name && user.id == userStore.current_user?.id"
 					>
 						<terminus-user-status class="q-ml-sm" />
