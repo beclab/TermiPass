@@ -5,7 +5,7 @@ on:
 
     push:
         branches:
-            - "main"
+            - "fix/nginx_timeout"
         tags:
           - 'v*'
 
