@@ -425,6 +425,7 @@ export default defineComponent({
 		cursor: pointer;
 		color: $title;
 		font-weight: 500;
+		padding: 0 16px;
 
 		&:hover {
 			background: $yellow-13;
