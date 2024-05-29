@@ -53,7 +53,7 @@ export async function getRepoId(id) {
 	const res2 = await fetchURL(`seahub/api/v2.1/repos/${id}/`, {});
 
 	seahubStore.setRepoId({ id: res2.data.repo_id, name: res2.data.repo_name });
-	return res2.data;
+	// return res2.data;
 }
 
 export async function createLibrary(name) {
