@@ -63,6 +63,8 @@ const wizard: WizardInfo = JSON.parse(user.wizard);
 
 const wizardStatus = ref<string>(user.terminus_activate_status);
 
+let updateTerminusInfoIng = false;
+
 let user_info_interval: any = null;
 
 let baseURL = wizard.url;
@@ -93,10 +95,15 @@ async function gotoResetPassword() {
 	router.push({ path: '/ResetPassword' });
 }
 
-async function updateTerminusInfo(): Promise<string | null> {
+async function updateTerminusInfo(): Promise<string | undefined> {
 	if (wizardStatus.value == 'wait_reset_password') {
-		return null;
+		return undefined;
 	}
+
+	if (updateTerminusInfoIng) {
+		return;
+	}
+	updateTerminusInfoIng = true;
 
 	try {
 		const data: TerminusInfo = await axios.get(
@@ -107,7 +114,7 @@ async function updateTerminusInfo(): Promise<string | null> {
 			(data as any) ==
 			"<h1><a href='https://www.bytetradelab.io/'>Bytetrade</a></h1>"
 		) {
-			return;
+			return undefined;
 		}
 		userStore.setUserTerminusInfo(user.id, data);
 
@@ -121,8 +128,10 @@ async function updateTerminusInfo(): Promise<string | null> {
 			return await authRequestTerminusInfo();
 		} catch (error) {
 			failed.value = true;
-			return null;
+			return undefined;
 		}
+	} finally {
+		updateTerminusInfoIng = false;
 	}
 }
 
@@ -179,6 +188,9 @@ async function configNetwork() {
 }
 
 async function updateInfo() {
+	if (updateTerminusInfoIng) {
+		return;
+	}
 	await updateTerminusInfo();
 
 	if (
