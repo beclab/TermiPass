@@ -314,9 +314,6 @@ const handle = (e: any, item: any) => {
 				copyed.value = true;
 			} else if (action == OPERATE_ACTION.PASTE) {
 				copyed.value = false;
-				if (data) {
-					Router.push({ path: data });
-				}
 			} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
 				const repo_id = Route.query.id as string;
 				const isElectron = $q.platform.is.electron;

@@ -16,7 +16,7 @@ import ListingFiles from './common-files/ListingFiles.vue';
 import { useDataStore } from '../../stores/data';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 // import { useUserStore } from '../../stores/user';
-// import { useSeahubStore } from '../../stores/seahub';
+import { useSeahubStore } from '../../stores/seahub';
 
 import { UserStatusActive } from '../../utils/checkTerminusState';
 import { checkSeahub } from '../../utils/file';
@@ -45,6 +45,7 @@ export default defineComponent({
 		const $q = useQuasar();
 		const routepath = ref(route.path);
 		const termipassStore = useTermipassStore();
+		const seahubStore = useSeahubStore();
 
 		watch(
 			() => termipassStore.totalStatus?.isError,
@@ -91,7 +92,7 @@ export default defineComponent({
 			if (url[0] !== '/') url = '/' + url;
 			const currentItem = store.currentItem;
 
-			if (checkSeahub(url)) {
+			if (checkSeahub(url) && route.query.id !== seahubStore.repo_id) {
 				let pathname = decodeURIComponent(window.location.pathname).split('/');
 				let hasRepoIndex = pathname.findIndex((item) => item === currentItem);
 				if (!pathname[hasRepoIndex + 1]) {
@@ -101,6 +102,7 @@ export default defineComponent({
 
 			try {
 				const res = await api.fetch(url, loading, currentItem);
+
 				if (!checkFetchData(url)) {
 					return false;
 				}
