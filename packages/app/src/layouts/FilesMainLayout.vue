@@ -203,26 +203,35 @@ onMounted(async () => {
 	});
 });
 
-const checkMenuPath = (path) => {
+const checkMenuPath = (path: string) => {
 	const parts = path.split('/');
 
 	let currentPath = '';
 
-	if (parts.findIndex((part) => ['Home', 'Seahub'].includes(part)) >= 0) {
-		currentPath =
-			parts[parts.findIndex((part) => ['Home', 'Seahub'].includes(part)) + 1] ||
-			'Home';
-	} else if (
-		parts.findIndex((part) => ['Application', 'AppData'].includes(part)) >= 0
+	if (
+		parts.findIndex((part: string) => ['Home', 'Seahub'].includes(part)) >= 0
 	) {
 		currentPath =
 			parts[
-				parts.findIndex((part) => ['Application', 'AppData'].includes(part)) + 1
+				parts.findIndex((part: string) => ['Home', 'Seahub'].includes(part)) + 1
+			] || 'Home';
+	} else if (
+		parts.findIndex((part: string) =>
+			['Application', 'AppData'].includes(part)
+		) >= 0
+	) {
+		currentPath =
+			parts[
+				parts.findIndex((part: string) =>
+					['Application', 'AppData'].includes(part)
+				) + 1
 			];
 	}
 
 	const defaultMenus: any = menuStore.menu[0].children;
-	if (defaultMenus.find((tab) => tab.label === currentPath)) {
+	if (
+		defaultMenus.find((tab: { label: string }) => tab.label === currentPath)
+	) {
 		store.currentItem = currentPath;
 		menuStore.activeMenu = currentPath;
 	}

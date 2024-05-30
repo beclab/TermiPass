@@ -98,7 +98,7 @@ module.exports = configure(function (ctx) {
 			extractCSS: true,
 			publicPath: '/',
 			distDir: 'dist',
-			sourceMap: false,
+			sourceMap: true,
 			minify: true,
 
 			// Options below are automatically set depending on the env, set them if you want to override
@@ -108,6 +108,14 @@ module.exports = configure(function (ctx) {
 				// 	...cfg.resolve.alias,
 				// 	'@files': path.resolve(__dirname, './src/files-drive')
 				// };
+				// cfg.plugins.push(
+				// 	new QuasarUnusedPlugin({
+				// 		directories: ['src'], // 指定要检查的目录
+				// 		exclude: ['node_modules'], // 排除的目录
+				// 		extensions: ['.js', '.vue'] // 要检查的文件类型
+				// 	})
+				// );
+
 				cfg.resolve.fallback = {
 					fs: false,
 					tls: false,
@@ -163,49 +171,6 @@ module.exports = configure(function (ctx) {
 			// https://v2.quasar.dev/quasar-cli-webpack/handling-webpack
 			// "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
 			chainWebpack(chain, { isClient }) {
-				if (isClient) {
-					chain.plugin('optimize-css').use(CssMinimizerPlugin, [
-						{
-							preset: [
-								'default',
-								{
-									mergeLonghand: true,
-									cssDeclarationSorter: 'concentric',
-									discardComments: { removeAll: true }
-								}
-							]
-						}
-					]);
-
-					chain.plugin('terser').use(TerserPlugin, [
-						{
-							terserOptions: {
-								compress: {
-									drop_console: true,
-									pure_funcs: ['console.log']
-								}
-							}
-						}
-					]);
-
-					chain.optimization.splitChunks({
-						chunks: 'all',
-						maxInitialRequests: Infinity,
-						minSize: 0,
-						cacheGroups: {
-							vendor: {
-								test: /[\\/]node_modules[\\/]/,
-								name(module) {
-									const packageName = module.context.match(
-										/[\\/]node_modules[\\/](.*?)([\\/]|$)/
-									)[1];
-									return `vendor.${packageName.replace('@', '')}`;
-								}
-							}
-						}
-					});
-				}
-
 				const nodePolyfillWebpackPlugin = require('node-polyfill-webpack-plugin');
 
 				const CopyWebpackPlugin = require('./build/plugins/CopyFilePlugin');
@@ -383,6 +348,66 @@ module.exports = configure(function (ctx) {
 					chain
 						.plugin('copy-index-html')
 						.use(CopyWebpackPlugin, [copyFileArray]);
+				}
+
+				if (isClient) {
+					chain.plugin('css-minimizer-webpack-plugin').use(CssMinimizerPlugin, [
+						{
+							parallel: true,
+							minimizerOptions: {
+								preset: [
+									'default',
+									{
+										mergeLonghand: true,
+										cssDeclarationSorter: 'concentric',
+										discardComments: { removeAll: true }
+									}
+								]
+							}
+						}
+					]);
+
+					chain.optimization.minimizer('terser').use(TerserPlugin, [
+						{
+							terserOptions: {
+								parallel: true,
+								sourceMap: true,
+								extractComments: false,
+								compress: {
+									drop_console: true,
+									drop_debugger: true,
+									pure_funcs: ['console.log']
+								},
+								output: {
+									comments: false,
+									ascii_only: true
+								}
+							}
+						}
+					]);
+
+					chain.optimization.splitChunks({
+						chunks: 'all', // The type of chunk that requires code segmentation
+						minSize: 20000, // Minimum split file size
+						minRemainingSize: 0, // Minimum remaining file size after segmentation
+						minChunks: 1, // The number of times it has been referenced before it is split
+						maxAsyncRequests: 30, // Maximum number of asynchronous requests
+						maxInitialRequests: 30, // Maximum number of initialization requests
+						enforceSizeThreshold: 50000,
+						cacheGroups: {
+							// Cache Group configuration
+							defaultVendors: {
+								test: /[\\/]node_modules[\\/]/,
+								priority: -10,
+								reuseExistingChunk: true
+							},
+							default: {
+								minChunks: 2,
+								priority: -20,
+								reuseExistingChunk: true //	Reuse the chunk that has been split
+							}
+						}
+					});
 				}
 			},
 			afterBuild(params) {
