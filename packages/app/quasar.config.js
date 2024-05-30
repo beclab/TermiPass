@@ -94,7 +94,7 @@ module.exports = configure(function (ctx) {
 			// preloadChunks: true,
 			// showProgress: false,
 			gzip: true,
-			analyze: true,
+			// analyze: true,
 			extractCSS: true,
 			publicPath: '/',
 			distDir: 'dist',
