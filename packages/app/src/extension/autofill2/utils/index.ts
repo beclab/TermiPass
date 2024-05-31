@@ -72,6 +72,12 @@ export const AutofillOverlayElement = {
 	List: 'autofill-overlay-list'
 } as const;
 
+export const TYPE_CHECK = {
+	FUNCTION: 'function',
+	NUMBER: 'number',
+	STRING: 'string'
+} as const;
+
 /**
  * Identifies whether an element is an instance of a specific tag name.
  *
@@ -201,4 +207,13 @@ export const elementIsFormElement = (
  */
 export const nodeIsFormElement = (node: Node): node is HTMLFormElement => {
 	return nodeIsElement(node) && elementIsFormElement(node);
+};
+
+/**
+ * Identifies whether a node is an input element.
+ *
+ * @param node - The node to check.
+ */
+export const nodeIsInputElement = (node: Node): node is HTMLInputElement => {
+	return nodeIsElement(node) && elementIsInputElement(node);
 };

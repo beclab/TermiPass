@@ -1,5 +1,9 @@
 import AutofillPageDetails from '../models/autofill-page-details';
+import { AutofillOverlayContentService } from '../services/abstractions/autofill-overlay-content.service';
 import CollectAutofillContentService from '../services/collect-autofill-content.service';
+import DomElementVisibilityService from '../services/dom-element-visibility.service';
+import InsertAutofillContentService from '../services/insert-autofill-content.service';
+import { sendExtensionMessage } from '../types';
 import {
 	AutofillExtensionMessage,
 	AutofillExtensionMessageHandlers,
@@ -7,9 +11,12 @@ import {
 } from './abstractions/autofill-init';
 
 class AutofillInit implements AutofillInitInterface {
+	private readonly autofillOverlayContentService:
+		| AutofillOverlayContentService
+		| undefined;
+	private readonly domElementVisibilityService: DomElementVisibilityService;
 	private readonly collectAutofillContentService: CollectAutofillContentService;
 	private readonly insertAutofillContentService: InsertAutofillContentService;
-
 	private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers =
 		{
 			collectPageDetails: ({ message }) => this.collectPageDetails(message),
@@ -30,50 +37,68 @@ class AutofillInit implements AutofillInitInterface {
 				this.updateAutofillOverlayVisibility(message)
 		};
 
-	init(): void {
-		throw new Error('Method not implemented.');
-	}
-	destroy(): void {
-		throw new Error('Method not implemented.');
-	}
-
 	/**
-	 * Sets up the extension message listeners for the content script.
+	 * AutofillInit constructor. Initializes the DomElementVisibilityService,
+	 * CollectAutofillContentService and InsertAutofillContentService classes.
+	 *
+	 * @param autofillOverlayContentService - The autofill overlay content service, potentially undefined.
 	 */
-	private setupExtensionMessageListeners() {
-		chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
+	constructor(autofillOverlayContentService?: AutofillOverlayContentService) {
+		this.autofillOverlayContentService = autofillOverlayContentService;
+		this.domElementVisibilityService = new DomElementVisibilityService();
+		this.collectAutofillContentService = new CollectAutofillContentService(
+			this.domElementVisibilityService,
+			this.autofillOverlayContentService
+		);
+		this.insertAutofillContentService = new InsertAutofillContentService(
+			this.domElementVisibilityService,
+			this.collectAutofillContentService
+		);
 	}
 
 	/**
-	 * Handles the extension messages sent to the content script.
+	 * Initializes the autofill content script, setting up
+	 * the extension message listeners. This method should
+	 * be called once when the content script is loaded.
+	 */
+	init() {
+		this.setupExtensionMessageListeners();
+		this.autofillOverlayContentService?.init();
+		this.collectPageDetailsOnLoad();
+	}
+
+	/**
+	 * Triggers a collection of the page details from the
+	 * background script, ensuring that autofill is ready
+	 * to act on the page.
+	 */
+	private collectPageDetailsOnLoad() {
+		const sendCollectDetailsMessage = () =>
+			setTimeout(
+				() =>
+					sendExtensionMessage('bgCollectPageDetails', {
+						sender: 'autofillInit'
+					}),
+				250
+			);
+
+		if (document.readyState === 'complete') {
+			sendCollectDetailsMessage();
+		}
+
+		window.addEventListener('load', sendCollectDetailsMessage);
+	}
+
+	/**
+	 * Collects the page details and sends them to the
+	 * extension background script. If the `sendDetailsInResponse`
+	 * parameter is set to true, the page details will be
+	 * returned to facilitate sending the details in the
+	 * response to the extension message.
 	 *
 	 * @param message - The extension message.
-	 * @param sender - The message sender.
-	 * @param sendResponse - The send response callback.
+	 * @param sendDetailsInResponse - Determines whether to send the details in the response.
 	 */
-	private handleExtensionMessage = (
-		message: AutofillExtensionMessage,
-		sender: chrome.runtime.MessageSender,
-		sendResponse: (response?: any) => void
-	): boolean => {
-		const command: string = message.command;
-		const handler: CallableFunction | undefined =
-			this.extensionMessageHandlers[command];
-		if (!handler) {
-			return false;
-		}
-
-		const messageResponse = handler({ message, sender });
-		if (!messageResponse) {
-			return false;
-		}
-
-		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		Promise.resolve(messageResponse).then((response) => sendResponse(response));
-		return true;
-	};
-
 	private async collectPageDetails(
 		message: AutofillExtensionMessage,
 		sendDetailsInResponse = false
@@ -109,6 +134,9 @@ class AutofillInit implements AutofillInitInterface {
 
 		this.blurAndRemoveOverlay();
 		this.updateOverlayIsCurrentlyFilling(true);
+		if (!fillScript) {
+			return;
+		}
 		await this.insertAutofillContentService.fillForm(fillScript);
 
 		if (!this.autofillOverlayContentService) {
@@ -141,7 +169,25 @@ class AutofillInit implements AutofillInitInterface {
 			return;
 		}
 
+		if (!data) {
+			return;
+		}
+
 		this.autofillOverlayContentService.openAutofillOverlay(data);
+	}
+
+	/**
+	 * Blurs the most recent overlay field and removes the overlay. Used
+	 * in cases where the background unlock or vault item reprompt popout
+	 * is opened.
+	 */
+	private blurAndRemoveOverlay() {
+		if (!this.autofillOverlayContentService) {
+			return;
+		}
+
+		this.autofillOverlayContentService.blurMostRecentOverlayField();
+		this.removeAutofillOverlay();
 	}
 
 	/**
@@ -191,6 +237,9 @@ class AutofillInit implements AutofillInitInterface {
 			return;
 		}
 
+		if (!data || !data.direction) {
+			return;
+		}
 		this.autofillOverlayContentService.redirectOverlayFocusOut(data?.direction);
 	}
 
@@ -211,20 +260,6 @@ class AutofillInit implements AutofillInitInterface {
 	}
 
 	/**
-	 * Blurs the most recent overlay field and removes the overlay. Used
-	 * in cases where the background unlock or vault item reprompt popout
-	 * is opened.
-	 */
-	private blurAndRemoveOverlay() {
-		if (!this.autofillOverlayContentService) {
-			return;
-		}
-
-		this.autofillOverlayContentService.blurMostRecentOverlayField();
-		this.removeAutofillOverlay();
-	}
-
-	/**
 	 * Updates the autofill overlay visibility.
 	 *
 	 * @param data - Contains the autoFillOverlayVisibility value
@@ -232,6 +267,7 @@ class AutofillInit implements AutofillInitInterface {
 	private updateAutofillOverlayVisibility({ data }: AutofillExtensionMessage) {
 		if (
 			!this.autofillOverlayContentService ||
+			!data?.autofillOverlayVisibility ||
 			isNaN(data?.autofillOverlayVisibility)
 		) {
 			return;
@@ -240,5 +276,53 @@ class AutofillInit implements AutofillInitInterface {
 		this.autofillOverlayContentService.autofillOverlayVisibility =
 			data?.autofillOverlayVisibility;
 	}
+
+	/**
+	 * Sets up the extension message listeners for the content script.
+	 */
+	private setupExtensionMessageListeners() {
+		chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
+	}
+
+	/**
+	 * Handles the extension messages sent to the content script.
+	 *
+	 * @param message - The extension message.
+	 * @param sender - The message sender.
+	 * @param sendResponse - The send response callback.
+	 */
+	private handleExtensionMessage = (
+		message: AutofillExtensionMessage,
+		sender: chrome.runtime.MessageSender,
+		sendResponse: (response?: any) => void
+	): boolean => {
+		const command: string = message.command;
+		const handler: CallableFunction | undefined =
+			this.extensionMessageHandlers[command];
+		if (!handler) {
+			return false;
+		}
+
+		const messageResponse = handler({ message, sender });
+		if (!messageResponse) {
+			return false;
+		}
+
+		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
+		// eslint-disable-next-line @typescript-eslint/no-floating-promises
+		Promise.resolve(messageResponse).then((response) => sendResponse(response));
+		return true;
+	};
+
+	/**
+	 * Handles destroying the autofill init content script. Removes all
+	 * listeners, timeouts, and object instances to prevent memory leaks.
+	 */
+	destroy() {
+		chrome.runtime.onMessage.removeListener(this.handleExtensionMessage);
+		this.collectAutofillContentService.destroy();
+		this.autofillOverlayContentService?.destroy();
+	}
 }
+
 export default AutofillInit;

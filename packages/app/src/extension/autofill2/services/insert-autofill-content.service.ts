@@ -1,6 +1,17 @@
 import AutofillScript, {
-	AutofillInsertActions
+	AutofillInsertActions,
+	FillScript
 } from '../models/autofill-script';
+import { FormFieldElement } from '../types';
+import {
+	EVENTS,
+	TYPE_CHECK,
+	elementIsFillableFormField,
+	elementIsInputElement,
+	elementIsSelectElement,
+	elementIsTextAreaElement,
+	nodeIsInputElement
+} from '../utils';
 import { InsertAutofillContentService as InsertAutofillContentServiceInterface } from './abstractions/insert-autofill-content.service';
 import CollectAutofillContentService from './collect-autofill-content.service';
 import DomElementVisibilityService from './dom-element-visibility.service';
@@ -152,7 +163,7 @@ class InsertAutofillContentService
 	private runFillScriptAction = (
 		[action, opid, value]: FillScript,
 		actionIndex: number
-	): Promise<void> => {
+	): Promise<void> | undefined => {
 		if (!opid || !this.autofillInsertActions[action]) {
 			return;
 		}
@@ -160,7 +171,7 @@ class InsertAutofillContentService
 		const delayActionsInMilliseconds = 20;
 		return new Promise((resolve) =>
 			setTimeout(() => {
-				this.autofillInsertActions[action]({ opid, value });
+				this.autofillInsertActions[action]({ opid, value: value || '' });
 				resolve();
 			}, delayActionsInMilliseconds * actionIndex)
 		);
@@ -186,6 +197,9 @@ class InsertAutofillContentService
 	private handleClickOnFieldByOpidAction(opid: string) {
 		const element =
 			this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
+		if (!element) {
+			return;
+		}
 		this.triggerClickOnElement(element);
 	}
 
@@ -197,6 +211,9 @@ class InsertAutofillContentService
 	private handleFocusOnFieldByOpidAction(opid: string) {
 		const element =
 			this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
+		if (!element) {
+			return;
+		}
 		this.simulateUserMouseClickAndFocusEventInteractions(element, true);
 	}
 
@@ -212,6 +229,9 @@ class InsertAutofillContentService
 		element: FormFieldElement | null,
 		value: string
 	) {
+		if (!element) {
+			return;
+		}
 		const elementCanBeReadonly =
 			elementIsInputElement(element) || elementIsTextAreaElement(element);
 		const elementCanBeFilled =
@@ -338,7 +358,7 @@ class InsertAutofillContentService
 	 * @private
 	 */
 	private triggerClickOnElement(element?: HTMLElement): void {
-		if (typeof element?.click !== TYPE_CHECK.FUNCTION) {
+		if (!element || typeof element.click !== TYPE_CHECK.FUNCTION) {
 			return;
 		}
 
@@ -356,7 +376,7 @@ class InsertAutofillContentService
 		element: HTMLElement | undefined,
 		shouldResetValue = false
 	): void {
-		if (typeof element?.focus !== TYPE_CHECK.FUNCTION) {
+		if (!element || typeof element?.focus !== TYPE_CHECK.FUNCTION) {
 			return;
 		}
 
@@ -419,10 +439,6 @@ class InsertAutofillContentService
 				new Event(simulatedInputEvents[index], { bubbles: true })
 			);
 		}
-	}
-
-	private nodeIsElement(node: Node): node is HTMLElement {
-		return node.nodeType === Node.ELEMENT_NODE;
 	}
 }
 
