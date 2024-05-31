@@ -25,8 +25,8 @@
 
 <script lang="ts" setup>
 import MD5 from 'MD5';
-import { watch } from 'vue';
-import { useRoute } from 'vue-router';
+// import { watch } from 'vue';
+// import { useRoute } from 'vue-router';
 import Resumablejs from '@seafile/resumablejs';
 import { seafileAPI } from '../../../api/seafileAPI.ts';
 import { useDataStore } from '../../../stores/data';
@@ -57,7 +57,7 @@ type uploadObjType = {
 
 const emits = defineEmits(['onFileUploadSuccess']);
 
-const route = useRoute();
+// const route = useRoute();
 const dataStore = useDataStore();
 
 const retryFileList = ref<any[]>([]);

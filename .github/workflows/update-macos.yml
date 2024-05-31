@@ -52,11 +52,7 @@ jobs:
               run: |
                 npm install
             - run: npm i -g @quasar/cli
-
-            - name: Get package version
-              id: get-version
-              run: echo "::set-output name=version::$(node -e 'console.log(require("./packages/app/package.json").version)')"
-
+            
             - name: Install the Apple certificate and provisioning profile
               env:
                 BUILD_CERTIFICATE_BASE64: ${{ secrets.MACOS_BUILD_DEVELOPER_ID_CERTIFICATE_BASE64 }}
@@ -105,6 +101,10 @@ jobs:
 
             - name: Show
               run: ls -a packages/app/dist/electron/Packaged/
+            
+            - name: Get package version
+              id: get-version
+              run: echo "::set-output name=version::$(node -e 'console.log(require("./packages/app/package.json").version)')"
 
             - name: Release dmg
               uses: djnicholson/release-action@v2.11
@@ -123,20 +123,5 @@ jobs:
                   tag-name: ${{ steps.get-latest-tag.outputs.tag }}
                   asset-name: TermiPass-darwin-x64-update.zip
                   file: 'packages/app/dist/electron/Packaged/TermiPass-${{ steps.get-version.outputs.version }}-mac.zip'
-            
-            # - name: Build windows
-            #   run: cd packages/app/;PLATFORM=DESKTOP PYTHON_PATH=/Library/Frameworks/Python.framework/Versions/2.7/bin/python quasar build -m electron -T win
-    
-            # - name: Show
-            #   run: ls -a packages/app/dist/electron/Packaged/
-    
-            # - name: Release Windows app
-            #   uses: djnicholson/release-action@v2.11
-            #   with:
-            #         token: ${{ secrets.GITHUB_TOKEN }}
-            #         release-name: TermiPass-exe Release
-            #         tag-name: ${{ steps.get-latest-tag.outputs.tag }}
-            #         asset-name: TermiPass.exe
-            #         file: 'packages/app/dist/electron/Packaged/TermiPass Setup ${{ steps.get-version.outputs.version }}.exe'
             
             

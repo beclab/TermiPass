@@ -2,7 +2,6 @@ package com.terminus.planeta;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.capacitorjs.plugins.filesystem.FilesystemPlugin;
 import com.capacitorjs.plugins.statusbar.StatusBarPlugin;
@@ -26,7 +25,6 @@ import com.terminus.planeta.plugins.TwitterLoginPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import ee.forgr.biometric.NativeBiometric;
 
 public class MainActivity extends FileActivity {
@@ -56,11 +54,4 @@ public class MainActivity extends FileActivity {
         NotificationChannelManager.loadNotificationChannel();
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        Log.d("Autofill", "onNewIntent: " + intent);
-        super.onNewIntent(intent);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-        setIntent(intent);
-    }
 }

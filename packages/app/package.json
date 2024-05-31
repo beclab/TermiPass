@@ -141,7 +141,8 @@
 		"workbox-precaching": "6.2.0",
 		"workbox-sw": "6.1.5",
 		"workbox-window": "6.1.5",
-		"zxcvbn": "4.4.2"
+		"zxcvbn": "4.4.2",
+		"node-gyp-build": "4.7.1"
 	},
 	"devDependencies": {
 		"@electron/notarize": "^2.3.0",

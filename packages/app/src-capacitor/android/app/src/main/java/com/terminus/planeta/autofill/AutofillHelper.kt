@@ -2,6 +2,7 @@ package com.terminus.planeta.autofill
 
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.content.IntentSender
 import android.os.Build
 import android.service.autofill.FillRequest
@@ -12,6 +13,7 @@ import android.service.autofill.SaveInfo.SAVE_DATA_TYPE_GENERIC
 import android.service.autofill.SaveInfo.SAVE_DATA_TYPE_PASSWORD
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.terminus.planeta.MainActivity
 import com.terminus.planeta.utils.Constants
 import com.terminus.planeta.utils.Constants.TAG_FRAMEWORK
 import java.util.*
@@ -143,7 +145,7 @@ object AutofillHelper {
     }
 
     fun getManualIntentSenderForResponse(uri: String?, context: Context): IntentSender {
-        val intent =  Constants.getAutoFillIntent(
+        val intent = Constants.getAutoFillIntent(
             context,
             uri,
             Constants.ACTION_AUTOFILL_FRAMEWORK
@@ -152,8 +154,32 @@ object AutofillHelper {
             context,
             1001,
             intent,
-            addPendingIntentMutabilityFlag(PendingIntent.FLAG_CANCEL_CURRENT,true)
+            addPendingIntentMutabilityFlag(PendingIntent.FLAG_CANCEL_CURRENT, true)
         ).intentSender
+    }
+
+    fun getAutoFillSavePendingIntent(
+        context: Context,
+        uri: String?,
+        @SaveDataType saveType: String,
+        json: String,
+        openNew : Boolean = false
+    ): PendingIntent {
+        val intent = Intent(context, MainActivity::class.java).apply {
+            this.putExtra(Constants.AUTOFILL_EXTRA_URI, uri)
+            this.putExtra(Constants.FRAMEWORK_SAVE_TYPE, saveType)
+            this.putExtra(Constants.FRAMEWORK_SAVE_DATA, json)
+            this.action = Constants.ACTION_AUTOFILL_FRAMEWORK_SAVE
+        }
+        if (openNew){
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        return PendingIntent.getActivity(
+            context,
+            1002,
+            intent,
+            addPendingIntentMutabilityFlag(PendingIntent.FLAG_CANCEL_CURRENT, true)
+        )
     }
 
     /**

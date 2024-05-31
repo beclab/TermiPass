@@ -360,7 +360,7 @@ const _pasteCatalogue = async (
 	const conflict = upload.checkConflict(items, dstItems);
 
 	let overwrite = false;
-	let rename = false;
+	let rename = true;
 	let isMove = false;
 
 	if (dataStore.copyFiles[0].key === 'x') {

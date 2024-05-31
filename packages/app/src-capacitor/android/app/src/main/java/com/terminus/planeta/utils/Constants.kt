@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.capacitorjs.plugins.statusbar.StatusBar
 import com.terminus.planeta.BuildConfig.APPLICATION_ID
 import com.terminus.planeta.MainActivity
-import com.terminus.planeta.autofill.SaveDataType
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -58,20 +57,6 @@ object Constants {
         return Intent(context, MainActivity::class.java).apply {
             this.putExtra(AUTOFILL_EXTRA_URI, uri)
             this.action = action
-        }
-    }
-
-    fun getAutoFillSaveIntent(
-        context: Context,
-        uri: String?,
-        @SaveDataType saveType: String,
-        json: String
-    ): Intent {
-        return Intent(context, MainActivity::class.java).apply {
-            this.putExtra(AUTOFILL_EXTRA_URI, uri)
-            this.putExtra(FRAMEWORK_SAVE_TYPE, saveType)
-            this.putExtra(FRAMEWORK_SAVE_DATA, json)
-            this.action = ACTION_AUTOFILL_FRAMEWORK_SAVE
         }
     }
 

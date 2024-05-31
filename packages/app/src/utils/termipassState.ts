@@ -358,6 +358,7 @@ export class TermiPassState {
 				this.stateMachine.transition().goto(TermipassActionStatus.SrpInvalid);
 				if (result == ErrorCode.INVALID_SESSION) {
 					termipassStore.srpInvalid = true;
+					termipassStore.ssoInvalid = false;
 				} else {
 					if (result == ErrorCode.TOKE_INVILID) {
 						// 400
@@ -367,12 +368,17 @@ export class TermiPassState {
 							terminusInfo.terminusId == this.currentUser!.terminus_id
 						) {
 							termipassStore.ssoInvalid = true;
+							termipassStore.srpInvalid = false;
 						} else {
 							termipassStore.srpInvalid = true;
+							termipassStore.ssoInvalid = false;
 						}
 					} else {
 						//525
 						if (result == ErrorCode.SERVER_NOT_EXIST) {
+							termipassStore.reactivation = true;
+							termipassStore.srpInvalid = false;
+							termipassStore.ssoInvalid = false;
 							await this.actions.getTerminusInfo(false);
 						} else if (result == ErrorCode.SERVER_ERROR) {
 							if (this.currentUser.isLocal) {
@@ -440,9 +446,7 @@ export class TermiPassState {
 						'Content-Type': 'application/json'
 					}
 				});
-				const data = await instance.get(baseUrl + '/api/terminus-info', {
-					timeout: 5000
-				});
+				const data = await instance.get(baseUrl + '/api/terminus-info', {});
 				const terminusInfo: TerminusInfo = data.data.data;
 
 				termipassStore.reactivation = false;
@@ -462,7 +466,8 @@ export class TermiPassState {
 						process.env.PLATFORM == 'BEX' ||
 						e.response.status == 525 ||
 						e.response.status == 522 ||
-						e.response.status == 530
+						e.response.status == 530 ||
+						e.response.status > 1000
 					) {
 						if (this.currentUser.tailscale_activated) {
 							const scaleStore = useScaleStore();

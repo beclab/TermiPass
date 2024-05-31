@@ -9,7 +9,6 @@ on:
 
         tags:
           - 'v*'
-          - 'w*'
 
 jobs:
     update_frontend:
@@ -47,6 +46,6 @@ jobs:
               uses: docker/build-push-action@v2
               with:
                 context: .
-                file: Dockerfile-frontend
+                file: docker/files/dockerfile
                 push: true
                 tags: beclab/files-frontend:${{ steps.get-latest-tag.outputs.tag }}

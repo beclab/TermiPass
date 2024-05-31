@@ -128,7 +128,7 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 			opts.headers = {
 				...opts.headers,
 				'X-Terminus-Node': node,
-				timeout: 100000
+				timeout: 600000
 			};
 			res = await fetchURL(`/api/paste/AppData${path}`, opts);
 		}
@@ -137,7 +137,7 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 			opts.headers = {
 				...opts.headers,
 				'X-Terminus-Node': terminusNode,
-				timeout: 100000
+				timeout: 600000
 			};
 		}
 		res = await fetchURL(`/api/paste${fromUrl}`, opts);
@@ -549,7 +549,7 @@ export async function uploadChunks(
 			request.setRequestHeader('X-Terminus-Node', node);
 		}
 
-		request.timeout = 100000;
+		request.timeout = 600000;
 		request.onload = () => {
 			if (request.status === 200) {
 				resolve(JSON.parse(request.responseText));

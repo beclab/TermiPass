@@ -15,9 +15,16 @@
 
 		<div class="terminus-account-root__right row items-center justify-between">
 			<div class="terminus-account-root__right__text column justify-between">
-				<div class="row items-center">
+				<div
+					class="row items-center terminus-account-root__right__text__detail"
+				>
 					<div
 						class="text-subtitle2"
+						:style="
+							user.name && user.id == userStore.current_user?.id
+								? 'max-width: 40%'
+								: 'max-width: 100%'
+						"
 						style="text-align: left"
 						:class="{
 							'text-title': user.name,
@@ -27,13 +34,16 @@
 					>
 						{{ user.name ? user.local_name : t('terminus_name_not_created') }}
 					</div>
-					<div v-if="user.name && user.id == userStore.current_user?.id">
+					<div
+						style="max-width: 60%"
+						v-if="user.name && user.id == userStore.current_user?.id"
+					>
 						<terminus-user-status class="q-ml-sm" />
 					</div>
 				</div>
 
 				<div
-					class="text-body3"
+					class="text-body3 terminus-account-root__right__text__detail"
 					style="text-align: left"
 					:class="user.name ? 'text-sub-title' : 'text-grey'"
 				>
@@ -107,7 +117,13 @@ onMounted(() => {
 
 		&__text {
 			height: 100%;
-			width: calc(100% - 83px);
+			width: calc(100% - 75px);
+			&__detail {
+				width: calc(100% - 5px);
+				overflow: hidden; //超出的文本隐藏
+				text-overflow: ellipsis; //溢出用省略号显示
+				white-space: nowrap; //溢出不换行
+			}
 		}
 	}
 

@@ -1,7 +1,6 @@
 package com.terminus.planeta.plugins
 
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
@@ -23,33 +22,18 @@ import com.terminus.planeta.utils.Utils
 class AndroidUniversalPlugin : Plugin() {
 
     private val TAG: String = AndroidUniversalPlugin::class.java.simpleName
-    private lateinit var receiver: IntentReceiver
 
-    override fun load() {
-        receiver = IntentReceiver(Constants.ACTION_HANDLE_INTENT,
-            object : OnSendIntentDataListener {
-                override fun onSendData(json: JSObject) {
-                    notifyListeners("onIntent", json,true)
+    override fun handleOnNewIntent(intent: Intent?) {
+        super.handleOnNewIntent(intent)
+        intent?.let {
+            if (Constants.ACTION_AUTOFILL_ACCESSIBILITY == it.action) {
+                val json = JSObject().apply {
+                    put("type", intent.getStringExtra("type"))
+                    put("message", intent.getStringExtra("message"))
                 }
-
-            },
-            object : OnHandleIntentListener {
-                override fun onHandleIntent(intent: Intent): JSObject {
-                    return JSObject().apply {
-                        put("type", intent.getStringExtra("type"))
-                        put("message", intent.getStringExtra("message"))
-                    }
-                }
-
-            })
-        context.registerReceiver(receiver, IntentFilter(Constants.ACTION_HANDLE_INTENT))
-    }
-
-    override fun handleOnDestroy() {
-        receiver.let {
-            context.unregisterReceiver(it)
+                notifyListeners("onIntent", json,true)
+            }
         }
-        super.handleOnDestroy()
     }
 
     @PluginMethod

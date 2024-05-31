@@ -51,7 +51,7 @@ onMounted(async () => {
 		if (user.setup_finished) {
 			busEmit('account_update');
 			if (process.env.PLATFORM == 'DESKTOP') {
-				router.replace('/Files/Home');
+				router.replace('/Files/Home/');
 			} else if (process.env.PLATFORM == 'WEB') {
 				router.replace('/items');
 			} else {

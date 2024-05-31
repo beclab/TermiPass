@@ -41,11 +41,12 @@ export async function parsingMnemonics(
 			);
 		}
 
-		const name = terminusURL.replace('.', '@');
+		const name =
+			terminusURL == '[local_user]' ? '' : terminusURL.replace('.', '@');
 
-		if (name.length == 0) {
-			throw new Error(i18n.global.t('errors.terminus_info_not_found'));
-		}
+		// if (name.length == 0) {
+		// 	throw new Error(i18n.global.t('errors.terminus_info_not_found'));
+		// }
 
 		const userStore = useUserStore();
 		const user = userStore.users!.items.get(did);

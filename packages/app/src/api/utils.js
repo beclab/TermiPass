@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { logout } from '../utils/auth';
 import { encodePath } from '../utils/url';
 import { useDataStore } from '../stores/data';
@@ -26,7 +26,7 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 	}
 	const instance = axiosInstanceProxy({
 		baseURL: baseURL,
-		timeout: opts.timeout || 100000
+		timeout: opts.timeout || 600000
 	});
 	headers = {
 		'Access-Control-Allow-Origin': '*',

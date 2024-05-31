@@ -61,7 +61,12 @@ export class PlatformAjaxSender implements Sender {
 			return new Response().fromRaw(res);
 		} catch (e) {
 			if (e.response) {
-				if (e.response.status == 525 || e.response.status == 530) {
+				if (
+					e.response.status == 525 ||
+					e.response.status == 530 ||
+					e.response.status == 522 ||
+					e.response.status > 1000
+				) {
 					throw new Err(ErrorCode.SERVER_NOT_EXIST);
 				}
 				if (e.response.status == 401) {

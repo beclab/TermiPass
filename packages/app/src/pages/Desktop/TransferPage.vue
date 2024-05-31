@@ -121,7 +121,7 @@
 								{{ formatStampTime(props.row.endTime) }}
 							</div>
 							<q-icon
-								:name="props.row.isUpload ? 'sym_r_download' : 'sym_r_upload'"
+								:name="props.row.isUpload ? 'sym_r_upload' : 'sym_r_download'"
 								color="blue"
 								size="20px"
 							/>

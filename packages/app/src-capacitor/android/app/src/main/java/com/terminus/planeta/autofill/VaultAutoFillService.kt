@@ -1,13 +1,12 @@
 package com.terminus.planeta.autofill
 
-import android.content.Intent
 import android.os.Build
 import android.os.CancellationSignal
 import android.service.autofill.*
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.terminus.planeta.utils.Constants
+import com.terminus.planeta.autofill.AutofillHelper.getAutoFillSavePendingIntent
 import com.terminus.planeta.utils.Constants.TAG_FRAMEWORK
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -50,6 +49,7 @@ class VaultAutoFillService : AutofillService() {
         callback.onSuccess(fillResponseBuilder.build())
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onSaveRequest(request: SaveRequest, callback: SaveCallback) {
 
         val structure = request.fillContexts.lastOrNull()?.structure ?: return
@@ -63,13 +63,25 @@ class VaultAutoFillService : AutofillService() {
         }
         Log.i(TAG_FRAMEWORK, "onSaveRequest: saveData opt ${saveData.data.opt()}")
 
-        val intent = Constants.getAutoFillSaveIntent(
-            this,
-            parser.getUri(),
-            saveData.type,
-            saveData.data.opt()
-        )
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            callback.onSuccess(
+                getAutoFillSavePendingIntent(
+                    this,
+                    parser.getUri(),
+                    saveData.type,
+                    saveData.data.opt()
+                ).intentSender
+            )
+        }else {
+            val pendingIntent = getAutoFillSavePendingIntent(
+                this,
+                parser.getUri(),
+                saveData.type,
+                saveData.data.opt(),
+                true
+            )
+            pendingIntent.send()
+            callback.onSuccess()
+        }
     }
 }
