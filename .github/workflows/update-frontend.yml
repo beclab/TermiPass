@@ -5,7 +5,7 @@ on:
 
     push:
         branches:
-            - "dev/analyzer"
+            - "main"
         tags:
           - 'v*'
 
