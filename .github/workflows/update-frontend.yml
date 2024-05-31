@@ -5,7 +5,7 @@ on:
 
     push:
         branches:
-            - "perf/cutting_fonts"
+            - "main"
         tags:
           - 'v*'
 
