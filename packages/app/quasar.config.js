@@ -80,7 +80,9 @@ module.exports = configure(function (ctx) {
 				BFL_URL: process.env.URL,
 				IS_PC_TEST: process.env.IS_PC_TEST,
 				WS_URL: process.env.WS_URL,
-				IS_BEX: process.env.PLATFORM == 'BEX'
+				IS_BEX: process.env.PLATFORM == 'BEX',
+				CACHE_CONTROL: 'max-age=31536000, public',
+				EXPIRES: 'Wed, 01 Jan 2025 00:00:00 GMT'
 			},
 
 			// transpile: false,
@@ -96,26 +98,12 @@ module.exports = configure(function (ctx) {
 			gzip: true,
 			// analyze: true,
 			extractCSS: true,
-			publicPath: '/',
-			distDir: 'dist',
 			sourceMap: true,
 			minify: true,
 
 			// Options below are automatically set depending on the env, set them if you want to override
 			// extractCSS: false,
 			extendWebpack(cfg) {
-				// cfg.resolve.alias = {
-				// 	...cfg.resolve.alias,
-				// 	'@files': path.resolve(__dirname, './src/files-drive')
-				// };
-				// cfg.plugins.push(
-				// 	new QuasarUnusedPlugin({
-				// 		directories: ['src'], // 指定要检查的目录
-				// 		exclude: ['node_modules'], // 排除的目录
-				// 		extensions: ['.js', '.vue'] // 要检查的文件类型
-				// 	})
-				// );
-
 				cfg.resolve.fallback = {
 					fs: false,
 					tls: false,
@@ -301,17 +289,6 @@ module.exports = configure(function (ctx) {
 							])
 							.end();
 
-						chain.optimization.splitChunks({
-							cacheGroups: {
-								'webextension-polyfill': {
-									minSize: 0,
-									test: /[\\/]node_modules[\\/]webextension-polyfill/,
-									name: 'webextension-polyfill',
-									chunks: 'all'
-								}
-							}
-						});
-
 						wasmRoot = `./dist/${ctx.modeName}/` + 'UnPackaged/www/';
 
 						copyFileArray.push({
@@ -395,6 +372,12 @@ module.exports = configure(function (ctx) {
 						maxInitialRequests: 30, // Maximum number of initialization requests
 						enforceSizeThreshold: 50000,
 						cacheGroups: {
+							'webextension-polyfill': {
+								minSize: 0,
+								test: /[\\/]node_modules[\\/]webextension-polyfill/,
+								name: 'webextension-polyfill',
+								chunks: 'all'
+							},
 							// Cache Group configuration
 							defaultVendors: {
 								test: /[\\/]node_modules[\\/]/,
