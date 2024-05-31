@@ -49,25 +49,15 @@ module.exports = configure(function (ctx) {
 		],
 
 		// https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
-		css: ['app.scss'],
+		css: [
+			'app.scss',
+			!ctx.dev && ['FILES', 'WEB'].includes(process.env.PLATFORM)
+				? 'font.pro.scss'
+				: 'font.dev.scss'
+		],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: [
-			// 'ionicons-v4',
-			// 'mdi-v5',
-			// 'fontawesome-v6',
-			// 'eva-icons',
-			// 'themify',
-			// 'line-awesome',
-			// 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-			'material-symbols-outlined',
-			'material-symbols-rounded',
-			'material-symbols-sharp',
-			'roboto-font', // optional, you are not bound to it
-			'material-icons', // optional, you are not bound to it
-			'fontawesome-v6',
-			'bootstrap-icons'
-		],
+		extras: ['material-icons', 'bootstrap-icons'],
 
 		vendor: {
 			remove: ['moment', '@bytetrade/ui', 'video.js']

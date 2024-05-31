@@ -20,7 +20,6 @@ COPY packages/locale/res ./packages/locale/res
 COPY packages/server/tsconfig.json ./packages/server/
 COPY packages/sdk/tsconfig.json ./packages/sdk/
 COPY packages/locale/tsconfig.json ./packages/locale/
-COPY assets/ ./assets
 COPY packages/server/webpack.config.js ./packages/server/webpack.config.js
 
 RUN npm run server:build
