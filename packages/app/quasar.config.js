@@ -99,7 +99,6 @@ module.exports = configure(function (ctx) {
 			// analyze: true,
 			extractCSS: true,
 			sourceMap: true,
-			minify: true,
 
 			// Options below are automatically set depending on the env, set them if you want to override
 			// extractCSS: false,
@@ -289,6 +288,17 @@ module.exports = configure(function (ctx) {
 							])
 							.end();
 
+						chain.optimization.splitChunks({
+							cacheGroups: {
+								'webextension-polyfill': {
+									minSize: 0,
+									test: /[\\/]node_modules[\\/]webextension-polyfill/,
+									name: 'webextension-polyfill',
+									chunks: 'all'
+								}
+							}
+						});
+
 						wasmRoot = `./dist/${ctx.modeName}/` + 'UnPackaged/www/';
 
 						copyFileArray.push({
@@ -327,7 +337,7 @@ module.exports = configure(function (ctx) {
 						.use(CopyWebpackPlugin, [copyFileArray]);
 				}
 
-				if (isClient) {
+				if (isClient && !isBex) {
 					chain.plugin('css-minimizer-webpack-plugin').use(CssMinimizerPlugin, [
 						{
 							parallel: true,
@@ -372,12 +382,6 @@ module.exports = configure(function (ctx) {
 						maxInitialRequests: 30, // Maximum number of initialization requests
 						enforceSizeThreshold: 50000,
 						cacheGroups: {
-							'webextension-polyfill': {
-								minSize: 0,
-								test: /[\\/]node_modules[\\/]webextension-polyfill/,
-								name: 'webextension-polyfill',
-								chunks: 'all'
-							},
 							// Cache Group configuration
 							defaultVendors: {
 								test: /[\\/]node_modules[\\/]/,
