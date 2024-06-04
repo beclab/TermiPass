@@ -132,6 +132,7 @@ export default defineComponent({
 			if (
 				pathSplit[3] === currentItem ||
 				pathSplit[3] === '' ||
+				(pathSplit[3] !== '' && currentItem === MenuItem.HOME) ||
 				(pathSplit[2] === 'Application' && currentItem === MenuItem.DATA) ||
 				(pathSplit[2] === 'AppData' && currentItem === MenuItem.CACHE)
 			) {
