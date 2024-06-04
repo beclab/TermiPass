@@ -140,7 +140,11 @@ export const userBindTerminus = async (
 
 		callback.onSuccess('');
 	} catch (e) {
-		callback.onFailure(e.message);
+		if (e.message) {
+			callback.onFailure(e.message);
+		} else {
+			callback.onFailure(e);
+		}
 	}
 };
 

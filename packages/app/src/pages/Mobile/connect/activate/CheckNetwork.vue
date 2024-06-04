@@ -102,7 +102,11 @@ async function checkHttpsCertificateProgress() {
 	try {
 		const data: any = await axios.get(
 			props.baseURL + '/bfl/settings/v1alpha1/ssl/task-state',
-			{}
+			{
+				params: {
+					t: new Date().getTime()
+				}
+			}
 		);
 
 		if (

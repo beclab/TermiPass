@@ -179,8 +179,6 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 	try {
 		getNativeAppPlatform().hookServerHttp = false;
 		const obj: WizardInfo = JSON.parse(base64ToString(content));
-		console.log('obj ===>');
-		console.log(obj);
 
 		if (obj.username?.split('@').length != 2) {
 			notifyFailed(
@@ -193,9 +191,6 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 			}
 			return;
 		}
-		console.log(obj.username);
-		console.log(userStore.current_user?.name);
-		console.log(obj.username !== userStore.current_user?.name);
 
 		if (obj.username !== userStore.current_user?.name) {
 			notifyFailed(
@@ -208,10 +203,6 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 			}
 			return;
 		}
-
-		// if (returnV.value) {
-		// 	return;
-		// }
 
 		$q.loading.show();
 
