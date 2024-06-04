@@ -103,6 +103,10 @@ module.exports = configure(function (ctx) {
 			extractCSS: true,
 			sourceMap: true,
 
+			uglifyOptions: {
+				compress: { drop_console: true }
+			},
+
 			// Options below are automatically set depending on the env, set them if you want to override
 			// extractCSS: false,
 			extendWebpack(cfg) {
