@@ -3,6 +3,11 @@
 
 export default {
 	//welcome
+	welcome_declaration_tips:
+		'We will use a VPN to help users connect to Terminus',
+	welcome_declaration_desc:
+		'TermiPass employ VPN services to ensure the privacy and security of our users. The VPN service is responsible for connecting your device terminal to the network where the Terminus server is located so that you can access Terminus server resources. The service will not access, hijack, tamper with your content information.',
+	welcome_get_started: 'Get Started',
 	welcome_words_first: 'System state at a glance',
 	welcome_words_second: 'Encrypted connection safe and solid',
 	welcome_words_third: 'Password management end-to-end encryption',

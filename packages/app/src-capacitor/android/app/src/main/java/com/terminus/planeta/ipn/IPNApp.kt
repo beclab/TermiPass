@@ -25,14 +25,11 @@ import com.terminus.planeta.VaultApp
 import com.terminus.planeta.ipn.IPNService.IPNBinder
 import com.terminus.planeta.plugins.OnTailscaleStatusListener
 import com.terminus.planeta.utils.Constants.VPN_STATUS_NEEDS_LOGIN
-import com.terminus.planeta.utils.Constants.VPN_STATUS_RUNNING
 import com.terminus.planeta.utils.Constants.VPN_STATUS_STARTING
-import com.terminus.planeta.utils.ExitUtils
 import com.terminus.planeta.utils.RunnablePocket
 import local_vpn_sdk.Local_vpn_sdk
 import org.json.JSONObject
 import utils.Callback
-import utils.Utils
 import java.io.IOException
 import java.net.NetworkInterface
 import java.security.GeneralSecurityException

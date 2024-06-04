@@ -1,6 +1,5 @@
 package com.terminus.planeta.file.notification;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.media.AudioAttributes;

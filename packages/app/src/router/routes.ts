@@ -6,6 +6,11 @@ const mobile: RouteRecordRaw[] = [
 		component: () => import('layouts/MobileLoginLayout.vue'),
 		children: [
 			{
+				path: '/declaration',
+				name: 'declaration',
+				component: () => import('src/pages/Mobile/login/DeclarationPage.vue')
+			},
+			{
 				path: '/welcome',
 				name: 'welcome',
 				component: () => import('src/pages/Mobile/login/WelcomePage.vue')

@@ -1,4 +1,5 @@
 <template>
+	<bt-theme />
 	<div
 		@touchstart="startSwipe"
 		@touchmove="handleSwipe"

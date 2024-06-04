@@ -1,10 +1,6 @@
 package com.terminus.planeta
 
 import android.app.Application
-import android.graphics.Color
-import android.view.Window
-import androidx.appcompat.app.AppCompatActivity
-import com.capacitorjs.plugins.statusbar.StatusBar
 import com.tencent.mmkv.MMKV
 import com.terminus.planeta.file.account.Account
 import com.terminus.planeta.file.data.DataManager
