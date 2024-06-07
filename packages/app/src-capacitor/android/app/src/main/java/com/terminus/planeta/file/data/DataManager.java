@@ -10,7 +10,6 @@ import com.terminus.planeta.file.SeafConnection;
 import com.terminus.planeta.file.SeafException;
 import com.terminus.planeta.file.Utils;
 import com.terminus.planeta.file.account.Account;
-import com.terminus.planeta.file.account.AccountInfo;
 import com.terminus.planeta.file.crypto.Crypto;
 
 import org.apache.commons.io.FileUtils;

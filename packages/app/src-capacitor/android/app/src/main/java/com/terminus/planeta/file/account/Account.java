@@ -2,12 +2,8 @@ package com.terminus.planeta.file.account;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.TextUtils;
 
-import com.getcapacitor.JSObject;
 import com.terminus.planeta.file.Utils;
-
-import java.util.Objects;
 
 public class Account implements Parcelable, Comparable<Account> {
     private static final String DEBUG_TAG = "Account";

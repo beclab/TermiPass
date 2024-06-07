@@ -2,7 +2,6 @@ package com.terminus.planeta.file.data;
 
 import android.util.Log;
 
-import com.getcapacitor.JSObject;
 import com.terminus.planeta.R;
 import com.terminus.planeta.VaultApp;
 import com.terminus.planeta.file.PinyinUtils;
