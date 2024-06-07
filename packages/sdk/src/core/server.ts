@@ -1496,6 +1496,17 @@ export class Controller extends API {
 		console.log('bflUser: ' + bflUser);
 		console.log('found: ' + found);
 		if (found) {
+			const auth = await this._getAuth(account.did);
+			if (
+				this.context.device &&
+				!auth.trustedDevices.some(
+					({ id }) => id === this.context.device!.id
+				)
+			) {
+				console.log('add trust device');
+				auth.trustedDevices.push(this.context.device);
+			}
+			await Promise.all([this.storage.save(auth)]);
 			return new CreateAccountResponse({
 				mfa
 			});

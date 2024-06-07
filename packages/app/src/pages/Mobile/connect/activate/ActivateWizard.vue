@@ -107,7 +107,12 @@ async function updateTerminusInfo(): Promise<string | undefined> {
 
 	try {
 		const data: TerminusInfo = await axios.get(
-			baseURL + '/bfl/info/v1/terminus-info'
+			baseURL + '/bfl/info/v1/terminus-info',
+			{
+				params: {
+					t: new Date().getTime()
+				}
+			}
 		);
 
 		if (
@@ -137,7 +142,12 @@ async function updateTerminusInfo(): Promise<string | undefined> {
 
 async function authRequestTerminusInfo() {
 	const data: TerminusInfo = await axios.get(
-		user.auth_url + 'bfl/info/v1/terminus-info'
+		user.auth_url + 'bfl/info/v1/terminus-info',
+		{
+			params: {
+				t: new Date().getMilliseconds()
+			}
+		}
 	);
 	if (
 		(data as any) ==

@@ -1077,34 +1077,6 @@ export class App {
 		if (!this.state_id) {
 			throw new Error('No State_id');
 		}
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 1 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-		// if (!this._cachedStartCreateSessionResponses.has(did)) {
-		// 	console.log('login cached ');
-		// 	// Fetch authentication info
-		// 	this._cachedStartCreateSessionResponses.set(
-		// 		did,
-		// 		await this.api.startCreateSession(
-		// 			new StartCreateSessionParams({ did, authToken, asAdmin })
-		// 		)
-		// 	);
-		// }
-
-		// const {
-		// 	accountId: accId,
-		// 	keyParams,
-		// 	srpId,
-		// 	B
-		// } = this._cachedStartCreateSessionResponses.get(did)!;
 
 		if (!this._cachedStartCreateSessionResponses.has(this.state_id)) {
 			console.log('login cached ');
@@ -1117,18 +1089,6 @@ export class App {
 				)
 			);
 		}
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 2 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-
 		const {
 			accountId: accId,
 			keyParams,
@@ -1139,59 +1099,14 @@ export class App {
 		const auth = new Auth(did);
 		auth.keyParams = keyParams;
 
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 3 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log('login 2');
 		// Generate auth secret
 		const authKey = await auth.getAuthKey(password);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 4 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log('login 3');
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 5 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		// Initialize SRP object
 		const srp = new SRPClient();
 		await srp.initialize(authKey);
 		await srp.setB(B);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 6 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-
 		console.log('login 4');
 		// Create session object
 		const session = await this.api.completeCreateSession(
@@ -1203,62 +1118,17 @@ export class App {
 				srpId
 			})
 		);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 7 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 
 		console.log('login 5');
 		// Apply session key and update state
 		session.key = srp.K!;
 		this.setState({ session });
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 8 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-
 		// Fetch and unlock account object
 		const account = await this.api.getAccount();
 		console.log('login 6');
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 9 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log(this.account);
 		console.log(JSON.stringify(this.account));
 		await account.unlock(password);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 10 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log('after unlock');
 		console.log(this.account);
 		console.log(JSON.stringify(this.account));
@@ -1283,6 +1153,9 @@ export class App {
 		console.log('login 8 mainvault');
 
 		console.log(this.mainVault);
+		// if (!asAdmin) {
+		// 	throw 'test throw error';
+		// }
 		// Load organizations and vaults
 		await this.synchronize();
 

@@ -14,8 +14,8 @@ import { useDeviceStore } from 'src/stores/device';
 import { useScaleStore } from 'src/stores/scale';
 import { useTermipassStore } from 'src/stores/termipass';
 import { BuildTransition, StateMachine } from './stateMachine';
-// import { UserStatusActive } from './checkTerminusState';
 import { axiosInstanceProxy } from 'src/platform/httpProxy';
+import { getAppPlatform } from 'src/platform/appPlatform';
 
 export enum TermiPassStatus {
 	INIT = 0,
@@ -288,6 +288,10 @@ export class TermiPassState {
 			if (this.stateMachine.state() < TermipassActionStatus.UserSetupFinished) {
 				return;
 			}
+
+			if (!getAppPlatform().hookServerHttp) {
+				return;
+			}
 			const isLocal = await this.actions.getTerminusInfo(false, true);
 			this.currentUser!.isLocal = isLocal != undefined;
 			this.actions.resetSenderUrl();
@@ -295,6 +299,9 @@ export class TermiPassState {
 		},
 		resetSenderUrl: async () => {
 			if (this.stateMachine.state() < TermipassActionStatus.UserSetupFinished) {
+				return;
+			}
+			if (!getAppPlatform().hookServerHttp) {
 				return;
 			}
 			if (getSenderUrl() != this.currentUser!.vault_url) {
