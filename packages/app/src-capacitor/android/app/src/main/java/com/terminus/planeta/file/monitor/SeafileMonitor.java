@@ -8,7 +8,6 @@ import com.terminus.planeta.file.account.Account;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SeafileMonitor {

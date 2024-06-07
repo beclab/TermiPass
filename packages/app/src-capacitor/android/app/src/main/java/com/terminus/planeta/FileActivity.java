@@ -8,16 +8,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.Window;
 import android.widget.Toast;
 
-import com.capacitorjs.plugins.statusbar.StatusBar;
 import com.getcapacitor.BridgeActivity;
 import com.terminus.planeta.file.ConcurrentAsyncTask;
 import com.terminus.planeta.file.NavContext;

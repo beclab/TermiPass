@@ -5,18 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.widget.Toast;
 
-import com.capacitorjs.plugins.statusbar.StatusBar;
 import com.terminus.planeta.R;
 import com.terminus.planeta.utils.Constants;
 import com.terminus.planeta.view.BaseWebView;

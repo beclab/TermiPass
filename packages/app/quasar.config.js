@@ -12,6 +12,8 @@
 const path = require('path');
 const fs = require('fs');
 const { configure } = require('quasar/wrappers');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const macConfig = require('./build/electron/mac/buildConfig');
 const winConfig = require('./build/electron/win/buildConfig');
@@ -66,6 +68,10 @@ module.exports = configure(function (ctx) {
 			'bootstrap-icons'
 		],
 
+		vendor: {
+			remove: ['moment', '@bytetrade/ui', 'video.js']
+		},
+
 		// Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
 		build: {
 			vueRouterMode: 'history', // available values: 'hash', 'history'
@@ -76,11 +82,12 @@ module.exports = configure(function (ctx) {
 				BFL_URL: process.env.URL,
 				IS_PC_TEST: process.env.IS_PC_TEST,
 				WS_URL: process.env.WS_URL,
-				IS_BEX: process.env.PLATFORM == 'BEX'
+				IS_BEX: process.env.PLATFORM == 'BEX',
+				CACHE_CONTROL: 'max-age=31536000, public',
+				EXPIRES: 'Wed, 01 Jan 2025 00:00:00 GMT'
 			},
 
 			// transpile: false,
-			// publicPath: '/',
 
 			// Add dependencies for transpiling with Babel (Array of string/regex)
 			// (from node_modules, which are by default not transpiled).
@@ -90,16 +97,14 @@ module.exports = configure(function (ctx) {
 			// rtl: true, // https://quasar.dev/options/rtl-support
 			// preloadChunks: true,
 			// showProgress: false,
-			// gzip: true,
+			gzip: true,
 			// analyze: true,
+			extractCSS: true,
+			sourceMap: true,
 
 			// Options below are automatically set depending on the env, set them if you want to override
 			// extractCSS: false,
 			extendWebpack(cfg) {
-				// cfg.resolve.alias = {
-				// 	...cfg.resolve.alias,
-				// 	'@files': path.resolve(__dirname, './src/files-drive')
-				// };
 				cfg.resolve.fallback = {
 					fs: false,
 					tls: false,
@@ -162,7 +167,7 @@ module.exports = configure(function (ctx) {
 
 			// https://v2.quasar.dev/quasar-cli-webpack/handling-webpack
 			// "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-			chainWebpack(chain) {
+			chainWebpack(chain, { isClient }) {
 				const nodePolyfillWebpackPlugin = require('node-polyfill-webpack-plugin');
 				chain.plugin('node-polyfill').use(nodePolyfillWebpackPlugin);
 
@@ -411,6 +416,66 @@ module.exports = configure(function (ctx) {
 						.plugin('copy-index-html')
 						.use(CopyWebpackPlugin, [copyFileArray]);
 				}
+
+				if (isClient && !isBex) {
+					chain.plugin('css-minimizer-webpack-plugin').use(CssMinimizerPlugin, [
+						{
+							parallel: true,
+							minimizerOptions: {
+								preset: [
+									'default',
+									{
+										mergeLonghand: true,
+										cssDeclarationSorter: 'concentric',
+										discardComments: { removeAll: true }
+									}
+								]
+							}
+						}
+					]);
+
+					chain.optimization.minimizer('terser').use(TerserPlugin, [
+						{
+							terserOptions: {
+								parallel: true,
+								sourceMap: true,
+								extractComments: false,
+								compress: {
+									drop_console: true,
+									drop_debugger: true,
+									pure_funcs: ['console.log']
+								},
+								output: {
+									comments: false,
+									ascii_only: true
+								}
+							}
+						}
+					]);
+
+					chain.optimization.splitChunks({
+						chunks: 'all', // The type of chunk that requires code segmentation
+						minSize: 20000, // Minimum split file size
+						minRemainingSize: 0, // Minimum remaining file size after segmentation
+						minChunks: 1, // The number of times it has been referenced before it is split
+						maxAsyncRequests: 30, // Maximum number of asynchronous requests
+						maxInitialRequests: 30, // Maximum number of initialization requests
+						enforceSizeThreshold: 50000,
+						cacheGroups: {
+							// Cache Group configuration
+							defaultVendors: {
+								test: /[\\/]node_modules[\\/]/,
+								priority: -10,
+								reuseExistingChunk: true
+							},
+							default: {
+								minChunks: 2,
+								priority: -20,
+								reuseExistingChunk: true //	Reuse the chunk that has been split
+							}
+						}
+					});
+				}
 			},
 			afterBuild(params) {
 				const isBex = ctx.modeName === 'bex';
@@ -473,7 +538,7 @@ module.exports = configure(function (ctx) {
 			open: true, // opens browser window automatically
 			proxy: {
 				'/api/controllers': {
-					target: 'https://agent.local.a72766.myterminus.com',
+					target: `https://agent.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
 					changeOrigin: true
 				},
 				'/bfl': {

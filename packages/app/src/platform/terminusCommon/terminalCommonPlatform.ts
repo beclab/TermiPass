@@ -157,7 +157,11 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 		const userStore = useUserStore();
 		await userStore.load();
 		if (!userStore.isBooted) {
-			redirect({ path: '/welcome' });
+			if (this.quasar?.platform.is.android) {
+				redirect({ path: '/declaration' });
+			} else {
+				redirect({ path: '/welcome' });
+			}
 			return;
 		}
 		redirect({ path: '/unlock' });

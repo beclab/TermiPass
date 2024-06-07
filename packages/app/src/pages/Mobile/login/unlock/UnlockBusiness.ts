@@ -47,7 +47,7 @@ export async function unlockByPwd(
 
 		if (userStore.current_id) {
 			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
-			if (user.setup_finished) {
+			if (user.name) {
 				setSenderUrl({
 					url: user.vault_url
 				});

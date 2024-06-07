@@ -167,14 +167,10 @@ export class Index extends Serializable {
 
 	async matchHost(host: string) {
 		const hashedHost = bytesToBase64(
-			await getCryptoProvider().deriveKey(
-				stringToBytes(host),
-				this.hashParams
-			)
+			await getCryptoProvider().deriveKey(stringToBytes(host), this.hashParams)
 		);
-		return this.items.filter((item) =>
-			item.hosts.some((h) => h === hashedHost)
-		).length;
+		return this.items.filter((item) => item.hosts.some((h) => h === hashedHost))
+			.length;
 	}
 
 	getHostnameVariants(host: string) {
@@ -197,9 +193,7 @@ export class Index extends Serializable {
 			.reduce(
 				(currentDomainParts: string[], subdomain: string) => {
 					currentDomainParts.push(
-						`${subdomain}.${
-							currentDomainParts[currentDomainParts.length - 1]
-						}`
+						`${subdomain}.${currentDomainParts[currentDomainParts.length - 1]}`
 					);
 
 					return currentDomainParts;
@@ -228,10 +222,7 @@ export class Index extends Serializable {
 			await Promise.all(
 				domains.map(async (domain) => await this.matchHost(domain))
 			)
-		).reduce(
-			(previousCount, currentCount) => previousCount + currentCount,
-			0
-		);
+		).reduce((previousCount, currentCount) => previousCount + currentCount, 0);
 
 		return domainsMatches;
 	}
@@ -327,9 +318,7 @@ export class AppState extends Storable {
 	@Serialize({
 		arrayDeserializeIndividually: false,
 		fromRaw: (raw: [string, string][]) =>
-			new Map<string, Date>(
-				raw.map(([id, date]) => [id, new Date(date)])
-			),
+			new Map<string, Date>(raw.map(([id, date]) => [id, new Date(date)])),
 		toRaw: (val: any) => [...val]
 	})
 	lastUsed = new Map<string, Date>();
@@ -479,9 +468,7 @@ export class App {
 
 	/** The current users main, or "private" [[Vault]] */
 	get mainVault(): Vault | null {
-		return (
-			(this.account && this.getVault(this.account.mainVault.id)) || null
-		);
+		return (this.account && this.getVault(this.account.mainVault.id)) || null;
 	}
 
 	get offline() {
@@ -1077,34 +1064,6 @@ export class App {
 		if (!this.state_id) {
 			throw new Error('No State_id');
 		}
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 1 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-		// if (!this._cachedStartCreateSessionResponses.has(did)) {
-		// 	console.log('login cached ');
-		// 	// Fetch authentication info
-		// 	this._cachedStartCreateSessionResponses.set(
-		// 		did,
-		// 		await this.api.startCreateSession(
-		// 			new StartCreateSessionParams({ did, authToken, asAdmin })
-		// 		)
-		// 	);
-		// }
-
-		// const {
-		// 	accountId: accId,
-		// 	keyParams,
-		// 	srpId,
-		// 	B
-		// } = this._cachedStartCreateSessionResponses.get(did)!;
 
 		if (!this._cachedStartCreateSessionResponses.has(this.state_id)) {
 			console.log('login cached ');
@@ -1117,18 +1076,6 @@ export class App {
 				)
 			);
 		}
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 2 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-
 		const {
 			accountId: accId,
 			keyParams,
@@ -1139,59 +1086,14 @@ export class App {
 		const auth = new Auth(did);
 		auth.keyParams = keyParams;
 
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 3 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log('login 2');
 		// Generate auth secret
 		const authKey = await auth.getAuthKey(password);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 4 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log('login 3');
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 5 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		// Initialize SRP object
 		const srp = new SRPClient();
 		await srp.initialize(authKey);
 		await srp.setB(B);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 6 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-
 		console.log('login 4');
 		// Create session object
 		const session = await this.api.completeCreateSession(
@@ -1203,62 +1105,17 @@ export class App {
 				srpId
 			})
 		);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 7 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 
 		console.log('login 5');
 		// Apply session key and update state
 		session.key = srp.K!;
 		this.setState({ session });
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 8 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
-
 		// Fetch and unlock account object
 		const account = await this.api.getAccount();
 		console.log('login 6');
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 9 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log(this.account);
 		console.log(JSON.stringify(this.account));
 		await account.unlock(password);
-		if (
-			this.state.vaults.length >
-			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
-		) {
-			console.log(
-				'login 10 save localvault ' + this.state.vaults[0].items.size
-			);
-
-			//this.vaults[0].id = account.mainVault.id;
-			//this.vaults[0].name = account.mainVault.name;
-		}
 		console.log('after unlock');
 		console.log(this.account);
 		console.log(JSON.stringify(this.account));
@@ -1269,9 +1126,7 @@ export class App {
 			this.state.vaults.length >
 			0 /*&& this.vaults[0].id == this.account?.mainVault.id*/
 		) {
-			console.log(
-				'login save localvault ' + this.state.vaults[0].items.size
-			);
+			console.log('login save localvault ' + this.state.vaults[0].items.size);
 			localvault = this.state.vaults[0];
 			//this.vaults[0].id = account.mainVault.id;
 			//this.vaults[0].name = account.mainVault.name;
@@ -1283,6 +1138,9 @@ export class App {
 		console.log('login 8 mainvault');
 
 		console.log(this.mainVault);
+		// if (!asAdmin) {
+		// 	throw 'test throw error';
+		// }
 		// Load organizations and vaults
 		await this.synchronize();
 
@@ -1598,9 +1456,7 @@ export class App {
 			org.invites = [];
 
 			// Suspend members and create confirmation invites
-			for (const member of org.members.filter(
-				(m) => m.id !== account.id
-			)) {
+			for (const member of org.members.filter((m) => m.id !== account.id)) {
 				member.status = OrgMemberStatus.Suspended;
 				const invite = new Invite(member.did, 'confirm_membership');
 				await invite.initialize(org, this.account!, 720);
@@ -1697,10 +1553,7 @@ export class App {
 	/** Locally update the given `vault` object */
 	putVault(vault: Vault) {
 		this.setState({
-			vaults: [
-				...this.state.vaults.filter((v) => v.id !== vault.id),
-				vault
-			]
+			vaults: [...this.state.vaults.filter((v) => v.id !== vault.id), vault]
 		});
 	}
 
@@ -1838,9 +1691,7 @@ export class App {
 		}
 
 		// Sync private vault
-		const promises = [
-			this.syncVault(this.account.mainVault)
-		] as Promise<any>[];
+		const promises = [this.syncVault(this.account.mainVault)] as Promise<any>[];
 
 		// Sync vaults assigned to through organizations
 		for (const org of this.state.orgs) {
@@ -1987,10 +1838,7 @@ export class App {
 		}
 	}
 
-	async updateVault(
-		{ id }: { id: VaultID },
-		tries = 0
-	): Promise<Vault | null> {
+	async updateVault({ id }: { id: VaultID }, tries = 0): Promise<Vault | null> {
 		if (!this.account) {
 			throw 'need to be logged in to update vault!';
 		}
@@ -2147,11 +1995,9 @@ export class App {
 
 			if (org) {
 				org.revision = vault.org!.revision!;
-				org.vaults.find((v) => v.id === vault!.id)!.revision =
-					vault.revision;
+				org.vaults.find((v) => v.id === vault!.id)!.revision = vault.revision;
 				this.putOrg(org);
-				account.orgs.find((o) => o.id === org.id)!.revision =
-					org.revision;
+				account.orgs.find((o) => o.id === org.id)!.revision = org.revision;
 			} else {
 				account.mainVault.revision = vault.revision;
 			}
@@ -2292,10 +2138,10 @@ export class App {
 			JSON.stringify(oldItem.fields) !== JSON.stringify(newItem.fields)
 		) {
 			console.log('add history2');
-			newItem.history = [
-				new ItemHistoryEntry(oldItem),
-				...item.history
-			].slice(0, ITEM_HISTORY_ENTRIES_LIMIT);
+			newItem.history = [new ItemHistoryEntry(oldItem), ...item.history].slice(
+				0,
+				ITEM_HISTORY_ENTRIES_LIMIT
+			);
 		}
 
 		vault.items.update(newItem);
@@ -2362,9 +2208,7 @@ export class App {
 			throw 'Items with attachments cannot be moved!';
 		}
 		const newItems = await Promise.all(
-			items.map(
-				async (item) => new VaultItem({ ...item, id: await uuid() })
-			)
+			items.map(async (item) => new VaultItem({ ...item, id: await uuid() }))
 		);
 		await this.addItems(newItems, target);
 		await this.deleteItems(items);
@@ -2390,9 +2234,7 @@ export class App {
 							//Do nothing
 						}
 
-						return this.state.index
-							.getHostnameVariants(host)
-							.includes(h);
+						return this.state.index.getHostnameVariants(host).includes(h);
 					})
 				) {
 					items.push({ vault, item });
@@ -2458,10 +2300,7 @@ export class App {
 					this.updateItem(
 						item,
 						{
-							tags: [
-								...item.tags.filter((t) => t !== tag),
-								newName
-							]
+							tags: [...item.tags.filter((t) => t !== tag), newName]
 						},
 						false,
 						false
@@ -2519,9 +2358,7 @@ export class App {
 		}
 
 		try {
-			await Promise.all(
-				this.account.orgs.map((org) => this.fetchOrg(org))
-			);
+			await Promise.all(this.account.orgs.map((org) => this.fetchOrg(org)));
 		} catch (e) {
 			//To Do nothing
 		}
@@ -2555,12 +2392,7 @@ export class App {
 
 		const account = this.account;
 
-		if (
-			account &&
-			!account.locked &&
-			org.isOwner(account) &&
-			!org.publicKey
-		) {
+		if (account && !account.locked && org.isOwner(account) && !org.publicKey) {
 			await org.initialize(account);
 			org = await this.api.updateOrg(org);
 		}
@@ -2800,9 +2632,7 @@ export class App {
 				invites.push(invite);
 			}
 			org.invites = [
-				...org.invites.filter(
-					(a) => !invites.some((b) => a.did === b.did)
-				),
+				...org.invites.filter((a) => !invites.some((b) => a.did === b.did)),
 				...invites
 			];
 		});
@@ -2814,9 +2644,7 @@ export class App {
 	 */
 	async getInvite(orgId: string, id: string) {
 		try {
-			return await this.api.getInvite(
-				new GetInviteParams({ org: orgId, id })
-			);
+			return await this.api.getInvite(new GetInviteParams({ org: orgId, id }));
 		} catch (e) {
 			//To Do nothing
 			return null;
@@ -2879,9 +2707,7 @@ export class App {
 		await this.updateOrg(
 			invite.org!.id,
 			async (org) =>
-				(org.invites = org.invites.filter(
-					(inv) => inv.id !== invite.id
-				))
+				(org.invites = org.invites.filter((inv) => inv.id !== invite.id))
 		);
 	}
 
@@ -2890,9 +2716,7 @@ export class App {
 			return;
 		}
 
-		for (const org of this.orgs.filter((org) =>
-			org.isOwner(this.account!)
-		)) {
+		for (const org of this.orgs.filter((org) => org.isOwner(this.account!))) {
 			const newMembers: string[] = [];
 
 			for (const member of org.members) {
@@ -2987,9 +2811,7 @@ export class App {
 	 */
 
 	getAccountProvisioning() {
-		return (
-			this.authInfo?.provisioning?.account || new AccountProvisioning()
-		);
+		return this.authInfo?.provisioning?.account || new AccountProvisioning();
 	}
 
 	getOrgProvisioning({ id }: { id: string }) {
