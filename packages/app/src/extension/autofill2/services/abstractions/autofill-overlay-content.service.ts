@@ -1,14 +1,15 @@
 import AutofillField from '../../models/autofill-field';
+
 import { ElementWithOpId, FormFieldElement } from '../../types';
 import { AuthenticationStatus } from '../../utils';
 
-export type OpenAutofillOverlayOptions = {
+type OpenAutofillOverlayOptions = {
 	isFocusingFieldElement?: boolean;
 	isOpeningFullOverlay?: boolean;
 	authStatus?: AuthenticationStatus;
 };
 
-export interface AutofillOverlayContentService {
+interface AutofillOverlayContentService {
 	isFieldCurrentlyFocused: boolean;
 	isCurrentlyFilling: boolean;
 	isOverlayCiphersPopulated: boolean;
@@ -29,3 +30,5 @@ export interface AutofillOverlayContentService {
 	blurMostRecentOverlayField(): void;
 	destroy(): void;
 }
+
+export { OpenAutofillOverlayOptions, AutofillOverlayContentService };

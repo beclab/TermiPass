@@ -1,3 +1,10 @@
+import '@webcomponents/custom-elements';
+import {
+	globeIcon,
+	lockIcon,
+	plusIcon,
+	viewCipherIcon
+} from '../../../utils/svg-icons';
 import {
 	AuthenticationStatus,
 	EVENTS,
@@ -17,7 +24,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	private ciphers: OverlayCipherData[] = [];
 	private ciphersList: HTMLUListElement;
 	private cipherListScrollIsDebounced = false;
-	private cipherListScrollDebounceTimeout: NodeJS.Timeout;
+	private cipherListScrollDebounceTimeout: number | NodeJS.Timeout;
 	private currentCipherIndex = 0;
 	private readonly showCiphersPerPage = 6;
 	private readonly overlayListWindowMessageHandlers: OverlayListWindowMessageHandlers =
@@ -32,7 +39,6 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 
 	constructor() {
 		super();
-
 		this.setupOverlayListGlobalListeners();
 	}
 
@@ -67,8 +73,6 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 			'overlay-list-container',
 			themeClass
 		);
-		this.overlayListContainer.setAttribute('role', 'dialog');
-		this.overlayListContainer.setAttribute('aria-modal', 'true');
 		this.resizeObserver.observe(this.overlayListContainer);
 
 		this.shadowDom.append(linkElement, this.overlayListContainer);
@@ -102,7 +106,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 				'opensInANewWindow'
 			)}`
 		);
-		// unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
+		unlockButtonElement.prepend(buildSvgDomElement(lockIcon));
 		unlockButtonElement.addEventListener(
 			EVENTS.CLICK,
 			this.handleUnlockButtonClick
@@ -174,7 +178,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 				'opensInANewWindow'
 			)}`
 		);
-		// newItemButton.prepend(buildSvgDomElement(plusIcon));
+		newItemButton.prepend(buildSvgDomElement(plusIcon));
 		newItemButton.addEventListener(EVENTS.CLICK, this.handeNewItemButtonClick);
 
 		const overlayListButtonContainer = globalThis.document.createElement('div');
@@ -377,7 +381,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 				'opensInANewWindow'
 			)}`
 		);
-		// viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
+		viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
 		viewCipherElement.addEventListener(
 			EVENTS.CLICK,
 			this.handleViewCipherClickEvent(cipher)
@@ -474,7 +478,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 			return cipherIcon;
 		}
 
-		// cipherIcon.append(buildSvgDomElement(globeIcon));
+		cipherIcon.append(buildSvgDomElement(globeIcon));
 		return cipherIcon;
 	}
 
@@ -557,6 +561,9 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 * the first cipher button.
 	 */
 	private focusOverlayList() {
+		this.overlayListContainer.setAttribute('role', 'dialog');
+		this.overlayListContainer.setAttribute('aria-modal', 'true');
+
 		const unlockButtonElement = this.overlayListContainer.querySelector(
 			'#unlock-button'
 		) as HTMLElement;

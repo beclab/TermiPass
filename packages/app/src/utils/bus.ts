@@ -71,3 +71,5 @@ export type BusEventName =
 
 	// others
 	| 'runTask';
+
+export type BroadcastToUIMethod = 'UNLOCKED_UPDATE';

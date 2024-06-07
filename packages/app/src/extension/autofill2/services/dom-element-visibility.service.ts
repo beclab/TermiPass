@@ -74,7 +74,7 @@ class DomElementVisibilityService
 	private getElementStyle(element: HTMLElement, styleProperty: string): string {
 		if (!this.cachedComputedStyle) {
 			this.cachedComputedStyle = (
-				element.ownerDocument.defaultView || window
+				element.ownerDocument.defaultView || globalThis
 			).getComputedStyle(element);
 		}
 
@@ -213,11 +213,7 @@ class DomElementVisibilityService
 		const closestParentLabel =
 			elementAtCenterPoint?.parentElement?.closest('label');
 
-		if (closestParentLabel) {
-			return targetElementLabelsSet.has(closestParentLabel);
-		}
-
-		return false;
+		return targetElementLabelsSet.has(closestParentLabel!);
 	}
 }
 

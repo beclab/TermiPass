@@ -68,7 +68,8 @@ class AutofillOverlayPageElement extends HTMLElement {
 	 * @protected
 	 */
 	protected getTranslation(key: string): string {
-		return this.translations[key] || '';
+		// return this.translations[key] || '';
+		return key;
 	}
 
 	/**
@@ -101,12 +102,11 @@ class AutofillOverlayPageElement extends HTMLElement {
 		if (!this.messageOrigin) {
 			this.messageOrigin = event.origin;
 		}
-
 		if (event.origin !== this.messageOrigin) {
 			return;
 		}
-
 		const message = event?.data;
+
 		const handler = this.windowMessageHandlers[message?.command];
 		if (!handler) {
 			return;

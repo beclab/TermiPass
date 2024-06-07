@@ -10,8 +10,6 @@ module.exports = class UpdatePackageVersionByLatestTag {
 		compiler.hooks.environment.tap(
 			'UpdatePackageVersionByLatestTagPlugin',
 			() => {
-				console.log('this.paths ===>');
-				console.log(this.paths);
 				let latestTag = '';
 				try {
 					execSync('git fetch -a');
@@ -28,8 +26,6 @@ module.exports = class UpdatePackageVersionByLatestTag {
 					console.log(error);
 					return;
 				}
-				console.log(latestTag);
-
 				const regex = /^v(\d+)\.(\d+)\.(\d+)$/;
 				const match = latestTag.match(regex);
 				if (!match) {

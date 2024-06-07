@@ -46,7 +46,7 @@ export class Controller {
 	 */
 
 	sendUnlocked = (data: string) => {
-		getExtensionBackgroundPlatform().dataCenter.decryptPassword(data);
+		getExtensionBackgroundPlatform().dataCenter.unlock(data);
 		providerBackground.setUnlock(true);
 	};
 

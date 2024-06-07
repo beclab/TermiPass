@@ -68,11 +68,6 @@ export const buildSvgDomElement = (svgString: string, ariaHidden = true) => {
 	return domElement;
 };
 
-export const AutofillOverlayElement = {
-	Button: 'autofill-overlay-button',
-	List: 'autofill-overlay-list'
-} as const;
-
 export const TYPE_CHECK = {
 	FUNCTION: 'function',
 	NUMBER: 'number',
@@ -86,8 +81,8 @@ export const TYPE_CHECK = {
  * @param tagName -  The tag name to check against.
  */
 function elementIsInstanceOf<T extends Element>(
-	element: Element,
-	tagName: string
+	element?: Element,
+	tagName?: string
 ): element is T {
 	return element?.tagName.toLowerCase() === tagName;
 }
@@ -109,7 +104,7 @@ export const elementIsSpanElement = (
  * @param element - The element to check.
  */
 export const elementIsSelectElement = (
-	element: Element
+	element?: Element
 ): element is HTMLSelectElement => {
 	return elementIsInstanceOf<HTMLSelectElement>(element, 'select');
 };
@@ -120,7 +115,7 @@ export const elementIsSelectElement = (
  * @param element - The element to check.
  */
 export const elementIsInputElement = (
-	element: Element
+	element?: Element
 ): element is HTMLInputElement => {
 	return elementIsInstanceOf<HTMLInputElement>(element, 'input');
 };
@@ -131,7 +126,7 @@ export const elementIsInputElement = (
  * @param element - The element to check.
  */
 export const elementIsTextAreaElement = (
-	element: Element
+	element?: Element
 ): element is HTMLTextAreaElement => {
 	return elementIsInstanceOf<HTMLTextAreaElement>(element, 'textarea');
 };
@@ -153,7 +148,7 @@ export const elementIsLabelElement = (
  * @param element - The element to check.
  */
 export const elementIsDescriptionDetailsElement = (
-	element: Element
+	element?: Element
 ): element is HTMLElement => {
 	return elementIsInstanceOf<HTMLElement>(element, 'dd');
 };
@@ -164,7 +159,7 @@ export const elementIsDescriptionDetailsElement = (
  * @param element - The element to check.
  */
 export const elementIsDescriptionTermElement = (
-	element: Element
+	element?: Element
 ): element is HTMLElement => {
 	return elementIsInstanceOf<HTMLElement>(element, 'dt');
 };
@@ -226,16 +221,16 @@ export const nodeIsInputElement = (node: Node): node is HTMLInputElement => {
  *
  * @param callback - Callback function to run when the extension disconnects
  */
-function setupExtensionDisconnectAction(
+export const setupExtensionDisconnectAction = (
 	callback: (port: chrome.runtime.Port) => void
-) {
+) => {
 	const port = chrome.runtime.connect({ name: AutofillPort.InjectedScript });
 	const onDisconnectCallback = (disconnectedPort: chrome.runtime.Port) => {
 		callback(disconnectedPort);
 		port.onDisconnect.removeListener(onDisconnectCallback);
 	};
 	port.onDisconnect.addListener(onDisconnectCallback);
-}
+};
 
 /**
  * Handles setup of the extension disconnect action for the autofill init class

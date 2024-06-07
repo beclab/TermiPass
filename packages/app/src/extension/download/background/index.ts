@@ -4,19 +4,19 @@ import {
 	UpdateBadgeInterface
 } from '../../interface/updateBadgeInterface';
 import { BrowserInterface } from '../../interface/browserInterface';
-import {
-	Bookmarks,
-	browser,
-	Menus,
-	Runtime,
-	Tabs
-} from 'webextension-polyfill-ts';
+import { browser, Menus, Runtime, Tabs } from 'webextension-polyfill-ts';
 import { CONTEXT_MENUS_SEND_ID } from '../../utils/menusMananger';
 import storage from '../../provider/storage/storage';
+import {
+	ExtensionMessage,
+	ExtensionMessageMode
+} from '../../interface/message';
 
 export class DownLoadBackground
 	implements UpdateBadgeInterface, BrowserInterface
 {
+	messageModule: ExtensionMessageMode = 'download';
+
 	async init() {
 		//Do Nothing
 	}
@@ -65,16 +65,20 @@ export class DownLoadBackground
 		//Do Nothing
 	}
 
-	runtimeOnMessage(_message: any, _sender: Runtime.MessageSender) {
-		//Do Nothing
-	}
+	// runtimeOnMessage(_message:, _sender: Runtime.MessageSender) {
+	// 	//Do Nothing
+	// }
+	runtimeOnMessage(
+		_message: ExtensionMessage,
+		_sender: Runtime.MessageSender
+	) {}
 
-	tabsOnRemoved(
-		_tabId: number,
-		_removeInfo: Bookmarks.OnRemovedRemoveInfoType
-	) {
+	tabsOnRemoved(_tabId: number, _removeInfo: Tabs.OnRemovedRemoveInfoType) {
 		//Do Nothing
 	}
+	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {}
+
+	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {}
 
 	uuidv4 = async () => {
 		// return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>

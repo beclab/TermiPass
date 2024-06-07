@@ -107,7 +107,6 @@ export default defineComponent({
 
 		const initOrg = () => {
 			org.value = app.orgs.find((org) => org.id == meunStore.org_id);
-			console.log('initOrginitOrg', org.value);
 		};
 
 		const heading = computed(function () {

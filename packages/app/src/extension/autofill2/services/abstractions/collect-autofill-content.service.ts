@@ -3,30 +3,34 @@ import AutofillForm from '../../models/autofill-form';
 import AutofillPageDetails from '../../models/autofill-page-details';
 import { ElementWithOpId, FormFieldElement } from '../../types';
 
-export type AutofillFormElements = Map<
-	ElementWithOpId<HTMLFormElement>,
-	AutofillForm
->;
+type AutofillFormElements = Map<ElementWithOpId<HTMLFormElement>, AutofillForm>;
 
-export type AutofillFieldElements = Map<
+type AutofillFieldElements = Map<
 	ElementWithOpId<FormFieldElement>,
 	AutofillField
 >;
 
-export type UpdateAutofillDataAttributeParams = {
+type UpdateAutofillDataAttributeParams = {
 	element: ElementWithOpId<HTMLFormElement | FormFieldElement>;
 	attributeName: string;
 	dataTarget?: AutofillForm | AutofillField;
 	dataTargetKey?: string;
 };
 
-export interface CollectAutofillContentService {
+interface CollectAutofillContentService {
 	getPageDetails(): Promise<AutofillPageDetails>;
-	getAutofillFieldElementByOpid(opid: string): HTMLElement | null;
-	queryAllTreeWalkerNodes(
-		rootNode: Node,
-		filterCallback: CallableFunction,
+	getAutofillFieldElementByOpid(opid: string): HTMLElement | undefined;
+	deepQueryElements<T>(
+		root: Document | ShadowRoot | Element,
+		selector: string,
 		isObservingShadowRoot?: boolean
-	): Node[];
+	): T[];
 	destroy(): void;
 }
+
+export {
+	AutofillFormElements,
+	AutofillFieldElements,
+	UpdateAutofillDataAttributeParams,
+	CollectAutofillContentService
+};

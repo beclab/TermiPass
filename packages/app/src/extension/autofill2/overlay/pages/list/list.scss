@@ -1,3 +1,6 @@
+@import "../../../shared/styles/variables";
+@import "../../../shared/styles/nord.scss";
+
 * {
 	box-sizing: border-box;
 }
@@ -18,7 +21,7 @@ body {
 }
 
 .overlay-list-message {
-	font-family: $font-family-sans-serif;
+	// font-family: $font-family-sans-serif;
 	font-weight: 400;
 	font-size: 1.4rem;
 	line-height: 1.5;
@@ -58,7 +61,7 @@ body {
 	align-content: center;
 	justify-content: flex-start;
 	width: 100%;
-	font-family: $font-family-sans-serif;
+	// font-family: $font-family-sans-serif;
 	font-size: 1.6rem;
 	font-weight: 700;
 	text-align: left;
@@ -262,7 +265,7 @@ body {
 		display: block;
 		width: 100%;
 		line-height: 1.5;
-		font-family: $font-family-sans-serif;
+		// font-family: $font-family-sans-serif;
 		font-weight: 400;
 		text-overflow: ellipsis;
 		white-space: nowrap;

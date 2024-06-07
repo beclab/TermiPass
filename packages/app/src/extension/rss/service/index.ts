@@ -22,6 +22,7 @@ export default class RssService {
 
 	static handleRSS = async (feeds: any, tabId: any, useCache = false) => {
 		this.initGlobalPageRss();
+
 		if (
 			useCache &&
 			Utils.global.pageRSS &&

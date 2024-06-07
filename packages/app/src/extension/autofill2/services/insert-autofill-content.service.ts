@@ -9,8 +9,7 @@ import {
 	elementIsFillableFormField,
 	elementIsInputElement,
 	elementIsSelectElement,
-	elementIsTextAreaElement,
-	nodeIsInputElement
+	elementIsTextAreaElement
 } from '../utils';
 import { InsertAutofillContentService as InsertAutofillContentServiceInterface } from './abstractions/insert-autofill-content.service';
 import CollectAutofillContentService from './collect-autofill-content.service';
@@ -70,8 +69,8 @@ class InsertAutofillContentService
 	private fillingWithinSandboxedIframe() {
 		return (
 			String(self.origin).toLowerCase() === 'null' ||
-			window.frameElement?.hasAttribute('sandbox') ||
-			window.location.hostname === ''
+			globalThis.frameElement?.hasAttribute('sandbox') ||
+			globalThis.location.hostname === ''
 		);
 	}
 
@@ -87,9 +86,9 @@ class InsertAutofillContentService
 	): boolean {
 		if (
 			!savedUrls?.some((url) =>
-				url.startsWith(`https://${window.location.hostname}`)
+				url.startsWith(`https://${globalThis.location.hostname}`)
 			) ||
-			window.location.protocol !== 'http:' ||
+			globalThis.location.protocol !== 'http:' ||
 			!this.isPasswordFieldWithinDocument()
 		) {
 			return false;
@@ -98,11 +97,11 @@ class InsertAutofillContentService
 		const confirmationWarning = [
 			chrome.i18n.getMessage('insecurePageWarning'),
 			chrome.i18n.getMessage('insecurePageWarningFillPrompt', [
-				window.location.hostname
+				globalThis.location.hostname
 			])
 		].join('\n\n');
 
-		return !confirm(confirmationWarning);
+		return !globalThis.confirm(confirmationWarning);
 	}
 
 	/**
@@ -112,13 +111,7 @@ class InsertAutofillContentService
 	 * @private
 	 */
 	private isPasswordFieldWithinDocument(): boolean {
-		return Boolean(
-			this.collectAutofillContentService.queryAllTreeWalkerNodes(
-				document.documentElement,
-				(node: Node) => nodeIsInputElement(node) && node.type === 'password',
-				false
-			)?.length
-		);
+		return this.collectAutofillContentService.isPasswordFieldWithinDocument();
 	}
 
 	/**
@@ -143,11 +136,11 @@ class InsertAutofillContentService
 		const confirmationWarning = [
 			chrome.i18n.getMessage('autofillIframeWarning'),
 			chrome.i18n.getMessage('autofillIframeWarningTip', [
-				window.location.hostname
+				globalThis.location.hostname
 			])
 		].join('\n\n');
 
-		return !confirm(confirmationWarning);
+		return !globalThis.confirm(confirmationWarning);
 	}
 
 	/**
@@ -163,9 +156,11 @@ class InsertAutofillContentService
 	private runFillScriptAction = (
 		[action, opid, value]: FillScript,
 		actionIndex: number
-	): Promise<void> | undefined => {
+	): Promise<void> => {
 		if (!opid || !this.autofillInsertActions[action]) {
-			return;
+			return new Promise((resolve) => {
+				resolve();
+			});
 		}
 
 		const delayActionsInMilliseconds = 20;
@@ -197,23 +192,24 @@ class InsertAutofillContentService
 	private handleClickOnFieldByOpidAction(opid: string) {
 		const element =
 			this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
-		if (!element) {
-			return;
-		}
 		this.triggerClickOnElement(element);
 	}
 
 	/**
 	 * Handles finding an element by opid and triggering click and focus events on the element.
-	 * @param {string} opid
-	 * @private
+	 * To ensure that we trigger a blur event correctly on a filled field, we first check if the
+	 * element is already focused. If it is, we blur the element before focusing on it again.
+	 *
+	 * @param {string} opid - The opid of the element to focus on.
 	 */
 	private handleFocusOnFieldByOpidAction(opid: string) {
 		const element =
 			this.collectAutofillContentService.getAutofillFieldElementByOpid(opid);
-		if (!element) {
-			return;
+
+		if (document.activeElement === element) {
+			element.blur();
 		}
+
 		this.simulateUserMouseClickAndFocusEventInteractions(element, true);
 	}
 
@@ -226,12 +222,9 @@ class InsertAutofillContentService
 	 * @private
 	 */
 	private insertValueIntoField(
-		element: FormFieldElement | null,
+		element: FormFieldElement | undefined,
 		value: string
 	) {
-		if (!element) {
-			return;
-		}
 		const elementCanBeReadonly =
 			elementIsInputElement(element) || elementIsTextAreaElement(element);
 		const elementCanBeFilled =
@@ -322,7 +315,6 @@ class InsertAutofillContentService
 		}
 
 		this.simulateInputElementChangedEvent(element);
-		element.blur();
 	}
 
 	/**
@@ -358,11 +350,11 @@ class InsertAutofillContentService
 	 * @private
 	 */
 	private triggerClickOnElement(element?: HTMLElement): void {
-		if (!element || typeof element.click !== TYPE_CHECK.FUNCTION) {
+		if (typeof element?.click !== TYPE_CHECK.FUNCTION) {
 			return;
 		}
 
-		element.click();
+		element?.click();
 	}
 
 	/**
@@ -376,19 +368,19 @@ class InsertAutofillContentService
 		element: HTMLElement | undefined,
 		shouldResetValue = false
 	): void {
-		if (!element || typeof element?.focus !== TYPE_CHECK.FUNCTION) {
+		if (typeof element?.focus !== TYPE_CHECK.FUNCTION) {
 			return;
 		}
 
 		let initialValue = '';
-		if (shouldResetValue && 'value' in element) {
-			initialValue = String(element.value);
+		if (shouldResetValue && element && 'value' in element) {
+			initialValue = String((element as any).value);
 		}
 
-		element.focus();
+		element?.focus();
 
-		if (initialValue && 'value' in element) {
-			element.value = initialValue;
+		if (initialValue && element && 'value' in element) {
+			(element as any).value = initialValue;
 		}
 	}
 
@@ -399,7 +391,7 @@ class InsertAutofillContentService
 	 * @private
 	 */
 	private simulateUserMouseClickAndFocusEventInteractions(
-		element: FormFieldElement,
+		element?: FormFieldElement,
 		shouldResetValue = false
 	): void {
 		this.triggerClickOnElement(element);

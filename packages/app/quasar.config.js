@@ -143,6 +143,14 @@ module.exports = configure(function (ctx) {
 								loader: 'string-replace-loader',
 								options: {
 									search: 'fetch\\(G,',
+									replace: `fetch(globalThis.extensionPlaceholder ? '/www/js/wallet-core.wasm' : 'chrome-extension://'+globalThis.${extensionPlaceholder}+'/www/js/wallet-core.wasm',`,
+									flags: 'g'
+								}
+							},
+							{
+								loader: 'string-replace-loader',
+								options: {
+									search: 'fetch\\(G,',
 									replace: `fetch(globalThis.extensionPlaceholder ? '/www/wallet-core.wasm' : 'chrome-extension://'+globalThis.${extensionPlaceholder}+'/www/wallet-core.wasm',`,
 									flags: 'g'
 								}
@@ -260,6 +268,26 @@ module.exports = configure(function (ctx) {
 							return definitions;
 						});
 
+						const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+						chain.plugin('html-button-plugin').use(HtmlWebpackPlugin, [
+							{
+								template:
+									'src/extension/autofill2/overlay/pages/button/button.html',
+								filename: 'button.html',
+								chunks: ['button']
+							}
+						]);
+
+						chain.plugin('html-list-plugin').use(HtmlWebpackPlugin, [
+							{
+								template:
+									'src/extension/autofill2/overlay/pages/list/list.html',
+								filename: 'list.html',
+								chunks: ['list']
+							}
+						]);
+
 						chain
 							.entry('TermiPassProvider')
 							.add(
@@ -275,6 +303,40 @@ module.exports = configure(function (ctx) {
 						chain
 							.entry('sidePanelContentScript')
 							.add('src/extension/sidePanel/content-script/index.js');
+
+						chain
+							.entry('content/trigger-autofill-script-injection')
+							.add(
+								'src/extension/autofill2/content/trigger-autofill-script-injection.ts'
+							);
+
+						chain
+							.entry('content/bootstrap-autofill')
+							.add('src/extension/autofill2/content/bootstrap-autofill.ts');
+
+						chain
+							.entry('content/bootstrap-autofill-overlay')
+							.add(
+								'src/extension/autofill2/content/bootstrap-autofill-overlay.ts'
+							);
+
+						chain
+							.entry('content/autofiller')
+							.add('src/extension/autofill2/content/autofiller.ts');
+
+						chain
+							.entry('button')
+							.add(
+								'src/extension/autofill2/overlay/pages/button/bootstrap-autofill-overlay-button.ts'
+							);
+						chain
+							.entry('list')
+							.add(
+								'src/extension/autofill2/overlay/pages/list/bootstrap-autofill-overlay-list.ts'
+							);
+
+						// "content/bootstrap-autofill": "./src/autofill/content/bootstrap-autofill.ts",
+						// "content/bootstrap-autofill-overlay": "./src/autofill/content/bootstrap-autofill-overlay.ts",
 
 						const quasarManifestV3Plugin = require('./build/plugins/QuasarManifestV3Plugin');
 						chain.plugin('quasar-manifest-v3').use(quasarManifestV3Plugin, []);
@@ -325,6 +387,14 @@ module.exports = configure(function (ctx) {
 							fromName: 'index.html',
 							toPath: path.resolve(wasmRoot),
 							toName: 'notification.html'
+						});
+						copyFileArray.push({
+							fromPath: path.resolve(
+								'./node_modules/@trustwallet/wallet-core/dist/lib/'
+							),
+							fromName: 'wallet-core.wasm',
+							toPath: path.resolve(wasmRoot + 'js/'),
+							toName: 'wallet-core.wasm'
 						});
 					} else {
 						copyFileArray.push({

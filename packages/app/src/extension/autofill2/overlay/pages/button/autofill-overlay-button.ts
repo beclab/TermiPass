@@ -1,7 +1,9 @@
+import '@webcomponents/custom-elements';
+import { logoIcon, logoLockedIcon } from '../../../utils/svg-icons';
 import {
 	AuthenticationStatus,
-	EVENTS
-	// buildSvgDomElement
+	EVENTS,
+	buildSvgDomElement
 } from '../../../utils';
 import {
 	InitAutofillOverlayButtonMessage,
@@ -28,15 +30,14 @@ class AutofillOverlayButton extends AutofillOverlayPageElement {
 
 	constructor() {
 		super();
-
 		this.buttonElement = globalThis.document.createElement('button');
 
 		this.setupGlobalListeners(this.overlayButtonWindowMessageHandlers);
 
-		// this.logoIconElement = buildSvgDomElement(logoIcon);
+		this.logoIconElement = buildSvgDomElement(logoIcon);
 		this.logoIconElement.classList.add('overlay-button-svg-icon', 'logo-icon');
 
-		// this.logoLockedIconElement = buildSvgDomElement(logoLockedIcon);
+		this.logoLockedIconElement = buildSvgDomElement(logoLockedIcon);
 		this.logoLockedIconElement.classList.add(
 			'overlay-button-svg-icon',
 			'logo-locked-icon'

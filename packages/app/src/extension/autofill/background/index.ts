@@ -6,13 +6,7 @@ import {
 	updateDataContextMenu,
 	updateLockedContextMenu
 } from '../../utils/menusMananger';
-import {
-	browser,
-	Tabs,
-	Menus,
-	Runtime,
-	Bookmarks
-} from 'webextension-polyfill-ts';
+import { browser, Tabs, Menus, Runtime } from 'webextension-polyfill-ts';
 import AutofillPageDetails from '../autofill-page-details';
 import {
 	UpdateBadgeInterface,
@@ -22,13 +16,19 @@ import { getActiveTab } from '../../utils';
 
 import AutofillService from '../autofillService';
 import { BrowserInterface } from '../../interface/browserInterface';
-import OnRemovedRemoveInfoType = Bookmarks.OnRemovedRemoveInfoType;
+import {
+	ExtensionMessage,
+	ExtensionMessageMode
+} from '../../interface/message';
+import OnRemovedRemoveInfoType = Tabs.OnRemovedRemoveInfoType;
 
 const autofillService: AutofillService = new AutofillService();
 
 export class AutofillBackground
 	implements UpdateBadgeInterface, BrowserInterface
 {
+	messageModule: ExtensionMessageMode = 'autofill';
+
 	async init() {
 		//Do Nothing
 	}
@@ -175,13 +175,17 @@ export class AutofillBackground
 		//Do Nothing
 	}
 
-	runtimeOnMessage(_message: any, _sender: Runtime.MessageSender) {
+	runtimeOnMessage(_message: ExtensionMessage, _sender: Runtime.MessageSender) {
 		//Do Nothing
 	}
 
 	tabsOnRemoved(_tabId: number, _removeInfo: OnRemovedRemoveInfoType) {
 		//Do Nothing
 	}
+
+	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {}
+
+	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {}
 }
 
 export default new AutofillBackground();

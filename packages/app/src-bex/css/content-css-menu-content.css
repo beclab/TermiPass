@@ -4094,7 +4094,7 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 	position: fixed !important;
-	z-index: 6000;
+	z-index: 70001;
 }
 
 .q-menu .q-menu--square {
@@ -11140,7 +11140,7 @@
 }
 
 .q-menu .z-fullscreen {
-	z-index: 6000;
+	z-index: 70001;
 }
 
 .q-menu .z-inherit {
@@ -13383,7 +13383,7 @@
 	border-radius: 0 !important;
 	max-height: 100vh;
 	max-width: 100vw;
-	z-index: 6000;
+	z-index: 70001;
 }
 
 .q-menu body.q-ios-padding .fullscreen {

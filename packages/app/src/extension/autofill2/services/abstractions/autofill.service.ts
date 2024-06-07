@@ -1,6 +1,8 @@
+import { Tabs } from 'webextension-polyfill-ts';
 import AutofillField from '../../models/autofill-field';
 import AutofillForm from '../../models/autofill-form';
 import AutofillPageDetails from '../../models/autofill-page-details';
+import { VaultItem } from '@didvault/sdk/src/core';
 
 export enum CipherType {
 	Login = 1,
@@ -25,9 +27,9 @@ export interface PageDetail {
 }
 
 export interface AutoFillOptions {
-	// cipher: CipherView;
+	item: VaultItem;
 	pageDetails: PageDetail[];
-	doc?: typeof window.document;
+	doc?: typeof self.document;
 	tab: chrome.tabs.Tab;
 	skipUsernameOnlyFill?: boolean;
 	onlyEmptyFields?: boolean;
@@ -45,22 +47,34 @@ export interface FormData {
 	passwords: AutofillField[];
 }
 
+export const UriMatchStrategy = {
+	Domain: 0,
+	Host: 1,
+	StartsWith: 2,
+	Exact: 3,
+	RegularExpression: 4,
+	Never: 5
+} as const;
+
+export type UriMatchStrategySetting =
+	typeof UriMatchStrategy[keyof typeof UriMatchStrategy];
+
 export interface GenerateFillScriptOptions {
 	skipUsernameOnlyFill: boolean;
 	onlyEmptyFields: boolean;
 	onlyVisibleFields: boolean;
 	fillNewPassword: boolean;
 	allowTotpAutofill: boolean;
-	// cipher: CipherView;
+	item: VaultItem;
 	tabUrl: string;
-	defaultUriMatch: UriMatchType;
+	defaultUriMatch: UriMatchStrategySetting;
 }
 
 export abstract class AutofillService {
-	loadAutofillScriptsOnInstall: () => Promise<void>;
+	// loadAutofillScriptsOnInstall: () => Promise<void>;
 	reloadAutofillScripts: () => Promise<void>;
 	injectAutofillScripts: (
-		tab: chrome.tabs.Tab,
+		tab: Tabs.Tab,
 		frameId?: number,
 		triggeringOnPageLoad?: boolean
 	) => Promise<void>;
@@ -71,13 +85,13 @@ export abstract class AutofillService {
 		tab: chrome.tabs.Tab,
 		fromCommand: boolean
 	) => Promise<string | null>;
-	doAutoFillActiveTab: (
-		pageDetails: PageDetail[],
-		fromCommand: boolean,
-		cipherType?: CipherType
-	) => Promise<string | null>;
+	// doAutoFillActiveTab: (
+	// 	pageDetails: PageDetail[],
+	// 	fromCommand: boolean,
+	// 	cipherType?: CipherType
+	// ) => Promise<string | null>;
 	// isPasswordRepromptRequired: (
-	// 	cipher: CipherView,
+	// 	// cipher: CipherView,
 	// 	tab: chrome.tabs.Tab
 	// ) => Promise<boolean>;
 }

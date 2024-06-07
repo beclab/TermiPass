@@ -3,7 +3,8 @@ import { AutofillOverlayContentService } from '../services/abstractions/autofill
 import CollectAutofillContentService from '../services/collect-autofill-content.service';
 import DomElementVisibilityService from '../services/dom-element-visibility.service';
 import InsertAutofillContentService from '../services/insert-autofill-content.service';
-import { sendExtensionMessage } from '../types';
+import { sendExtensionMessage } from '../utils/sendMessage';
+
 import {
 	AutofillExtensionMessage,
 	AutofillExtensionMessageHandlers,
@@ -17,6 +18,7 @@ class AutofillInit implements AutofillInitInterface {
 	private readonly domElementVisibilityService: DomElementVisibilityService;
 	private readonly collectAutofillContentService: CollectAutofillContentService;
 	private readonly insertAutofillContentService: InsertAutofillContentService;
+	private collectPageDetailsOnLoadTimeout: number | NodeJS.Timeout | undefined;
 	private readonly extensionMessageHandlers: AutofillExtensionMessageHandlers =
 		{
 			collectPageDetails: ({ message }) => this.collectPageDetails(message),
@@ -73,20 +75,22 @@ class AutofillInit implements AutofillInitInterface {
 	 * to act on the page.
 	 */
 	private collectPageDetailsOnLoad() {
-		const sendCollectDetailsMessage = () =>
-			setTimeout(
+		const sendCollectDetailsMessage = () => {
+			this.clearCollectPageDetailsOnLoadTimeout();
+			this.collectPageDetailsOnLoadTimeout = setTimeout(
 				() =>
 					sendExtensionMessage('bgCollectPageDetails', {
 						sender: 'autofillInit'
 					}),
 				250
 			);
+		};
 
-		if (document.readyState === 'complete') {
+		if (globalThis.document.readyState === 'complete') {
 			sendCollectDetailsMessage();
 		}
 
-		window.addEventListener('load', sendCollectDetailsMessage);
+		globalThis.addEventListener('load', sendCollectDetailsMessage);
 	}
 
 	/**
@@ -109,10 +113,8 @@ class AutofillInit implements AutofillInitInterface {
 			return pageDetails;
 		}
 
-		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
-		chrome.runtime.sendMessage({
-			command: 'collectPageDetailsResponse',
+		void chrome.runtime.sendMessage({
+			type: 'collectPageDetailsResponse',
 			tab: message.tab,
 			details: pageDetails,
 			sender: message.sender
@@ -134,10 +136,8 @@ class AutofillInit implements AutofillInitInterface {
 
 		this.blurAndRemoveOverlay();
 		this.updateOverlayIsCurrentlyFilling(true);
-		if (!fillScript) {
-			return;
-		}
-		await this.insertAutofillContentService.fillForm(fillScript);
+		if (fillScript)
+			await this.insertAutofillContentService.fillForm(fillScript);
 
 		if (!this.autofillOverlayContentService) {
 			return;
@@ -168,12 +168,9 @@ class AutofillInit implements AutofillInitInterface {
 		if (!this.autofillOverlayContentService) {
 			return;
 		}
-
-		if (!data) {
-			return;
+		if (data) {
+			this.autofillOverlayContentService.openAutofillOverlay(data);
 		}
-
-		this.autofillOverlayContentService.openAutofillOverlay(data);
 	}
 
 	/**
@@ -237,10 +234,11 @@ class AutofillInit implements AutofillInitInterface {
 			return;
 		}
 
-		if (!data || !data.direction) {
-			return;
+		if (data?.direction) {
+			this.autofillOverlayContentService.redirectOverlayFocusOut(
+				data.direction
+			);
 		}
-		this.autofillOverlayContentService.redirectOverlayFocusOut(data?.direction);
 	}
 
 	/**
@@ -267,7 +265,8 @@ class AutofillInit implements AutofillInitInterface {
 	private updateAutofillOverlayVisibility({ data }: AutofillExtensionMessage) {
 		if (
 			!this.autofillOverlayContentService ||
-			!data?.autofillOverlayVisibility ||
+			!data ||
+			!data.autofillOverlayVisibility ||
 			isNaN(data?.autofillOverlayVisibility)
 		) {
 			return;
@@ -275,6 +274,15 @@ class AutofillInit implements AutofillInitInterface {
 
 		this.autofillOverlayContentService.autofillOverlayVisibility =
 			data?.autofillOverlayVisibility;
+	}
+
+	/**
+	 * Clears the send collect details message timeout.
+	 */
+	private clearCollectPageDetailsOnLoadTimeout() {
+		if (this.collectPageDetailsOnLoadTimeout) {
+			clearTimeout(this.collectPageDetailsOnLoadTimeout);
+		}
 	}
 
 	/**
@@ -308,8 +316,6 @@ class AutofillInit implements AutofillInitInterface {
 			return false;
 		}
 
-		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		Promise.resolve(messageResponse).then((response) => sendResponse(response));
 		return true;
 	};
@@ -319,6 +325,7 @@ class AutofillInit implements AutofillInitInterface {
 	 * listeners, timeouts, and object instances to prevent memory leaks.
 	 */
 	destroy() {
+		this.clearCollectPageDetailsOnLoadTimeout();
 		chrome.runtime.onMessage.removeListener(this.handleExtensionMessage);
 		this.collectAutofillContentService.destroy();
 		this.autofillOverlayContentService?.destroy();

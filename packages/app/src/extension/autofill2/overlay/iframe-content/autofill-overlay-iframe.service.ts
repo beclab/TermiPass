@@ -212,7 +212,6 @@ class AutofillOverlayIframeService
 			this.backgroundPortMessageHandlers[message.command]({ message, port });
 			return;
 		}
-
 		this.iframe.contentWindow?.postMessage(message, '*');
 	};
 
@@ -226,10 +225,11 @@ class AutofillOverlayIframeService
 		message: AutofillOverlayIframeExtensionMessage
 	) {
 		const { theme } = message;
-		// let borderColor: string;
+		const borderColor: string | '' = '';
 		const verifiedTheme = theme;
 		// if (verifiedTheme === ThemeType.System) {
-		// 	verifiedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+		// 	verifiedTheme = globalThis.matchMedia('(prefers-color-scheme: dark)')
+		// 		.matches
 		// 		? ThemeType.Dark
 		// 		: ThemeType.Light;
 		// }
@@ -238,14 +238,14 @@ class AutofillOverlayIframeService
 		// 	borderColor = '#4c525f';
 		// }
 		// if (theme === ThemeType.Nord) {
-		// 	borderColor = '#2E3440';
+		// borderColor = '#2E3440';
 		// }
 		// if (theme === ThemeType.SolarizedDark) {
 		// 	borderColor = '#073642';
 		// }
-		// if (borderColor) {
-		// 	this.updateElementStyles(this.iframe, { borderColor });
-		// }
+		if (borderColor) {
+			this.updateElementStyles(this.iframe, { borderColor });
+		}
 
 		message.theme = verifiedTheme;
 		this.iframe.contentWindow?.postMessage(message, '*');
