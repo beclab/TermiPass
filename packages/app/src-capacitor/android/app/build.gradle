@@ -49,7 +49,7 @@ android {
     namespace "com.terminus.planeta"
     compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "com.terminus.planeta"
+        applicationId "com.terminus.termipass"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode getPackageVersionCode()

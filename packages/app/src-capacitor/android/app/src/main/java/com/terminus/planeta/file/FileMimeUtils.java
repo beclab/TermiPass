@@ -1,18 +1,9 @@
 package com.terminus.planeta.file;
 
-import android.content.ContentResolver;
-import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
-import android.os.Build;
 
 import java.io.File;
-import java.net.FileNameMap;
-import java.net.URLConnection;
 import java.util.HashMap;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 
 /**
  * Function:

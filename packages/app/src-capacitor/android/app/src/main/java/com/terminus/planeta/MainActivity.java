@@ -1,6 +1,5 @@
 package com.terminus.planeta;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.capacitorjs.plugins.filesystem.FilesystemPlugin;

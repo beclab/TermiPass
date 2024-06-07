@@ -1,6 +1,5 @@
 package com.terminus.planeta.file.notification;
 
-import android.app.Notification;
 import android.content.Context;
 import android.view.View;
 import android.widget.RemoteViews;
