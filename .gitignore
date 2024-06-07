@@ -78,3 +78,5 @@ packages/app/src-capacitor/android/app/TerminusKey
 packages/app/macAddonSDK/TermiPassMac/TermiPassMac.xcodeproj/project.xcworkspace/xcuserdata/gjm.xcuserdatad/UserInterfaceState.xcuserstate
 packages/app/build/mac/PlanetaMacDev.provisionprofile
 packages/app/build/mac/notarize.js
+
+packages/app/.unimportedrc.json
