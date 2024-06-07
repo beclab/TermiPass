@@ -2,8 +2,8 @@ import '@webcomponents/custom-elements';
 import {
 	globeIcon,
 	lockIcon,
-	plusIcon,
-	viewCipherIcon
+	plusIcon
+	// viewCipherIcon
 } from '../../../utils/svg-icons';
 import {
 	AuthenticationStatus,
@@ -267,11 +267,11 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 */
 	private buildOverlayActionsListItem(cipher: OverlayCipherData) {
 		const fillCipherElement = this.buildFillCipherElement(cipher);
-		const viewCipherElement = this.buildViewCipherElement(cipher);
+		// const viewCipherElement = this.buildViewCipherElement(cipher);
 
 		const cipherContainerElement = globalThis.document.createElement('div');
 		cipherContainerElement.classList.add('cipher-container');
-		cipherContainerElement.append(fillCipherElement, viewCipherElement);
+		cipherContainerElement.append(fillCipherElement);
 
 		const overlayActionsListItem = globalThis.document.createElement('li');
 		overlayActionsListItem.setAttribute('role', 'listitem');
@@ -371,28 +371,28 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 *
 	 * @param cipher - The cipher to view.
 	 */
-	private buildViewCipherElement(cipher: OverlayCipherData) {
-		const viewCipherElement = globalThis.document.createElement('button');
-		viewCipherElement.tabIndex = -1;
-		viewCipherElement.classList.add('view-cipher-button');
-		viewCipherElement.setAttribute(
-			'aria-label',
-			`${this.getTranslation('view')} ${cipher.name}, ${this.getTranslation(
-				'opensInANewWindow'
-			)}`
-		);
-		viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
-		viewCipherElement.addEventListener(
-			EVENTS.CLICK,
-			this.handleViewCipherClickEvent(cipher)
-		);
-		viewCipherElement.addEventListener(
-			EVENTS.KEYUP,
-			this.handleViewCipherKeyUpEvent
-		);
+	// private buildViewCipherElement(cipher: OverlayCipherData) {
+	// 	const viewCipherElement = globalThis.document.createElement('button');
+	// 	viewCipherElement.tabIndex = -1;
+	// 	viewCipherElement.classList.add('view-cipher-button');
+	// 	viewCipherElement.setAttribute(
+	// 		'aria-label',
+	// 		`${this.getTranslation('view')} ${cipher.name}, ${this.getTranslation(
+	// 			'opensInANewWindow'
+	// 		)}`
+	// 	);
+	// 	viewCipherElement.append(buildSvgDomElement(viewCipherIcon));
+	// 	viewCipherElement.addEventListener(
+	// 		EVENTS.CLICK,
+	// 		this.handleViewCipherClickEvent(cipher)
+	// 	);
+	// 	viewCipherElement.addEventListener(
+	// 		EVENTS.KEYUP,
+	// 		this.handleViewCipherKeyUpEvent
+	// 	);
 
-		return viewCipherElement;
-	}
+	// 	return viewCipherElement;
+	// }
 
 	/**
 	 * Handles the click event for the view cipher button. Sends a
@@ -400,16 +400,16 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 *
 	 * @param cipher - The cipher to view.
 	 */
-	private handleViewCipherClickEvent = (cipher: OverlayCipherData) => {
-		return this.useEventHandlersMemo(
-			() =>
-				this.postMessageToParent({
-					command: 'viewSelectedCipher',
-					overlayCipherId: cipher.id
-				}),
-			`${cipher.id}-view-cipher-button-click-handler`
-		);
-	};
+	// private handleViewCipherClickEvent = (cipher: OverlayCipherData) => {
+	// 	return this.useEventHandlersMemo(
+	// 		() =>
+	// 			this.postMessageToParent({
+	// 				command: 'viewSelectedCipher',
+	// 				overlayCipherId: cipher.id
+	// 			}),
+	// 		`${cipher.id}-view-cipher-button-click-handler`
+	// 	);
+	// };
 
 	/**
 	 * Handles the keyup event for the view cipher button. Facilitates
@@ -418,38 +418,38 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 * cipher button on ArrowLeft.
 	 *
 	 * @param event - The keyup event.
-	 */
-	private handleViewCipherKeyUpEvent = (event: KeyboardEvent) => {
-		const listenedForKeys = new Set(['ArrowDown', 'ArrowUp', 'ArrowLeft']);
-		if (
-			!listenedForKeys.has(event.code) ||
-			!(event.target instanceof Element)
-		) {
-			return;
-		}
+	//  */
+	// private handleViewCipherKeyUpEvent = (event: KeyboardEvent) => {
+	// 	const listenedForKeys = new Set(['ArrowDown', 'ArrowUp', 'ArrowLeft']);
+	// 	if (
+	// 		!listenedForKeys.has(event.code) ||
+	// 		!(event.target instanceof Element)
+	// 	) {
+	// 		return;
+	// 	}
 
-		event.preventDefault();
+	// 	event.preventDefault();
 
-		const currentListItem = event.target.closest(
-			'.overlay-actions-list-item'
-		) as HTMLElement;
-		const cipherContainer = currentListItem.querySelector(
-			'.cipher-container'
-		) as HTMLElement;
-		cipherContainer?.classList.remove('remove-outline');
-		if (event.code === 'ArrowDown') {
-			this.focusNextListItem(currentListItem);
-			return;
-		}
+	// 	const currentListItem = event.target.closest(
+	// 		'.overlay-actions-list-item'
+	// 	) as HTMLElement;
+	// 	const cipherContainer = currentListItem.querySelector(
+	// 		'.cipher-container'
+	// 	) as HTMLElement;
+	// 	cipherContainer?.classList.remove('remove-outline');
+	// 	if (event.code === 'ArrowDown') {
+	// 		this.focusNextListItem(currentListItem);
+	// 		return;
+	// 	}
 
-		if (event.code === 'ArrowUp') {
-			this.focusPreviousListItem(currentListItem);
-			return;
-		}
+	// 	if (event.code === 'ArrowUp') {
+	// 		this.focusPreviousListItem(currentListItem);
+	// 		return;
+	// 	}
 
-		const previousSibling = event.target.previousElementSibling as HTMLElement;
-		previousSibling?.focus();
-	};
+	// 	const previousSibling = event.target.previousElementSibling as HTMLElement;
+	// 	previousSibling?.focus();
+	// };
 
 	/**
 	 * Builds the icon for a given cipher. Prioritizes the favicon from a given cipher url

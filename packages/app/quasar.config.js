@@ -373,15 +373,15 @@ module.exports = configure(function (ctx) {
 
 						wasmRoot = `./dist/${ctx.modeName}/` + 'UnPackaged/www/';
 
-						copyFileArray.push({
-							fromPath: path.resolve('./src/extension/autofill/layout/'),
-							fromName: 'autofill.js',
-							toPath: path.resolve(wasmRoot + 'js/'),
-							toName: 'autofill.js'
-						});
+						// copyFileArray.push({
+						// 	fromPath: path.resolve('./src/extension/autofill/layout/'),
+						// 	fromName: 'autofill.js',
+						// 	toPath: path.resolve(wasmRoot + 'js/'),
+						// 	toName: 'autofill.js'
+						// });
 
 						copyFileArray.push({
-							fromPath: path.resolve('./src/extension/autofill/layout/'),
+							fromPath: path.resolve('./src/extension/autofill2/content/'),
 							fromName: 'autofill.css',
 							toPath: path.resolve(wasmRoot + 'css/'),
 							toName: 'autofill.css'

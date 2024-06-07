@@ -11,8 +11,8 @@ class AutofillOverlayButtonIframe extends AutofillOverlayIframeElement {
 				background: 'transparent',
 				border: 'none'
 			},
-			'bitwardenOverlayButton',
-			'bitwardenOverlayMenuAvailable'
+			'Termipass auto-fill menu button',
+			'Termipass auto-fill menu available. Press the down arrow key to select.'
 		);
 	}
 }

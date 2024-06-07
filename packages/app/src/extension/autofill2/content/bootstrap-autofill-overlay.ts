@@ -4,13 +4,13 @@ import { setupAutofillInitDisconnectAction } from '../utils';
 import AutofillInit from './autofill-init';
 
 (function (windowContext) {
-	if (!windowContext.bitwardenAutofillInit) {
+	if (!windowContext.termipassAutofillInit) {
 		const autofillOverlayContentService = new AutofillOverlayContentService();
-		windowContext.bitwardenAutofillInit = new AutofillInit(
+		windowContext.termipassAutofillInit = new AutofillInit(
 			autofillOverlayContentService
 		);
 		setupAutofillInitDisconnectAction(windowContext);
 
-		windowContext.bitwardenAutofillInit.init();
+		windowContext.termipassAutofillInit.init();
 	}
 })(window);

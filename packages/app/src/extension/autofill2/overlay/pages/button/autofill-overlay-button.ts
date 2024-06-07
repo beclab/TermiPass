@@ -1,5 +1,5 @@
 import '@webcomponents/custom-elements';
-import { logoIcon, logoLockedIcon } from '../../../utils/svg-icons';
+import { logoIcon } from '../../../utils/svg-icons';
 import {
 	AuthenticationStatus,
 	EVENTS,
@@ -37,7 +37,7 @@ class AutofillOverlayButton extends AutofillOverlayPageElement {
 		this.logoIconElement = buildSvgDomElement(logoIcon);
 		this.logoIconElement.classList.add('overlay-button-svg-icon', 'logo-icon');
 
-		this.logoLockedIconElement = buildSvgDomElement(logoLockedIcon);
+		this.logoLockedIconElement = buildSvgDomElement(logoIcon);
 		this.logoLockedIconElement.classList.add(
 			'overlay-button-svg-icon',
 			'logo-locked-icon'
@@ -69,7 +69,7 @@ class AutofillOverlayButton extends AutofillOverlayPageElement {
 		this.buttonElement.classList.add('overlay-button');
 		this.buttonElement.setAttribute(
 			'aria-label',
-			this.getTranslation('toggleBitwardenVaultOverlay')
+			'Toggle Termipass auto-fill menu'
 		);
 		this.buttonElement.addEventListener(
 			EVENTS.CLICK,

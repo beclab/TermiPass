@@ -239,13 +239,12 @@ export const setupExtensionDisconnectAction = (
  * @param windowContext - The global window context
  */
 export const setupAutofillInitDisconnectAction = (windowContext: Window) => {
-	// if (!windowContext.bitwardenAutofillInit) {
-	// 	return;
-	// }
-
+	if (!windowContext.termipassAutofillInit) {
+		return;
+	}
 	const onDisconnectCallback = () => {
-		windowContext.bitwardenAutofillInit?.destroy();
-		delete windowContext.bitwardenAutofillInit;
+		windowContext.termipassAutofillInit?.destroy();
+		delete windowContext.termipassAutofillInit;
 	};
 	setupExtensionDisconnectAction(onDisconnectCallback);
 };

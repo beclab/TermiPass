@@ -337,9 +337,9 @@ class InsertAutofillContentService
 			return;
 		}
 
-		element.classList.add('com-bitwarden-browser-animated-fill');
+		element.classList.add('com-termipass-browser-animated-fill');
 		setTimeout(
-			() => element.classList.remove('com-bitwarden-browser-animated-fill'),
+			() => element.classList.remove('com-termipass-browser-animated-fill'),
 			200
 		);
 	}
