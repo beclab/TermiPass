@@ -243,7 +243,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 */
 	private async fillSelectedOverlayListItem(
 		{ overlayCipherId }: OverlayPortMessage,
-		{ sender }: chrome.runtime.Port
+		{ sender }: Runtime.Port
 	) {
 		if (!sender?.tab?.id) {
 			return;
@@ -309,10 +309,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 * @param sender - The sender of the port message
 	 * @param forceCloseOverlay - Identifies whether the overlay should be force closed
 	 */
-	private closeOverlay(
-		{ sender }: chrome.runtime.Port,
-		forceCloseOverlay = false
-	) {
+	private closeOverlay({ sender }: Runtime.Port, forceCloseOverlay = false) {
 		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
 		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		// BrowserApi.tabSendMessageData(sender.tab, 'closeAutofillOverlay', {
@@ -550,7 +547,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 *
 	 * @param port - The port of the overlay button
 	 */
-	private handleOverlayButtonClicked(port: chrome.runtime.Port) {
+	private handleOverlayButtonClicked(port: Runtime.Port) {
 		if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
 			// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -568,7 +565,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 *
 	 * @param port - The port of the overlay list
 	 */
-	private async unlockVault(port: chrome.runtime.Port) {
+	private async unlockVault(port: Runtime.Port) {
 		// const { sender } = port;
 
 		this.closeOverlay(port);
@@ -602,7 +599,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		// eslint-disable-next-line no-empty-pattern
 		{}: OverlayPortMessage,
 		// eslint-disable-next-line no-empty-pattern
-		{}: chrome.runtime.Port
+		{}: Runtime.Port
 	) {
 		// const cipher = this.overlayLoginCiphers.get(overlayCipherId);
 		// if (!cipher) {
@@ -675,7 +672,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 */
 	private redirectOverlayFocusOut(
 		{ direction }: OverlayPortMessage,
-		{ sender }: chrome.runtime.Port
+		{ sender }: Runtime.Port
 	) {
 		if (!direction || !sender?.tab?.id) {
 			return;
@@ -699,7 +696,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 * @param sender - The sender of the port message
 	 */
 	// eslint-disable-next-line no-empty-pattern
-	private getNewVaultItemDetails({}: chrome.runtime.Port) {
+	private getNewVaultItemDetails({}: Runtime.Port) {
 		// void BrowserApi.tabSendMessage(sender.tab, {
 		// 	command: 'addNewVaultItemFromOverlay'
 		// });

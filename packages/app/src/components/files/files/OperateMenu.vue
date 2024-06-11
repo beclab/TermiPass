@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { defineEmits, defineProps, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useDataStore } from '../../../stores/data';
 import { useQuasar } from 'quasar';
 import { handleFileOperate } from './OperateAction';
@@ -40,7 +40,7 @@ const props = defineProps({
 });
 
 const Route = useRoute();
-const Router = useRouter();
+// const Router = useRouter();
 const dataStore = useDataStore();
 const menuStore = useMenuStore();
 

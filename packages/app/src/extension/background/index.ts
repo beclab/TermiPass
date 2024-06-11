@@ -159,6 +159,7 @@ export class ExtensionBackground {
 	};
 
 	async update(options: any) {
+		await autofillBackground.updateAutofillContextMenu();
 		await rssBackground.handleRSS(options);
 		await this._updateBadge();
 	}

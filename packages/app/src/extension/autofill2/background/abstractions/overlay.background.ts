@@ -110,7 +110,7 @@ type PortMessageParam = {
 	message: OverlayPortMessage;
 };
 type PortConnectionParam = {
-	port: chrome.runtime.Port;
+	port: Runtime.Port;
 };
 
 type PortOnMessageHandlerParams = PortMessageParam & PortConnectionParam;

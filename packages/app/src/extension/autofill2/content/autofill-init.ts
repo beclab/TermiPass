@@ -107,8 +107,13 @@ class AutofillInit implements AutofillInitInterface {
 		message: AutofillExtensionMessage,
 		sendDetailsInResponse = false
 	): Promise<AutofillPageDetails | void> {
+		console.log('collectPageDetailsImmediately ===>');
+		console.log(sendDetailsInResponse);
+
 		const pageDetails: AutofillPageDetails =
 			await this.collectAutofillContentService.getPageDetails();
+		console.log(pageDetails);
+
 		if (sendDetailsInResponse) {
 			return pageDetails;
 		}
@@ -299,24 +304,40 @@ class AutofillInit implements AutofillInitInterface {
 	 * @param sender - The message sender.
 	 * @param sendResponse - The send response callback.
 	 */
-	private handleExtensionMessage = (
+	private handleExtensionMessage = async (
 		message: AutofillExtensionMessage,
 		sender: chrome.runtime.MessageSender,
 		sendResponse: (response?: any) => void
-	): boolean => {
+	): Promise<boolean> => {
 		const command: string = message.command;
+		console.log('command ===>', command);
+
 		const handler: CallableFunction | undefined =
 			this.extensionMessageHandlers[command];
+		console.log('handler 1');
+
 		if (!handler) {
 			return false;
 		}
 
-		const messageResponse = handler({ message, sender });
+		console.log('handler 2');
+		const messageResponse = await handler({ message, sender });
 		if (!messageResponse) {
 			return false;
 		}
+		console.log('handler 3');
+		console.log(messageResponse);
 
-		Promise.resolve(messageResponse).then((response) => sendResponse(response));
+		console.log(new Date());
+
+		sendResponse(messageResponse);
+		console.log(new Date());
+		// await Promise.resolve(messageResponse).then((response) => {
+		// 	console.log('handle 4');
+		// 	console.log(response);
+		// 	// sendResponse(response);
+		// 	// sendResponse(222);
+		// });
 		return true;
 	};
 

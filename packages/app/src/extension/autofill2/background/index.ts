@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // import { getExtensionBackgroundPlatform } from 'src/extension/background/extensionBackgroundPlatform';
-// import {
-// 	CONTEXT_MENUS_AUTOFILL_ID,
-// 	CONTEXT_MENUS_LOCKED,
-// 	updateDataContextMenu,
-// 	updateLockedContextMenu
-// } from '../../utils/menusMananger';
+import {
+	CONTEXT_MENUS_AUTOFILL_ID,
+	CONTEXT_MENUS_LOCKED,
+	updateDataContextMenu,
+	updateLockedContextMenu
+} from '../../utils/menusMananger';
 import { browser, Tabs, Menus, Runtime } from 'webextension-polyfill-ts';
 // import AutofillPageDetails from '../autofill-page-details';
 // import {
@@ -21,11 +21,12 @@ import {
 import { BrowserInterface } from '../../interface/browserInterface';
 import { ExtensionMessageMode } from '../../interface/message';
 import { getExtensionBackgroundPlatform } from 'src/extension/background/extensionBackgroundPlatform';
-import { CONTEXT_MENUS_LOCKED } from 'src/extension/utils/menusMananger';
+// import { CONTEXT_MENUS_LOCKED } from 'src/extension/utils/menusMananger';
 import { AutofillExtensionMessage } from '../interface/message';
 
 import AutofillService from '../services/autofill.service';
 import OverlayBackground from './overlay.background';
+import AutofillPageDetails from '../models/autofill-page-details';
 // import { BrowserInterface } from '../../interface/browserInterface';
 // import {
 // 	ExtensionMessage,
@@ -46,68 +47,73 @@ export class AutofillBackground
 		await this.overlayBackground.init();
 	}
 
-	// async updateAutofillContextMenu(unlockedCallback: any) {
-	// if (getExtensionBackgroundPlatform().dataCenter.isLocked()) {
-	// 	await updateLockedContextMenu();
-	// } else {
-	// 	await updateDataContextMenu(await this._getItemsForTab());
-	// 	unlockedCallback();
-	// }
-	// }
+	async updateAutofillContextMenu() {
+		if (getExtensionBackgroundPlatform().dataCenter.isLocked()) {
+			await updateLockedContextMenu();
+		} else {
+			await updateDataContextMenu(await this._getItemsForTab());
+			// unlockedCallback();
+		}
+	}
 
-	// async doAutofillTab(tab: Tabs.Tab, info: Menus.OnClickData) {
-	// 	if (!tab || !tab.id) {
-	// 		throw new Error('Tab does not have an id, cannot complete autofill.');
-	// 	}
+	async doAutofillTab(tab: Tabs.Tab, info: Menus.OnClickData) {
+		if (!tab || !tab.id) {
+			throw new Error('Tab does not have an id, cannot complete autofill.');
+		}
 
-	// 	const details = await this.collectPageDetails(tab.id);
+		const details = await this.collectPageDetails(tab.id);
 
-	// 	const platform = getExtensionBackgroundPlatform();
+		const platform = getExtensionBackgroundPlatform();
 
-	// 	const item = platform.dataCenter.findChildItem(info);
+		const item = platform.dataCenter.findChildItem(info);
+		if (item) {
+			console.log(details);
 
-	// 	if (item) {
-	// 		await autofillService.doAutoFill(
-	// 			{
-	// 				tab: tab,
-	// 				pageDetails: [
-	// 					{
-	// 						frameId: 0,
-	// 						tab: tab,
-	// 						details: details
-	// 					}
-	// 				],
-	// 				skipLastUsed: false,
-	// 				skipUsernameOnlyFill: false,
-	// 				onlyEmptyFields: false,
-	// 				onlyVisibleFields: false,
-	// 				fillNewPassword: true
-	// 			},
-	// 			item
-	// 		);
-	// 	} else {
-	// 		throw new Error('item does not exist, cannot complete autofill.');
-	// 	}
-	// }
+			await this.autofillService.doAutoFill({
+				item,
+				tab: tab,
+				pageDetails: [
+					{
+						frameId: 0,
+						tab: tab,
+						details: details
+					}
+				],
+				// skipLastUsed: false,
+				// skipUsernameOnlyFill: false,
+				// onlyEmptyFields: false,
+				// onlyVisibleFields: false,
+				// fillNewPassword: true
+				fillNewPassword: true,
+				allowTotpAutofill: true
+			});
+		} else {
+			throw new Error('item does not exist, cannot complete autofill.');
+		}
+	}
 
-	// private async collectPageDetails(
-	// 	tabId: number
-	// ): Promise<AutofillPageDetails> {
-	// 	return new Promise((resolve, reject) => {
-	// 		//fix : by new Promise and response,return turn
-	// 		//https://github.com/mozilla/webextension-polyfill/issues/130
-	// 		browser.tabs
-	// 			.sendMessage(tabId, {
-	// 				command: 'collectPageDetailsImmediately'
-	// 			})
-	// 			.then((response) => {
-	// 				resolve(response);
-	// 			})
-	// 			.catch((e) => {
-	// 				reject(e);
-	// 			});
-	// 	});
-	// }
+	private async collectPageDetails(
+		tabId: number
+	): Promise<AutofillPageDetails> {
+		return new Promise((resolve, reject) => {
+			//fix : by new Promise and response,return turn
+			//https://github.com/mozilla/webextension-polyfill/issues/130
+			browser.tabs
+				.sendMessage(tabId, {
+					command: 'collectPageDetailsImmediately'
+				})
+				.then((response) => {
+					console.log('response ===>');
+					console.log(response);
+					console.log(new Date());
+
+					resolve(response);
+				})
+				.catch((e) => {
+					reject(e);
+				});
+		});
+	}
 
 	private async _getItemsForTab() {
 		const tab = await getActiveTab();
@@ -168,20 +174,20 @@ export class AutofillBackground
 			return;
 		}
 
-		// if (
-		// 	!platform.dataCenter.isLocked() &&
-		// 	(await platform.dataCenter.hasUser())
-		// ) {
-		// 	switch (info.parentMenuItemId) {
-		// 		case CONTEXT_MENUS_AUTOFILL_ID:
-		// 			try {
-		// 				await this.doAutofillTab(tab, info);
-		// 			} catch (error) {
-		// 				console.error(error);
-		// 			}
-		// 			break;
-		// 	}
-		// }
+		if (
+			!platform.dataCenter.isLocked() &&
+			(await platform.dataCenter.hasUser())
+		) {
+			switch (info.parentMenuItemId) {
+				case CONTEXT_MENUS_AUTOFILL_ID:
+					try {
+						await this.doAutofillTab(tab, info);
+					} catch (error) {
+						console.error(error);
+					}
+					break;
+			}
+		}
 	}
 
 	runtimeOnConnect(_port: Runtime.Port) {

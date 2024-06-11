@@ -275,6 +275,7 @@ export default class AutofillService implements AutofillServiceInterface {
 					tabUrl: tab.url,
 					defaultUriMatch: defaultUriMatch
 				});
+
 				if (!fillScript || !fillScript.script || !fillScript.script.length) {
 					return;
 				}
@@ -288,6 +289,7 @@ export default class AutofillService implements AutofillServiceInterface {
 					// );
 					return;
 				}
+				console.log(555);
 				// Add a small delay between operations
 				fillScript.properties.delay_between_operations = 20;
 				didAutofill = true;
@@ -502,6 +504,8 @@ export default class AutofillService implements AutofillServiceInterface {
 		options: GenerateFillScriptOptions
 	): Promise<AutofillScript | null> {
 		if (!pageDetails || !options.item) {
+			console.log('generateFillScript null');
+
 			return null;
 		}
 		let fillScript = new AutofillScript();

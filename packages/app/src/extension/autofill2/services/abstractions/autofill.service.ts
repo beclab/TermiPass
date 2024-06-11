@@ -22,7 +22,7 @@ export enum UriMatchType {
 
 export interface PageDetail {
 	frameId: number;
-	tab: chrome.tabs.Tab;
+	tab: Tabs.Tab;
 	details: AutofillPageDetails;
 }
 
@@ -30,7 +30,7 @@ export interface AutoFillOptions {
 	item: VaultItem;
 	pageDetails: PageDetail[];
 	doc?: typeof self.document;
-	tab: chrome.tabs.Tab;
+	tab: Tabs.Tab;
 	skipUsernameOnlyFill?: boolean;
 	onlyEmptyFields?: boolean;
 	onlyVisibleFields?: boolean;
