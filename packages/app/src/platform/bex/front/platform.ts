@@ -1,6 +1,5 @@
 import { MobileWebPlatform } from '../../terminusCommon/mobileWebPlatform';
 import { ExtensionStorage, ExtensionUserStorage } from '../storage';
-// import { browser } from 'webextension-polyfill-ts';
 import { useUserStore } from '../../../stores/user';
 import {
 	UserItem,

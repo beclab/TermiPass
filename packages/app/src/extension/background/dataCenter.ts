@@ -200,6 +200,10 @@ export class DataCenter {
 			`${info.parentMenuItemId}_`,
 			''
 		);
+		return this.findChildItemById(id);
+	}
+
+	findChildItemById(id: string) {
 		return this.getWebVaultItems().find((it) => {
 			return it.id == id;
 		});

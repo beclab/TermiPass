@@ -27,3 +27,11 @@ export const bexVaultUpdate = () => {
 	}
 	busEmit('updateVaultComplete');
 };
+
+export const autofillById = (id: string) => {
+	if (process.env.PLATFORM !== 'BEX') {
+		return;
+	}
+	const bex = useBexStore();
+	bex.controller.autofillById(id);
+};

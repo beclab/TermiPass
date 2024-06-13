@@ -394,7 +394,6 @@
 import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
 import { useQuasar, format } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
-import { Field } from '@didvault/sdk/src/core';
 import CreateItem from './dialog/CreateItem.vue';
 import ExchangeViewAdd from './dialog/ExchangeViewAdd.vue';
 import CryptoViewAdd from './dialog/CryptoViewAdd.vue';
@@ -429,6 +428,8 @@ import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
 import { useTermipassStore } from '../../stores/termipass';
 import { addItem } from '../../platform/addItem';
+import { getAppPlatform } from '../../platform/appPlatform';
+import { autofillById } from '../../utils/bexFront';
 
 function filterByString(fs: string, rec: VaultItem) {
 	if (!fs) {
@@ -569,8 +570,13 @@ export default defineComponent({
 				}
 			});
 		}
+		async function _getItems() {
+			let filterUrl = '';
+			if (process.env.PLATFORM == 'BEX') {
+				const tab = await (getAppPlatform() as any).getCurrentTab();
+				filterUrl = tab.url;
+			}
 
-		function _getItems() {
 			const filter = filterInput.value || '';
 			const recentThreshold = new Date(
 				Date.now() - app.settings.recentLimit * 24 * 60 * 60 * 1000
@@ -582,8 +588,8 @@ export default defineComponent({
 						.filter((item) => filterByString(filter || '', item))
 						.map((item) => ({ vault, item }))
 				);
-			} else if (meunStore.host) {
-				//items = app.getItemsForUrl(app.state.context.browser?.url!);
+			} else if (filterUrl) {
+				items = app.getItemsForUrl(filterUrl);
 			} else {
 				for (const vault of app.state.vaults) {
 					if (meunStore.vaultId && vault.id !== meunStore.vaultId) {
@@ -699,6 +705,10 @@ export default defineComponent({
 		};
 
 		async function selectItem(item: ListItem) {
+			if (process.env.PLATFORM == 'BEX') {
+				autofillById(item.item.id);
+				return;
+			}
 			if (item) {
 				context.emit('toolabClick', item.item.id);
 			}
@@ -721,8 +731,8 @@ export default defineComponent({
 			return false;
 		}
 
-		function stateUpdate() {
-			itemList.value = _getItems();
+		async function stateUpdate() {
+			itemList.value = await _getItems();
 		}
 
 		onMounted(() => {
@@ -734,7 +744,8 @@ export default defineComponent({
 		onUnmounted(() => {
 			busOff('appSubscribe', stateUpdate);
 		});
-		let itemList = ref<ListItem[]>(_getItems());
+		let itemList = ref<ListItem[]>([]);
+		stateUpdate();
 		const placeholder = computed(function () {
 			return itemList.value.length
 				? {}
@@ -846,8 +857,8 @@ export default defineComponent({
 			return message;
 		});
 
-		let updateItems = debounce(() => {
-			itemList.value = _getItems();
+		let updateItems = debounce(async () => {
+			itemList.value = await _getItems();
 		}, 50);
 
 		async function search() {

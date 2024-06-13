@@ -65,6 +65,7 @@ export type BusEventName =
 	| 'BROADCAST_TO_UI'
 	| 'BROADCAST_TO_BACKGROUND'
 	| 'updateVaultComplete'
+	| 'autofillById'
 
 	// app
 	| 'appSubscribe'

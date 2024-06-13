@@ -2,7 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 import PluginRootLayout from 'layouts/PluginRootLayout.vue';
 import PluginMainLayout from 'layouts/PluginMainLayout.vue';
 import PluginIndexPage from 'pages/Plugin/indexPage.vue';
-import PluginItemIndex from 'pages/Mobile/vault/ItemIndex.vue';
+import PluginItemIndex from 'src/pages/Mobile/vault/ItemIndex.vue';
 import PluginItemView from 'src/pages/Mobile/vault/ItemView.vue';
 import PluginSettingIndex from 'pages/Mobile/setting/SettingIndex.vue';
 // import PluginRssIndexPage from 'pages/Mobile/rss/RssIndexPage.vue';

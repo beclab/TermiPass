@@ -31,6 +31,7 @@ import { VaultItem } from '@didvault/sdk/src/core';
 import { AuthService } from 'src/extension/services/abstractions/auth.service';
 import { OverlayBackground as OverlayBackgroundInterface } from './abstractions/overlay.background';
 import NotificationBackground from './notification.background';
+import { busOn } from 'src/utils/bus';
 // import { BrowserInterface } from '../../interface/browserInterface';
 // import {
 // 	ExtensionMessage,
@@ -64,6 +65,13 @@ export class AutofillBackground
 		await this.autofillService.init();
 		await this.overlayBackground.init();
 		await this.notificationBackground.init();
+
+		busOn('autofillById', async (id: string) => {
+			console.log('id ===>');
+			console.log(id);
+			const tab = await getActiveTab();
+			this.doAutofillTabById(tab, id);
+		});
 	}
 
 	async updateAutofillContextMenu() {
@@ -76,13 +84,24 @@ export class AutofillBackground
 	}
 
 	async doAutofillTab(tab: Tabs.Tab, info: Menus.OnClickData) {
-		if (!tab || !tab.id) {
+		const id = (info.menuItemId as string).replace(
+			`${info.parentMenuItemId}_`,
+			''
+		);
+		this.doAutofillTabById(tab, id);
+	}
+
+	private doAutofillTabById(tab: Tabs.Tab, id: string) {
+		if (!tab || !tab.id || !id) {
 			throw new Error('Tab does not have an id, cannot complete autofill.');
 		}
-		this.autoFillCollectPageDetails(tab.id);
 		const platform = getExtensionBackgroundPlatform();
-
-		this.autofillVaultItem = platform.dataCenter.findChildItem(info);
+		const item = platform.dataCenter.findChildItemById(id);
+		if (!item) {
+			throw new Error('Tab does not have an id, cannot complete autofill.');
+		}
+		this.autofillVaultItem = item;
+		this.autoFillCollectPageDetails(tab.id);
 	}
 
 	private async autoFillCollectPageDetails(tabId: number): Promise<void> {
