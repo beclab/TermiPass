@@ -12,7 +12,6 @@ import {
 import { FocusableElement, tabbable } from 'tabbable';
 import { AutoFillConstants } from './autofill-constants';
 import {
-	AuthenticationStatus,
 	EVENTS,
 	RedirectFocusDirection,
 	elementIsFillableFormField,
@@ -28,6 +27,7 @@ import {
 import AutofillOverlayButtonIframe from '../overlay/iframe-content/autofill-overlay-button-iframe';
 import AutofillOverlayListIframe from '../overlay/iframe-content/autofill-overlay-list-iframe';
 import { sendExtensionMessage } from '../utils/sendMessage';
+import { AuthenticationStatus } from 'src/extension/utils/enums';
 
 class AutofillOverlayContentService
 	implements AutofillOverlayContentServiceInterface

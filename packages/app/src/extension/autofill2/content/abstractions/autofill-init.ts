@@ -1,5 +1,5 @@
+import { AuthenticationStatus } from 'src/extension/utils/enums';
 import AutofillScript from '../../models/autofill-script';
-import { AuthenticationStatus } from '../../utils';
 
 export type AutofillExtensionMessage = {
 	command: string;

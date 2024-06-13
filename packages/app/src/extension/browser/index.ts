@@ -92,3 +92,16 @@ export const getTabFromCurrentWindowId = async (): Promise<
 	}
 	return undefined;
 };
+
+export const getTabFromCurrentWindow = async (): Promise<
+	Tabs.Tab | undefined
+> => {
+	const tabs = await browser.tabs.query({
+		active: true,
+		currentWindow: true
+	});
+	if (tabs.length > 0) {
+		return tabs[0];
+	}
+	return undefined;
+};

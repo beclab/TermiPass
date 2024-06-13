@@ -35,21 +35,66 @@ import { ref, watchEffect } from 'vue';
 import { useUserStore } from '../stores/user';
 import { setAssetsUrl } from '../stores/bex-url';
 import urlUtils from '../utils/url';
+import { updateUIToAddWeb } from '../platform/addItem';
+import { useRouter } from 'vue-router';
 const userStore = useUserStore();
 const searchParamsObj = urlUtils.getSearchParamsObj();
 
 const $q = useQuasar();
 const show = ref(false);
 const extraShow = ref(false);
+const router = useRouter();
 const isnotification = ref(searchParamsObj.notification);
 const toggle = () => {
 	show.value = !show.value;
 };
+let lasteventResponseKey = '';
+$q?.bex?.on(
+	'webos.app.status',
+	(data: {
+		data: { show?: boolean };
+		respond: any;
+		eventResponseKey: string;
+	}) => {
+		if (lasteventResponseKey == data.eventResponseKey) {
+			return;
+		}
+		lasteventResponseKey = data.eventResponseKey;
+		if (data.data.show != undefined) {
+			show.value = data.data.show;
+		} else {
+			toggle();
+		}
+		data.respond();
+	}
+);
 
-$q?.bex?.on('webos.app.status', ({ respond }) => {
-	toggle();
-	respond();
-});
+$q?.bex.on(
+	'frontAddNewVaultItem',
+	(data: {
+		data: {
+			url: string;
+			username: string;
+			password: string;
+			direct: boolean;
+		};
+		respond: any;
+		eventResponseKey: string;
+	}) => {
+		if (lasteventResponseKey == data.eventResponseKey) {
+			return;
+		}
+		lasteventResponseKey = data.eventResponseKey;
+		updateUIToAddWeb(
+			data.data.url,
+			router,
+			data.data.username,
+			data.data.password,
+			data.data.direct
+		);
+		data.respond();
+	}
+);
 
 const initExtensionURL = async () => {
 	const data = await $q?.bex?.send('webos.app.url', {

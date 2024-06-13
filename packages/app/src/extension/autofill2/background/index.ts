@@ -27,6 +27,10 @@ import { AutofillExtensionMessage } from '../interface/message';
 import AutofillService from '../services/autofill.service';
 import OverlayBackground from './overlay.background';
 import AutofillPageDetails from '../models/autofill-page-details';
+import { VaultItem } from '@didvault/sdk/src/core';
+import { AuthService } from 'src/extension/services/abstractions/auth.service';
+import { OverlayBackground as OverlayBackgroundInterface } from './abstractions/overlay.background';
+import NotificationBackground from './notification.background';
 // import { BrowserInterface } from '../../interface/browserInterface';
 // import {
 // 	ExtensionMessage,
@@ -39,12 +43,27 @@ export class AutofillBackground
 {
 	messageModule: ExtensionMessageMode = 'autofill';
 	autofillService = new AutofillService();
-	overlayBackground = new OverlayBackground(this.autofillService);
+	overlayBackground: OverlayBackgroundInterface;
+	private notificationBackground: NotificationBackground;
 
-	async init() {
+	autofillVaultItem: VaultItem | undefined = undefined;
+
+	authService: AuthService;
+
+	async init(authService: AuthService) {
 		//Do Nothing
+		this.authService = authService;
+		this.overlayBackground = new OverlayBackground(
+			this.autofillService,
+			this.authService
+		);
+		this.notificationBackground = new NotificationBackground(
+			this.autofillService,
+			this.authService
+		);
 		await this.autofillService.init();
 		await this.overlayBackground.init();
+		await this.notificationBackground.init();
 	}
 
 	async updateAutofillContextMenu() {
@@ -60,58 +79,16 @@ export class AutofillBackground
 		if (!tab || !tab.id) {
 			throw new Error('Tab does not have an id, cannot complete autofill.');
 		}
-
-		const details = await this.collectPageDetails(tab.id);
-
+		this.autoFillCollectPageDetails(tab.id);
 		const platform = getExtensionBackgroundPlatform();
 
-		const item = platform.dataCenter.findChildItem(info);
-		if (item) {
-			console.log(details);
-
-			await this.autofillService.doAutoFill({
-				item,
-				tab: tab,
-				pageDetails: [
-					{
-						frameId: 0,
-						tab: tab,
-						details: details
-					}
-				],
-				// skipLastUsed: false,
-				// skipUsernameOnlyFill: false,
-				// onlyEmptyFields: false,
-				// onlyVisibleFields: false,
-				// fillNewPassword: true
-				fillNewPassword: true,
-				allowTotpAutofill: true
-			});
-		} else {
-			throw new Error('item does not exist, cannot complete autofill.');
-		}
+		this.autofillVaultItem = platform.dataCenter.findChildItem(info);
 	}
 
-	private async collectPageDetails(
-		tabId: number
-	): Promise<AutofillPageDetails> {
-		return new Promise((resolve, reject) => {
-			//fix : by new Promise and response,return turn
-			//https://github.com/mozilla/webextension-polyfill/issues/130
-			browser.tabs
-				.sendMessage(tabId, {
-					command: 'collectPageDetailsImmediately'
-				})
-				.then((response) => {
-					console.log('response ===>');
-					console.log(response);
-					console.log(new Date());
-
-					resolve(response);
-				})
-				.catch((e) => {
-					reject(e);
-				});
+	private async autoFillCollectPageDetails(tabId: number): Promise<void> {
+		browser.tabs.sendMessage(tabId, {
+			command: 'collectPageDetailsImmediately',
+			sender: 'autofill'
 		});
 	}
 
@@ -213,6 +190,33 @@ export class AutofillBackground
 					message.sender,
 					sender.frameId
 				);
+				break;
+
+			case 'collectPageDetailsImmediately':
+				if (message.sender == 'autofill') {
+					if (this.autofillVaultItem) {
+						const details: AutofillPageDetails = message.info.details;
+						if (!details || !this.autofillVaultItem || !sender.tab) {
+							return;
+						}
+						await this.autofillService.doAutoFill({
+							item: this.autofillVaultItem,
+							tab: sender.tab,
+							pageDetails: [
+								{
+									frameId: 0,
+									tab: sender.tab,
+									details: details
+								}
+							],
+							fillNewPassword: true,
+							allowTotpAutofill: true
+						});
+						this.autofillVaultItem = undefined;
+					} else {
+						throw new Error('item does not exist, cannot complete autofill.');
+					}
+				}
 				break;
 
 			default:

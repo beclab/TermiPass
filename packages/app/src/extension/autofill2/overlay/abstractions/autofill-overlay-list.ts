@@ -1,4 +1,5 @@
-import { AuthenticationStatus, OverlayCipherData } from '../../utils';
+import { AuthenticationStatus } from 'src/extension/utils/enums';
+import { OverlayCipherData } from '../../utils';
 
 type OverlayListMessage = { command: string };
 

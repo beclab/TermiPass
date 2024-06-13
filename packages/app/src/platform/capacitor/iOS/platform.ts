@@ -4,7 +4,7 @@ import { FCM } from '@capacitor-community/fcm';
 import { CapacitorPlatform } from '../capacitorPlatform';
 import iOSPlugins from './iOSRegisterPlugins';
 import { busOn, busOff, busEmit } from '../../../utils/bus';
-import { updateUIToAddWeb } from '../addItem';
+import { updateUIToAddWeb } from '../../addItem';
 import { FieldType, VaultItem } from '@didvault/sdk/src/core';
 import { app } from 'src/globals';
 import { addAxiosProxyGlobalRequestInterceptor } from '../../httpProxy';

@@ -33,12 +33,12 @@ export class AutofillBackground
 		//Do Nothing
 	}
 
-	async updateAutofillContextMenu(unlockedCallback: any) {
+	async updateAutofillContextMenu() {
 		if (getExtensionBackgroundPlatform().dataCenter.isLocked()) {
 			await updateLockedContextMenu();
 		} else {
 			await updateDataContextMenu(await this._getItemsForTab());
-			unlockedCallback();
+			// unlockedCallback();
 		}
 	}
 
@@ -48,6 +48,8 @@ export class AutofillBackground
 		}
 
 		const details = await this.collectPageDetails(tab.id);
+		console.log('details ===>');
+		console.log(details);
 
 		const platform = getExtensionBackgroundPlatform();
 

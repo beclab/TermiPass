@@ -64,6 +64,7 @@ export type BusEventName =
 	//bex
 	| 'BROADCAST_TO_UI'
 	| 'BROADCAST_TO_BACKGROUND'
+	| 'updateVaultComplete'
 
 	// app
 	| 'appSubscribe'

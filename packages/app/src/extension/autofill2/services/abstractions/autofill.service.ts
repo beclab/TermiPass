@@ -59,6 +59,9 @@ export const UriMatchStrategy = {
 export type UriMatchStrategySetting =
 	(typeof UriMatchStrategy)[keyof typeof UriMatchStrategy];
 
+export type NeverDomains = { [id: string]: unknown };
+export type EquivalentDomains = string[][];
+
 export interface GenerateFillScriptOptions {
 	skipUsernameOnlyFill: boolean;
 	onlyEmptyFields: boolean;

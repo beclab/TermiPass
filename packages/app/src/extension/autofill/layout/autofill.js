@@ -1336,6 +1336,8 @@
 			var pageDetails = collect(document);
 			// eslint-disable-next-line no-redeclare
 			var pageDetailsObj = JSON.parse(pageDetails);
+			console.log('pageDetailsObj ===>');
+			console.log(pageDetailsObj);
 			sendResponse(pageDetailsObj);
 			return true;
 		}

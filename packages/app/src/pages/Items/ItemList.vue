@@ -428,6 +428,7 @@ import { busOn, busOff } from '../../utils/bus';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
 import { useTermipassStore } from '../../stores/termipass';
+import { addItem } from '../../platform/addItem';
 
 function filterByString(fs: string, rec: VaultItem) {
 	if (!fs) {
@@ -489,26 +490,26 @@ export default defineComponent({
 
 		const isBex = ref(process.env.IS_BEX);
 
-		async function addItem(
-			name: string,
-			icon: string,
-			fields: any,
-			tags: string[],
-			vault: any
-		) {
-			const item: VaultItem = await app.createItem({
-				name,
-				vault,
-				icon,
-				fields: fields.map(
-					(f: Field) => new Field({ ...f, value: f.value || '' })
-				),
-				tags
-			});
-			if (item) {
-				context.emit('toolabClick', item.id);
-			}
-		}
+		// async function addItem(
+		// 	name: string,
+		// 	icon: string,
+		// 	fields: any,
+		// 	tags: string[],
+		// 	vault: any
+		// ) {
+		// 	const item: VaultItem = await app.createItem({
+		// 		name,
+		// 		vault,
+		// 		icon,
+		// 		fields: fields.map(
+		// 			(f: Field) => new Field({ ...f, value: f.value || '' })
+		// 		),
+		// 		tags
+		// 	});
+		// 	if (item) {
+		// 		context.emit('toolabClick', item.id);
+		// 	}
+		// }
 
 		async function onCreate() {
 			let option: any = null;

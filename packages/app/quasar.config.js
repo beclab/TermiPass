@@ -293,6 +293,14 @@ module.exports = configure(function (ctx) {
 							}
 						]);
 
+						chain.plugin('html-bar-plugin').use(HtmlWebpackPlugin, [
+							{
+								template: 'src/extension/autofill2/bar/bar.html',
+								filename: 'bar.html',
+								chunks: ['bar']
+							}
+						]);
+
 						chain
 							.entry('TermiPassProvider')
 							.add(
@@ -339,6 +347,12 @@ module.exports = configure(function (ctx) {
 							.add(
 								'src/extension/autofill2/overlay/pages/list/bootstrap-autofill-overlay-list.ts'
 							);
+
+						chain
+							.entry('content/notificationBar')
+							.add('src/extension/autofill2/content/notification-bar.ts');
+
+						chain.entry('bar').add('src/extension/autofill2/bar/bar.ts');
 
 						// "content/bootstrap-autofill": "./src/autofill/content/bootstrap-autofill.ts",
 						// "content/bootstrap-autofill-overlay": "./src/autofill/content/bootstrap-autofill-overlay.ts",

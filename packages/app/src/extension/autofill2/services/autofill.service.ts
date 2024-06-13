@@ -93,7 +93,6 @@ export default class AutofillService implements AutofillServiceInterface {
 		if (!tab.id) {
 			return;
 		}
-		console.log('register bootstrap-autofill-overlay.js');
 
 		const mainAutofillScript = 'bootstrap-autofill-overlay.js';
 		const injectedScripts = [mainAutofillScript];
@@ -106,6 +105,7 @@ export default class AutofillService implements AutofillServiceInterface {
 			// 	}
 			// });
 		}
+		injectedScripts.push('notificationBar.js');
 		for (const injectedScript of injectedScripts) {
 			await inject({
 				tabId: tab.id,
@@ -289,7 +289,6 @@ export default class AutofillService implements AutofillServiceInterface {
 					// );
 					return;
 				}
-				console.log(555);
 				// Add a small delay between operations
 				fillScript.properties.delay_between_operations = 20;
 				didAutofill = true;
@@ -504,8 +503,6 @@ export default class AutofillService implements AutofillServiceInterface {
 		options: GenerateFillScriptOptions
 	): Promise<AutofillScript | null> {
 		if (!pageDetails || !options.item) {
-			console.log('generateFillScript null');
-
 			return null;
 		}
 		let fillScript = new AutofillScript();

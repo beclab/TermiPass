@@ -112,10 +112,17 @@ class AutofillInit implements AutofillInitInterface {
 
 		const pageDetails: AutofillPageDetails =
 			await this.collectAutofillContentService.getPageDetails();
-		console.log(pageDetails);
 
 		if (sendDetailsInResponse) {
-			return pageDetails;
+			// return pageDetails;
+			sendExtensionMessage('collectPageDetailsImmediately', {
+				sender: message.sender,
+				info: {
+					details: pageDetails,
+					tab: message.tab
+				}
+			});
+			return;
 		}
 
 		void chrome.runtime.sendMessage({
@@ -294,7 +301,9 @@ class AutofillInit implements AutofillInitInterface {
 	 * Sets up the extension message listeners for the content script.
 	 */
 	private setupExtensionMessageListeners() {
-		chrome.runtime.onMessage.addListener(this.handleExtensionMessage);
+		chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+			this.handleExtensionMessage(message, sender, sendResponse);
+		});
 	}
 
 	/**
@@ -308,36 +317,21 @@ class AutofillInit implements AutofillInitInterface {
 		message: AutofillExtensionMessage,
 		sender: chrome.runtime.MessageSender,
 		sendResponse: (response?: any) => void
-	): Promise<boolean> => {
+	) => {
 		const command: string = message.command;
-		console.log('command ===>', command);
 
 		const handler: CallableFunction | undefined =
 			this.extensionMessageHandlers[command];
-		console.log('handler 1');
 
 		if (!handler) {
 			return false;
 		}
 
-		console.log('handler 2');
 		const messageResponse = await handler({ message, sender });
 		if (!messageResponse) {
 			return false;
 		}
-		console.log('handler 3');
-		console.log(messageResponse);
-
-		console.log(new Date());
-
 		sendResponse(messageResponse);
-		console.log(new Date());
-		// await Promise.resolve(messageResponse).then((response) => {
-		// 	console.log('handle 4');
-		// 	console.log(response);
-		// 	// sendResponse(response);
-		// 	// sendResponse(222);
-		// });
 		return true;
 	};
 

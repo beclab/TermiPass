@@ -1,12 +1,6 @@
 import { AutofillPort } from '../enums/autofill-port.enums';
 import { FillableFormFieldElement, FormFieldElement } from '../types';
 
-export enum AuthenticationStatus {
-	LoggedOut = 0,
-	Locked = 1,
-	Unlocked = 2
-}
-
 export enum CipherType {
 	Login = 1,
 	SecureNote = 2,

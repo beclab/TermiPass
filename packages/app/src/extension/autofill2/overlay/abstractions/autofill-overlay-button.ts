@@ -1,4 +1,4 @@
-import { AuthenticationStatus } from '../../utils';
+import { AuthenticationStatus } from 'src/extension/utils/enums';
 
 type OverlayButtonMessage = { command: string; colorScheme?: string };
 

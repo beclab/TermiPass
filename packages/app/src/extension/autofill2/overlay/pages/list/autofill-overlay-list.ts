@@ -1,21 +1,16 @@
 import '@webcomponents/custom-elements';
 import {
-	globeIcon,
 	lockIcon,
 	plusIcon
 	// viewCipherIcon
 } from '../../../utils/svg-icons';
-import {
-	AuthenticationStatus,
-	EVENTS,
-	OverlayCipherData,
-	buildSvgDomElement
-} from '../../../utils';
+import { EVENTS, OverlayCipherData, buildSvgDomElement } from '../../../utils';
 import {
 	InitAutofillOverlayListMessage,
 	OverlayListWindowMessageHandlers
 } from '../../abstractions/autofill-overlay-list';
 import AutofillOverlayPageElement from '../shared/autofill-overlay-page-element';
+import { AuthenticationStatus } from 'src/extension/utils/enums';
 
 class AutofillOverlayList extends AutofillOverlayPageElement {
 	private overlayListContainer: HTMLDivElement;
@@ -93,13 +88,13 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 		const lockedOverlay = globalThis.document.createElement('div');
 		lockedOverlay.id = 'locked-overlay-description';
 		lockedOverlay.classList.add('locked-overlay', 'overlay-list-message');
-		lockedOverlay.textContent = this.getTranslation('unlockYourAccount');
+		lockedOverlay.textContent = 'Unlock your account';
 
 		const unlockButtonElement = globalThis.document.createElement('button');
 		unlockButtonElement.id = 'unlock-button';
 		unlockButtonElement.tabIndex = -1;
 		unlockButtonElement.classList.add('unlock-button', 'overlay-list-button');
-		unlockButtonElement.textContent = this.getTranslation('unlockAccount');
+		unlockButtonElement.textContent = 'Unlock account';
 		unlockButtonElement.setAttribute(
 			'aria-label',
 			`${this.getTranslation('unlockAccount')}, ${this.getTranslation(
@@ -165,13 +160,13 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	private buildNoResultsOverlayList() {
 		const noItemsMessage = globalThis.document.createElement('div');
 		noItemsMessage.classList.add('no-items', 'overlay-list-message');
-		noItemsMessage.textContent = this.getTranslation('noItemsToShow');
+		noItemsMessage.textContent = 'No items to show';
 
 		const newItemButton = globalThis.document.createElement('button');
 		newItemButton.tabIndex = -1;
 		newItemButton.id = 'new-item-button';
 		newItemButton.classList.add('add-new-item-button', 'overlay-list-button');
-		newItemButton.textContent = this.getTranslation('newItem');
+		newItemButton.textContent = 'New item';
 		newItemButton.setAttribute(
 			'aria-label',
 			`${this.getTranslation('addNewVaultItem')}, ${this.getTranslation(
@@ -288,7 +283,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 * @param cipher - The cipher to build the fill cipher button for.
 	 */
 	private buildFillCipherElement(cipher: OverlayCipherData) {
-		const cipherIcon = this.buildCipherIconElement(cipher);
+		// const cipherIcon = this.buildCipherIconElement(cipher);
 		const cipherDetailsElement = this.buildCipherDetailsElement(cipher);
 
 		const fillCipherElement = globalThis.document.createElement('button');
@@ -302,7 +297,7 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 			'aria-description',
 			`${this.getTranslation('partialUsername')}, ${cipher.login?.username}`
 		);
-		fillCipherElement.append(cipherIcon, cipherDetailsElement);
+		fillCipherElement.append(cipherDetailsElement);
 		fillCipherElement.addEventListener(
 			EVENTS.CLICK,
 			this.handleFillCipherClickEvent(cipher)
@@ -458,29 +453,29 @@ class AutofillOverlayList extends AutofillOverlayPageElement {
 	 *
 	 * @param cipher - The cipher to build the icon for.
 	 */
-	private buildCipherIconElement(cipher: OverlayCipherData) {
-		const cipherIcon = globalThis.document.createElement('span');
-		cipherIcon.classList.add('cipher-icon');
-		cipherIcon.setAttribute('aria-hidden', 'true');
+	// private buildCipherIconElement(cipher: OverlayCipherData) {
+	// 	const cipherIcon = globalThis.document.createElement('span');
+	// 	cipherIcon.classList.add('cipher-icon');
+	// 	cipherIcon.setAttribute('aria-hidden', 'true');
 
-		if (cipher.icon?.image) {
-			try {
-				const url = new URL(cipher.icon.image);
-				cipherIcon.style.backgroundImage = `url(${url.href})`;
-				return cipherIcon;
-			} catch {
-				// Silently default to the globe icon element if the image URL is invalid
-			}
-		}
+	// 	if (cipher.icon?.image) {
+	// 		try {
+	// 			const url = new URL(cipher.icon.image);
+	// 			cipherIcon.style.backgroundImage = `url(${url.href})`;
+	// 			return cipherIcon;
+	// 		} catch {
+	// 			// Silently default to the globe icon element if the image URL is invalid
+	// 		}
+	// 	}
 
-		if (cipher.icon?.icon) {
-			cipherIcon.classList.add('cipher-icon', 'bwi', cipher.icon.icon);
-			return cipherIcon;
-		}
+	// 	if (cipher.icon?.icon) {
+	// 		cipherIcon.classList.add('cipher-icon', 'bwi', cipher.icon.icon);
+	// 		return cipherIcon;
+	// 	}
 
-		cipherIcon.append(buildSvgDomElement(globeIcon));
-		return cipherIcon;
-	}
+	// 	cipherIcon.append(buildSvgDomElement(globeIcon));
+	// 	return cipherIcon;
+	// }
 
 	/**
 	 * Builds the details for a given cipher. Includes the cipher name and username login.

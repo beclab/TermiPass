@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { VaultItem } from '@didvault/sdk/src/core';
+import { FieldType, VaultItem } from '@didvault/sdk/src/core';
 import {
 	AutofillService,
 	PageDetail
@@ -14,18 +14,19 @@ import {
 	OverlayCipherData,
 	OverlayListPortMessageHandlers,
 	OverlayPortMessage
-	// WebsiteIconData
 } from './abstractions/overlay.background';
 import { getTabFromCurrentWindowId } from '../../browser';
 import { getExtensionBackgroundPlatform } from 'src/extension/background/extensionBackgroundPlatform';
 import { browser, Runtime } from 'webextension-polyfill-ts';
-import { AuthenticationStatus, CipherRepromptType } from '../utils';
+import { CipherRepromptType } from '../utils';
 import {
 	AutofillOverlayElement,
 	AutofillOverlayPort,
 	AutofillOverlayVisibility,
 	InlineMenuVisibilitySetting
 } from '../utils/autofill-overlay.enum';
+import { AuthenticationStatus } from 'src/extension/utils/enums';
+import { AuthService } from 'src/extension/services/auth.service';
 
 class OverlayBackground implements OverlayBackgroundInterface {
 	private overlayLoginVault: Map<string, VaultItem> = new Map();
@@ -60,8 +61,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 			collectPageDetailsResponse: ({ message, sender }) =>
 				this.storePageDetails(message, sender),
 			unlockCompleted: ({ message }) => this.unlockCompleted(message),
-			addEditCipherSubmitted: () => this.updateOverlayCiphers(),
-			deletedCipher: () => this.updateOverlayCiphers()
+			updateVaultComplete: () => this.updateOverlayCiphers()
 		};
 	private readonly overlayButtonPortMessageHandlers: OverlayButtonPortMessageHandlers =
 		{
@@ -87,7 +87,10 @@ class OverlayBackground implements OverlayBackgroundInterface {
 				this.redirectOverlayFocusOut(message, port)
 		};
 
-	constructor(private autofillService: AutofillService) {} // private themeStateService: ThemeStateService // private platformUtilsService: PlatformUtilsService, // private i18nService: I18nService, // private autofillSettingsService: AutofillSettingsServiceAbstraction, // private domainSettingsService: DomainSettingsService, // private environmentService: EnvironmentService, // private authService: AuthService, // private autofillService: AutofillService,
+	constructor(
+		private autofillService: AutofillService,
+		private authService: AuthService
+	) {} // private themeStateService: ThemeStateService // private platformUtilsService: PlatformUtilsService, // private i18nService: I18nService, // private autofillSettingsService: AutofillSettingsServiceAbstraction, // private domainSettingsService: DomainSettingsService, // private environmentService: EnvironmentService, // private authService: AuthService, // private autofillService: AutofillService,
 
 	/**
 	 * Removes cached page details for a tab
@@ -125,6 +128,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		// const authStatus = await firstValueFrom(
 		// 	this.authService.activeAccountStatus$
 		// );
+
 		const authStatus = await this.getAuthStatus();
 		if (authStatus !== AuthenticationStatus.Unlocked) {
 			return;
@@ -134,7 +138,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		if (!currentTab?.url || !currentTab.id) {
 			return;
 		}
-
 		this.overlayLoginVault = new Map();
 		const vaultItems = await this.getItemsForTab();
 		for (let vaultIndex = 0; vaultIndex < vaultItems.length; vaultIndex++) {
@@ -143,7 +146,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 				vaultItems[vaultIndex]
 			);
 		}
-
 		const ciphers = await this.getOverlayCipherData();
 		this.overlayListPort?.postMessage({
 			command: 'updateOverlayListCiphers',
@@ -185,7 +187,7 @@ class OverlayBackground implements OverlayBackgroundInterface {
 				id: overlayVaultId,
 				name: vaultItem.name,
 				type: vaultItem.type as any,
-				reprompt: CipherRepromptType.None,
+				reprompt: CipherRepromptType.Password,
 				favorite: false,
 				icon: {
 					imageEnabled: false,
@@ -193,7 +195,11 @@ class OverlayBackground implements OverlayBackgroundInterface {
 					fallbackImage: '',
 					icon: ''
 				},
-				login: undefined,
+				login: {
+					username:
+						vaultItem.fields.find((e) => e.type == FieldType.Username)?.value ||
+						''
+				},
 				card: undefined
 			});
 		}
@@ -429,10 +435,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		};
 	}
 
-	/**
-	 * Gets the position of the focused field and calculates the position
-	 * of the overlay list based on the focused field's position and dimensions.
-	 */
 	private getOverlayListPosition() {
 		if (!this.focusedFieldData) {
 			return;
@@ -447,12 +449,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		};
 	}
 
-	/**
-	 * Sets the focused field data to the data passed in the extension message.
-	 *
-	 * @param focusedFieldData - Contains the rects and styles of the focused field.
-	 * @param sender - The sender of the extension message
-	 */
 	private setFocusedFieldData(
 		{ focusedFieldData }: OverlayBackgroundExtensionMessage,
 		sender: Runtime.MessageSender
@@ -460,11 +456,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		this.focusedFieldData = { ...focusedFieldData, tabId: sender.tab?.id };
 	}
 
-	/**
-	 * Updates the overlay's visibility based on the display property passed in the extension message.
-	 *
-	 * @param display - The display property of the overlay, either "block" or "none"
-	 */
 	private updateOverlayHidden({ display }: OverlayBackgroundExtensionMessage) {
 		if (!display) {
 			return;
@@ -476,12 +467,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		this.overlayListPort?.postMessage(portMessage);
 	}
 
-	/**
-	 * Sends a message to the currently active tab to open the autofill overlay.
-	 *
-	 * @param isFocusingFieldElement - Identifies whether the field element should be focused when the overlay is opened
-	 * @param isOpeningFullOverlay - Identifies whether the full overlay should be forced open regardless of other states
-	 */
 	private async openOverlay(
 		isFocusingFieldElement = false,
 		isOpeningFullOverlay = false
@@ -500,24 +485,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		});
 	}
 
-	/**
-	 * Gets the overlay's visibility setting from the settings service.
-	 */
 	private async getOverlayVisibility(): Promise<InlineMenuVisibilitySetting> {
 		return AutofillOverlayVisibility.OnFieldFocus;
 	}
 
-	/**
-	 * Gets the user's authentication status from the auth service. If the user's
-	 * authentication status has changed, the overlay button's authentication status
-	 * will be updated and the overlay list's ciphers will be updated.
-	 */
 	private async getAuthStatus() {
 		const formerAuthStatus = this.userAuthStatus;
-		// this.userAuthStatus = await this.authService.getAuthStatus();
-		this.userAuthStatus = getExtensionBackgroundPlatform().dataCenter.isLocked()
-			? AuthenticationStatus.LoggedOut
-			: AuthenticationStatus.Unlocked;
+		this.userAuthStatus = await this.authService.getAuthStatus();
 
 		if (
 			this.userAuthStatus !== formerAuthStatus &&
@@ -530,100 +504,44 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		return this.userAuthStatus;
 	}
 
-	/**
-	 * Sends a message to the overlay button to update its authentication status.
-	 */
 	private updateOverlayButtonAuthStatus() {
 		this.overlayButtonPort?.postMessage({
 			command: 'updateOverlayButtonAuthStatus',
 			authStatus: this.userAuthStatus
 		});
 	}
-
-	/**
-	 * Handles the overlay button being clicked. If the user is not authenticated,
-	 * the vault will be unlocked. If the user is authenticated, the overlay will
-	 * be opened.
-	 *
-	 * @param port - The port of the overlay button
-	 */
 	private handleOverlayButtonClicked(port: Runtime.Port) {
 		if (this.userAuthStatus !== AuthenticationStatus.Unlocked) {
-			// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			this.unlockVault(port);
 			return;
 		}
-
-		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-		// eslint-disable-next-line @typescript-eslint/no-floating-promises
 		this.openOverlay(false, true);
 	}
 
-	/**
-	 * Facilitates opening the unlock popout window.
-	 *
-	 * @param port - The port of the overlay list
-	 */
 	private async unlockVault(port: Runtime.Port) {
-		// const { sender } = port;
-
 		this.closeOverlay(port);
-		// const retryMessage: LockedVaultPendingNotificationsData = {
-		// 	commandToRetry: { message: { command: 'openAutofillOverlay' }, sender },
-		// 	target: 'overlay.background'
-		// };
-		// await BrowserApi.tabSendMessageData(
-		// 	sender.tab,
-		// 	'addToLockedVaultPendingNotifications',
-		// 	retryMessage
-		// );
-		// await this.openUnlockPopout(sender.tab, true);
 		const currentTab = await getTabFromCurrentWindowId();
 		if (!currentTab?.id) {
 			return;
 		}
 		browser.tabs.sendMessage(currentTab.id!, {
 			url: currentTab.url,
-			type: 'toggle-slider'
+			type: 'toggle-slider',
+			show: true
 		});
 	}
 
-	/**
-	 * Triggers the opening of a vault item popout window associated
-	 * with the passed cipher ID.
-	 * @param overlayCipherId - Cipher ID corresponding to the overlayLoginCiphers map. Does not correspond to the actual cipher's ID.
-	 * @param sender - The sender of the port message
-	 */
 	private async viewSelectedCipher(
 		// eslint-disable-next-line no-empty-pattern
 		{}: OverlayPortMessage,
 		// eslint-disable-next-line no-empty-pattern
 		{}: Runtime.Port
-	) {
-		// const cipher = this.overlayLoginCiphers.get(overlayCipherId);
-		// if (!cipher) {
-		// 	return;
-		// }
-		// await this.openViewVaultItemPopout(sender.tab, {
-		// 	cipherId: cipher.id,
-		// 	action: SHOW_AUTOFILL_BUTTON
-		// });
-	}
+	) {}
 
-	/**
-	 * Facilitates redirecting focus to the overlay list.
-	 */
 	private focusOverlayList() {
 		this.overlayListPort?.postMessage({ command: 'focusOverlayList' });
 	}
 
-	/**
-	 * Updates the authentication status for the user and opens the overlay if
-	 * a followup command is present in the message.
-	 *
-	 * @param message - Extension message received from the `unlockCompleted` command
-	 */
 	private async unlockCompleted(message: OverlayBackgroundExtensionMessage) {
 		await this.getAuthStatus();
 
@@ -639,27 +557,8 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 */
 	private getTranslations() {
 		if (!this.overlayPageTranslations) {
-			// this.overlayPageTranslations = {
-			// 	locale: BrowserApi.getUILanguage(),
-			// 	opensInANewWindow: this.i18nService.translate('opensInANewWindow'),
-			// 	buttonPageTitle: this.i18nService.translate('bitwardenOverlayButton'),
-			// 	toggleBitwardenVaultOverlay: this.i18nService.translate(
-			// 		'toggleBitwardenVaultOverlay'
-			// 	),
-			// 	listPageTitle: this.i18nService.translate('bitwardenVault'),
-			// 	unlockYourAccount: this.i18nService.translate(
-			// 		'unlockYourAccountToViewMatchingLogins'
-			// 	),
-			// 	unlockAccount: this.i18nService.translate('unlockAccount'),
-			// 	fillCredentialsFor: this.i18nService.translate('fillCredentialsFor'),
-			// 	partialUsername: this.i18nService.translate('partialUsername'),
-			// 	view: this.i18nService.translate('view'),
-			// 	noItemsToShow: this.i18nService.translate('noItemsToShow'),
-			// 	newItem: this.i18nService.translate('newItem'),
-			// 	addNewVaultItem: this.i18nService.translate('addNewVaultItem')
-			// };
+			this.overlayPageTranslations = {};
 		}
-
 		return this.overlayPageTranslations;
 	}
 
@@ -695,11 +594,13 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	 *
 	 * @param sender - The sender of the port message
 	 */
-	// eslint-disable-next-line no-empty-pattern
-	private getNewVaultItemDetails({}: Runtime.Port) {
-		// void BrowserApi.tabSendMessage(sender.tab, {
-		// 	command: 'addNewVaultItemFromOverlay'
-		// });
+	private getNewVaultItemDetails({ sender }: Runtime.Port) {
+		if (!sender?.tab?.id) {
+			return;
+		}
+		browser.tabs.sendMessage(sender?.tab.id, {
+			command: 'addNewVaultItemFromOverlay'
+		});
 	}
 
 	/**
@@ -713,34 +614,19 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		{ login }: OverlayAddNewItemMessage,
 		sender: Runtime.MessageSender
 	) {
-		console.log(login);
-		console.log(sender.tab?.id);
-
 		if (!login) {
 			return;
 		}
-		// const uriView = new LoginUriView();
-		// uriView.uri = login.uri;
-		// const loginView = new LoginView();
-		// loginView.uris = [uriView];
-		// loginView.username = login.username || '';
-		// loginView.password = login.password || '';
-		// const cipherView = new CipherView();
-		// cipherView.name = (Utils.getHostname(login.uri) || login.hostname).replace(
-		// 	/^www\./,
-		// 	''
-		// );
-		// cipherView.folderId = null;
-		// cipherView.type = CipherType.Login;
-		// cipherView.login = loginView;
-		// await this.cipherService.setAddEditCipherInfo({
-		// 	cipher: cipherView,
-		// 	collectionIds: cipherView.collectionIds
-		// });
-		// await this.openAddEditVaultItemPopout(sender.tab, {
-		// 	cipherId: cipherView.id
-		// });
-		// await BrowserApi.sendMessage('inlineAutofillMenuRefreshAddEditCipher');
+
+		if (!sender?.tab?.id) {
+			return;
+		}
+		browser.tabs.sendMessage(sender?.tab.id, {
+			type: 'frontAddNewVaultItem',
+			url: login.uri,
+			password: login.password,
+			username: login.username
+		});
 	}
 
 	/**
@@ -765,13 +651,14 @@ class OverlayBackground implements OverlayBackgroundInterface {
 	) => {
 		const handler: CallableFunction | undefined =
 			this.extensionMessageHandlers[message?.type];
+
 		if (!handler) {
-			return;
+			return false;
 		}
 
 		const messageResponse = handler({ message, sender });
 		if (!messageResponse) {
-			return;
+			return false;
 		}
 
 		// FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
@@ -779,12 +666,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		Promise.resolve(messageResponse).then((response) => sendResponse(response));
 		return true;
 	};
-
-	/**
-	 * Handles the connection of a port to the extension background.
-	 *
-	 * @param port - The port that connected to the extension background
-	 */
 	private handlePortOnConnect = async (port: Runtime.Port) => {
 		const isOverlayListPort = port.name === AutofillOverlayPort.List;
 		const isOverlayButtonPort = port.name === AutofillOverlayPort.Button;
@@ -816,11 +697,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		);
 	};
 
-	/**
-   * Stores the connected overlay port and sets up any existing ports to be disconnected.
-   *
-   * @param port - The port to store
-|   */
 	private storeOverlayPort(port: Runtime.Port) {
 		if (port.name === AutofillOverlayPort.List) {
 			this.storeExpiredOverlayPort(this.overlayListPort);
@@ -834,13 +710,6 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		}
 	}
 
-	/**
-	 * When registering a new connection, we want to ensure that the port is disconnected.
-	 * This method places an existing port in the expiredPorts array to be disconnected
-	 * at a later time.
-	 *
-	 * @param port - The port to store in the expiredPorts array
-	 */
 	private storeExpiredOverlayPort(port: Runtime.Port | undefined) {
 		if (port) {
 			this.expiredPorts.push(port);

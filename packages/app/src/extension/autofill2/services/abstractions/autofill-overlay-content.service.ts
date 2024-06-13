@@ -1,7 +1,7 @@
+import { AuthenticationStatus } from 'src/extension/utils/enums';
 import AutofillField from '../../models/autofill-field';
 
 import { ElementWithOpId, FormFieldElement } from '../../types';
-import { AuthenticationStatus } from '../../utils';
 
 type OpenAutofillOverlayOptions = {
 	isFocusingFieldElement?: boolean;

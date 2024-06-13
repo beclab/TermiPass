@@ -33,7 +33,7 @@ export class Utils {
 		}
 	}
 
-	static isNullOrWhitespace(str: string | null): boolean {
+	static isNullOrWhitespace(str: string | null | undefined): boolean {
 		return str == null || typeof str !== 'string' || str.trim() === '';
 	}
 
@@ -69,12 +69,12 @@ export class Utils {
 		}
 	}
 
-	static getDomain(uriString: string): string | null {
+	static getDomain(uriString: string | undefined | null): string | null {
 		if (Utils.isNullOrWhitespace(uriString)) {
 			return null;
 		}
 
-		uriString = uriString.trim();
+		uriString = uriString!.trim();
 
 		if (uriString.startsWith('data:')) {
 			return null;

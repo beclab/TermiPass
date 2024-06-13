@@ -1,16 +1,13 @@
 import '@webcomponents/custom-elements';
 import { logoIcon } from '../../../utils/svg-icons';
-import {
-	AuthenticationStatus,
-	EVENTS,
-	buildSvgDomElement
-} from '../../../utils';
+import { EVENTS, buildSvgDomElement } from '../../../utils';
 import {
 	InitAutofillOverlayButtonMessage,
 	OverlayButtonMessage,
 	OverlayButtonWindowMessageHandlers
 } from '../../abstractions/autofill-overlay-button';
 import AutofillOverlayPageElement from '../shared/autofill-overlay-page-element';
+import { AuthenticationStatus } from 'src/extension/utils/enums';
 
 class AutofillOverlayButton extends AutofillOverlayPageElement {
 	private authStatus: AuthenticationStatus = AuthenticationStatus.LoggedOut;

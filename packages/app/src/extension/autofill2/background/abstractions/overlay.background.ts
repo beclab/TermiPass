@@ -39,7 +39,7 @@ type OverlayPortMessage = {
 
 type OverlayBackgroundExtensionMessage = {
 	[key: string]: any;
-	type: string;
+	// type: string;
 	tab?: chrome.tabs.Tab;
 	sender?: string;
 	details?: AutofillPageDetails;
@@ -77,17 +77,16 @@ type OverlayBackgroundExtensionMessageHandlers = {
 		sender
 	}: BackgroundOnMessageHandlerParams) => void;
 	updateAutofillOverlayHidden: ({ message }: BackgroundMessageParam) => void;
-	updateFocusedFieldData: ({
-		message,
-		sender
-	}: BackgroundOnMessageHandlerParams) => void;
+	// updateFocusedFieldData: ({
+	// 	message,
+	// 	sender
+	// }: BackgroundOnMessageHandlerParams) => void;
 	collectPageDetailsResponse: ({
 		message,
 		sender
 	}: BackgroundOnMessageHandlerParams) => void;
 	unlockCompleted: ({ message }: BackgroundMessageParam) => void;
-	addEditCipherSubmitted: () => void;
-	deletedCipher: () => void;
+	updateVaultComplete: () => void;
 };
 
 type OverlayCipherData = {

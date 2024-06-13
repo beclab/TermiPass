@@ -14,6 +14,7 @@ import { busOn, busOff, busEmit } from 'src/utils/bus';
 import { rssBackground, autofillBackground, providerBackground } from './utils';
 import { BrowserInterface } from '../interface/browserInterface';
 import { ExtensionMessage } from '../interface/message';
+import { AuthService } from '../services/auth.service';
 
 export class ExtensionBackground {
 	app = new App(new AjaxSender(process.env.PL_SERVER_URL!));
@@ -21,6 +22,8 @@ export class ExtensionBackground {
 
 	backgroundBrowserInterfaceList: BrowserInterface[] = [];
 	backgroundBadgeInterfaceList: UpdateBadgeInterface[] = [];
+
+	authService = new AuthService();
 
 	async init() {
 		globalThis.webos_app_plugin_id = chrome.runtime.id;
@@ -30,7 +33,7 @@ export class ExtensionBackground {
 		const update = debounce((options: any) => this.update(options), 500);
 
 		rssBackground.init();
-		autofillBackground.init();
+		autofillBackground.init(this.authService);
 		providerBackground.init();
 
 		this.backgroundBrowserInterfaceList = [

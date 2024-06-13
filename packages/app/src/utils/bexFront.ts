@@ -1,7 +1,8 @@
 import { stringToBase64 } from '@didvault/sdk/src/core';
 import { useBexStore } from '../stores/bex';
 import { useUserStore } from '../stores/user';
-
+import { busEmit } from './bus';
+// import { sendExtensionMessage } from '../extension/autofill2/utils/sendMessage';
 export const sendUnlock = () => {
 	if (process.env.PLATFORM !== 'BEX') {
 		return;
@@ -18,4 +19,11 @@ export const sendLock = () => {
 	}
 	const bex = useBexStore();
 	bex.controller.sendLocked();
+};
+
+export const bexVaultUpdate = () => {
+	if (process.env.PLATFORM !== 'BEX') {
+		return;
+	}
+	busEmit('updateVaultComplete');
 };

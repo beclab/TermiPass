@@ -4,22 +4,24 @@ import {
 	ITEM_TEMPLATES,
 	VaultItem
 } from '@didvault/sdk/src/core';
-import { app } from '../../globals';
+import { app } from '../globals';
 import { Router } from 'vue-router';
-import { useMenuStore } from '../../stores/menu';
+import { useMenuStore } from '../stores/menu';
+import { bexVaultUpdate } from 'src/utils/bexFront';
 
 export async function updateUIToAddWeb(
 	identify: string,
 	router: Router,
 	username = '',
-	password = ''
+	password = '',
+	direct = false
 ) {
 	const meunStore = useMenuStore();
 	const selectedTemplate = ITEM_TEMPLATES.find((i) => i.id == 'web');
 	if (!selectedTemplate) {
 		return;
 	}
-	meunStore.isEdit = true;
+	meunStore.isEdit = !direct;
 
 	const field = selectedTemplate.fields.find((t) => t.type === FieldType.Url);
 	if (field) {
@@ -50,20 +52,21 @@ export async function updateUIToAddWeb(
 		[]
 	);
 
-	if (item && router) {
+	if (item && router && !direct) {
 		router.push({
 			path: '/items/' + item.id
 		});
 	}
 }
 
-async function addItem(
+export async function addItem(
 	name: string,
 	icon: string,
 	fields: any,
-	tags: string[]
+	tags: string[],
+	vault = app.mainVault
 ): Promise<VaultItem | undefined> {
-	const vault = app.mainVault;
+	// const vault = app.mainVault;
 	if (!vault) {
 		return;
 	}
@@ -74,5 +77,6 @@ async function addItem(
 		fields: fields.map((f: Field) => new Field({ ...f, value: f.value || '' })),
 		tags
 	});
+	bexVaultUpdate();
 	return item;
 }

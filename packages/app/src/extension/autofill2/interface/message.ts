@@ -18,4 +18,13 @@ export type AutoFillTypeMessage =
 	| 'updateAutofillOverlayHidden'
 	| 'updateFocusedFieldData'
 	| 'getAutofillOverlayVisibility'
-	| 'getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag';
+	| 'getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag'
+	| 'collectPageDetailsImmediately'
+	| 'updateVaultComplete'
+	| 'bgGetEnableChangedPasswordPrompt'
+	| 'bgGetEnableAddedLoginPrompt'
+	| 'bgGetExcludedDomains'
+	| 'checkNotificationQueue'
+	| 'bgAddLogin'
+	| 'bgChangedPassword'
+	| 'bgRemoveTabFromNotificationQueue';
