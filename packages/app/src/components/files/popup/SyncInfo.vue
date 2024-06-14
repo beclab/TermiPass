@@ -75,43 +75,30 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { format, useDialogPluginComponent, useQuasar } from 'quasar';
-import { useDataStore } from 'src/stores/data';
-import TerminusFileIcon from '../../common/TerminusFileIcon.vue';
-import { formatFileModified } from 'src/utils/file';
 import { useI18n } from 'vue-i18n';
+import { format, useDialogPluginComponent, useQuasar } from 'quasar';
+import { formatFileModified } from 'src/utils/file';
 
+import TerminusFileIcon from '../../common/TerminusFileIcon.vue';
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
-// import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
-const { dialogRef } = useDialogPluginComponent();
+const props = defineProps({
+	item: {
+		type: Object,
+		required: false
+	}
+});
+
+const { dialogRef, onDialogCancel } = useDialogPluginComponent();
 
 const $q = useQuasar();
-const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
-
 const { humanStorageSize } = format;
-
 const { t } = useI18n();
 const show = ref(true);
-
-const store = useDataStore();
+const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 
 const humanSize = computed(function () {
-	if (fileType.value === 'folder') {
-		return '-';
-	}
-
-	if (store.selectedCount === 0) {
-		return humanStorageSize(store.req.size);
-	}
-
-	let sum = 0;
-
-	for (let selected of store.selected) {
-		sum += store.req.items[selected].size;
-	}
-
-	return humanStorageSize(sum);
+	return humanStorageSize(props.item?.size);
 });
 
 const humanNumber = computed(function () {
@@ -127,56 +114,31 @@ const humanNumber = computed(function () {
 });
 
 const name = computed(function () {
-	return store.selectedCount === 0
-		? store.req.name
-		: store.req.items[store.selected[0]].name;
+	return props.item?.name || '-';
 });
 
 const modified = computed(function () {
-	return formatFileModified(
-		store.selectedCount === 0
-			? store.req.modified
-			: store.req.items[store.selected[0]].modified
-	);
+	return formatFileModified(props.item?.last_modified);
 });
 
 const fileType = computed(function () {
-	return store.selectedCount === 0
-		? store.req.isDir
-			? 'folder'
-			: store.req.type
-		: store.req.items[store.selected[0]].isDir
-		? 'folder'
-		: store.req.items[store.selected[0]].type;
+	return 'folder';
 });
 
 const isDir = computed(function () {
-	return store.selectedCount === 0
-		? (store.req.isDir as boolean)
-		: (store.req.items[store.selected[0]].isDir as boolean);
+	return props.item?.isDir || '-';
 });
 
 const readOnly = computed(function () {
-	return store.selectedCount === 0
-		? store.req.readOnly
-		: store.req.items[store.selected[0]].readOnly;
+	return props.item?.readOnly || '-';
 });
 
 const path = computed(function () {
-	const path =
-		store.selectedCount === 0
-			? store.req.path
-			: store.req.items[store.selected[0]].path;
-
-	if (path.startsWith('/Seahub')) {
-		return path.slice(7);
-	} else {
-		return path;
-	}
+	return `/${props.item?.name}`;
 });
 
 const onCancel = () => {
-	store.closeHovers();
+	onDialogCancel();
 };
 </script>
 

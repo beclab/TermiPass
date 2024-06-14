@@ -3,7 +3,6 @@
 		v-model="store.leftDrawerOpen"
 		:behavior="behavior"
 		show-if-above
-		bordered
 		:width="240"
 		class="drawer"
 	>
@@ -33,6 +32,6 @@ onMounted(async () => {
 .drawer {
 	padding-top: 6px;
 	overflow: hidden !important;
-	background-color: #fff;
+	border-right: 1px solid $separator;
 }
 </style>

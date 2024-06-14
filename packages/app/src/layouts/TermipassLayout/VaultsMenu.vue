@@ -7,12 +7,11 @@
 			@scroll="getScroll"
 		>
 			<bt-menu
-				v-close-popup
+				:modelValue="store.currentItem"
 				:items="store.menus"
-				:default-active="store.currentItem || VaultMenuItem.ALLVAULTS"
 				@select="selectHandler"
 				style="width: 240px"
-				active-class="vault-active-link"
+				active-class="text-subtitle2 bg-yellow-soft text-ink-1"
 			>
 			</bt-menu>
 		</q-scroll-area>
@@ -159,13 +158,6 @@ const getScroll = (info: any) => {
 };
 </script>
 
-<style lang="scss">
-.vault-active-link {
-	color: rgba(31, 24, 20, 1);
-	background: rgba(255, 235, 59, 0.1);
-}
-</style>
-
 <style lang="scss" scoped>
 .menu-active {
 	width: 240px;
@@ -191,8 +183,7 @@ const getScroll = (info: any) => {
 }
 
 .bottomBar {
-	border-top: 1px solid $grey-2;
-	background: $white;
+	border-top: 1px solid $separator;
 }
 
 .rotate {

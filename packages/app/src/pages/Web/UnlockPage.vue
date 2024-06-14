@@ -2,7 +2,11 @@
 	<div class="terminus-unlock-page column justify-center items-center">
 		<q-img
 			class="terminus-unlock-page__brand"
-			:src="getRequireImage('login/vault_brand_web.svg')"
+			:src="
+				$q.dark.isActive
+					? getRequireImage('login/vault_brand_web_dark.svg')
+					: getRequireImage('login/vault_brand_web_light.svg')
+			"
 		/>
 		<div class="terminus-unlock-box column justify-start items-center">
 			<span class="terminus-unlock-box__desc login-sub-title">{{
@@ -30,6 +34,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import { ConfirmButtonStatus } from '../../utils/constants';
 import TerminusEdit from '../../components/common/TerminusEdit.vue';
 import ConfirmButton from '../../components/common/ConfirmButton.vue';
@@ -41,6 +46,7 @@ import { useUserStore } from '../../stores/user';
 import { app } from '../../globals';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 
+const $q = useQuasar();
 const router = useRouter();
 const passwordRef = ref('');
 const { t } = useI18n();
@@ -96,7 +102,7 @@ async function onSubmit() {
 .terminus-unlock-page {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-1;
 
 	&__brand {
 		width: 124px;
@@ -108,8 +114,8 @@ async function onSubmit() {
 		margin-top: 32px;
 		border-radius: 12px;
 		padding: 20px;
-		background: $background;
-		border: 1px solid $grey-2;
+		background: $background-2;
+		border: 1px solid $separator;
 
 		&__desc {
 			margin-top: 12px;

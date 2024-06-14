@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="item"
+		class="item text-ink-1"
 		role="button"
 		tabindex="0"
 		:draggable="isDraggable"
@@ -372,3 +372,17 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style lang="scss" scoped>
+#listing.list .item {
+	border-bottom: 1px solid $separator;
+}
+
+#listing .item[aria-selected='true'] {
+	background: $background-selected;
+}
+
+#listing .item:hover {
+	background: $background-hover;
+}
+</style>

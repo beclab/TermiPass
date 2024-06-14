@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" v-model="showDialog" ref="dialogRef">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				:label="$t('prompts.rename')"
 				icon=""
@@ -12,7 +12,12 @@
 				class="dialog-desc"
 				:style="{ textAlign: isMobile ? 'center' : 'left' }"
 			>
-				<q-input outlined v-model="name" dense />
+				<input
+					class="input input--block text-ink-1"
+					v-focus
+					type="text"
+					v-model.trim="name"
+				/>
 			</div>
 
 			<terminus-dialog-footer
@@ -28,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useDialogPluginComponent } from 'quasar';
+import { useQuasar, useDialogPluginComponent } from 'quasar';
 import { ref, onMounted } from 'vue';
 import { seahub, sync } from '../../../api';
 
@@ -44,10 +49,12 @@ const props = defineProps({
 
 const { onDialogHide, dialogRef, onDialogCancel } = useDialogPluginComponent();
 
-const name = ref('');
+const $q = useQuasar();
 
+const name = ref('');
 const showDialog = ref(true);
 const submitLoading = ref(false);
+const isMobile = $q.platform.is.mobile;
 
 const onCancel = () => {
 	onDialogCancel();
@@ -83,6 +90,14 @@ const submit = async () => {
 		.dialog-desc {
 			padding-left: 20px;
 			padding-right: 20px;
+		}
+		.input {
+			border-radius: 5px;
+			border: 1px solid $input-stroke;
+			background-color: transparent;
+			&:focus {
+				border: 1px solid $yellow-disabled;
+			}
 		}
 	}
 }

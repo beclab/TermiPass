@@ -3,6 +3,7 @@
 		<q-card
 			class="q-dialog-plugin-web"
 			:style="{ width: `${isMobile ? '100%' : '400px'}` }"
+			flat
 		>
 			<terminus-dialog-bar
 				:label="
@@ -16,7 +17,7 @@
 			/>
 
 			<q-card-section class="q-px-lg">
-				<div class="text-catipon text-grey-7">{{ t('add_user') }}</div>
+				<div class="text-catipon text-ink-3">{{ t('add_user') }}</div>
 				<q-item dense class="row justify-between q-mt-none q-px-none">
 					<q-select
 						class="multiple"
@@ -25,7 +26,7 @@
 						v-model="userModel"
 						multiple
 						:options="userOptions"
-						outlined
+						borderless
 						emit-value
 						map-options
 						option-value="email"
@@ -33,7 +34,7 @@
 						placeholder="Select User"
 						color="yellow"
 						dropdown-icon="sym_r_expand_more"
-						style="width: 200px"
+						:style="{ width: '200px' }"
 					>
 						<template v-slot:option="{ itemProps, opt }">
 							<q-item
@@ -43,7 +44,7 @@
 								}"
 							>
 								<q-item-section
-									class="text-grey-9"
+									class="text-ink-1"
 									style="word-break: normal; white-space: nowrap"
 								>
 									<span>{{ opt.name }}</span>
@@ -73,7 +74,7 @@
 			<q-card-section class="q-pt-none q-px-lg">
 				<q-item
 					dense
-					class="row items=center justify-between q-mt-none q-px-none"
+					class="row items=center justify-between q-mt-none q-px-none text-ink-3"
 				>
 					<span class="text-catipon text-grey-7">{{ t('user') }}</span>
 					<span class="text-catipon text-grey-7">{{ t('permission') }}</span>
@@ -81,7 +82,7 @@
 
 				<q-item
 					dense
-					class="row q-pa-none items-center justify-between"
+					class="row q-pa-none items-center justify-between text-ink-2"
 					v-for="item in menuStore.sharedItems"
 					:key="item.user_info.name"
 				>
@@ -97,16 +98,19 @@
 							borderless
 							emit-value
 							map-options
+							dropdown-icon="sym_r_expand_more"
 							@update:model-value="
 								updateItem(item.user_info.name, item.permission)
 							"
 						>
 							<template v-slot:selected>
-								{{
-									item.permission.replace(/\s*/g, '') === 'rw'
-										? 'Read-Write'
-										: 'Read-only'
-								}}
+								<span class="text-ink-2">
+									{{
+										item.permission.replace(/\s*/g, '') === 'rw'
+											? 'Read-Write'
+											: 'Read-only'
+									}}
+								</span>
 							</template>
 
 							<template v-slot:option="scope">
@@ -240,6 +244,10 @@ onMounted(async () => {
 
 	.multiple {
 		flex: 1;
+		border: 1px solid $input-stroke;
+		border-radius: 8px;
+		overflow: hidden;
+		padding-left: 8px;
 	}
 
 	.adduser {
@@ -247,19 +255,18 @@ onMounted(async () => {
 		padding: 0 10px;
 		margin-left: 10px;
 		border-radius: 8px;
-		border: 1px solid $yellow;
+		border: 1px solid $yellow-disabled;
 		word-break: normal;
 		white-space: nowrap;
-		color: $grey-8;
+		color: $ink-1;
 
 		cursor: pointer;
 		&:hover {
-			background-color: $grey-1;
+			background-color: $background-hover;
 		}
 		&.adduserdisable {
-			background-color: $grey-1;
-			color: $grey-13;
-			border: 1px solid $grey-1;
+			color: $ink-3;
+			border: 1px solid $yellow-disabled;
 		}
 	}
 }

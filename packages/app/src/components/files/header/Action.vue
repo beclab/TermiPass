@@ -1,7 +1,7 @@
 <template>
 	<button @click="action" :aria-label="label" :title="label" class="action">
 		<!-- <i class="material-icons">{{ icon }}</i> -->
-		<q-icon :name="`sym_r_${icon}`" size="18px"></q-icon>
+		<q-icon :name="`sym_r_${icon}`" color="ink-2" size="18px"></q-icon>
 		<span>{{ label }}</span>
 		<span v-if="counter && counter > 0" class="counter">{{ counter }}</span>
 	</button>
@@ -47,3 +47,9 @@ export default defineComponent({
 	}
 });
 </script>
+
+<style lang="scss" scoped>
+#previewer header .action:hover {
+	background-color: $btn-bg-pressed;
+}
+</style>

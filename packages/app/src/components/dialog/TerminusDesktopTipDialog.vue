@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" v-model="showDialog" ref="dialogRef">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				:label="title"
 				icon=""

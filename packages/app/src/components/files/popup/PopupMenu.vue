@@ -1,8 +1,11 @@
 <template>
-	<q-menu @update:model-value="showPopupProxy" class="popup-menu">
+	<q-menu
+		@update:model-value="showPopupProxy"
+		class="popup-menu bg-background-2"
+	>
 		<q-list dense padding>
 			<q-item
-				class="row items-center justify-start popup-item text-grey-8"
+				class="row items-center justify-start text-ink-2 popup-item"
 				clickable
 				v-close-popup
 				v-for="item in menuList"
@@ -27,6 +30,8 @@ import { useMenuStore } from '../../../stores/files-menu';
 import { handleFileOperate } from '../files/OperateAction';
 import ReName from './ReName.vue';
 import DeleteRepo from './DeleteRepo.vue';
+import SyncInfo from './SyncInfo.vue';
+
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -65,7 +70,7 @@ const showPopupProxy = (value: boolean) => {
 
 const menuStore = useMenuStore();
 
-const menuList = ref([]);
+const menuList = ref<any[]>([]);
 const isElectron = ref($q.platform.is.electron);
 
 const onBeforeShow = async () => {
@@ -118,13 +123,13 @@ const noLocalMenu = () => {
 
 const checkShardUser = () => {
 	let selfMenuList = JSON.parse(JSON.stringify(menuList.value));
-	let newMenuList = [];
+	let newMenuList: any[] = [];
 
 	for (let i = 0; i < selfMenuList.length; i++) {
 		const slef = selfMenuList[i];
 		if (
 			slef.action === OPERATE_ACTION.SHARE_WITH &&
-			props.item.type &&
+			props.item?.type &&
 			props.item.type === 'shared'
 		) {
 			continue;
@@ -132,7 +137,7 @@ const checkShardUser = () => {
 
 		if (
 			slef.action === OPERATE_ACTION.EXIT_SHARING &&
-			props.item.type &&
+			props.item?.type &&
 			props.item.type === 'mine'
 		) {
 			continue;
@@ -140,7 +145,7 @@ const checkShardUser = () => {
 
 		if (
 			slef.action === OPERATE_ACTION.RENAME &&
-			props.item.type &&
+			props.item?.type &&
 			props.item.type === 'shared'
 		) {
 			continue;
@@ -148,7 +153,7 @@ const checkShardUser = () => {
 
 		if (
 			slef.action === OPERATE_ACTION.DELETE &&
-			props.item.type &&
+			props.item?.type &&
 			props.item.type === 'shared'
 		) {
 			continue;
@@ -204,7 +209,9 @@ const handleEvent = async (action: OPERATE_ACTION, e: any) => {
 			break;
 
 		case OPERATE_ACTION.ATTRIBUTES:
-			dataStore.showHover('info');
+			// dataStore.showHover('info');
+			syncRepoInfo(e);
+
 			break;
 
 		case OPERATE_ACTION.EXIT_SHARING:
@@ -271,6 +278,33 @@ const deleteRepo = async (e: any) => {
 	}
 };
 
+const syncRepoInfo = (e) => {
+	if (props.from === 'sync') {
+		try {
+			$q.dialog({
+				component: SyncInfo,
+				componentProps: {
+					item: props.item
+				}
+			}).onOk(async () => {
+				console.log('ok');
+			});
+		} catch (error) {
+			return false;
+		}
+	} else {
+		handleFileOperate(
+			e,
+			route,
+			OPERATE_ACTION.DELETE,
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			async (_action: OPERATE_ACTION, _data: any) => {
+				dataStore.closeHovers();
+			}
+		);
+	}
+};
+
 const deleteShareRepo = async () => {
 	try {
 		$q.dialog({
@@ -286,7 +320,10 @@ const deleteShareRepo = async () => {
 	}
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
+.popup-item {
+	border-radius: 4px;
+}
 .menuName {
 	white-space: nowrap;
 }

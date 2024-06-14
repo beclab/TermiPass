@@ -98,11 +98,11 @@ const mnemonicUpdate = (value: string) => {
 .input-mnemonic-page {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-2;
 	padding-left: 20px;
 	padding-right: 20px;
 	position: relative;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 
 	&__edit {
 		width: 100%;

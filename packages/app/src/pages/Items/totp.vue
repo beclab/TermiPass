@@ -6,8 +6,8 @@
 			:value="_age"
 			size="18px"
 			:thickness="1"
-			color="grey-4"
-			track-color="grey-8"
+			color="ink-2"
+			track-color="background-1"
 			class="q-ma-md"
 			style="margin: 0 10px"
 		/>
