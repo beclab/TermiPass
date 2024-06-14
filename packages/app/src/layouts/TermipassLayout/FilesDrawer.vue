@@ -194,6 +194,7 @@ const getSyncStatus = (repo_id: string) => {
 .myDrawer {
 	overflow: hidden;
 	padding-top: 6px;
+	border-right: 1px solid $separator;
 	// border-right: 1px solid red;
 	// .title-active {
 	// 	color: $ink-1;

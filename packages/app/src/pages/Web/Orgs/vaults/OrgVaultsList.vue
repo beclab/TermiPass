@@ -1,16 +1,27 @@
 <template>
-	<div style="width: 100%; height: 60px">
-		<div class="row items-center justify-between">
-			<div class="row items-center q-pl-md">
-				<q-icon
-					v-if="isMobile"
-					name="sym_r_chevron_left"
-					size="24px"
-					@click="goBack"
-				/>
-				<q-icon :name="heading.icon" size="24px" />
+	<div class="vault-list">
+		<div style="width: 100%; height: 60px">
+			<div class="row items-center justify-between">
+				<div class="row items-center q-pl-md">
+					<q-icon
+						v-if="isMobile"
+						name="sym_r_chevron_left"
+						size="24px"
+						@click="goBack"
+					/>
+					<q-icon :name="heading.icon" size="24px" />
 
-				<div class="column q-pl-md" v-if="!isMobile">
+					<div class="column q-pl-md" v-if="!isMobile">
+						<div class="text-ink-3 text-overline">
+							{{ org?.name }}
+						</div>
+						<div class="text-subtitle2 text-ink-1 text-weight-bold">
+							{{ heading.title }}
+						</div>
+					</div>
+				</div>
+
+				<div class="column" v-if="isMobile">
 					<div class="text-ink-3 text-overline">
 						{{ org?.name }}
 					</div>
@@ -18,83 +29,74 @@
 						{{ heading.title }}
 					</div>
 				</div>
-			</div>
 
-			<div class="column" v-if="isMobile">
-				<div class="text-ink-3 text-overline">
-					{{ org?.name }}
-				</div>
-				<div class="text-subtitle2 text-ink-1 text-weight-bold">
-					{{ heading.title }}
+				<div class="row items-center q-py-xs q-my-md">
+					<q-icon
+						class="q-mr-md cursor-pointer"
+						name="sym_r_add"
+						size="24px"
+						clickable
+						color="ink-1"
+						@click="onCreate"
+					>
+						<q-tooltip>{{ t('add_vault') }}</q-tooltip>
+					</q-icon>
 				</div>
 			</div>
-
-			<div class="row items-center q-py-xs q-my-md">
-				<q-icon
-					class="q-mr-md cursor-pointer"
-					name="sym_r_add"
-					size="24px"
-					clickable
-					color="ink-1"
-					@click="onCreate"
+		</div>
+		<q-list style="width: 100%; height: calc(100% - 60px); overflow: hidden">
+			<template v-if="itemList.length > 0">
+				<q-scroll-area
+					style="height: 100%"
+					content-style="height: 100%;"
+					:thumb-style="scrollBarStyle.thumbStyle"
 				>
-					<q-tooltip>{{ t('add_vault') }}</q-tooltip>
-				</q-icon>
-			</div>
-		</div>
-	</div>
-	<q-list style="width: 100%; height: calc(100% - 60px); overflow: hidden">
-		<template v-if="itemList.length > 0">
-			<q-scroll-area
-				style="height: 100%"
-				content-style="height: 100%;"
-				:thumb-style="scrollBarStyle.thumbStyle"
-			>
-				<template v-for="(item, index) in itemList" :key="index">
-					<div class="card-wrap full-width">
-						<q-card
-							clickable
-							v-ripple
-							@click="selectItem(item)"
-							:active="isSelected(item)"
-							active-class="text-blue"
-							flat
-							class="vaultsCard row items-center justify-start q-my-sm q-pa-md"
-							:class="isSelected(item) ? 'vaultActive' : ''"
-						>
-							<q-card-section
-								class="row items-center justify-between q-pa-none"
+					<template v-for="(item, index) in itemList" :key="index">
+						<div class="card-wrap full-width">
+							<q-card
+								clickable
+								v-ripple
+								@click="selectItem(item)"
+								:active="isSelected(item)"
+								active-class="text-blue"
+								flat
+								class="vaultsCard row items-center justify-start q-my-sm q-pa-md"
+								:class="isSelected(item) ? 'vaultActive' : ''"
 							>
-								<q-icon name="sym_r_deployed_code" size="24px" />
-							</q-card-section>
-							<q-card-section
-								class="column items-start justify-start q-pa-none q-ml-sm"
-							>
-								<div>{{ item.name }}</div>
-								<div class="row items-center justify-start">
-									<div
-										class="members text-body3 row items-center justify-center"
-									>
-										<q-icon name="sym_r_person" size="20px" class="q-mr-xs" />
-										{{ org?.getMembersForVault(item)?.length }}
+								<q-card-section
+									class="row items-center justify-between q-pa-none"
+								>
+									<q-icon name="sym_r_deployed_code" size="24px" />
+								</q-card-section>
+								<q-card-section
+									class="column items-start justify-start q-pa-none q-ml-sm"
+								>
+									<div>{{ item.name }}</div>
+									<div class="row items-center justify-start">
+										<div
+											class="members text-body3 row items-center justify-center"
+										>
+											<q-icon name="sym_r_person" size="20px" class="q-mr-xs" />
+											{{ org?.getMembersForVault(item)?.length }}
+										</div>
 									</div>
-								</div>
-							</q-card-section>
-						</q-card>
-					</div>
-				</template>
-			</q-scroll-area>
-		</template>
-		<div
-			class="text-color-sub-title column items-center justify-center full-height"
-			v-else
-		>
-			<img src="../../../../assets/layout/nodata.svg" />
-			<span class="q-mt-md">
-				{{ t('not_have_any_vaults_yet') }}
-			</span>
-		</div>
-	</q-list>
+								</q-card-section>
+							</q-card>
+						</div>
+					</template>
+				</q-scroll-area>
+			</template>
+			<div
+				class="text-color-sub-title column items-center justify-center full-height"
+				v-else
+			>
+				<img src="../../../../assets/layout/nodata.svg" />
+				<span class="q-mt-md">
+					{{ t('not_have_any_vaults_yet') }}
+				</span>
+			</div>
+		</q-list>
+	</div>
 </template>
 
 <script lang="ts">
@@ -212,40 +214,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.searchWrap {
-	text-align: center;
-	.searchInput {
-		width: 90%;
-		height: 40px;
-		line-height: 40px;
-		border: 1px solid $blue;
-		border-radius: 10px;
-		margin: 17px auto;
-		display: inline-block;
-	}
+.vault-list {
+	height: 100vh;
+	border-right: 1px solid $separator;
 }
-.checkOperate {
-	border-radius: 4px;
-	padding: 4px;
-}
-.item-unit {
-	border-radius: 5px;
-	padding: 4px 20px;
-	white-space: nowrap;
-	position: relative;
-	.item-unit-content {
-		white-space: nowrap;
-	}
-	.hideCopied {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		opacity: 0;
-		left: 0;
-		top: 0;
-	}
-}
-
 .card-wrap {
 	display: flex;
 	align-items: center;
