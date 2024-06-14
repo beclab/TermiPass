@@ -67,6 +67,7 @@ import {
 import { busEmit } from '../../../utils/bus';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
+import { getAppPlatform } from 'src/platform/appPlatform';
 
 const { t } = useI18n();
 const $q = useQuasar();
@@ -142,7 +143,7 @@ const onConfirm = async () => {
 		await userStore.users!.items.update(user);
 		await userStore.save();
 
-		if (process.env.PLATFORM == 'DESKTOP') {
+		if (process.env.PLATFORM == 'DESKTOP' || getAppPlatform().isPad) {
 			router.replace({ path: '/Files/Home/' });
 		} else {
 			router.replace({ path: '/home' });

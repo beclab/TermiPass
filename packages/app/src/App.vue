@@ -48,7 +48,7 @@ export default defineComponent({
 	},
 	setup() {
 		const userStore = useUserStore();
-		const $q: any = useQuasar();
+		const $q = useQuasar();
 		const isBex =
 			process.env.IS_BEX &&
 			process.env.NODE_ENV !== 'development' &&
@@ -71,7 +71,7 @@ export default defineComponent({
 				});
 			}
 
-			let state = $q.platform.is.mobile;
+			let state = $q.platform.is.mobile && !$q.platform.is.ipad;
 			if (state) {
 				import('./css/listing-mobile.css').then(() => {});
 			} else {

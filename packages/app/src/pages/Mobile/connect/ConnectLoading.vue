@@ -34,6 +34,7 @@ import waiting_waikuang_image from '../../../assets/wizard/waiting_waikuang.png'
 import { useI18n } from 'vue-i18n';
 import { StatusBar } from '@capacitor/status-bar';
 import { busEmit } from '../../../utils/bus';
+import { getAppPlatform } from 'src/platform/appPlatform';
 
 const { t } = useI18n();
 
@@ -50,7 +51,7 @@ onMounted(async () => {
 	if (user) {
 		if (user.setup_finished) {
 			busEmit('account_update');
-			if (process.env.PLATFORM == 'DESKTOP') {
+			if (process.env.PLATFORM == 'DESKTOP' || getAppPlatform().isPad) {
 				router.replace('/Files/Home/');
 			} else if (process.env.PLATFORM == 'WEB') {
 				router.replace('/items');
@@ -73,7 +74,7 @@ onMounted(async () => {
 			}
 		}
 	} else {
-		router.replace({ path: '/home' }); //error not found user
+		router.replace({ path: '/home' });
 	}
 });
 

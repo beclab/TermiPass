@@ -393,7 +393,6 @@ export default {
 				//                 Wallet
 				//                     .importKeyStore(walletName.value, result as string, keyStorePassword.value).then(() => {
 				//                         $q.loading.hide();
-				//                         router.replace({ path: '/home' });
 				//                     }).catch((e:any) => {
 				//                         $q.loading.hide();
 				//                     });

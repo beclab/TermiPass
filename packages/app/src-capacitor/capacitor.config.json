@@ -13,7 +13,7 @@
     },
     "GoogleAuth": {
       "scopes": [
-        "email"
+        "https://www.googleapis.com/auth/drive"
       ],
       "serverClientId": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
       "forceCodeForRefreshToken": true

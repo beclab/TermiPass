@@ -136,6 +136,7 @@ export class CapacitorPlatform
 
 	async appMounted() {
 		super.appMounted();
+
 		this.resetOrientationLockType();
 
 		const userStore = useUserStore();

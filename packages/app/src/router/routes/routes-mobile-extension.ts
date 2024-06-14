@@ -13,6 +13,18 @@ const mobileExtension: RouteRecordRaw[] = [
 				component: () => import('pages/Mobile/file/FileRootPage.vue')
 			}
 		]
+	},
+	{
+		path: '/',
+		component: () => import('layouts/TermipassMainLayout.vue'),
+		name: 'TermipassMainLayout',
+		children: [
+			{
+				path: 'Files/:path*',
+				name: 'Files',
+				component: () => import('pages/Files/FilesPage.vue')
+			}
+		]
 	}
 ];
 

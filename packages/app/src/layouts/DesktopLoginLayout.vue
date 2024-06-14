@@ -21,19 +21,19 @@
 					>
 						<q-carousel-slide
 							:name="1"
-							img-src="../../../assets/login/termipass_slide_img.svg"
+							img-src="../assets/login/termipass_slide_img.svg"
 						/>
 						<q-carousel-slide
 							:name="2"
-							img-src="../../../assets/login/termipass_slide_img.svg"
+							img-src="../assets/login/termipass_slide_img.svg"
 						/>
 						<q-carousel-slide
 							:name="3"
-							img-src="../../../assets/login/termipass_slide_img.svg"
+							img-src="../assets/login/termipass_slide_img.svg"
 						/>
 						<q-carousel-slide
 							:name="4"
-							img-src="../../../assets/login/termipass_slide_img.svg"
+							img-src="../assets/login/termipass_slide_img.svg"
 						/>
 					</q-carousel>
 					<div class="login-layout-data text-h4">{{ carouselData }}</div>
@@ -57,7 +57,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import DesktopDefaultHeaderView from '../../../components/DesktopDefaultHeaderView.vue';
+import DesktopDefaultHeaderView from '../components/DesktopDefaultHeaderView.vue';
 
 const slide = ref(1);
 const autoplay = ref(true);

@@ -21,6 +21,9 @@ export async function googleLogin(
 
 	await GoogleAuth.signOut();
 	const googleResponse = await GoogleAuth.signIn();
+	console.log('googleResponse ===>');
+	console.log(googleResponse);
+
 	if (!googleResponse || !googleResponse.authentication.accessToken) {
 		throw Error(i18n.global.t('errors.get_google_accessToken_failure'));
 	}

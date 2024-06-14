@@ -19,6 +19,13 @@ export class IOSMobilePlatform extends CapacitorPlatform {
 
 	async appMounted(): Promise<void> {
 		await super.appMounted();
+		if (
+			this.quasar &&
+			this.quasar.platform.is.nativeMobile &&
+			this.quasar.platform.is.ipad
+		) {
+			this.isPad = true;
+		}
 		addAxiosProxyGlobalRequestInterceptor((config) => {
 			//
 			if (config.data instanceof FormData) {

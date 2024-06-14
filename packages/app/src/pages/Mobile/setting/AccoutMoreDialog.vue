@@ -126,7 +126,6 @@ const deleteAccount = async () => {
 		if (process.env.IS_BEX && userStore.current_id) {
 			await bexStore.controller.changeAccount(userStore.current_id);
 		}
-		// $router.push('/home');
 		if (userStore.current_user) {
 			if (userStore.current_user.name) {
 				$router.replace('/connectLoading');

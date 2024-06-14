@@ -3,7 +3,7 @@ import { RouteRecordRaw } from 'vue-router';
 const desktop: RouteRecordRaw[] = [
 	{
 		path: '/',
-		component: () => import('pages/Desktop/import/DesktopLoginLayout.vue'),
+		component: () => import('layouts/DesktopLoginLayout.vue'),
 		children: [
 			{
 				path: '/welcome',
@@ -28,11 +28,6 @@ const desktop: RouteRecordRaw[] = [
 				path: 'ConnectTerminus',
 				component: () => import('src/pages/Mobile/connect/ConnectTerminus.vue')
 			}
-			// {
-			// 	path: 'check_fa',
-			// 	component: () =>
-			// 		import('pages/Desktop/import/SecondVerificationPage.vue')
-			// }
 		]
 	},
 	{

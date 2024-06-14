@@ -81,7 +81,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 						}
 					});
 				} else {
-					//router.replace('/home');
 					router.replace({ path: '/connectLoading' });
 				}
 			} else {
