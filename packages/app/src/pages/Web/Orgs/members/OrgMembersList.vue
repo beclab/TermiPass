@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="row justify-between items-center bg-white"
+		class="row justify-between items-center"
 		style="width: 100%; height: 60px"
 	>
 		<div class="row items-center justify-between">
@@ -8,35 +8,33 @@
 				<q-icon
 					v-if="isMobile"
 					name="sym_r_chevron_left"
+					color="ink-1"
 					size="24px"
 					@click="goBack"
 				/>
-				<q-icon :name="heading.icon" size="24px" />
+				<q-icon :name="heading.icon" color="ink-1" size="24px" />
 
 				<div class="column q-pl-md" v-if="!isMobile">
-					<div class="text-grey-8 text-caption">
+					<div class="text-ink-3 text-overline">
 						{{ org?.name }}
 					</div>
-					<div class="text-body2 text-weight-bold">
+					<div class="text-subtitle2 text-ink-1 text-weight-bold">
 						{{ heading.title }}
 					</div>
 				</div>
 			</div>
 
 			<div class="column" v-if="isMobile">
-				<div class="text-grey-8 text-caption">
+				<div class="text-ink-3 text-overline">
 					{{ org?.name }}
 				</div>
-				<div class="text-body2 text-weight-bold">
+				<div class="text-subtitle2 text-ink-1 text-weight-bold">
 					{{ heading.title }}
 				</div>
 			</div>
 		</div>
 	</div>
-	<q-list
-		class="bg-white"
-		style="width: 100%; height: calc(100% - 60px); overflow: hidden"
-	>
+	<q-list style="width: 100%; height: calc(100% - 60px); overflow: hidden">
 		<q-scroll-area
 			v-if="itemList.length > 0"
 			style="height: 100%"
@@ -190,7 +188,7 @@ export default defineComponent({
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-bottom: 1px solid #e0e0e0;
+		border-bottom: 1px solid $separator;
 
 		.memberCard {
 			width: 90%;
@@ -202,10 +200,10 @@ export default defineComponent({
 			cursor: pointer;
 
 			&:hover {
-				background: $grey-1;
+				background: $background-hover;
 			}
 			&.memberActive {
-				background: $grey-1;
+				background: $background-selected;
 			}
 		}
 	}

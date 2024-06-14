@@ -25,8 +25,9 @@
 						@click="goBack"
 					/>
 					<q-icon
-						v-if="!isMobile && item"
+						v-if="!isMobile && item && item.icon"
 						:name="showItemIcon(item.icon)"
+						color="ink-1"
 						size="24px"
 					/>
 
@@ -39,7 +40,7 @@
 								ref="nameRef"
 								:placeholder="t('vault_t.enter_item_name')"
 								input-style="margin-bottom: 2px;"
-								input-class="text-body3"
+								input-class="text-body3 text-ink-1"
 							/>
 						</div>
 						<div v-else class="full-height column items-start justify-center">
@@ -47,10 +48,10 @@
 								{{ t('new_item') }}
 							</template>
 							<template v-else>
-								<span class="text-grey-5 text-overline">
-									{{ vault.label }}
+								<span class="text-ink-3 text-overline">
+									{{ vault?.label }}
 								</span>
-								<span class="text-grey-10 text-subtitle2">
+								<span class="text-ink-1 text-subtitle2">
 									{{ name }}
 								</span>
 							</template>
@@ -64,7 +65,7 @@
 					<div class="optionItem" v-if="!editing_t1">
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border"
-							:class="isFavorite ? 'text-yellow-6' : 'text-grey-8'"
+							:class="isFavorite ? 'text-yellow-default' : 'text-ink-2'"
 							:icon="isFavorite ? 'star' : 'sym_r_star'"
 							@click="setFavorite(!isFavorite)"
 						>
@@ -80,6 +81,7 @@
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_edit_note"
+							text-color="ink-2"
 						>
 							<q-tooltip>{{ t('buttons.edit') }}</q-tooltip>
 						</q-btn>
@@ -89,21 +91,27 @@
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_add"
+							text-color="ink-2"
 						>
-							<q-tooltip>"{{ t('vault_t.add_field') }}"</q-tooltip>
-							<q-menu class="filedMenu" v-model="showAddField">
-								<q-list style="min-width: 200px">
+							<q-tooltip>{{ t('vault_t.add_field') }}</q-tooltip>
+							<q-menu
+								class="popup-menu bg-background-2"
+								flat
+								v-model="showAddField"
+							>
+								<q-list class="q-py-sm" style="min-width: 200px">
 									<template
 										v-for="(filed, index) in [...Object.values(FIELD_DEFS)]"
 										:key="index"
 									>
 										<q-item
-											class="menuItem row items-center justify-center"
+											dense
+											class="popup-item row items-center justify-center text-ink-2 q-px-sm"
 											clickable
 											v-close-popup
 											@click="addFieldClick(filed)"
 										>
-											<span class="bg-grey-11-hover optionIcon">
+											<span class="optionIcon">
 												<q-icon :name="filed.icon" size="24px" />
 											</span>
 											<q-item-section class="q-ml-sm">{{
@@ -120,12 +128,13 @@
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_more_horiz"
+							text-color="ink-2"
 						>
 							<q-tooltip>{{ t('buttons.more') }}</q-tooltip>
-							<q-menu class="popup-menu">
-								<q-list dense padding>
+							<q-menu class="popup-menu bg-background-2">
+								<q-list class="q-py-sm" dense padding>
 									<q-item
-										class="popup-item row items-center justify-start text-caption"
+										class="popup-item row items-center justify-start text-body3 text-ink-2"
 										clickable
 										dense
 										v-close-popup
@@ -136,7 +145,7 @@
 										{{ t('vault_t.move_to_vault') }}
 									</q-item>
 									<q-item
-										class="popup-item row items-center justify-start text-caption"
+										class="popup-item row items-center justify-start text-body3 text-ink-2"
 										clickable
 										dense
 										v-close-popup
@@ -159,15 +168,17 @@
 			>
 				<div>
 					<div class="tags listRow">
-						<div class="row items-center justify-start q-px-lg q-py-sm">
+						<div
+							class="row items-center justify-start q-px-lg q-py-sm text-ink-2"
+						>
 							<q-icon name="sym_r_more" size="24px" />
-							<span class="text-color-sub-title q-ml-xs">
+							<span class="text-body3 q-ml-xs">
 								{{ t('tags') }}
 							</span>
 						</div>
 					</div>
 
-					<div class="tags listRow">
+					<div class="tags listRow q-py-xs">
 						<q-select
 							class="tagSelect q-pl-md"
 							v-model="tags"
@@ -175,6 +186,7 @@
 							use-input
 							use-chips
 							multiple
+							dense
 							borderless
 							stack-label
 							hide-bottom-space
@@ -203,7 +215,7 @@
 									@mouseover="chipMouseOver(scope)"
 									@mouseleave="chipMouseLeave(scope)"
 									:tabindex="scope.tabindex"
-									class="q-ma-none tagChip"
+									class="q-ma-none tagChip text-overline"
 								>
 									{{ scope.opt.name }}
 								</q-chip>
@@ -226,7 +238,7 @@
 					</div>
 
 					<div
-						class="listRow row items-center justify-start text-color-sub-title q-py-md q-px-lg q-py-sm"
+						class="listRow row items-center justify-start text-body3 q-py-md q-px-lg q-py-sm text-ink-2"
 					>
 						<q-icon name="sym_r_article" size="20px" />
 						<span class="q-ml-xs">{{ t('fields') }}</span>
@@ -255,16 +267,16 @@
 					</div>
 
 					<div
-						class="listRow row items-center justify-center cursor-pointer text-color-sub-title q-py-md"
+						class="listRow row items-center justify-center cursor-pointer text-ink-3 text-body3 q-py-md"
 						@click="openMenu"
 					>
 						<q-icon name="sym_r_add" size="20px" />
 						<span class="q-ml-xs">{{ t('vault_t.add_field') }}</span>
 					</div>
 
-					<div class="listRow q-pa-md row items-center">
+					<div class="listRow q-pa-md row items-center text-ink-2 text-body3">
 						<q-icon name="sym_r_attach_file" size="20px" />
-						<span class="text-color-sub-title text-li-title">
+						<span class="text-li-title">
 							{{ t('attachments') }}
 						</span>
 					</div>
@@ -309,9 +321,11 @@
 					</div>
 
 					<div class="listRow q-pa-md">
-						<div class="row items-center justify-center uploadFile">
-							<BtIcon src="add" :width="14" :height="14" />
-							<span class="text-color-sub-title text-li-title">
+						<div
+							class="row items-center justify-center uploadFile text-ink-3 text-body3"
+						>
+							<q-icon name="sym_r_add" size="20px" />
+							<span class="text-li-title">
 								{{ t('vault_t.click_or_drag_files_here_to_add_an_attachment') }}
 							</span>
 							<q-input
@@ -323,7 +337,7 @@
 						</div>
 					</div>
 
-					<div class="listRow q-pa-md row items-center text-color-sub-title">
+					<div class="listRow q-pa-md row items-center text-ink-2 text-body3">
 						<q-icon name="sym_r_today" size="20px" />
 						<span class="text-li-title">
 							{{ t('expiration') }}
@@ -331,12 +345,12 @@
 					</div>
 
 					<div
-						class="listRow q-pa-md row items-center justify-center"
+						class="listRow q-pa-md row items-center justify-center text-ink-3 text-body3"
 						v-if="!isEditExpir && !expiresAfter_t1"
 						@click="handleEditExpir(1)"
 					>
 						<q-icon name="sym_r_add" size="20px" />
-						<span class="text-color-sub-title text-li-title">
+						<span class="text-li-title">
 							{{ t('vault_t.add_expiration') }}
 						</span>
 					</div>
@@ -346,14 +360,14 @@
 						v-if="!isEditExpir && expiresAfter_t1"
 					>
 						<span class="text-li-title">
-							<span class="text-color-sub-title"
-								>{{
+							<span class="text-ink-1 text-subtitle3">
+								{{
 									item?.expiresAt && item.expiresAt > now
 										? t('expires') + ' '
 										: t('expired') + ' '
 								}}
 							</span>
-							<span class="text-color-title text-weight-bold"
+							<span class="text-weight-bold text-ink-1"
 								>{{
 									item?.expiresAt ? formatDateFromNow(item.expiresAt) : ''
 								}}.</span
@@ -362,13 +376,14 @@
 					</div>
 
 					<div
-						class="listRow q-pa-md row items-center justify-center"
+						class="listRow q-pa-md row items-center justify-center text-ink-1"
 						v-if="isEditExpir"
 					>
 						<span>{{ t('expire') }}</span>
 						<q-input
 							class="q-mx-sm expireInput"
-							outlined
+							inputClass="q-pl-sm"
+							borderless
 							dense
 							type="number"
 							v-model.number="expiresAfter_t1"
@@ -378,7 +393,7 @@
 					</div>
 
 					<div
-						class="listRow q-pa-md row items-center justify-center text-color-sub-title"
+						class="listRow q-pa-md row items-center justify-center text-ink-3 text-body3"
 						v-if="isEditExpir"
 						@click="handleEditExpir(0)"
 					>
@@ -388,9 +403,9 @@
 						</span>
 					</div>
 
-					<div class="listRow q-pa-md row items-center">
+					<div class="listRow q-pa-md row items-center text-ink-2 text-body3">
 						<q-icon name="sym_r_history" size="20px" />
-						<span class="text-color-sub-title text-li-title">
+						<span class="text-li-title">
 							{{ t('history') }}
 						</span>
 					</div>
@@ -405,26 +420,27 @@
 								@click="showHistoryEntry(index)"
 								style="border-bottom: 0"
 							>
-								<div class="hisData">
+								<div class="hisData text-body3">
 									<q-icon class="q-mr-sm" name="sym_r_schedule" size="20px" />
-									<span class="q-mr-xs">{{
+									<span class="q-mr-xs text-ink-2">{{
 										formatDateTime(history.updated)
 									}}</span>
-									<span class="text-color-sub-title"
+									<span class="text-ink-3"
 										>({{ formatDateFromNow(history.updated) }})</span
 									>
 								</div>
 								<div
 									v-if="index === 0"
-									class="text-grey-8 currenetVersion q-pa-xs text-caption"
+									class="currenetVersion q-pa-xs text-overline text-ink-2"
 								>
 									{{ t('vault_t.current_version') }}
 								</div>
 								<q-icon
-									class="visibility"
+									class="visibility q-mr-md"
 									v-else
 									name="sym_r_visibility"
 									size="24px"
+									color="ink-2"
 								/>
 
 								<span class="guide"></span>
@@ -434,7 +450,10 @@
 				</div>
 			</q-scroll-area>
 		</div>
-		<div v-if="editing_t1" class="footer row iterm-center justify-around">
+		<div
+			v-if="editing_t1"
+			class="footer row iterm-center justify-around bg-background-1"
+		>
 			<button class="reset" type="reset" @click="onCancel">
 				{{ t('cancel') }}
 			</button>
@@ -1076,7 +1095,6 @@ export default defineComponent({
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	background: $white;
 	overflow: hidden;
 	float: right;
 
@@ -1098,13 +1116,13 @@ export default defineComponent({
 		}
 
 		&:focus-within {
-			border: 1px solid $blue;
+			border: 1px solid $light-blue-default;
 		}
 	}
 
 	.isedit {
 		height: 40px;
-		border: 1px solid $grey-2;
+		border: 1px solid $ink-3;
 	}
 
 	.view-option {
@@ -1117,10 +1135,6 @@ export default defineComponent({
 
 			span.optionIcon {
 				display: inline-block;
-
-				&:hover {
-					border-radius: 4px;
-				}
 			}
 		}
 	}
@@ -1132,10 +1146,12 @@ export default defineComponent({
 			width: 90%;
 
 			.tagChip {
-				background: $white;
+				height: 20px;
+				line-height: 20px;
+				color: $ink-2;
 				margin-right: 5px;
-				margin-bottom: 4px;
-				border: 1px solid $grey-8;
+				border: 1px solid $ink-2;
+				background-color: $background-1;
 			}
 		}
 	}
@@ -1143,6 +1159,10 @@ export default defineComponent({
 
 .header {
 	flex: 0 0 auto;
+}
+
+.popup-menu {
+	max-width: auto;
 }
 
 .footer {
@@ -1163,14 +1183,20 @@ export default defineComponent({
 	}
 
 	.confirm {
-		background: $yellow;
-		color: $grey-10;
+		background: $yellow-default;
+		color: $ink-on-brand-black;
+		&:hover {
+			background: $background-hover;
+		}
 	}
 
 	.reset {
-		border: 1px solid $grey-2;
-		background: $white;
-		color: $grey-10;
+		border: 1px solid $btn-stroke;
+		background: $background-1;
+		color: $ink-1;
+		&:hover {
+			background: $background-hover;
+		}
 	}
 }
 
@@ -1183,8 +1209,8 @@ export default defineComponent({
 
 	.guide {
 		position: absolute;
-		left: 25px;
-		top: -18px;
+		left: 22px;
+		top: -16px;
 		width: 0px;
 		height: 32px;
 		border-left: 1px solid $grey-2;
@@ -1192,7 +1218,7 @@ export default defineComponent({
 
 	&:hover {
 		cursor: pointer;
-		background-color: $grey-12;
+		background-color: $background-hover;
 
 		.visibility {
 			opacity: 1;
@@ -1222,6 +1248,8 @@ export default defineComponent({
 	.expireInput {
 		width: 75px;
 		font-size: map-get($map: $body2, $key: size);
+		border: 1px solid $input-stroke;
+		border-radius: 8px;
 	}
 
 	.attachment {
@@ -1238,9 +1266,9 @@ export default defineComponent({
 	}
 
 	.currenetVersion {
-		border: 1px solid $yellow;
 		border-radius: 4px;
-		background: rgba(255, 235, 59, 0.1);
+		border: 1px solid $yellow-default;
+		background: $yellow-alpha;
 	}
 }
 

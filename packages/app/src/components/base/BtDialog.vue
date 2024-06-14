@@ -6,19 +6,26 @@
 		persistent
 		@hide="onDialogHide"
 	>
-		<q-card class="q-dialog-plugin-web">
-			<q-bar class="bg-grey-1">
-				<div class="text-subtitle2">
+		<q-card class="q-dialog-plugin-web" flat>
+			<q-bar class="bg-background-3">
+				<span class="text-subtitle3 text-ink-1">
 					{{ title }}
-				</div>
+				</span>
 				<q-space />
-				<q-btn dense flat icon="close" @click="onCancelClick" v-close-popup>
+				<q-btn
+					class="text-ink-3"
+					dense
+					flat
+					icon="close"
+					@click="onCancelClick"
+					v-close-popup
+				>
 					<q-tooltip>Close</q-tooltip>
 				</q-btn>
 			</q-bar>
 
 			<q-card-section>
-				<div class="content text-left" v-if="message">
+				<div class="content text-left text-ink-1" v-if="message">
 					{{ message }}
 				</div>
 			</q-card-section>
@@ -27,7 +34,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-cancel-web text-subtitle3 row justify-center items-center q-px-md q-mr-lg text-grey-8"
+					class="but-cancel-web text-body3 text-ink-2 row justify-center items-center q-px-md q-mr-lg"
 					@click="onCancelClick"
 				>
 					{{ cancelTxt }}
@@ -35,7 +42,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-creat-web text-subtitle3 row justify-center items-center q-px-md q-mr-md text-grey-8"
+					class="but-creat-web text-body3 text-ink-on-brand-black row justify-center items-center q-px-md q-mr-md"
 					@click="onOKClick"
 				>
 					{{ confirmTxt }}
@@ -113,11 +120,11 @@ const onCancelClick = () => {
 
 		.but-creat-web {
 			border-radius: 8px;
-			background: $yellow;
+			background: $yellow-default;
 		}
 		.but-cancel-web {
 			border-radius: 8px;
-			border: 1px solid $grey-2;
+			border: 1px solid $btn-stroke;
 		}
 	}
 }

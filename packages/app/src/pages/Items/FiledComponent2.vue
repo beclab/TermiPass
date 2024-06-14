@@ -13,9 +13,9 @@
 		<div class="row items-center justify-between info">
 			<div class="col-10 q-pl-lg">
 				<div>
-					<div class="row items-center text-blue-4">
+					<div class="row items-center text-light-blue-default">
 						<q-icon :name="field.icon" size="20px" />
-						<span class="text-li-title">{{ field?.name }}</span>
+						<span class="text-li-title text-body3">{{ field?.name }}</span>
 					</div>
 				</div>
 				<div class="q-mt-sm q-mb-md" v-if="editing" style="height: 36px">
@@ -89,13 +89,14 @@
 
 					<q-input
 						v-else
-						outlined
+						borderless
 						dense
 						v-model="fieldValue"
 						@update:model-value="onUpdate"
 						:placeholder="placeholder[field.type]"
 						input-style="width: 100%; text-indent: 10px;"
 						input-class="text-body3"
+						class="filedInput"
 					>
 						<template v-slot:append>
 							<q-icon
@@ -116,6 +117,7 @@
 						"
 					>
 						<q-input
+							input-class="text-ink-1"
 							v-model="displayVaule"
 							dense
 							borderless
@@ -132,6 +134,7 @@
 					</div>
 					<div v-else-if="fieldType == 'note'">
 						<q-input
+							input-class="text-ink-1"
 							v-model="displayVaule"
 							dense
 							borderless
@@ -145,49 +148,61 @@
 							displayVaule !== 'empty' ? 'hasValue' : 'text-color-sub-title'
 						"
 					>
-						<q-input v-model="displayVaule" dense borderless readonly />
+						<q-input
+							input-class="text-ink-1"
+							v-model="displayVaule"
+							dense
+							borderless
+							readonly
+						/>
 					</div>
 				</div>
 			</div>
 
 			<div class="col-2 row items-center justify-center" v-if="editing">
 				<span class="trashCan text-grey-7" @click="onRemove">
-					<q-icon name="sym_r_delete" size="20px" />
+					<q-btn
+						class="btn-size-sm btn-no-text btn-no-border"
+						icon="sym_r_delete"
+						text-color="ink-2"
+					>
+						<q-tooltip>{{ t('Delete') }}</q-tooltip>
+					</q-btn>
 				</span>
 				<div class="q-ml-xs">
-					<span
-						class="q-mb-xs bg-grey-11-hover arrow row items-center"
-						@click="onMoveUp"
-					>
-						<q-icon name="sym_r_arrow_upward" size="18px" class="text-grey-7" />
+					<span class="q-mb-xs row items-center" @click="onMoveUp">
+						<q-btn
+							class="btn-size-xs btn-no-text btn-no-border"
+							icon="sym_r_arrow_upward"
+							text-color="ink-2"
+						>
+						</q-btn>
 					</span>
-					<span
-						class="bg-grey-11-hover arrow row items-center"
-						@click="onMoveDown"
-					>
-						<q-icon
-							name="sym_r_arrow_downward"
-							size="18px"
-							class="text-grey-7"
-						/>
+					<span class="row items-center" @click="onMoveDown">
+						<q-btn
+							class="btn-size-xs btn-no-text btn-no-border"
+							icon="sym_r_arrow_downward"
+							text-color="ink-2"
+						>
+						</q-btn>
 					</span>
 				</div>
 			</div>
 
 			<div class="row item-center justify-end infoOperateWrap">
 				<div
-					class="row item-center justify-center q-px-sm q-py-xs q-mr-md bg-grey-11-hover infoOperate"
+					class="row items-center justify-center q-px-sm q-py-xs q-mr-md bg-grey-11-hover infoOperate text-ink-1"
 					@click="copyFile(fieldValue)"
 				>
-					<BtIcon src="copyIcon" :width="14" :height="14" />
-					{{ t('copy') }}
+					<q-icon name="sym_r_content_copy" size="14px" />
+					<span class="text-body3 q-ml-xs">{{ t('copy') }}</span>
 				</div>
 				<div
-					class="row item-center justify-center q-px-sm q-py-xs bg-grey-11-hover infoOperate"
+					class="row items-center justify-center q-px-sm q-py-xs bg-grey-11-hover infoOperate text-ink-1"
 					@click="onEdit"
 				>
-					<BtIcon src="editIcon" :width="14" :height="14" />
-					{{ t('buttons.edit') }}
+					<q-icon name="sym_r_edit_note" size="14px" />
+					<span class="text-body3 q-ml-xs">{{ t('buttons.edit') }}</span>
 				</div>
 			</div>
 		</div>
@@ -383,8 +398,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .listRow {
-	border-bottom: 1px solid $grey-2;
-
 	.userInfo {
 		font-size: map-get($map: $body2, $key: size);
 		padding-left: 19px;
@@ -401,9 +414,8 @@ export default defineComponent({
 
 	.filedInput {
 		width: 100%;
-		height: 36px;
 		font-size: map-get($map: $body1, $key: size);
-		border: 1px solid $grey-2;
+		border: 1px solid $input-stroke;
 		border-radius: 4px;
 		text-indent: 10px;
 	}
@@ -429,6 +441,7 @@ export default defineComponent({
 				&:hover {
 					border-radius: 4px;
 					cursor: pointer;
+					background-color: $background-hover;
 				}
 			}
 		}
@@ -443,9 +456,5 @@ export default defineComponent({
 
 .trashCan {
 	cursor: pointer;
-}
-
-.arrow {
-	padding: 6px;
 }
 </style>

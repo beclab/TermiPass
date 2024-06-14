@@ -7,10 +7,10 @@
 		transition-hide="slide-down"
 	>
 		<q-card>
-			<div id="previewer">
+			<div id="previewer" class="bg-background-3">
 				<header-bar>
 					<title
-						class="q-ml-md"
+						class="q-ml-md text-ink-1"
 						:style="
 							$q.platform.is.electron && $q.platform.is.mac
 								? 'margin-left: 90px;'
@@ -21,7 +21,7 @@
 					</title>
 					<template #info v-if="store.req.type === 'image'">
 						<div
-							class="q-px-md q-py-xs view-another-image text-overline cursor-pointer"
+							class="q-px-md q-py-xs view-another-image text-overline cursor-pointer q-mr-sm"
 							@click="store.preview.fullSize = !store.preview.fullSize"
 							style="-webkit-app-region: no-drag"
 						>
@@ -70,7 +70,7 @@
 						/>
 					</template>
 				</header-bar>
-				<div class="content">
+				<div class="content bg-background-2">
 					<BtLoading
 						:show="true"
 						v-if="store.loading"
@@ -363,8 +363,12 @@ const showOperation = () => {
 <style scoped lang="scss">
 .view-another-image {
 	height: 20px;
-	background: $grey-2;
 	border-radius: 4px;
 	text-align: center;
+	border: 1px solid $btn-stroke;
+}
+
+#previewer .content > button {
+	background-color: $dimmed-background;
 }
 </style>

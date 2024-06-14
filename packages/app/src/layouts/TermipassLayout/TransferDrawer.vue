@@ -16,7 +16,7 @@
 				@select="updateCurrentMenu"
 				style="width: 100%"
 				class="title-norla"
-				active-class="files-active-link title-active"
+				active-class="text-subtitle2 bg-yellow-soft text-ink-1"
 			>
 			</bt-menu>
 		</q-scroll-area>
@@ -38,12 +38,10 @@ const updateCurrentMenu = (item: { key: string }) => {
 
 <style lang="scss">
 .files-active-link {
-	color: rgba(31, 24, 20, 1);
 	background: rgba(255, 235, 59, 0.1);
 }
 
 .myDrawer {
-	background-color: $white;
 	overflow: hidden;
 	padding-top: 6px;
 }

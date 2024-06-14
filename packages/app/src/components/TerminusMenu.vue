@@ -15,7 +15,7 @@
 				/>
 			</div>
 			<div class="userinfo q-ml-sm">
-				<div class="text-subtitle1 text-left">
+				<div class="text-subtitle1 text-ink-1 text-left">
 					{{ current_user?.local_name }}
 				</div>
 				<div class="text-overline text-left row items-start">
@@ -38,25 +38,28 @@
 		<div class="contain-search q-mt-sm" ref="searchBox">
 			<q-input
 				dense
+				readonly
 				stack-label
 				borderless
-				readonly
 				class="search_itme"
 				v-model="searchVal"
+				color="ink-2"
 				@click.stop
 				@dblclick.stop
 				debounce="500"
 				@update:model-value="updateSearch"
 				placeholder="Search"
+				input-class="text-ink-1"
 				input-style="color: rgba(92, 85, 81, 1); height: 30px !important; line-height: 30px;"
 			>
 				<template v-slot:prepend>
-					<q-icon class="search_icon" name="search" size="16px" />
+					<q-icon class="search_icon" name="search" size="16px" color="ink-2" />
 				</template>
 				<template v-slot:append>
 					<q-icon
 						v-if="searchVal"
 						name="sym_r_cancel"
+						color="ink-2"
 						size="16px"
 						@click="clearSearch"
 						class="search_clean cursor-pointer"
@@ -65,6 +68,7 @@
 						<q-icon
 							v-if="!searchVal"
 							name="sym_r_keyboard_command_key"
+							color="ink-2"
 							size="16px"
 						/>
 						<span v-if="!searchVal" class="text-overline text-body3 k"
@@ -85,8 +89,8 @@
 					@dblclick.stop
 					@click.stop="handleActive(menu)"
 					:active="menu.identify === menuStore.terminusActiveMenu"
-					class="row items-center justify-start q-px-md q-mb-xs q-py-none text-grey-8 text-body1"
-					active-class="text-grey-10 bg-white"
+					class="row items-center justify-start q-px-md q-mb-xs q-py-none text-ink-1 text-body1"
+					active-class="text-ink-1 bg-background-selected"
 					style="border-radius: 8px; height: 32px"
 				>
 					<q-img
@@ -103,8 +107,8 @@
 					<div
 						:class="
 							menu.identify === menuStore.terminusActiveMenu
-								? 'title-active text-subtitle2'
-								: 'title-normal text-body2'
+								? 'text-ink-1 text-subtitle2'
+								: 'text-ink-2 text-body2'
 						"
 					>
 						{{ menu.name }}
@@ -244,7 +248,7 @@ const showing = ref(false);
 			font-size: map-get($map: $body2, $key: size) !important;
 			padding-left: 8px;
 			padding-right: 8px;
-			border: 1px solid $grey-3;
+			border: 1px solid $input-stroke;
 			box-sizing: border-box;
 			// background: $grey-1;
 			position: relative;

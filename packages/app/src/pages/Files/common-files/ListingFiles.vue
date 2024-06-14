@@ -9,7 +9,7 @@
 			v-if="store.req.numDirs + store.req.numFiles == 0"
 		>
 			<img src="../../../assets/images/empty.png" alt="empty" />
-			<span class="text-body2">{{ $t('files.lonely') }}</span>
+			<span class="text-body2 text-ink-1">{{ $t('files.lonely') }}</span>
 			<input
 				style="display: none"
 				type="file"
@@ -919,16 +919,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .empty {
-	background: $white;
-
 	img {
 		width: 226px;
 		height: 170px;
 		margin-bottom: 20px;
-	}
-
-	span {
-		color: $grey-14;
 	}
 }
 
@@ -945,8 +939,7 @@ export default defineComponent({
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	border-top: 1px solid $grey-11;
+	border-top: 1px solid $separator;
 	justify-content: center !important;
-	background: $white;
 }
 </style>

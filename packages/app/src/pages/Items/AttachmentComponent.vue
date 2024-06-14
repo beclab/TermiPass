@@ -1,10 +1,10 @@
 <template>
 	<div class="column attach">
 		<div class="">
-			<div class="text-blue text-subtitle2">
+			<div class="text-light-blue-default text-subtitle2">
 				{{ attach?.name }}
 			</div>
-			<div class="text-body3">
+			<div class="text-body3 text-ink-1">
 				{{
 					(attach.type || t('vault_t.unkown_file_type')) +
 					' - ' +

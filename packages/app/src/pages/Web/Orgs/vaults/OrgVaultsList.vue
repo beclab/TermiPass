@@ -1,5 +1,5 @@
 <template>
-	<div class="bg-white" style="width: 100%; height: 60px">
+	<div style="width: 100%; height: 60px">
 		<div class="row items-center justify-between">
 			<div class="row items-center q-pl-md">
 				<q-icon
@@ -11,20 +11,20 @@
 				<q-icon :name="heading.icon" size="24px" />
 
 				<div class="column q-pl-md" v-if="!isMobile">
-					<div class="text-grey-8 text-caption">
+					<div class="text-ink-3 text-overline">
 						{{ org?.name }}
 					</div>
-					<div class="text-body2 text-weight-bold">
+					<div class="text-subtitle2 text-ink-1 text-weight-bold">
 						{{ heading.title }}
 					</div>
 				</div>
 			</div>
 
 			<div class="column" v-if="isMobile">
-				<div class="text-grey-8 text-caption">
+				<div class="text-ink-3 text-overline">
 					{{ org?.name }}
 				</div>
-				<div class="text-body2 text-weight-bold">
+				<div class="text-subtitle2 text-ink-1 text-weight-bold">
 					{{ heading.title }}
 				</div>
 			</div>
@@ -35,6 +35,7 @@
 					name="sym_r_add"
 					size="24px"
 					clickable
+					color="ink-1"
 					@click="onCreate"
 				>
 					<q-tooltip>{{ t('add_vault') }}</q-tooltip>
@@ -42,10 +43,7 @@
 			</div>
 		</div>
 	</div>
-	<q-list
-		class="bg-white"
-		style="width: 100%; height: calc(100% - 60px); overflow: hidden"
-	>
+	<q-list style="width: 100%; height: calc(100% - 60px); overflow: hidden">
 		<template v-if="itemList.length > 0">
 			<q-scroll-area
 				style="height: 100%"
@@ -252,7 +250,7 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid $separator;
 	.vaultsCard {
 		width: 90%;
 		border: 0;
@@ -263,7 +261,7 @@ export default defineComponent({
 		cursor: pointer;
 
 		&:hover {
-			background: $grey-1;
+			background: $background-hover;
 		}
 
 		.groups,
@@ -274,7 +272,7 @@ export default defineComponent({
 		}
 
 		&.vaultActive {
-			background: $grey-1;
+			background: $background-selected;
 		}
 	}
 }

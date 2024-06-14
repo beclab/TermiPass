@@ -1,5 +1,5 @@
 <template>
-	<div v-if="invite" class="inviteItemView bg-white">
+	<div v-if="invite" class="inviteItemView">
 		<div class="row justify-between header items-center">
 			<q-icon
 				v-if="isMobile"
@@ -7,16 +7,18 @@
 				size="24px"
 				@click="goBack"
 			/>
-			<div v-else class="text-subtitle2 title">{{ t('invite') }}</div>
+			<div v-else class="text-subtitle2 title text-ink-1">
+				{{ t('invite') }}
+			</div>
 
-			<div class="text-body2 tag" :class="status?.class">
+			<div class="tag text-ink-2 text-overline" :class="status?.class">
 				<q-icon :name="status?.icon" size="20px" />
 				{{ status?.text }}
 			</div>
 		</div>
 
 		<div class="stretch">
-			<div class="title1 text-subtitle3">
+			<div class="title1 text-body3">
 				{{
 					invite?.purpose === 'confirm_membership'
 						? t('a_membership_confirmation_request_was_send_to')
@@ -44,11 +46,10 @@
 					:disabled="invite?.expired"
 					outline
 					no-caps
-					color="yellow-6"
-					class="full-width"
+					class="full-width resend"
 					@click="onConfirm()"
 				>
-					<span class="row justify-center text-blue-grey-8">
+					<span class="row justify-center text-ink-1">
 						<q-icon name="sym_r_mail" class="q-mr-xs" />
 						{{
 							invite?.purpose === 'confirm_membership'
@@ -66,7 +67,7 @@
 					class="full-width"
 					@click="onResend()"
 				>
-					<span class="row justify-center text-blue-grey-8">
+					<span class="row justify-center text-ink-1">
 						<q-icon name="sym_r_mail" class="q-mr-xs" />
 						{{ t('resend') }}
 					</span>
@@ -76,11 +77,11 @@
 	</div>
 
 	<div
-		class="inviteItemView text-color-sub-title row items-center justify-center bg-white"
+		class="inviteItemView text-color-sub-title row items-center justify-center"
 		v-else
 	>
 		<img src="../../../../assets/layout/nodata.svg" />
-		<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+		<span class="q-mb-md text-ink-2" style="margin-top: 32px">
 			{{ t('no_invite_selected') }}
 		</span>
 	</div>
@@ -291,9 +292,7 @@ export default defineComponent({
 		}
 
 		.tag {
-			height: 32px;
-			line-height: 32px;
-			border: 1px solid $grey-2;
+			border: 1px solid $ink-2;
 			padding: 0 8px;
 			border-radius: 4px;
 		}
@@ -308,26 +307,26 @@ export default defineComponent({
 
 		.title1 {
 			text-align: center;
-			color: $sub-title;
+			color: $ink-2;
 			font-weight: 600;
 		}
 
 		.title2 {
 			text-align: center;
-			color: $title;
+			color: $ink-1;
 			font-weight: 800;
 			margin: 10px 0;
 		}
 
 		.title3 {
 			text-align: center;
-			color: $sub-title;
+			color: $ink-2;
 			font-weight: 600;
 		}
 
 		.title4 {
 			text-align: center;
-			color: $title;
+			color: $ink-1;
 			font-weight: 800;
 			margin: 16px 0;
 		}
@@ -336,6 +335,10 @@ export default defineComponent({
 			display: flex;
 			align-items: center;
 			justify-content: space-around;
+
+			.resend {
+				border: 1px solid separator;
+			}
 		}
 	}
 }

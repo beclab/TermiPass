@@ -7,28 +7,37 @@
 		@hide="onDialogHide"
 	>
 		<q-card class="q-dialog-plugin-web" v-if="isWeb">
-			<q-bar class="bg-grey-1">
-				<div class="text-subtitle2">
+			<q-bar class="bg-background-3">
+				<span class="text-subtitle3 text-ink-1">
 					{{ t('vault_t.new_vault_item') }}
-				</div>
+				</span>
 				<q-space />
-				<q-btn dense flat icon="close" @click="onDialogCancel" v-close-popup>
+				<q-btn
+					dense
+					flat
+					color="ink-3"
+					icon="close"
+					@click="onDialogCancel"
+					v-close-popup
+				>
 					<q-tooltip>{{ t('buttons.close') }}</q-tooltip>
 				</q-btn>
 			</q-bar>
 
 			<q-card-section class="q-pt-xs">
 				<div
-					class="text-left text-body2 q-mt-md q-mb-sm text-grey-8 text-weight-medium"
+					class="text-left text-body2 q-mt-md q-mb-sm text-ink-3 text-weight-medium"
 				>
 					{{ t('vault_t.select_vault') }}
 				</div>
 				<div class="row align-center justify-center">
 					<q-select
-						outlined
+						class="select-vault q-px-sm"
+						borderless
 						dense
 						color="yellow-6"
 						v-model="model.label"
+						dropdown-icon="sym_r_expand_more"
 						:options="
 							vaults.map((v) => ({
 								value: v.id,
@@ -43,7 +52,7 @@
 				</div>
 			</q-card-section>
 
-			<div class="text-caption text-grey-8 text-left q-pl-md q-mb-xs">
+			<div class="text-body3 text-ink-3 text-left q-pl-md q-mb-sm">
 				{{ t('vault_t.what_kind_of_item_you_would_like_to_add') }}
 			</div>
 			<q-card-section class="row q-col-gutter-md" style="padding-top: 0">
@@ -55,14 +64,14 @@
 						@click="selectTemplate(item)"
 						:active="isSelected(item)"
 						class="item-web q-px-sm"
-						active-class=".border-color-yellow activeItem text-black"
+						active-class="border-color-yellow activeItem text-black"
 						style="padding-top: 5px; padding-bottom: 5px"
 					>
 						<q-item-section side class="q-ml-xs q-pr-sm">
 							<q-icon :name="showItemIcon(item.icon)" />
 						</q-item-section>
 
-						<q-item-section class="text-left text-grey-9">{{
+						<q-item-section class="text-left text-body3 text-ink-2">{{
 							item.toString()
 						}}</q-item-section>
 					</q-item>
@@ -72,7 +81,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-cancel-web text-body3 row justify-center items-center q-px-md q-mr-lg text-grey-8"
+					class="but-cancel-web text-body3 text-ink-2 row justify-center items-center q-px-md q-mr-lg text-grey-8"
 					@click="onDialogCancel"
 				>
 					{{ t('cancel') }}
@@ -80,7 +89,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-creat-web text-body3 row justify-center items-center q-px-md q-mr-md text-grey-8"
+					class="but-creat-web text-body3 text-ink-on-brand-black row justify-center items-center q-px-md q-mr-md text-grey-8"
 					@click="onOKClick"
 				>
 					{{ t('create') }}
@@ -103,6 +112,7 @@
 				</div>
 				<div class="row align-center justify-center">
 					<q-select
+						class="select-vault q-px-sm"
 						outlined
 						dense
 						behavior="menu"
@@ -143,7 +153,7 @@
 							<q-icon :name="showItemIcon(item.icon)" />
 						</q-item-section>
 
-						<q-item-section class="text-left text-grey-9 text-body3">
+						<q-item-section class="text-left text-body3 text-ink-2">
 							{{ item.toString() }}
 						</q-item-section>
 					</q-item>
@@ -300,19 +310,24 @@ onMounted(async () => {
 		width: 400px;
 		border-radius: 12px;
 
+		.select-vault {
+			border: 1px solid $input-stroke;
+			border-radius: 8px;
+		}
+
 		.item-web {
-			border-radius: 10px;
-			border: 1px solid $grey-2;
+			border-radius: 8px;
+			border: 1px solid $btn-stroke;
 		}
 
 		.but-creat-web {
 			border-radius: 8px;
-			background: $yellow;
+			background: $yellow-default;
 		}
 
 		.but-cancel-web {
 			border-radius: 8px;
-			border: 1px solid $grey-2;
+			border: 1px solid $btn-stroke;
 		}
 	}
 
@@ -320,9 +335,14 @@ onMounted(async () => {
 		width: 400px;
 		border-radius: 12px;
 
+		.select-vault {
+			border: 1px solid $input-stroke;
+			border-radius: 8px;
+		}
+
 		.item-web {
-			border-radius: 10px;
-			border: 1px solid $grey-2;
+			border-radius: 8px;
+			border: 1px solid $btn-stroke;
 		}
 
 		.title {
