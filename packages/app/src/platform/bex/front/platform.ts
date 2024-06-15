@@ -4,6 +4,7 @@ import { ExtensionStorage, ExtensionUserStorage } from '../storage';
 import { useUserStore } from '../../../stores/user';
 import {
 	UserItem,
+	MnemonicItem,
 	getPlatform as defaultGetPlatform
 } from '@didvault/sdk/src/core';
 import { app, setSenderUrl } from '../../../globals';
@@ -64,8 +65,12 @@ export class ExtensionPlatform
 				});
 			}
 
+			const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+				userStore.current_id!
+			)!;
+
 			await app.load(userStore.current_id!);
-			await app.unlock(user.mnemonic);
+			await app.unlock(mnemonic.mnemonic);
 
 			redirect({ path: '/home' });
 		} else {

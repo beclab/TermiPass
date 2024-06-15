@@ -52,7 +52,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../../../stores/user';
 import { TerminusInfo } from '@bytetrade/core';
 import { useQuasar } from 'quasar';
-import { UserItem } from '@didvault/sdk/src/core';
+import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import TerminusEdit from '../../../components/common/TerminusEdit.vue';
 import ConfirmButton from '../../../components/common/ConfirmButton.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
@@ -85,6 +85,9 @@ let monitorKeyboard: MonitorKeyboard | undefined = undefined;
 const keyboardOpen = ref(false);
 
 const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+	userStore.current_id!
+)!;
 
 terminusNameRef.value = user.name;
 
@@ -132,7 +135,12 @@ const onConfirm = async () => {
 		return;
 	}
 	try {
-		await connectTerminus(user, osPwd.value, use_local.value);
+		await connectTerminus(
+			user,
+			mnemonic.mnemonic,
+			osPwd.value,
+			use_local.value
+		);
 		await loginTerminus(user, osPwd.value, true, use_local.value);
 
 		busEmit('account_update', true);

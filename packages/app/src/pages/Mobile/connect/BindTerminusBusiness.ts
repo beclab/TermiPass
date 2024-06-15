@@ -3,7 +3,8 @@ import {
 	AuthType,
 	Err,
 	ErrorCode,
-	UserItem
+	UserItem,
+	MnemonicItem
 } from '@didvault/sdk/src/core';
 import { TerminusDefaultDomain, Token } from '@bytetrade/core';
 import { onFirstFactor } from '../../../utils/account';
@@ -25,6 +26,7 @@ import { i18n } from '../../../boot/i18n';
 
 export const userBindTerminus = async (
 	user: UserItem,
+	mnemonic: MnemonicItem,
 	host: string,
 	osPwd: string,
 	callback: BusinessCallback
@@ -63,7 +65,7 @@ export const userBindTerminus = async (
 		});
 
 		await app.load(userStore.current_id!);
-		await app.unlock(user.mnemonic);
+		await app.unlock(mnemonic.mnemonic);
 
 		await app.clearSession();
 		app.state._errors = [];
@@ -81,7 +83,7 @@ export const userBindTerminus = async (
 			);
 		}
 
-		const masterPassword = user.mnemonic;
+		const masterPassword = mnemonic.mnemonic;
 		let { url } = queryString.parseUrl(host);
 		if (url) {
 			if (url.startsWith('http://')) {
@@ -247,12 +249,13 @@ export async function importUserSkipBind(
 		await userStore.setCurrentID(user.id);
 		await app.load(user.id);
 
-		await app.new(user.id, user.mnemonic);
+		await app.new(user.id, mnemonic);
 
 		user.url = '';
 		user.binding = false;
 		user.name = terminusName;
 		userStore.users!.items.update(user);
+
 		await userStore.save();
 
 		callback.onSuccess('');
@@ -415,7 +418,7 @@ export async function loginTerminus(
 	await userStore.save();
 }
 
-export async function loginVault(user: UserItem) {
+export async function loginVault(user: UserItem, mnemonic: string) {
 	await app.clearSession();
 	const authRes = await _authenticate({
 		did: user.local_name,
@@ -430,7 +433,7 @@ export async function loginVault(user: UserItem) {
 	}
 	await app.login({
 		did: authRes.did,
-		password: user.mnemonic,
+		password: mnemonic,
 		authToken: authRes.token
 	});
 
@@ -445,6 +448,7 @@ export async function loginVault(user: UserItem) {
 
 export async function connectTerminus(
 	user: UserItem,
+	mnemonic: string,
 	password: string,
 	use_local = true
 ) {
@@ -476,22 +480,22 @@ export async function connectTerminus(
 		await app.load(undefined);
 	} else {
 		await app.load(user.id);
-		await app.unlock(user.mnemonic, false);
+		await app.unlock(mnemonic, false);
 	}
 	if (user.setup_finished) {
 		const code = await app.simpleSync();
 		if (code == ErrorCode.INVALID_SESSION) {
-			await loginVault(user);
+			await loginVault(user, mnemonic);
 		} else {
 			if (code == ErrorCode.TOKE_INVILID) {
 				const terminusInfo = await getTerminusInfo(user);
 				if (user.terminus_id != terminusInfo?.terminusId) {
-					await loginVault(user);
+					await loginVault(user, mnemonic);
 				}
 			}
 		}
 	} else {
-		await loginVault(user);
+		await loginVault(user, mnemonic);
 	}
 }
 
@@ -577,7 +581,7 @@ export async function importUser(
 			await app.load(undefined);
 		} else {
 			await app.load(user.id, getAppPlatform().reconfigAppStateDefaultValue);
-			await app.new(user.id, user.mnemonic);
+			await app.new(user.id, mnemonic);
 		}
 
 		user.binding = false;

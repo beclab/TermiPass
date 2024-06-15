@@ -1,4 +1,4 @@
-import { UserItem } from '@didvault/sdk/src/core';
+import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import { app, setSenderUrl } from '../../../../globals';
 import { useUserStore } from '../../../../stores/user';
 import { BusinessAsyncCallback } from '../Callback';
@@ -53,8 +53,12 @@ export async function unlockByPwd(
 				});
 			}
 
+			const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+				userStore.current_id!
+			)!;
+
 			await app.load(userStore.current_id!);
-			await app.unlock(user.mnemonic);
+			await app.unlock(mnemonic.mnemonic);
 		}
 
 		await callback.onSuccess(userStore.current_id);
