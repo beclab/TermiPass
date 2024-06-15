@@ -9,6 +9,7 @@ import {
 import {
 	LocalUserVault,
 	UserItem,
+	MnemonicItem,
 	base64ToString,
 	uuid
 } from '@didvault/sdk/src/core';
@@ -131,6 +132,16 @@ export const useUserStore = defineStore('user', {
 
 			return this.users.items.get(this.current_id);
 		},
+		current_mnemonic(): MnemonicItem | null {
+			if (!this.current_id) {
+				return null;
+			}
+			if (!this.users) {
+				return null;
+			}
+
+			return this.users.mnemonics.get(this.current_id);
+		},
 		user_name() {
 			return this.current_user ? this.current_user.name.split('@')[0] : '';
 		},
@@ -138,7 +149,7 @@ export const useUserStore = defineStore('user', {
 			if (!this.current_user) {
 				return null;
 			}
-			return await getPrivateJWK(this.current_user?.mnemonic);
+			return await getPrivateJWK(this.current_mnemonic?.mnemonic);
 		},
 		currentUserBackup(): boolean {
 			return this.backupList.find((e) => e == this.current_id) != undefined;
@@ -340,14 +351,14 @@ export const useUserStore = defineStore('user', {
 				await userModeRemoveItem('current-user-id');
 			}
 		},
-		async temporaryCreateUser(did: string, name: string, mnemonic: string) {
-			const user1 = new UserItem();
-			user1.name = name;
-			user1.id = did;
-			user1.mnemonic = mnemonic;
+		// async temporaryCreateUser(did: string, name: string, mnemonic: string) {
+		// 	const user1 = new UserItem();
+		// 	user1.name = name;
+		// 	user1.id = did;
+		// 	user1.mnemonic = mnemonic;
 
-			return user1;
-		},
+		// 	return user1;
+		// },
 		async importTemporaryUser(user: UserItem) {
 			if (!this.users || this.users.locked) {
 				return null;
@@ -373,9 +384,14 @@ export const useUserStore = defineStore('user', {
 			const user1 = new UserItem();
 			user1.name = name;
 			user1.id = did;
-			user1.mnemonic = mnemonic;
+			//user1.mnemonic = mnemonic;
+
+			const m = new MnemonicItem();
+			m.id = did;
+			m.mnemonic = mnemonic;
 
 			this.users.items.update(user1);
+			this.users.mnemonics.update(m);
 			await this.save();
 			return user1;
 		},

@@ -141,14 +141,17 @@ export const useCloudStore = defineStore('cloud', {
 			if (!userStore.current_user) {
 				return null;
 			}
+			if (!userStore.current_mnemonic) {
+				return null;
+			}
 			if (
 				!userStore.current_user.cloud_id ||
 				!userStore.current_user.cloud_token ||
 				userStore.current_user.cloud_expired < new Date().getTime() - 1000 * 60
 			) {
-				const did = await getDID(userStore.current_user.mnemonic);
+				const did = await getDID(userStore.current_mnemonic.mnemonic);
 				const privateJWK: PrivateJwk | undefined = await getPrivateJWK(
-					userStore.current_user.mnemonic
+					userStore.current_mnemonic.mnemonic
 				);
 				const body = {
 					did: did,

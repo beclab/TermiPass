@@ -7,7 +7,7 @@ import { TerminusDefaultDomain } from '@bytetrade/core';
 export type UserItemID = string;
 export type LocalUserVaultID = string;
 
-export class UserItem extends Serializable {
+export class MnemonicItem extends Serializable {
 	constructor(vals: Partial<UserItem> = {}) {
 		super();
 		Object.assign(this, vals);
@@ -16,6 +16,101 @@ export class UserItem extends Serializable {
 	id: UserItemID = ''; //did
 
 	mnemonic = '';
+
+	@AsDate()
+	updated: Date = new Date();
+}
+
+export class MnemonicItemCollection
+	extends Serializable
+	implements Iterable<MnemonicItem>
+{
+	/** Number of items in this VaultItemCollection */
+	get size() {
+		return this._items.size;
+	}
+
+	private _items: Map<string, MnemonicItem>;
+
+	constructor(items: MnemonicItem[] = []) {
+		super();
+		this._items = new Map(
+			items.map((item) => [item.id, item] as [string, MnemonicItem])
+		);
+	}
+
+	/** Get an item with a given `id` */
+	get(id: string) {
+		return this._items.get(id) || null;
+	}
+
+	/**
+	 * Updates one or more items based on their id. If no item with the same id
+	 * exists, the item will be added to the collection
+	 */
+	update(...items: MnemonicItem[]) {
+		for (const item of items) {
+			item.updated = new Date();
+			this._items.set(item.id, item);
+		}
+	}
+
+	/**
+	 * Removes one or more items based on their id.
+	 */
+	remove(...items: MnemonicItem[]) {
+		for (const item of items) {
+			this._items.delete(item.id);
+		}
+	}
+
+	/**
+	 * Merges in changes from another [[UserItemCollection]] instance.
+	 */
+	merge(coll: MnemonicItemCollection) {
+		// Delete any items from this collection that don't
+		// exist in the other collection and haven't been changed recently
+		for (const item of this) {
+			if (!coll.get(item.id)) {
+				this._items.delete(item.id);
+			}
+		}
+
+		// Get changes items from other collection (but only if they haven't recently changed locally)
+		for (const item of coll) {
+			this._items.set(item.id, item);
+		}
+	}
+
+	protected _toRaw(version: string) {
+		return {
+			items: Array.from(this).map((item) => item.toRaw(version))
+		};
+	}
+
+	protected _fromRaw({ items }: any) {
+		this._items = new Map(
+			items.map(
+				(item: any) =>
+					[item.id, new MnemonicItem().fromRaw(item)] as [string, MnemonicItem]
+			)
+		);
+	}
+
+	[Symbol.iterator]() {
+		return this._items.values();
+	}
+}
+
+export class UserItem extends Serializable {
+	constructor(vals: Partial<UserItem> = {}) {
+		super();
+		Object.assign(this, vals);
+	}
+
+	id: UserItemID = ''; //did
+
+	//mnemonic = '';
 
 	/** icon to be displayed for this item */
 	name = ''; // terminus name
@@ -72,11 +167,7 @@ export class UserItem extends Serializable {
 			return 'https://' + this.local_url + array[0] + '.' + array[1] + '';
 		} else {
 			return (
-				'https://' +
-				this.local_url +
-				array[0] +
-				'.' +
-				TerminusDefaultDomain
+				'https://' + this.local_url + array[0] + '.' + TerminusDefaultDomain
 			);
 		}
 	}
@@ -107,14 +198,7 @@ export class UserItem extends Serializable {
 	get auth_url() {
 		const array: string[] = this.name.split('@');
 		if (array.length == 2) {
-			return (
-				'https://auth.' +
-				this.local_url +
-				array[0] +
-				'.' +
-				array[1] +
-				'/'
-			);
+			return 'https://auth.' + this.local_url + array[0] + '.' + array[1] + '/';
 		} else {
 			return (
 				'https://auth.' +
@@ -210,10 +294,7 @@ export class UserItemCollection
 		this._items = new Map(
 			items.map(
 				(item: any) =>
-					[item.id, new UserItem().fromRaw(item)] as [
-						string,
-						UserItem
-					]
+					[item.id, new UserItem().fromRaw(item)] as [string, UserItem]
 			)
 		);
 	}
@@ -246,6 +327,9 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	@AsDate()
 	updated = new Date(0);
 
+	@Exclude()
+	mnemonics = new MnemonicItemCollection();
+
 	/**
 	 * A collection [[UserItem]]s representing the senstive data store in this vault
 	 *
@@ -254,7 +338,6 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	 * **IMPORTANT**: This property is considered **secret**
 	 * and should never stored or transmitted in plain text
 	 */
-	@Exclude()
 	items = new UserItemCollection();
 
 	// @Exclude()
@@ -274,7 +357,7 @@ export class LocalUserVault extends PBES2Container implements Storable {
 		}
 		await this._deriveAndSetKey(password);
 		// await this._commitSecrets();
-		await this.setData(this.items.toBytes());
+		await this.setData(this.mnemonics.toBytes());
 		this.updated = new Date();
 	}
 
@@ -285,12 +368,12 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	 */
 	async unlock(password: string) {
 		await super.unlock(password);
-		this.items.fromBytes(await this.getData());
+		this.mnemonics.fromBytes(await this.getData());
 	}
 
 	async lock() {
 		await super.lock();
-		this.items = new UserItemCollection();
+		this.mnemonics = new MnemonicItemCollection();
 	}
 
 	get locked() {

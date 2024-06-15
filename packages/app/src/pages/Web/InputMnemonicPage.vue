@@ -57,6 +57,7 @@ const userStore = useUserStore();
 async function onConfirm() {
 	btnStatusRef.value = ConfirmButtonStatus.disable;
 	$q.loading.show();
+
 	try {
 		await importUser(userStore.terminusInfo().terminusName, mnemonic.value);
 	} catch (e) {
@@ -67,8 +68,9 @@ async function onConfirm() {
 	}
 
 	const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+
 	try {
-		await connectTerminus(user, '');
+		await connectTerminus(user, mnemonic.value, '');
 		router.push({ path: '/items' });
 	} catch (e) {
 		notifyFailed(e.message);

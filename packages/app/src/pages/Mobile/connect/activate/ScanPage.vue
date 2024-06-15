@@ -43,7 +43,7 @@ import { getNativeAppPlatform } from '../../../../platform/capacitor/capacitorPl
 import { useI18n } from 'vue-i18n';
 import { WizardInfo } from './wizard';
 import { userBindTerminus } from '../BindTerminusBusiness';
-import { base64ToString, UserItem } from '@didvault/sdk/src/core';
+import { base64ToString, UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
 const $q = useQuasar();
 const userStore = useUserStore();
@@ -207,8 +207,11 @@ const resoleScanResult = async (result: string, failCallBack?: any) => {
 		$q.loading.show();
 
 		const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+		const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+			userStore.current_id!
+		)!;
 
-		await userBindTerminus(user, obj.url, obj.password!, {
+		await userBindTerminus(user, mnemonic, obj.url, obj.password!, {
 			async onSuccess() {
 				const new_user: UserItem = userStore.users!.items.get(
 					userStore.current_id!

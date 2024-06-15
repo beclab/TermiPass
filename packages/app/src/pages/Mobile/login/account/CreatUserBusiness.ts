@@ -58,7 +58,7 @@ export async function createUser() {
 		if (user) {
 			await userStore.setCurrentID(user.id);
 			await app.load(user.id, getAppPlatform().reconfigAppStateDefaultValue);
-			await app.new(user.id, user.mnemonic);
+			await app.new(user.id, mnemonic);
 		}
 		return { data: userStore.current_id };
 	} catch (e) {
