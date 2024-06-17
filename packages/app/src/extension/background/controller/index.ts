@@ -10,6 +10,7 @@ import { providerBackground } from '../utils';
 import storage from '../../provider/storage/storage';
 import { getActiveTab } from '../../utils';
 import { browser } from 'webextension-polyfill-ts';
+import { busEmit } from 'src/utils/bus';
 
 export class Controller {
 	/**
@@ -46,7 +47,7 @@ export class Controller {
 	 */
 
 	sendUnlocked = (data: string) => {
-		getExtensionBackgroundPlatform().dataCenter.decryptPassword(data);
+		getExtensionBackgroundPlatform().dataCenter.unlock(data);
 		providerBackground.setUnlock(true);
 	};
 
@@ -155,6 +156,10 @@ export class Controller {
 			url: activeTab.url,
 			type: 'toggle-slider'
 		});
+	};
+
+	autofillById = async (id: string) => {
+		busEmit('autofillById', id);
 	};
 }
 

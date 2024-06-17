@@ -4247,7 +4247,7 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 	position: fixed !important;
-	z-index: 6000;
+	z-index: 70001;
 }
 
 #terminus-app-root .q-menu--square {
@@ -11418,7 +11418,7 @@
 }
 
 #terminus-app-root .z-fullscreen {
-	z-index: 6000;
+	z-index: 70001;
 }
 
 #terminus-app-root .z-inherit {
@@ -13661,7 +13661,7 @@
 	border-radius: 0 !important;
 	max-height: 100vh;
 	max-width: 100vw;
-	z-index: 6000;
+	z-index: 70001;
 }
 
 #terminus-app-root body.q-ios-padding .fullscreen {

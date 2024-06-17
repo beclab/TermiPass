@@ -1,13 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import PortMessage from '../../utils/message/portMessage';
 import { busEmit } from 'src/utils/bus';
-import {
-	Bookmarks,
-	browser,
-	Menus,
-	Runtime,
-	Tabs
-} from 'webextension-polyfill-ts';
+import { browser, Menus, Runtime, Tabs } from 'webextension-polyfill-ts';
 import provider from '../provider';
 import { getOriginFromUrl } from '../utils';
 import {
@@ -21,11 +15,14 @@ import {
 } from '../../interface/updateBadgeInterface';
 import { getExtensionBackgroundPlatform } from '../../background/extensionBackgroundPlatform';
 import { BrowserInterface } from '../../interface/browserInterface';
-import OnRemovedRemoveInfoType = Bookmarks.OnRemovedRemoveInfoType;
+import OnRemovedRemoveInfoType = Tabs.OnRemovedRemoveInfoType;
+import { ExtensionMessageMode } from '../../interface/message';
 
 export class ProviderBackground
 	implements UpdateBadgeInterface, BrowserInterface
 {
+	messageModule: ExtensionMessageMode = 'provider';
+
 	async init() {
 		await permissionService.init();
 	}
@@ -93,6 +90,10 @@ export class ProviderBackground
 	tabsOnRemoved(_tabId: number, _removeInfo: OnRemovedRemoveInfoType) {
 		//Do Nothing
 	}
+
+	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {}
+
+	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {}
 }
 
 export default new ProviderBackground();

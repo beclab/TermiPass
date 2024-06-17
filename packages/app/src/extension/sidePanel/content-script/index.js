@@ -79,9 +79,28 @@ const createSearch = (bridge) => {
 	browser.runtime.onMessage.addListener(async (msg) => {
 		if (msg.type === 'toggle-slider') {
 			bridge.send('webos.app.status', {
-				asideChange: Math.random()
+				asideChange: Math.random(),
+				show: msg.show != undefined ? msg.show : undefined
 			});
+			return false;
 		}
+		if (msg.type == 'frontAddNewVaultItem') {
+			if (!msg.direct) {
+				await bridge.send('webos.app.status', {
+					asideChange: Math.random(),
+					show: true
+				});
+			}
+
+			bridge.send('frontAddNewVaultItem', {
+				url: msg.url,
+				username: msg.username,
+				password: msg.password,
+				direct: msg.direct ? msg.direct : false
+			});
+			return false;
+		}
+		return false;
 	});
 };
 

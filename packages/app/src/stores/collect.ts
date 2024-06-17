@@ -96,9 +96,6 @@ export const useCollectStore = defineStore('collect', {
 				}
 				this.rssList.push(data);
 			}
-			console.log(this.pagesList);
-			console.log(this.rssList);
-			console.log(this.pdfList);
 		},
 		async addFeed(item: RssInfo) {
 			try {

@@ -503,6 +503,7 @@ import ScanComponent from '../../components/common/ScanComponent.vue';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
 import { NotifyDefinedType } from '@bytetrade/ui';
+import { bexVaultUpdate } from 'src/utils/bexFront';
 
 export default defineComponent({
 	name: 'ItemView',
@@ -695,12 +696,13 @@ export default defineComponent({
 			clearChanges();
 		}
 
-		const clearChanges = () => {
+		const clearChanges = async () => {
 			if (props.isNew) {
 				Router.push({
 					path: '/items/'
 				});
-				app.deleteItems([item.value!]);
+				await app.deleteItems([item.value!]);
+				bexVaultUpdate();
 			}
 		};
 
@@ -712,7 +714,8 @@ export default defineComponent({
 					content: t('delete_vault_message')
 				}
 			}).onOk(async () => {
-				app.deleteItems([item.value!]);
+				await app.deleteItems([item.value!]);
+				bexVaultUpdate();
 				editing_t1.value = false;
 				Router.push({
 					path: '/items/'
@@ -720,7 +723,7 @@ export default defineComponent({
 			});
 		}
 
-		function onSave() {
+		async function onSave() {
 			if (!name.value) {
 				notifyFailed(t('vault_t.item_name_is_null'));
 				return;
@@ -736,7 +739,7 @@ export default defineComponent({
 			isEditExpir.value = false;
 			meunStore.isEdit = false;
 
-			app.updateItem(item.value!, {
+			await app.updateItem(item.value!, {
 				name: name.value,
 				fields: fieldsForm.value,
 				tags: [...tags.value],
@@ -747,6 +750,7 @@ export default defineComponent({
 			});
 
 			refreshItem(props.itemID);
+			bexVaultUpdate();
 
 			auditVaults([vault.value!], {
 				updateOnlyItemWithId: item.value!.id
