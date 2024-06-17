@@ -11,8 +11,10 @@ import { useSeahubStore } from '../stores/seahub';
 import { formatAppDataNode } from '../utils/appdata';
 import { seahubGetRepos } from './sync';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
+import { axiosInstanceProxy } from '../platform/httpProxy';
+import { useUserStore } from 'src/stores/user';
 
-import axios from 'axios';
+// import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function fetch(url, loading, curItem) {
@@ -475,6 +477,9 @@ export async function uploadPost(
 
 	const fileChunkList = await createFileChunk(fileInfo, content);
 
+	console.log('fileChunkList ===>');
+	console.log(fileChunkList);
+
 	const exportProgress = (e) => {
 		if (typeof onupload === 'function') {
 			onupload(e);
@@ -534,12 +539,15 @@ export async function uploadChunks(
 	exportProgress,
 	node
 ) {
+	console.log('uploadChunks ===>');
+	console.log(fileInfo);
 	const store = useDataStore();
 	const baseURL = store.baseURL();
 
 	return new Promise(async (resolve, reject) => {
 		let request = new XMLHttpRequest();
 		let params = new FormData();
+		console.log('uploadChunks ===> 1');
 		const offset = fileInfo.offset + SIZE * i;
 
 		params.append('file', chunkFile.file);
@@ -548,10 +556,16 @@ export async function uploadChunks(
 		if (node) {
 			request.setRequestHeader('X-Terminus-Node', node);
 		}
+		const userStore = useUserStore();
+		const user = userStore.users.items.get(userStore.current_id);
+		if (user && user.access_token) {
+			request.setRequestHeader('X-Authorization', user.access_token);
+		}
 
 		request.timeout = 600000;
 		request.onload = () => {
 			if (request.status === 200) {
+				console.log(JSON.parse(request.responseText));
 				resolve(JSON.parse(request.responseText));
 			} else if (request.status === 409) {
 				reject(request.status);
@@ -594,6 +608,7 @@ export async function createFileChunk(fileInfo, file, size = SIZE) {
 }
 
 export async function getUploadInfo(url, prefix, content = '') {
+	console.log('getUploadInfo ===>');
 	const store = useDataStore();
 	const baseURL = store.baseURL();
 	const appendUrl = splitUrl(url, content);
@@ -603,8 +618,14 @@ export async function getUploadInfo(url, prefix, content = '') {
 	params.append('file_type', content.type);
 	params.append('file_size', content.size);
 
-	const res = await axios.post(baseURL + '/upload', params);
-	return res;
+	const instance = axiosInstanceProxy({
+		baseURL: baseURL,
+		timeout: 10000,
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+	});
+
+	const res = await instance.post(baseURL + '/upload', params);
+	return res.data.data;
 }
 
 const splitUrl = (url, content) => {

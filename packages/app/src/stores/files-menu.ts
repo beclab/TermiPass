@@ -155,7 +155,10 @@ export const useMenuStore = defineStore('filesMenu', {
 		},
 
 		fifterMenu() {
-			if (process.env.PLATFORM === 'DESKTOP') {
+			if (
+				process.env.PLATFORM === 'DESKTOP' ||
+				process.env.PLATFORM === 'MOBILE'
+			) {
 				const menus = JSON.parse(JSON.stringify(this.menu));
 				const newMenus: any = [];
 				for (let i = 0; i < menus.length; i++) {
