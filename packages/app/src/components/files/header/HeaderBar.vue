@@ -9,7 +9,7 @@
 		<div
 			id="dropdown"
 			:class="{ active: store.show === 'more' }"
-			class="q-pr-xs"
+			class="q-pr-md"
 		>
 			<slot name="actions" />
 		</div>

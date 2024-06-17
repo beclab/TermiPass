@@ -39,8 +39,8 @@
 						class="q-ml-sm"
 						:class="
 							$q.platform.is.mobile
-								? 'mobile-title text-subtitle1 text-color-title'
-								: ''
+								? 'mobile-title text-subtitle2 text-ink-1'
+								: 'text-ink-1 text-subtitle2'
 						"
 					>
 						{{ heading.title }}
@@ -63,6 +63,7 @@
 						v-if="!isBex"
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_checklist"
+						text-color="ink-2"
 						@click="() => (filterShowing = 'checkbox')"
 					>
 						<q-tooltip>{{ t('select') }}</q-tooltip>
@@ -71,6 +72,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_add"
+						text-color="ink-2"
 						@click="onCreate"
 					>
 						<q-tooltip>{{ t('create') }}</q-tooltip>
@@ -79,6 +81,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border q-mr-md"
 						icon="sym_r_search"
+						text-color="ink-2"
 						@click="() => (filterShowing = 'search')"
 					>
 						<q-tooltip>{{ t('search') }}</q-tooltip>
@@ -97,6 +100,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_chevron_left"
+						text-color="ink-2"
 						@click="() => (filterShowing = 'default')"
 					>
 						<q-tooltip>{{ t('return') }}</q-tooltip>
@@ -105,6 +109,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_done_all"
+						text-color="ink-2"
 						@click="toggleCheckbox"
 					>
 						<q-tooltip>{{ t('toggle') }}</q-tooltip>
@@ -123,6 +128,7 @@
 							v-if="checkBoxArr.length > 0"
 							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_low_priority"
+							text-color="ink-2"
 							@click="moveItems"
 						>
 							<q-tooltip>{{ t('move_to') }}</q-tooltip>
@@ -132,6 +138,7 @@
 							v-else
 							class="text-grey-6 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_low_priority"
+							text-color="ink-2"
 							disabled
 						>
 							<q-tooltip>{{ t('move_to') }}</q-tooltip>
@@ -143,6 +150,7 @@
 							v-if="checkBoxArr.length > 0"
 							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_delete"
+							text-color="ink-2"
 							@click="removeItem"
 						>
 							<q-tooltip>{{ t('delete') }}</q-tooltip>
@@ -151,6 +159,7 @@
 							v-else
 							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_delete"
+							text-color="ink-2"
 							disabled
 						>
 							<q-tooltip>{{ t('delete') }}</q-tooltip>
@@ -212,24 +221,26 @@
 											:val="item.item.id"
 											size="30px"
 											v-if="filterShowing === 'checkbox'"
+											color="ink-1"
 										/>
 										<q-icon
 											v-else
 											:class="item.class"
 											:name="showItemIcon(item.item.icon)"
 											size="24px"
+											color="ink-1"
 										/>
 										<div class="item-name q-ml-sm">
-											<div class="label text-body3 text-grey-8">
+											<div class="label text-body3 text-ink-3">
 												{{ item.vault.name }}
 											</div>
-											<div class="name text-subtitle2">
+											<div class="name text-subtitle2 text-ink-1">
 												{{ item.item.name ? item.item.name : t('new_item') }}
 											</div>
 										</div>
 									</div>
 									<div
-										class="tag-wrap"
+										class="tag-wrap text-ink-2"
 										:style="{
 											width: `${showTags(item.item).tagWidth}px`
 										}"
@@ -240,9 +251,11 @@
 											:key="index"
 										>
 											<q-icon :name="tag.icon" />
-											<span class="q-ml-xs tag-name" v-if="tag.name">{{
-												tag.name
-											}}</span>
+											<span
+												class="q-ml-xs tag-name text-overline"
+												v-if="tag.name"
+												>{{ tag.name }}</span
+											>
 										</div>
 									</div>
 								</q-card-section>
@@ -275,7 +288,7 @@
 											class="item-unit cursor-pointer q-px-sm q-py-xs"
 											:key="`f` + index2"
 										>
-											<div class="text-blue-4 item-header">
+											<div class="text-light-blue-default item-header">
 												<q-icon :name="filed.icon" size="20px" />
 												<span class="text-caption text-body1 q-ml-xs">
 													{{ filed.name }}
@@ -283,7 +296,7 @@
 											</div>
 											<div
 												v-if="filed.value"
-												class="text-grey-9 text-left item-unit-content q-ml-xs"
+												class="text-ink-2 text-left item-unit-content q-ml-xs"
 											>
 												<span v-if="filed.type === 'totp'">
 													<Totp :secret="filed.value" ref="myTotps" />
@@ -296,7 +309,7 @@
 												[{{ t('empty') }}]
 											</div>
 											<div
-												class="hideCopied text-body3"
+												class="hideCopied text-body3 text-ink-1"
 												v-if="filed.value"
 												@click="copyItem(filed, $event)"
 											>
@@ -314,7 +327,7 @@
 											class="item-unit cursor-pointer q-px-sm q-py-xs"
 											:key="`f` + index2"
 										>
-											<div class="text-blue-4 item-header">
+											<div class="text-light-blue-default item-header">
 												<q-icon name="sym_r_attach_file" size="20px" />
 												<span class="text-caption text-body1 q-ml-xs">
 													{{ filed.name }}
@@ -373,11 +386,11 @@
 				v-else
 			>
 				<img src="../../assets/layout/nodata.svg" />
-				<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+				<span class="q-mb-md text-ink-2" style="margin-top: 32px">
 					{{ t('vault_t.this_vault_don_not_have_any_items_yet') }}
 				</span>
 				<div
-					class="newVault cursor-pointer q-px-md q-py-sm row items-center justify-center"
+					class="newVault cursor-pointer q-px-md q-py-sm row items-center justify-center text-ink-2"
 					@click="onCreate"
 				>
 					<q-icon class="q-mr-sm" name="add" />
@@ -1156,6 +1169,7 @@ export default defineComponent({
 .itemlist {
 	width: 100%;
 	height: 100%;
+	border-right: 1px solid $separator;
 
 	.searchWrap {
 		width: 100%;
@@ -1237,8 +1251,7 @@ export default defineComponent({
 			left: 0;
 			top: 0;
 			opacity: 0;
-			border-radius: 5px;
-			color: $grey-10;
+			border-radius: 8px;
 
 			display: flex;
 			align-items: center;
@@ -1249,13 +1262,13 @@ export default defineComponent({
 
 		.copied {
 			opacity: 1;
-			border: 1px solid $yellow;
-			background: $grey-1;
+			border: 1px solid $yellow-default;
+			background: $background-1;
 
 			&:after {
 				width: 100%;
 				height: 100%;
-				background: rgba(255, 235, 59, 0.1);
+				background: $yellow-alpha;
 				content: '';
 				position: absolute;
 				top: 0;
@@ -1267,7 +1280,6 @@ export default defineComponent({
 
 	.vaultCard {
 		border: 0;
-		border-radius: 0;
 		box-sizing: border-box;
 		position: relative;
 		padding: 12px 12px 0px 12px;
@@ -1278,12 +1290,12 @@ export default defineComponent({
 			justify-content: flex-end;
 
 			.tag {
-				border: 1px solid $grey-8;
+				border: 1px solid $ink-2;
 				padding: 0 4px;
 				border-radius: 4px;
 				float: right;
-				height: 26px;
-				line-height: 26px;
+				height: 20px;
+				line-height: 20px;
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
@@ -1327,11 +1339,11 @@ export default defineComponent({
 			bottom: 18px;
 			margin: auto;
 			z-index: 1;
-			color: $grey-13;
+			color: $ink-2;
 			cursor: pointer;
 
 			&:hover {
-				color: $grey-10;
+				color: $ink-1;
 			}
 		}
 
@@ -1342,22 +1354,21 @@ export default defineComponent({
 			bottom: 18px;
 			margin: auto;
 			z-index: 1;
-			color: $grey-13;
+			color: $ink-2;
 			cursor: pointer;
 
 			&:hover {
-				color: $grey-10;
+				color: $ink-1;
 			}
 		}
 	}
 
 	.newVault {
-		border: 1px solid $yellow;
-		background-color: rgba(255, 235, 59, 0.1);
 		border-radius: 8px;
+		border: 1px solid $yellow-default;
 
 		&:hover {
-			background: rgba(255, 235, 59, 0.3);
+			background: $background-hover;
 		}
 	}
 

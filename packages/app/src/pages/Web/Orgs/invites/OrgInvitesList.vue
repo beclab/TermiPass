@@ -1,79 +1,79 @@
 <template>
-	<div
-		class="row justify-between items-center bg-white"
-		style="width: 100%; height: 60px"
-	>
-		<div class="row justify-between items-center">
-			<div class="row items-center q-pl-md">
-				<q-icon
-					v-if="isMobile"
-					name="sym_r_chevron_left"
-					size="24px"
-					@click="goBack"
-				/>
-				<q-icon :name="heading.icon" size="24px" />
+	<div class="invites-list">
+		<div
+			class="row justify-between items-center"
+			style="width: 100%; height: 60px"
+		>
+			<div class="row justify-between items-center">
+				<div class="row items-center q-pl-md">
+					<q-icon
+						v-if="isMobile"
+						name="sym_r_chevron_left"
+						color="ink-1"
+						size="24px"
+						@click="goBack"
+					/>
+					<q-icon :name="heading.icon" color="ink-1" size="24px" />
 
-				<div class="column q-pl-md" v-if="!isMobile">
-					<div class="text-grey-8 text-caption">
+					<div class="column q-pl-md" v-if="!isMobile">
+						<div class="text-ink-3 text-overline">{{ org?.name }}11</div>
+						<div class="text-subtitle2 text-ink-1 text-weight-bold">
+							{{ heading.title }}
+						</div>
+					</div>
+				</div>
+
+				<div class="column" v-if="isMobile">
+					<div class="text-ink-3 text-overline">
 						{{ org?.name }}
 					</div>
-					<div class="text-body2 text-weight-bold">
+					<div class="text-subtitle2 text-ink-1 text-weight-bold">
 						{{ heading.title }}
 					</div>
 				</div>
 			</div>
+		</div>
 
-			<div class="column" v-if="isMobile">
-				<div class="text-grey-8 text-caption">
-					{{ org?.name }}
-				</div>
-				<div class="text-body2 text-weight-bold">
-					{{ heading.title }}
-				</div>
+		<q-list style="width: 100%; height: calc(100% - 60px); overflow: hidden">
+			<q-scroll-area
+				v-if="itemList.length > 0"
+				style="height: 100%"
+				:thumb-style="scrollBarStyle.thumbStyle"
+			>
+				<template v-for="(item, index) in itemList" :key="index">
+					<div class="card-wrap full-width">
+						<q-card
+							clickable
+							v-ripple
+							@click="selectItem(item as Invite)"
+							:active="isSelected(item as Invite)"
+							active-class="text-blue"
+							flat
+							class="vaultsCard row items-center justify-start q-my-sm q-pa-md"
+							:class="isSelected(item as Invite) ? 'vaultCardActive' : ''"
+						>
+							<q-card-section
+								class="row items-center justify-between q-pa-none"
+							>
+								<OrgInviteItem :invite="(item as Invite)" />
+								<q-separator v-if="index < itemList.length - 1" />
+							</q-card-section>
+						</q-card>
+					</div>
+				</template>
+			</q-scroll-area>
+
+			<div
+				class="column text-color-sub-title items-center justify-center full-height"
+				v-else
+			>
+				<img src="../../../../assets/layout/nodata.svg" />
+				<span style="margin-top: 32px; margin-bottom: 70px; color: $grey-8">
+					{{ t('do_not_have_any_invitees_yet') }}
+				</span>
 			</div>
-		</div>
+		</q-list>
 	</div>
-
-	<q-list
-		class="bg-white"
-		style="width: 100%; height: calc(100% - 60px); overflow: hidden"
-	>
-		<q-scroll-area
-			v-if="itemList.length > 0"
-			style="height: 100%"
-			:thumb-style="scrollBarStyle.thumbStyle"
-		>
-			<template v-for="(item, index) in itemList" :key="index">
-				<div class="card-wrap full-width">
-					<q-card
-						clickable
-						v-ripple
-						@click="selectItem(item as Invite)"
-						:active="isSelected(item as Invite)"
-						active-class="text-blue"
-						flat
-						class="vaultsCard row items-center justify-start q-my-sm q-pa-md"
-						:class="isSelected(item as Invite) ? 'vaultCardActive' : ''"
-					>
-						<q-card-section class="row items-center justify-between q-pa-none">
-							<OrgInviteItem :invite="(item as Invite)" />
-							<q-separator v-if="index < itemList.length - 1" />
-						</q-card-section>
-					</q-card>
-				</div>
-			</template>
-		</q-scroll-area>
-
-		<div
-			class="column text-color-sub-title items-center justify-center full-height"
-			v-else
-		>
-			<img src="../../../../assets/layout/nodata.svg" />
-			<span style="margin-top: 32px; margin-bottom: 70px; color: $grey-8">
-				{{ t('do_not_have_any_invitees_yet') }}
-			</span>
-		</div>
-	</q-list>
 </template>
 
 <script lang="ts">
@@ -180,6 +180,10 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+.invites-list {
+	height: 100vh;
+	border-right: 1px solid $separator;
+}
 .searchWrap {
 	height: 56px;
 	line-height: 56px;
@@ -225,7 +229,7 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: 1px solid $separator;
 
 	.vaultsCard {
 		width: 90%;
@@ -237,7 +241,7 @@ export default defineComponent({
 		cursor: pointer;
 
 		&:hover {
-			background: $grey-1;
+			background: $background-hover;
 		}
 	}
 }

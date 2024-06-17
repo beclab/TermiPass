@@ -2,141 +2,73 @@
 
 /************************************************************************ 颜色 ********************************************************************/
 
-body.body--dark {
-	.itemlist {
-		background-color: #23242a;
 
-		.vaultCard {
-			&:hover {
-				background: #323741;
-			}
-		}
+// Light Mode
+.itemlist {
 
-		.vaultCardActive {
-			background: #323741;
+	.vaultCard {
+		border-radius: 12px;
+		margin: 16px;
+
+		&:hover {
+			background: $background-hover;
 		}
 	}
 
-	.itemView {
-		.hearder-input {
-			.text {
-				color: #ffffff;
-			}
-		}
+	.vaultCardActive {
+		background: $background-selected;
+	}
+}
 
-		.tagSelect {
-			.tagChip {
-				background-color: #23242a;
-				border: 1px solid #ffffff;
-			}
-		}
-
-		.listRow {
-			border-bottom: 1px solid #323741;
-		}
-
-		.footer {
-			background: #323741;
-			box-shadow: 0px -2px 4px rgba(17, 17, 18, 0.35);
-
-			.reset {
-				color: #9298a8;
-				background: #23242a;
-			}
+.itemView {
+	.hearder-input {
+		.text {
+			color: #212322;
 		}
 	}
 
-	.d-creatVault {
-		.item {
-			border: 1px solid #7c7c7c;
-		}
-
-		.activeItem {
-			border: 1px solid $blue;
-		}
-
-		.but-cancel {
-			background: #23242a;
-			color: #9298a8;
+	.tagSelect {
+		.tagChip {
+			border: 1px solid #212322;
 		}
 	}
 
-	.filedMenu {
-		background: #000000;
+	.listRow {
+		border-bottom: 1px solid $separator;
+	}
 
-		.menuItem {
-			border-bottom: 0.5px solid #ececec;
+	.footer {
+
+		.reset {
+			background: #ffffff;
+			color: #4d4742;
 		}
 	}
 }
 
-// Light Mode
-body.body--light {
-	.itemlist {
-		background-color: #ffffff;
-
-		.vaultCard {
-			border-radius: 12px;
-			margin: 16px;
-			&:hover {
-				background: $grey-1;
-			}
-		}
-
-		.vaultCardActive {
-			background: $grey-1;
-		}
+.d-creatVault {
+	.item {
+		border: 1px solid #ececec;
 	}
 
-	.itemView {
-		.hearder-input {
-			.text {
-				color: #212322;
-			}
-		}
-
-		.tagSelect {
-			.tagChip {
-				border: 1px solid #212322;
-			}
-		}
-
-		.listRow {
-			border-bottom: 1px solid #ececec;
-		}
-
-		.footer {
-			background-color: #ffffff;
-
-			.reset {
-				background: #ffffff;
-				color: #4d4742;
-			}
-		}
+	.activeItem {
+		border: 1px solid $blue;
+		background-color: rgba(255, 235, 59, 0.1);
 	}
 
-	.d-creatVault {
-		.item {
-			border: 1px solid #ececec;
-		}
-
-		.activeItem {
-			border: 1px solid $blue;
-			background-color: rgba(255, 235, 59, 0.1);
-		}
-
-		.but-cancel {
-			background: $grey-11;
-			color: #7a7a7a;
-		}
+	.but-cancel {
+		background: $grey-11;
+		color: #7a7a7a;
 	}
+}
 
-	.filedMenu {
-		background: #f9f9f9;
+.filedMenu {
 
-		.menuItem {
-			border-bottom: 0.5px solid #ececec;
-		}
+	.menuItem {
+		height: 32px;
+		padding: 0 4px;
+		border-radius: 4px;
+		margin: 2px 0;
 	}
 }
 
@@ -146,7 +78,7 @@ body.body--light {
 }
 
 .border-color-yellow {
-	border-color: $yellow !important;
+	border-color: $yellow  !important;
 }
 
 .text-color-title {
@@ -168,6 +100,7 @@ body.body--light {
 .text-color-white {
 	color: #ffffff;
 }
+
 .bg-color-white {
 	background-color: #ffffff;
 }
@@ -197,6 +130,7 @@ body.body--light {
 
 .bg-blue-1-hover {
 	border-left: 2px solid $blue-1;
+
 	&:hover {
 		border-left: 2px solid $blue-1;
 		background-color: $blue-1;

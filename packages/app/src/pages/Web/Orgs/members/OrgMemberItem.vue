@@ -8,17 +8,17 @@
 				/>
 			</div>
 			<div class="column justify-between">
-				<div class="did text-subtitle2">{{ member.name }}</div>
+				<div class="did text-body text-ink-1">{{ member.name }}</div>
 				<div>
 					<!-- TODO: snowning.com error-->
-					<span>@{{ userStore.getCurrentDomain() }}</span>
+					<span class="text-ink-2">@{{ userStore.getCurrentDomain() }}</span>
 					<span
-						class="tag text-3ubtitle3 owner"
+						class="tag text-subtitle3 owner"
 						v-if="member.role === OrgRole.Owner"
 						>{{ t('owner') }}</span
 					>
 					<span
-						class="tag text-3ubtitle3 admin"
+						class="tag text-subtitle3 admin"
 						v-if="member.role === OrgRole.Admin"
 						>{{ t('admin') }}</span
 					>
@@ -98,7 +98,6 @@ export default defineComponent({
 		}
 		.did {
 			width: 90%;
-			color: $title;
 		}
 		.tag {
 			padding: 0 4px;

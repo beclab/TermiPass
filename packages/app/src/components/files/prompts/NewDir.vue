@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" v-model="show" ref="dialogRef">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				:label="t('prompts.newDir')"
 				titAlign="text-left"
@@ -8,9 +8,9 @@
 			/>
 
 			<div class="card-content">
-				<p>{{ t('prompts.newFileMessage') }}</p>
+				<p class="text-ink-3">{{ t('prompts.newFileMessage') }}</p>
 				<input
-					class="input input--block"
+					class="input input--block text-ink-1"
 					v-focus
 					ref="inputRef"
 					type="text"
@@ -119,8 +119,10 @@ nextTick(() => {
 			padding: 0 20px;
 			.input {
 				border-radius: 5px;
+				border: 1px solid $input-stroke;
+				background-color: transparent;
 				&:focus {
-					border: 1px solid $blue;
+					border: 1px solid $yellow-disabled;
 				}
 			}
 		}

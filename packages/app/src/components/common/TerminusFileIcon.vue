@@ -17,8 +17,9 @@
 		<img
 			v-else-if="isDir || !type || type === 'folder'"
 			:src="folderIcon(name)"
+			style="width: 32px; height: 32px"
 		/>
-		<img v-else :src="fileIcon(name)" />
+		<img v-else :src="fileIcon(name)" style="width: 32px; height: 32px" />
 	</div>
 </template>
 

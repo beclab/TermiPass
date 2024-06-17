@@ -159,7 +159,7 @@ const onConfirm = async () => {
 .terminus-login-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-2;
 
 	.terminus-login-scroll {
 		width: 100%;
@@ -180,13 +180,13 @@ const onConfirm = async () => {
 
 			&__name {
 				text-align: center;
-				color: $title;
+				color: $ink-1;
 				margin-top: 12px;
 			}
 
 			&__desc {
 				text-align: center;
-				color: $sub-title;
+				color: $ink-2;
 			}
 
 			&__edit {

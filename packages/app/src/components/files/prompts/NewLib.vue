@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" v-model="show" ref="dialogRef" @hide="close">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				:label="t('files.new_library')"
 				icon=""
@@ -9,11 +9,11 @@
 			/>
 
 			<div class="card-content">
-				<div class="text-caption text-grey-8 q-mb-xs">
+				<div class="text-body3 text-ink-3 q-mb-xs">
 					{{ t('please_enter_a_library_name') }}
 				</div>
 				<input
-					class="input input--block"
+					class="input input--block text-ink-1"
 					v-focus
 					type="text"
 					v-model.trim="name"
@@ -74,6 +74,7 @@ const close = () => {
 
 <style lang="scss" scoped>
 .card-dialog {
+	box-shadow: none !important;
 	.card-continer {
 		width: 400px;
 		border-radius: 12px;
@@ -82,8 +83,10 @@ const close = () => {
 			padding: 0 20px;
 			.input {
 				border-radius: 5px;
+				border: 1px solid $input-stroke;
+				background-color: transparent;
 				&:focus {
-					border: 1px solid $blue;
+					border: 1px solid $yellow-disabled;
 				}
 			}
 		}

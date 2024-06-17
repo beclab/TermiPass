@@ -4,7 +4,7 @@
 			{{ label }}
 		</div>
 		<div
-			class="terminus-edit__bg row wrap justify-between items-center"
+			class="terminus-edit__bg bg-background-2 row wrap justify-between items-center"
 			:class="
 				isError
 					? 'terminus_background_edt_error'
@@ -112,7 +112,7 @@ const props = defineProps({
 	},
 	inputColor: {
 		type: String,
-		default: '#1F1814',
+		default: '$ink-1',
 		require: false
 	},
 	errorMessage: {
@@ -176,14 +176,12 @@ function changeInputType() {
 
 <style lang="scss" scoped>
 .terminus_background_edt {
-	background: white;
 	backdrop-filter: blur(6.07811px);
 	border-radius: 8px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 }
 
 .terminus_background_edt_error {
-	background: white;
 	backdrop-filter: blur(6.07811px);
 	border-radius: 8px;
 	border: 1px solid $red;
@@ -193,7 +191,7 @@ function changeInputType() {
 	background: linear-gradient(0deg, $grey-1, $grey-1);
 	backdrop-filter: blur(6.07811px);
 	border-radius: 8px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 }
 
 .terminus-edit {

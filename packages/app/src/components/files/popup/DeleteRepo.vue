@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" v-model="showDialog" ref="dialogRef">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				label="Delete"
 				icon=""
@@ -9,13 +9,13 @@
 			/>
 
 			<div
-				class="dialog-desc"
+				class="dialog-desc text-ink-2"
 				:style="{ textAlign: isMobile ? 'center' : 'left' }"
 			>
 				<div>
-					{{ `Are you sure you want to delete ${item.repo_name}?` }}
+					{{ `Are you sure you want to delete ${item?.repo_name}?` }}
 				</div>
-				<div v-if="shared_length > 0" class="text-red">
+				<div v-if="shared_length && shared_length > 0" class="text-red">
 					{{ `This library has been shared to ${shared_length} user(s).` }}
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useDialogPluginComponent } from 'quasar';
+import { useDialogPluginComponent, useQuasar } from 'quasar';
 import { ref } from 'vue';
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -51,6 +51,9 @@ defineProps({
 
 const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
 
+const $q = useQuasar();
+
+const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 const showDialog = ref(true);
 const submitLoading = ref(false);
 

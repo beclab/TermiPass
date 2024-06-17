@@ -1,6 +1,6 @@
 <template>
 	<q-list
-		class="menu-list"
+		class="menu-list text-ink-2 bg-background-2"
 		v-if="visible"
 		:style="{ top: top + 'px', left: left + 'px' }"
 	>
@@ -40,7 +40,6 @@ const props = defineProps({
 });
 
 const Route = useRoute();
-// const Router = useRouter();
 const dataStore = useDataStore();
 const menuStore = useMenuStore();
 
@@ -329,8 +328,6 @@ const handle = (e: any, item: any) => {
 
 <style scoped lang="scss">
 .menu-list {
-	background: $white;
-	box-shadow: 0px 2px 10px $grey-2;
 	border-radius: 10px;
 	cursor: pointer;
 	display: flex;
@@ -340,6 +337,7 @@ const handle = (e: any, item: any) => {
 	padding: 5px 8px;
 	position: fixed;
 	z-index: 10;
+	box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
 
 	.menu-item {
 		width: 100%;
@@ -351,7 +349,7 @@ const handle = (e: any, item: any) => {
 		padding-bottom: 2px !important;
 
 		&:hover {
-			background-color: $grey-1;
+			background-color: $background-hover;
 		}
 	}
 }

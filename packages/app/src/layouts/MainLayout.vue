@@ -4,7 +4,7 @@
 
 		<q-page-container>
 			<q-page
-				class="container"
+				class="container bg-background-1"
 				:class="platform == 'DESKTOP' ? 'desktop-vault' : ''"
 			>
 				<router-view />

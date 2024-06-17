@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="orgItemView text-color-sub-title row items-center justify-center bg-white"
+		class="orgItemView text-ink-1 row items-center justify-center"
 		v-if="isBlank"
 	>
 		<img
@@ -12,7 +12,7 @@
 			{{ t('no_vault_selected') }}
 		</span>
 	</div>
-	<div v-else class="orgItemView bg-white">
+	<div v-else class="orgItemView">
 		<div class="header">
 			<div class="row items-center justify-between q-pa-md">
 				<div :class="['row', 'items-center', 'view-hearder']">
@@ -24,10 +24,11 @@
 							@click="goBack"
 						/>
 						<q-input
+							class="create-valut-input"
 							v-if="editing_t1"
 							v-model="name"
 							dense
-							outlined
+							borderless
 							color="grey-7"
 							ref="nameRef"
 							placeholder="Enter Item Name"
@@ -69,10 +70,10 @@
 				style="height: 100%"
 				:thumb-style="scrollBarStyle.thumbStyle"
 			>
-				<div class="listRow column justify-center">
+				<div class="listRow column justify-center q-mx-md">
 					<div class="header q-pa-md row justify-between">
 						<div class="items-center">
-							<span class="text-color-sub-title text-li-title">
+							<span class="text-ink-1 text-li-title">
 								{{ t('members') }}
 							</span>
 						</div>
@@ -121,7 +122,7 @@
 
 						<template v-else>
 							<div
-								class="listRow q-pa-md row items-center justify-between"
+								class="listRow-content q-pa-md row items-center justify-between"
 								v-for="(member, index) in members"
 								:key="'member' + index"
 							>
@@ -190,7 +191,7 @@
 				no-caps
 				@click="onCancel"
 				unelevated
-				color="grey-7"
+				color="ink-2"
 			/>
 			<q-btn
 				class="confirm text-grey-9"
@@ -609,6 +610,11 @@ export default defineComponent({
 				height: 40px;
 				line-height: 40px;
 			}
+			.create-valut-input {
+				border: 1px solid $input-stroke;
+				padding-left: 10px;
+				border-radius: 8px;
+			}
 		}
 	}
 
@@ -632,7 +638,7 @@ export default defineComponent({
 .footer {
 	width: 100%;
 	padding: 10px 20px;
-	border-top: 1px solid #e0e0e0;
+	border-top: 1px solid $input-stroke;
 	.confirm {
 		width: 48%;
 	}
@@ -642,13 +648,13 @@ export default defineComponent({
 }
 
 .listRow {
-	width: 100%;
-	border-bottom: 1px solid #ececec;
+	border: 1px solid $input-stroke;
 	border-radius: 8px;
+	overflow: hidden;
 	cursor: pointer;
 	.header {
-		background-color: $tooltip-color;
-		border-bottom: 1px solid #ececec;
+		background-color: $background-3;
+		border-bottom: 1px solid $input-stroke;
 	}
 	.rowLeft {
 		display: flex;
@@ -663,7 +669,7 @@ export default defineComponent({
 }
 
 .body1 {
-	.listRow {
+	.listRow-content {
 		.avator {
 			width: 28px;
 			height: 28px;

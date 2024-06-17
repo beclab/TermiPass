@@ -3,14 +3,10 @@
 		show-if-above
 		behavior="desktop"
 		:width="240"
-		:bordered="platform === 'DESKTOP' ? false : true"
 		class="myDrawer"
+		:dark="$q.dark.isActive"
 	>
-		<!-- <BtScrollArea style="height: 100%"> -->
-		<q-scroll-area
-			style="height: 100%; width: 100%"
-			:thumb-style="scrollBarStyle.thumbStyle"
-		>
+		<BtScrollArea style="height: 100%; width: 100%">
 			<bt-menu
 				:items="menuStore.menu"
 				:modelValue="menuStore.activeMenu"
@@ -18,16 +14,13 @@
 				@select="selectHandler"
 				style="width: 100%"
 				class="title-norla"
-				:active-class="
-					platform === 'WEB'
-						? 'files-active-link-web'
-						: 'files-active-link title-active text-subtitle2'
-				"
+				active-class="text-subtitle2 bg-yellow-soft text-ink-1"
 			>
 				<template #extra-MyLibraries>
 					<q-btn
 						class="btn-size-xs btn-no-text btn-no-border text-grey-8"
 						icon="sym_r_add_circle"
+						text-color="ink-2"
 						@click="handleNewLib($event)"
 					>
 						<q-tooltip> {{ t('files.new_library') }}</q-tooltip>
@@ -44,6 +37,7 @@
 							v-if="menuStore.syncStatus"
 							class="btn-size-xs btn-no-text btn-no-border text-grey-5"
 							icon="sym_r_pause_circle"
+							text-color="ink-2"
 							@click="menuStore.updateSyncStatus"
 						>
 							<q-tooltip> {{ t('files.click_to_pause') }}</q-tooltip>
@@ -53,6 +47,7 @@
 							v-if="!menuStore.syncStatus"
 							class="btn-size-xs btn-no-text btn-no-border text-grey-5"
 							icon="sym_r_autoplay"
+							text-color="ink-2"
 							@click="menuStore.updateSyncStatus"
 						>
 							<q-tooltip> {{ t('files.click_to_continue') }}</q-tooltip>
@@ -91,19 +86,20 @@
 					<q-btn
 						class="btn-size-xs btn-no-text btn-no-border text-grey-8"
 						icon="more_horiz"
+						text-color="ink-2"
 					>
 						<q-tooltip>{{ t('files.operate') }}</q-tooltip>
 						<PopupMenu :item="menu" from="sync" :isSide="true" />
 					</q-btn>
 				</template>
 			</bt-menu>
-		</q-scroll-area>
+		</BtScrollArea>
 	</q-drawer>
 </template>
 
 <script lang="ts" setup>
 import { useQuasar } from 'quasar';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDataStore } from '../../stores/data';
 import { syncStatusInfo, useMenuStore } from '../../stores/files-menu';
@@ -111,7 +107,7 @@ import { useSeahubStore } from '../../stores/seahub';
 import { sync } from '../../api';
 import { handleFileOperate } from '../../components/files/files/OperateAction';
 import PopupMenu from '../../components/files/popup/PopupMenu.vue';
-import { scrollBarStyle, OPERATE_ACTION } from '../../utils/contact';
+import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
 
 const $q = useQuasar();
@@ -120,8 +116,6 @@ const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
 const seahubStore = useSeahubStore();
-
-const platform = ref(process.env.PLATFORM);
 
 const { t } = useI18n();
 
@@ -197,23 +191,14 @@ const getSyncStatus = (repo_id: string) => {
 </script>
 
 <style lang="scss">
-.files-active-link {
-	color: rgba(31, 24, 20, 1);
-	background: rgba(255, 235, 59, 0.1);
-}
-.files-active-link-web {
-	color: rgba(100, 96, 93, 1);
-	background: rgba(244, 219, 195, 1);
-}
-
 .myDrawer {
-	background-color: $white;
 	overflow: hidden;
 	padding-top: 6px;
-
-	.title-active {
-		color: $title;
-	}
+	border-right: 1px solid $separator;
+	// border-right: 1px solid red;
+	// .title-active {
+	// 	color: $ink-1;
+	// }
 }
 
 .sync-icon {

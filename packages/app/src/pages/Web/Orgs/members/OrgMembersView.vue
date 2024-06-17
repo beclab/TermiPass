@@ -1,20 +1,20 @@
 <template>
-	<div v-if="member && org" class="orgMemberView bg-white">
+	<div v-if="member && org" class="orgMemberView">
 		<div class="header">
 			<div class="row justify-between q-pa-md">
 				<div :class="['row', 'items-center', 'view-hearder']">
 					<q-icon
 						v-if="isMobile"
 						name="sym_r_chevron_left"
+						color="ink-1"
 						size="24px"
 						@click="goBack"
 					/>
 					<div class="hearder-input column justify-center">
-						<div class="text-body2 text-weight-bold">
+						<div class="text-subtitle2 text-ink-1 text-weight-bold">
 							{{ member.did }}
 						</div>
-						<!-- TODO:  snowning.com error -->
-						<div class="text-caption text-grey-8">
+						<div class="text-overline text-ink-3">
 							@{{ userStore.getCurrentDomain() }}
 						</div>
 					</div>
@@ -26,7 +26,7 @@
 						v-if="isOwner || isAdmin || isSuspended"
 						:class="{
 							owner: isOwner,
-							admin: isAdmin,
+							admin: !isOwner && isAdmin,
 							suspended: isSuspended
 						}"
 					>
@@ -136,14 +136,18 @@
 					<div class="listRow column justify-center">
 						<div class="header q-pa-md row justify-between q-mb-sm">
 							<div class="items-center">
-								<span class="text-color-sub-title text-li-title">
+								<span class="text-ink-2 text-body3 text-li-title">
 									{{ t('vaults') }}
 								</span>
 							</div>
 							<div>
-								<BtIcon src="add" :width="16" :height="16" />
-								<q-menu class="popup-menu" v-if="_availableVaults.length > 0">
-									<q-list dense padding>
+								<q-icon name="sym_r_add" size="20px" color="ink-1" />
+								<q-menu
+									class="popup-menu bg-background-2"
+									flat
+									v-if="_availableVaults.length > 0"
+								>
+									<q-list class="q-py-sm" dense>
 										<template
 											v-for="(vault, index) in _availableVaults"
 											:key="'avn' + index"
@@ -161,15 +165,16 @@
 										</template>
 									</q-list>
 								</q-menu>
-								<q-menu class="popup-menu" v-else>
-									<q-item
-										class="row items-center justify-center"
-										style="width: 140px"
-										clickable
-										v-close-popup
-									>
-										{{ t('no_more_vaults_available') }}
-									</q-item>
+								<q-menu class="popup-menu bg-background-2" flat v-else>
+									<q-list class="q-py-sm" dense style="min-width: 200px">
+										<q-item
+											class="row items-center justify-center text-ink-1 text-body3"
+											clickable
+											v-close-popup
+										>
+											{{ t('no_more_vaults_available') }}
+										</q-item>
+									</q-list>
 								</q-menu>
 							</div>
 						</div>
@@ -263,10 +268,7 @@
 			/>
 		</div>
 	</div>
-	<div
-		class="orgMemberView text-color-sub-title row items-center justify-center bg-white"
-		v-else
-	>
+	<div class="orgMemberView row items-center justify-center" v-else>
 		<BtIcon class="q-mb-lg" src="itemSelect" :width="215" :height="148" />
 		{{ t('no_member_selected') }}
 	</div>
@@ -897,13 +899,14 @@ export default defineComponent({
 
 .listRow {
 	width: 90%;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 8px;
 	margin: 20px auto;
+	overflow: hidden;
 
 	.header {
-		background-color: $tooltip-color;
-		border-bottom: 1px solid $grey-2;
+		background-color: $background-3;
+		border-bottom: 1px solid $separator;
 	}
 
 	.body {
