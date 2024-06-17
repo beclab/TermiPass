@@ -122,7 +122,7 @@ async function getTerminusInfo(baseUrl: string): Promise<TerminusInfo | null> {
 .input-mnemonic-page {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-2;
 	padding-top: 20px;
 	padding-left: 32px;
 	padding-right: 32px;
