@@ -120,7 +120,7 @@
 					class="q-mr-xs"
 					:disabled="sendDisabled"
 				>
-					<q-icon name="sym_o_send" size="20px" />
+					<q-icon name="sym_r_send" size="20px" />
 				</q-btn>
 			</div>
 		</div>

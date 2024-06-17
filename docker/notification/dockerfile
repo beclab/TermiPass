@@ -13,7 +13,6 @@ RUN npm ci --unsafe-perm
 # Now copy over source files and assets
 COPY packages/notification/src ./packages/notification/src
 COPY packages/notification/tsconfig.json ./packages/notification/
-COPY assets/ ./assets
 COPY packages/notification/webpack.config.js ./packages/notification/webpack.config.js
 
 RUN npm run notification:build
