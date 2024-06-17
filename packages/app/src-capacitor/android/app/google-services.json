@@ -102,6 +102,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "343424174381-mgooga4e8764s17ier2uvp64716ujoo8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.terminus.termipass",
+            "certificate_hash": "ced320816fc90636df7f557cf73d78d76e93cf3d"
+          }
+        },
+        {
           "client_id": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -137,6 +145,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "343424174381-oog3ga0nfqpu6d7ib5ttuqgt8fp1pd44.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.terminus.termipass.debug",
+            "certificate_hash": "ced320816fc90636df7f557cf73d78d76e93cf3d"
+          }
+        },
         {
           "client_id": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
           "client_type": 3
