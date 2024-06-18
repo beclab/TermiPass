@@ -41,7 +41,7 @@ import ConfirmButton from '../../components/common/ConfirmButton.vue';
 import '../../css/terminus.scss';
 import { useI18n } from 'vue-i18n';
 import { getRequireImage } from '../../utils/imageUtils';
-import { UserItem } from '@didvault/sdk/src/core';
+import { MnemonicItem, UserItem } from '@didvault/sdk/src/core';
 import { useUserStore } from '../../stores/user';
 import { app } from '../../globals';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
@@ -67,9 +67,9 @@ const loginByPassword = async (password: string) => {
 	if (!userStore.current_user) {
 		router.push({ path: '/import_mnemonic' });
 	} else {
-		let user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+		const mnemonicItem: MnemonicItem = userStore.current_mnemonic!;
 		await app.load(undefined);
-		await app.unlock(user.mnemonic);
+		await app.unlock(mnemonicItem.mnemonic);
 		router.push('/items');
 	}
 };

@@ -97,15 +97,18 @@ const choose = async (id: string) => {
 	}
 	resetAPP();
 
-	await app.load(user.id);
-	await app.unlock(user.mnemonic);
+	if (userStore.current_mnemonic?.mnemonic) {
+		await app.load(user.id);
+		await app.unlock(userStore.current_mnemonic?.mnemonic);
+	}
+
 	userStore.userUpdating = false;
 
 	const UIType = getUiType();
-	if (UIType.isNotification) {
+	if (UIType.isNotification && userStore.current_mnemonic?.mnemonic) {
 		const { resolveApproval } = useApproval(router);
 		sendUnlock();
-		const selectedDidKey = await getDID(user.mnemonic);
+		const selectedDidKey = await getDID(userStore.current_mnemonic?.mnemonic);
 		resolveApproval({ selectedDidKey });
 		return;
 	}

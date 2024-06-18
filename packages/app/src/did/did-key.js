@@ -106,14 +106,6 @@ export async function getPrivateJWK(mnemonic) {
  */
 export class DIDKey {
 	static async generate() {
-		// try {
-		// 	await walletService.loaded;
-		// 	const { HDWallet } = walletService.walletCore;
-		// 	const wallet = HDWallet.create(128, '');
-		// 	const mnemonic = wallet.mnemonic();
-		// 	return mnemonic;
-		// } catch (e) {
-		// }
 		try {
 			const mnemonic = bip39.generateMnemonic();
 			return mnemonic;
