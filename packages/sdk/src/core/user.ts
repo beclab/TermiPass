@@ -1,7 +1,7 @@
 import { PBES2Container } from './container';
 import { Storable } from './storage';
 //import { Err } from '@didvault/core/src/error';
-import { Serializable, Exclude, AsDate } from './encoding';
+import { Serializable, Exclude, AsDate, AsSerializable } from './encoding';
 import { TerminusDefaultDomain } from '@bytetrade/core';
 
 export type UserItemID = string;
@@ -338,6 +338,7 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	 * **IMPORTANT**: This property is considered **secret**
 	 * and should never stored or transmitted in plain text
 	 */
+	@AsSerializable(UserItemCollection)
 	items = new UserItemCollection();
 
 	// @Exclude()
@@ -368,6 +369,7 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	 */
 	async unlock(password: string) {
 		await super.unlock(password);
+
 		this.mnemonics.fromBytes(await this.getData());
 	}
 
@@ -384,7 +386,7 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	 * Commit changes to `items` by reencrypting the data.
 	 */
 	async commit() {
-		await this.setData(this.items.toBytes());
+		await this.setData(this.mnemonics.toBytes());
 	}
 
 	/**
