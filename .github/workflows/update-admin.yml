@@ -6,6 +6,8 @@ on:
     push:
         branches:
             - "main"
+            - "feat/support-arm"
+            
         tags:
           - 'v*'
 
@@ -26,7 +28,7 @@ jobs:
   
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v3
-              
+
             - name: get latest tag
               uses: "WyriHaximus/github-action-get-previous-tag@v1"
               id: get-latest-tag
