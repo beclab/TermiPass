@@ -44,6 +44,14 @@
 				<string>com.googleusercontent.apps.343424174381-vrtlie7g85jcso7c98c4vavo17qoied7</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string></string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>db-oi7kyle19hkh6q6</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>20</string>
@@ -74,6 +82,8 @@
 		<string>fb-messenger-share-api</string>
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
+		<string>dbapi-8-emm</string>
+		<string>dbapi-2</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

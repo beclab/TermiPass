@@ -18,6 +18,13 @@ export class MobileWebPlatform extends TerminusCommonPlatform {
 			to: '/secret'
 		},
 		{
+			name: 'Opendal',
+			identify: 'opendal',
+			normalImage: 'tab_secret_normal',
+			activeImage: 'tab_secret_active',
+			to: '/opendal'
+		},
+		{
 			name: i18n.global.t('setting'),
 			identify: 'setting',
 			normalImage: 'tab_setting_normal',
