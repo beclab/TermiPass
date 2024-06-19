@@ -95,8 +95,9 @@ export default defineComponent({
 		const { t } = useI18n();
 
 		const currentUser = userStore.users?.items.get(userStore.current_id || '');
+		const mnemonicItem = userStore.current_mnemonic;
 
-		const mnemonic = ref(currentUser?.mnemonic || '');
+		const mnemonic = ref(mnemonicItem?.mnemonic || '');
 		const openCheckLogin = () => {
 			$q.dialog({
 				component: DialogLogin
@@ -148,7 +149,8 @@ export default defineComponent({
 			} else {
 				await userStore.users!.unlock(userStore.password!);
 				const user = userStore.current_user;
-				if (user) {
+				const mneminicItem = userStore.current_mnemonic;
+				if (user && mneminicItem) {
 					$q.loading.show();
 					if (user.setup_finished) {
 						setSenderUrl({
@@ -158,8 +160,7 @@ export default defineComponent({
 						clearSenderUrl();
 					}
 					await app.load(user.id);
-
-					await app.unlock(user.mnemonic);
+					await app.unlock(mneminicItem.mnemonic);
 					$q.loading.hide();
 				} else {
 					console.error('user not found');

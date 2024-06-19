@@ -87,7 +87,8 @@ import {
 	ITEM_TEMPLATES,
 	Field,
 	UserItem,
-	VaultType
+	VaultType,
+	MnemonicItem
 } from '@didvault/sdk/src/core';
 import {
 	signJWS,
@@ -164,10 +165,15 @@ const onOKClick = async () => {
 
 	try {
 		let user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
-
-		let did = await getDID(user.mnemonic);
-		let privateJWK: PrivateJwk | undefined = await getPrivateJWK(user.mnemonic);
-		const owner = await getEthereumAddress(user.mnemonic);
+		let mneminicItem = userStore.current_mnemonic;
+		if (!mneminicItem) {
+			return;
+		}
+		let did = await getDID(mneminicItem.mnemonic);
+		let privateJWK: PrivateJwk | undefined = await getPrivateJWK(
+			mneminicItem.mnemonic
+		);
+		const owner = await getEthereumAddress(mneminicItem.mnemonic);
 
 		if (!did) {
 			throw new Error(t('errors.get_did_failure'));
@@ -195,7 +201,10 @@ const onOKClick = async () => {
 		} else {
 			let eth721Sign = '';
 			if (props.body.message?.sign?.sign_eth) {
-				const ownerKey = mnemonicToKey(user.mnemonic, defaultDriverPath(0));
+				const ownerKey = mnemonicToKey(
+					mneminicItem.mnemonic,
+					defaultDriverPath(0)
+				);
 				eth721Sign = await signStatement(
 					props.body.message?.sign?.sign_eth.domain,
 					props.body.message?.sign?.sign_eth.types,
