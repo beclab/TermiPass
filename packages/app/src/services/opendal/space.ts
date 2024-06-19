@@ -51,7 +51,7 @@ export class SpaceAuthService extends OpendalIntegrationAuth {
 			const loginToken: TokenData = response.data;
 			if (response.code == 200) {
 				resolve({
-					name: loginToken.userid,
+					name: userStore.current_user?.name || did,
 					type: AccountType.Space,
 					raw_data: {
 						refresh_token: loginToken.token,
