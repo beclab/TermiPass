@@ -1,8 +1,8 @@
 import { TokenData, useCloudStore } from 'src/stores/cloud';
 import {
 	AccountType,
-	IntegrationAccount,
-	OpendalIntegrationAuth
+	OpendalIntegrationAuth,
+	SpaceIntegrationAccount
 } from '../abstractions/opendal/opendalService';
 import { useUserStore } from 'src/stores/user';
 import { uid } from 'quasar';
@@ -11,9 +11,9 @@ import { PrivateJwk } from '@bytetrade/core';
 import { signJWS } from 'src/layouts/dialog/sign';
 import axios from 'axios';
 
-export class SpaceAuthService extends OpendalIntegrationAuth {
+export class SpaceAuthService extends OpendalIntegrationAuth<SpaceIntegrationAccount> {
 	type = AccountType.Space;
-	async signIn(): Promise<IntegrationAccount> {
+	async signIn(): Promise<SpaceIntegrationAccount> {
 		return new Promise(async (resolve, reject) => {
 			const cloudStore = useCloudStore();
 			const userStore = useUserStore();
@@ -57,7 +57,8 @@ export class SpaceAuthService extends OpendalIntegrationAuth {
 						refresh_token: loginToken.token,
 						access_token: loginToken.token,
 						expires_in: 30 * 60 * 1000,
-						expires_at: Math.trunc(loginToken.expired)
+						expires_at: Math.trunc(loginToken.expired),
+						userid: did
 					}
 				});
 			} else {

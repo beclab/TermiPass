@@ -4,7 +4,7 @@
 		style="width: 100%; height: 100%"
 	>
 		<q-btn
-			v-for="item in OpendalService.supportAuthList"
+			v-for="item in opendalService.supportAuthList"
 			:key="item.type"
 			flat
 			no-caps
@@ -12,22 +12,26 @@
 		>
 			<div
 				class="text-body3"
-				@click="OpendalService.requestOpendalAuth(item.type)"
+				@click="opendalService.requestOpendalAuth(item.type)"
 			>
 				{{ item.name }}
 			</div>
 		</q-btn>
+		<div style="margin-top: 30px">
+			{{ dataList }}
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { useOpendalStore } from '../../../stores/opendal';
 import { onMounted } from 'vue';
-import OpendalService from '../../../services/opendal';
+import opendalService from '../../../services/opendal';
+import { ref } from 'vue';
 const opendalStore = useOpendalStore();
-
-onMounted(() => {
-	opendalStore.getAccount('all');
+const dataList = ref();
+onMounted(async () => {
+	dataList.value = await opendalStore.getAccount('all');
 });
 </script>
 

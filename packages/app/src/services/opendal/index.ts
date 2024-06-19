@@ -42,7 +42,6 @@ class OpendalService implements OpendalServiceInterface {
 				await opendalStore.createAccount(result.account);
 			}
 		} catch (e) {
-			result.status = false;
 			result.message = e.message ? e.message : 'Auth failed';
 		}
 		return result;
