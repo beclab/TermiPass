@@ -23,34 +23,38 @@
 				dense
 				class="row items-center justify-between q-px-sm item-li"
 			>
-				<div class="row items-center justify-start">
-					<q-icon name="sym_r_sensors_off" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
-						t('user_current_status.offline_mode.title')
-					}}</span>
+				<div class="row items-center justify-between" style="width: 100%">
+					<div class="row items-center justify-start">
+						<q-icon name="sym_r_sensors_off" size="20px" />
+						<span class="text-body2 text-grey-8 q-ml-xs">{{
+							t('user_current_status.offline_mode.title')
+						}}</span>
+					</div>
+					<q-toggle
+						v-model="offLineModeRef"
+						@update:model-value="updateOffLineMode"
+					/>
 				</div>
-				<q-toggle
-					v-model="offLineModeRef"
-					@update:model-value="updateOffLineMode"
-				/>
 			</q-item>
 
 			<q-item
 				tag="label"
 				v-ripple
 				dense
-				class="row items-center justify-between q-px-sm item-li"
+				class="row items-center q-px-sm item-li"
 			>
-				<div class="row items-center justify-start">
-					<q-icon name="sym_r_sync_lock" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
-						t('encrypted_connection')
-					}}</span>
+				<div class="row items-center justify-between" style="width: 100%">
+					<div class="row items-center justify-start">
+						<q-icon name="sym_r_sync_lock" size="20px" />
+						<span class="text-body2 text-grey-8 q-ml-xs">{{
+							t('encrypted_connection')
+						}}</span>
+					</div>
+					<q-toggle
+						v-model="vpnToggleStatus"
+						@update:model-value="updateVpnStatus"
+					/>
 				</div>
-				<q-toggle
-					v-model="vpnToggleStatus"
-					@update:model-value="updateVpnStatus"
-				/>
 			</q-item>
 
 			<q-separator class="q-my-md" />
@@ -58,7 +62,7 @@
 			<q-item
 				dense
 				clickable
-				class="row items-center justify-between q-px-sm item-li"
+				class="row items-center q-px-sm item-li"
 				@click="accountCenter"
 			>
 				<div class="row items-center justify-start">
@@ -72,7 +76,7 @@
 			<q-item
 				dense
 				clickable
-				class="row items-center justify-between q-px-sm item-li"
+				class="row items-center q-px-sm item-li"
 				@click="changeAccount"
 			>
 				<div class="row items-center justify-start">
@@ -87,7 +91,7 @@
 				dense
 				clickable
 				@click="handleSettings"
-				class="row items-center justify-between q-px-sm item-li"
+				class="row items-center q-px-sm item-li"
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_settings" size="20px" />
@@ -101,7 +105,7 @@
 				dense
 				clickable
 				@click="lock"
-				class="row items-center justify-between q-px-sm item-li"
+				class="row items-center q-px-sm item-li"
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_lock" size="20px" />

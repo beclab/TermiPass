@@ -114,6 +114,7 @@ import { useDataStore } from '../../../stores/data';
 import FilePreview from '../common-files/FilePreview.vue';
 import FileEditor from '../common-files/FileEditor.vue';
 import FileUnavailable from '../common-files/FileUnavailable.vue';
+import FilePDFPreview from '../common-files/FilePDFPreview.vue';
 
 import { onMounted, onUnmounted, ref, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
@@ -201,6 +202,9 @@ onMounted(() => {
 			newVal.type == 'pdf'
 		) {
 			isDark.value = true;
+			if ($q.platform.is.ipad && newVal.type == 'pdf') {
+				return (currentView.value = FilePDFPreview);
+			}
 			return (currentView.value = FilePreview);
 		}
 

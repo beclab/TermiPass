@@ -113,7 +113,11 @@
 					</q-item-section>
 				</q-item>
 
-				<q-item id="setting_6" class="q-mb-lg setting_item">
+				<q-item
+					id="setting_6"
+					class="q-mb-lg setting_item"
+					v-if="!$q.platform.is.ipad"
+				>
 					<q-item-section>
 						<q-item-label
 							class="text-body1 text-weight-bold q-pl-sm q-ml-xs q-mb-sm"
@@ -150,7 +154,7 @@
 					</q-item-section>
 				</q-item>
 
-				<q-item class="q-mb-sm">
+				<q-item class="q-mb-sm" v-if="!$q.platform.is.ipad">
 					<q-item-section>
 						<q-item-label
 							class="text-body1 text-weight-bold q-pl-sm q-ml-xs q-mb-sm"
@@ -417,7 +421,6 @@ export default defineComponent({
 	.viewBtn {
 		background: $yellow;
 		border-radius: 8px;
-		width: 76px;
 		height: 40px;
 		line-height: 40px;
 		text-align: center;
