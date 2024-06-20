@@ -10,10 +10,6 @@ import PhoneLoginLayout from './mobiles/PhoneLoginLayout.vue';
 // import { computed } from 'vue';
 
 // const $q = useQuasar();
-
-// const isPad = computed(() => {
-// 	return $q.platform.is.nativeMobile && $q.platform.is.ipad;
-// });
 </script>
 
 <style lang="scss" scoped></style>

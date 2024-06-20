@@ -8,7 +8,7 @@
 	>
 		<q-card>
 			<div id="previewer">
-				<header-bar>
+				<header-bar style="margin-top: env(safe-area-inset-top)">
 					<title
 						class="q-ml-md"
 						:style="

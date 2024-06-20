@@ -1,5 +1,5 @@
 <template>
-	<div className="file-uploader-container">
+	<div className="file-uploader-container" v-if="!$q.platform.is.ipad">
 		<div className="file-uploader">
 			<input
 				id="uploader-input"

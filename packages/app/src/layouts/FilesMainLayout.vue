@@ -130,6 +130,8 @@
 				:class="
 					$q.platform.is.win && $q.platform.is.electron
 						? 'files-content-win'
+						: $q.platform.is.ipad
+						? 'files-content-pad'
 						: 'files-content-common'
 				"
 			>
@@ -407,6 +409,9 @@ const openPopupMenu = () => {
 
 .files-content-common {
 	height: calc(100vh - 73px) !important;
+}
+.files-content-ipad {
+	height: calc(100vh - 116px) !important;
 }
 .files-content-win {
 	height: calc(100vh - 145px) !important;

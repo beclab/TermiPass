@@ -63,6 +63,7 @@ import {
 	registerNativeScanQRProtocols,
 	NativeScanQRProtocol
 } from './scanQRProtocols';
+import { isPad } from 'src/utils/platform';
 
 declare let cordova: any;
 declare let plugins: any;
@@ -136,6 +137,8 @@ export class CapacitorPlatform
 
 	async appMounted() {
 		super.appMounted();
+
+		this.isPad = isPad();
 
 		this.resetOrientationLockType();
 

@@ -11,12 +11,14 @@
 		/>
 		<div
 			class="contain-content"
-			:style="
+			:class="
 				$q.platform.is.win &&
 				$q.platform.is.electron &&
 				!dataStore.preview.isShow
-					? 'height: calc(100vh - 30px);'
-					: 'height: 100vh;padding-top:8px;'
+					? 'contain-content-win'
+					: $q.platform.is.ipad
+					? 'contain-content-ipad'
+					: 'contain-content-common'
 			"
 		>
 			<TerminusMenu />
@@ -224,6 +226,20 @@ export default defineComponent({
 			justify-content: space-between;
 			overflow: hidden;
 		}
+	}
+
+	.contain-content-win {
+		height: calc(100vh - 30px);
+	}
+
+	.contain-content-ipad {
+		height: calc(100vh - env(safe-area-inset-top));
+		padding-top: env(safe-area-inset-top);
+	}
+
+	.contain-content-common {
+		height: 100vh;
+		padding-top: 8px;
 	}
 
 	.headerBar {

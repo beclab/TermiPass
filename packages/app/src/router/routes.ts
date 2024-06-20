@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import { Platform } from 'quasar';
+import { isPad } from 'src/utils/platform';
 
 let routes: RouteRecordRaw[] = [];
 
@@ -13,7 +14,7 @@ if (process.env.PLATFORM == 'WEB') {
 	console.log('Platform ====>');
 	console.log(Platform);
 
-	if (Platform.is.ipad) {
+	if (isPad()) {
 		routes = [...routes, ...require('./routes/routes-desktop').default];
 	} else {
 		routes = [
@@ -28,4 +29,5 @@ if (process.env.PLATFORM == 'WEB') {
 } else if (process.env.PLATFORM == 'FILES') {
 	routes = [...routes, ...require('./routes/routes-files').default];
 }
+
 export default routes;
