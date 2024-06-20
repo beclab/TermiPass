@@ -627,7 +627,7 @@ export class CapacitorPlatform
 	};
 
 	async resetOrientationLockType(): Promise<void> {
-		if (this.quasar?.platform.is.ipad) {
+		if (this.isPad) {
 			return;
 		}
 		ScreenOrientation.lock({
