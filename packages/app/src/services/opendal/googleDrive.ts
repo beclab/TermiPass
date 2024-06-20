@@ -8,12 +8,11 @@ import {
 export class GoogleAuthService extends OpendalIntegrationAuth<GoogleIntegrationAccount> {
 	type = AccountType.Google;
 	async signIn(): Promise<GoogleIntegrationAccount> {
-		await GoogleAuth.signOut();
 		const scopes = ['https://www.googleapis.com/auth/drive'];
-		GoogleAuth.initialize({
+		await GoogleAuth.initialize({
 			scopes
 		});
-
+		await GoogleAuth.signOut();
 		const googleDriveSignInResponse = await GoogleAuth.signIn();
 		return {
 			name: googleDriveSignInResponse.email,

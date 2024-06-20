@@ -184,14 +184,14 @@ public class CustomGooglePlugin  extends Plugin {
     }
 
     @PluginMethod()
-    public void initialize(final PluginCall call) {
+    public void initialize(PluginCall call) {
         JSArray scopeArray = call.getArray("scopes");
         try {
             String[] scopeNames = new String[scopeArray.length()];
             for (int i = 0; i < scopeArray.length(); i++) {
                 scopeNames[i] = scopeArray.getString(i);
             }
-            Log.d("TEST", "initialize: scopeArray" + Arrays.toString(scopeNames));
+            Log.i("TEST", "initialize scopeArray : " + Arrays.toString(scopeNames));
             Scope[] scopes = new Scope[scopeNames.length - 1];
             Scope firstScope = new Scope(scopeNames[0]);
             for (int i = 1; i < scopeNames.length; i++) {
@@ -204,7 +204,7 @@ public class CustomGooglePlugin  extends Plugin {
             call.resolve();
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.i("TEST", "initialize: " + e.getMessage());
+            Log.i("TEST", "initialize failure: " + e.getMessage());
             call.reject("initialize failure : " + e.getMessage());
         }
     }
