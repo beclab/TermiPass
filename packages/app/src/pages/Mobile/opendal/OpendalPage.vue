@@ -17,8 +17,22 @@
 				{{ item.name }}
 			</div>
 		</q-btn>
-		<div style="margin-top: 30px">
-			{{ dataList }}
+		<div style="margin-top: 100px">
+			<div
+				v-for="item in dataList"
+				:key="item.name + item.type"
+				class="row items-center justify-between"
+				style="margin-bottom: 30px"
+			>
+				<div>{{ item.type }}</div>
+				<div>{{ item.name }}</div>
+				<q-btn
+					flat
+					no-caps
+					label="Delete"
+					@click="opendalStore.deleteAccount(item)"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -28,8 +42,9 @@ import { useOpendalStore } from '../../../stores/opendal';
 import { onMounted } from 'vue';
 import opendalService from '../../../services/opendal';
 import { ref } from 'vue';
+import { IntegrationAccountMiniData } from '../../../services/abstractions/opendal/opendalService';
 const opendalStore = useOpendalStore();
-const dataList = ref();
+const dataList = ref<IntegrationAccountMiniData[]>([]);
 onMounted(async () => {
 	dataList.value = await opendalStore.getAccount('all');
 });
