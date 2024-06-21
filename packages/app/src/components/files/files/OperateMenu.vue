@@ -28,7 +28,9 @@ import { handleFileOperate } from './OperateAction';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { useMenuStore } from '../../../stores/files-menu';
 import { SYNC_STATE, OPERATE_ACTION } from '../../../utils/contact';
-import { downloadFile } from '../../../utils/utils';
+// import { downloadFile } from '../../../utils/utils';
+
+import { useOperateinStore } from './../../../stores/operation';
 
 const props = defineProps({
 	clientX: Number,
@@ -42,6 +44,7 @@ const props = defineProps({
 const Route = useRoute();
 const dataStore = useDataStore();
 const menuStore = useMenuStore();
+const operateinStore = useOperateinStore();
 
 const emit = defineEmits(['changeVisible']);
 const menuListSelf = ref<any[]>([]);
@@ -278,38 +281,40 @@ const hideMenu = () => {
 };
 
 const handle = (e: any, item: any) => {
-	handleFileOperate(
+	operateinStore.handleFileOperate(
 		e,
 		Route,
 		item.action,
 		async (action: OPERATE_ACTION, data: any) => {
-			if (action === OPERATE_ACTION.DOWNLOAD) {
-				const isElectron = $q.platform.is.electron;
+			// if (action === OPERATE_ACTION.DOWNLOAD) {
+			// console.log('1')
+			// const isElectron = $q.platform.is.electron;
 
-				if (!isElectron && data) {
-					// window.open(data);
-					await downloadFile(data);
-					return '';
-				}
+			// if (!isElectron && data) {
+			// 	// window.open(data);
+			// 	await downloadFile(data);
+			// 	return '';
+			// }
 
-				if (isElectron && data && data.url && data.url.length > 0) {
-					const savePath = await window.electron.api.download.getDownloadPath();
-					console.log(savePath);
+			// if (isElectron && data && data.url && data.url.length > 0) {
+			// 	const savePath = await window.electron.api.download.getDownloadPath();
+			// 	console.log(savePath);
 
-					const formData: INewDownloadFile = {
-						url: data.url,
-						fileName: dataStore.req.items[dataStore.selected[0]].isDir
-							? dataStore.req.items[dataStore.selected[0]].name + '.zip'
-							: dataStore.req.items[dataStore.selected[0]].name,
-						path: savePath,
-						totalBytes: dataStore.req.items[dataStore.selected[0]].size
-					};
-					console.log(formData);
+			// 	const formData: INewDownloadFile = {
+			// 		url: data.url,
+			// 		fileName: dataStore.req.items[dataStore.selected[0]].isDir
+			// 			? dataStore.req.items[dataStore.selected[0]].name + '.zip'
+			// 			: dataStore.req.items[dataStore.selected[0]].name,
+			// 		path: savePath,
+			// 		totalBytes: dataStore.req.items[dataStore.selected[0]].size
+			// 	};
+			// 	console.log(formData);
 
-					await window.electron.api.download.newDownloadFile(formData);
-				}
-				return;
-			} else if (action == OPERATE_ACTION.COPY) {
+			// 	await window.electron.api.download.newDownloadFile(formData);
+			// }
+			// return;
+			// } else
+			if (action == OPERATE_ACTION.COPY) {
 				copyed.value = true;
 			} else if (action == OPERATE_ACTION.PASTE) {
 				copyed.value = false;
@@ -322,6 +327,50 @@ const handle = (e: any, item: any) => {
 			}
 		}
 	);
+	// handleFileOperate(
+	// 	e,
+	// 	Route,
+	// 	item.action,
+	// 	async (action: OPERATE_ACTION, data: any) => {
+	// 		if (action === OPERATE_ACTION.DOWNLOAD) {
+	// 			const isElectron = $q.platform.is.electron;
+
+	// 			if (!isElectron && data) {
+	// 				// window.open(data);
+	// 				await downloadFile(data);
+	// 				return '';
+	// 			}
+
+	// 			if (isElectron && data && data.url && data.url.length > 0) {
+	// 				const savePath = await window.electron.api.download.getDownloadPath();
+	// 				console.log(savePath);
+
+	// 				const formData: INewDownloadFile = {
+	// 					url: data.url,
+	// 					fileName: dataStore.req.items[dataStore.selected[0]].isDir
+	// 						? dataStore.req.items[dataStore.selected[0]].name + '.zip'
+	// 						: dataStore.req.items[dataStore.selected[0]].name,
+	// 					path: savePath,
+	// 					totalBytes: dataStore.req.items[dataStore.selected[0]].size
+	// 				};
+	// 				console.log(formData);
+
+	// 				await window.electron.api.download.newDownloadFile(formData);
+	// 			}
+	// 			return;
+	// 		} else if (action == OPERATE_ACTION.COPY) {
+	// 			copyed.value = true;
+	// 		} else if (action == OPERATE_ACTION.PASTE) {
+	// 			copyed.value = false;
+	// 		} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
+	// 			const repo_id = Route.query.id as string;
+	// 			const isElectron = $q.platform.is.electron;
+	// 			if (isElectron) {
+	// 				window.electron.api.files.openLocalRepo(repo_id, data);
+	// 			}
+	// 		}
+	// 	}
+	// );
 	hideMenu();
 };
 </script>

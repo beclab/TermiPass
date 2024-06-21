@@ -1,4 +1,5 @@
 import { fetchURL } from './utils';
+import { dataAPI } from './index';
 import { useSeahubStore } from '../stores/seahub';
 import { useDataStore } from '../stores/data';
 import { axiosInstanceProxy } from '../platform/httpProxy';
@@ -50,9 +51,11 @@ export const getFormData = (object) =>
 export async function getRepoId(id) {
 	const seahubStore = useSeahubStore();
 
-	const res2 = await fetchURL(`seahub/api/v2.1/repos/${id}/`, {});
+	const res2 = await dataAPI.get(`seahub/api/v2.1/repos/${id}/`, {});
 
-	seahubStore.setRepoId({ id: res2.data.repo_id, name: res2.data.repo_name });
+	console.log('getRepoIdgetRepoId', res2);
+
+	seahubStore.setRepoId({ id: res2.repo_id, name: res2.repo_name });
 	// return res2.data;
 }
 

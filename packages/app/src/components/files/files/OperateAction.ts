@@ -273,8 +273,8 @@ const _copyCatalogue = () => {
 		});
 	}
 
-	const isSeahub = checkSeahub(dataStore.req.url);
-	dataStore.updateCopyFiles(items, isSeahub ? 'Sync' : 'Drive');
+	// const isSeahub = checkSeahub(dataStore.req.url);
+	// dataStore.updateCopyFiles(items, isSeahub ? 'Sync' : 'Drive');
 };
 
 const _cutCatalogue = () => {
@@ -301,8 +301,8 @@ const _cutCatalogue = () => {
 		});
 	}
 
-	const isSeahub = checkSeahub(dataStore.req.url);
-	dataStore.updateCopyFiles(items, isSeahub ? 'Sync' : 'Drive');
+	// const isSeahub = checkSeahub(dataStore.req.url);
+	// dataStore.updateCopyFiles(items, isSeahub ? 'Sync' : 'Drive');
 };
 
 const _pasteCatalogue = async (
@@ -319,7 +319,7 @@ const _pasteCatalogue = async (
 		src_repo_id?: any;
 		parentPath: string;
 	}[] = [];
-	for (let i = 0; i < dataStore.copyFiles.length; i++) {
+	for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
 		const element: any = dataStore.copyFiles[i];
 
 		let to =
@@ -356,7 +356,7 @@ const _pasteCatalogue = async (
 		}
 	}
 
-	const dstItems = (await api.fetch(route.path)).items;
+	const dstItems = (await dataStore.fetchList(route.path))!.items;
 	const conflict = upload.checkConflict(items, dstItems);
 
 	let overwrite = false;

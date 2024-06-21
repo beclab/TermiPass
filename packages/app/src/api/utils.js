@@ -37,55 +37,20 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 		...headers
 	};
 
-	// const cancelTokenArr = ['api/resources/Home', 'seahub/api/v2.1/repos'];
-	// let pending = [];
-	// const cancelToken = axios.CancelToken;
-	// const removePending = (config) => {
-	// 	if (pending.length <= 0) return;
-	// 	for (const p in pending) {
-	// 		if (pending[p].u === config.url.split('?')[0] + '&' + config.method) {
-	// 			pending[p].f();
-	// 			pending.splice(Number(p), 1);
-	// 		}
-	// 	}
-	// };
-
 	instance.interceptors.request.use(
 		(config) => {
-			// removePending(config);
-			// config.cancelToken = new cancelToken((c) => {
-			// 	const pendingFind = cancelTokenArr.find((item) => {
-			// 		return config.url.indexOf(item) > -1;
-			// 	});
-			// 	if (pendingFind) {
-			// 		pending.push({
-			// 			u: config.url.split('?')[0] + '&' + config.method,
-			// 			f: c
-			// 		});
-			// 	}
-			// });
 			return config;
 		},
 		(error) => {
-			// pending = [];
 			return Promise.reject(error);
 		}
 	);
 
 	instance.interceptors.response.use(
 		(response) => {
-			// for (let p in pending) {
-			// 	if (
-			// 		pending[p].u ===
-			// 		response.config.url.split('?')[0] + '&' + response.config.method
-			// 	) {
-			// 		pending.splice(p, 1);
-			// 	}
-			// }
 			return response;
 		},
 		async (error) => {
-			// pending = [];
 			if (error.message == InOfflineMode) {
 				throw error;
 			}

@@ -4,11 +4,16 @@ import * as share from './share';
 import * as users from './users';
 import * as settings from './settings';
 import * as pub from './pub';
-import * as sync from './sync';
 import * as shareToUser from './shareToUser';
 import * as ai from './ai';
 import search from './search';
 import commands from './commands';
+
+import { Data } from './data';
+import { Operation } from './operation';
+
+const dataAPI = new Data();
+const operationAPI = new Operation();
 
 export {
 	files,
@@ -19,7 +24,8 @@ export {
 	pub,
 	commands,
 	search,
-	sync,
 	shareToUser,
-	ai
+	ai,
+	dataAPI,
+	operationAPI
 };

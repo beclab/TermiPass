@@ -72,7 +72,7 @@ export default defineComponent({
 				return;
 			}
 
-			let dstItems = (await api.fetch(dest.value)).items;
+			let dstItems = (await store.fetchList(dest.value)).items;
 			let conflict = upload.checkConflict(items, dstItems);
 
 			let overwrite = false;

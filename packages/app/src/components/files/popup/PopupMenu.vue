@@ -172,6 +172,7 @@ const checkShardUser = () => {
 };
 
 const handleEvent = async (action: OPERATE_ACTION, e: any) => {
+	console.log('handleEventhandleEvent', action);
 	const path = '/';
 	switch (action) {
 		case OPERATE_ACTION.SHARE_WITH:
@@ -296,7 +297,7 @@ const syncRepoInfo = (e) => {
 		handleFileOperate(
 			e,
 			route,
-			OPERATE_ACTION.DELETE,
+			OPERATE_ACTION.ATTRIBUTES,
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			async (_action: OPERATE_ACTION, _data: any) => {
 				dataStore.closeHovers();

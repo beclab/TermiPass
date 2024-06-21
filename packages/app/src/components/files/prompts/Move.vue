@@ -52,6 +52,7 @@ export default {
 	},
 	methods: {
 		move: async function (event) {
+			const store = useDataStore();
 			event.preventDefault();
 			let items = [];
 
@@ -78,7 +79,7 @@ export default {
 					});
 			};
 
-			let dstItems = (await api.fetch(this.dest)).items;
+			let dstItems = (await store.fetchList(this.dest)).items;
 			let conflict = upload.checkConflict(items, dstItems);
 
 			let overwrite = false;

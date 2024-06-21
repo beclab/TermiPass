@@ -9,86 +9,86 @@ import {
 } from '../utils/file';
 import { useSeahubStore } from '../stores/seahub';
 import { formatAppDataNode } from '../utils/appdata';
-import { seahubGetRepos } from './sync';
+// import { seahubGetRepos } from './syncMenu';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
 
 import axios from 'axios';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function fetch(url, loading, curItem) {
-	const dataStore = useDataStore();
-	const seahubStore = useSeahubStore();
+// export async function fetch(url, loading, curItem) {
+// 	const dataStore = useDataStore();
+// 	const seahubStore = useSeahubStore();
 
-	url = decodeURIComponent(removePrefix(url));
+// 	url = decodeURIComponent(removePrefix(url));
 
-	let res = '';
-	let data;
+// 	let res = '';
+// 	let data;
 
-	try {
-		if (checkSeahub(url)) {
-			const currentItem = seahubStore.repo_name;
-			let pathLen = url.indexOf(currentItem) + currentItem.length;
-			const path = url.slice(pathLen);
-			if (seahubStore.repo_id) {
-				res = await fetchURL(
-					`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
-					{}
-				);
-			} else {
-				res = await seahubGetRepos(dataStore.activeMenu);
-				if (Array.isArray(res)) {
-					const [res1, res2] = res;
-					res.data = {
-						repos: [...res1.data, ...res2.data.repos]
-					};
-				}
-			}
-		} else if (checkAppData(url)) {
-			const { path, node } = getAppDataPath(url);
-			res = await fetchURL(`/api/resources/AppData${path}`, {}, true, node);
-		} else {
-			res = await fetchURL(`/api/resources${url}`, {});
-		}
+// 	try {
+// 		if (checkSeahub(url)) {
+// 			const currentItem = seahubStore.repo_name;
+// 			let pathLen = url.indexOf(currentItem) + currentItem.length;
+// 			const path = url.slice(pathLen);
+// 			if (seahubStore.repo_id) {
+// 				res = await fetchURL(
+// 					`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
+// 					{}
+// 				);
+// 			} else {
+// 				res = await seahubGetRepos(dataStore.activeMenu);
+// 				if (Array.isArray(res)) {
+// 					const [res1, res2] = res;
+// 					res.data = {
+// 						repos: [...res1.data, ...res2.data.repos]
+// 					};
+// 				}
+// 			}
+// 		} else if (checkAppData(url)) {
+// 			const { path, node } = getAppDataPath(url);
+// 			res = await fetchURL(`/api/resources/AppData${path}`, {}, true, node);
+// 		} else {
+// 			res = await fetchURL(`/api/resources${url}`, {});
+// 		}
 
-		data = await res.data;
+// 		data = await res.data;
 
-		if (checkSeahub(url)) {
-			if (seahubStore.repo_id) {
-				data = formatSeahub(url, JSON.parse(JSON.stringify(data)));
-			} else {
-				data = formatSeahubRepos(dataStore.activeMenu, data);
-			}
-		} else if (isAppData(url)) {
-			data = formatAppDataNode(url, JSON.parse(JSON.stringify(data)));
-		}
+// 		if (checkSeahub(url)) {
+// 			if (seahubStore.repo_id) {
+// 				data = formatSeahub(url, JSON.parse(JSON.stringify(data)));
+// 			} else {
+// 				data = formatSeahubRepos(dataStore.activeMenu, data);
+// 			}
+// 		} else if (isAppData(url)) {
+// 			data = formatAppDataNode(url, JSON.parse(JSON.stringify(data)));
+// 		}
 
-		data.url = `/Files${url}`;
+// 		data.url = `/Files${url}`;
 
-		if (data.isDir) {
-			if (!data.url.endsWith('/')) data.url += '/';
-			data.items = data.items.map((item, index) => {
-				item.index = index;
-				item.url = `${data.url}${encodeURIComponent(item.name)}`;
-				if (item.isDir) {
-					item.url += '/';
-				}
+// 		if (data.isDir) {
+// 			if (!data.url.endsWith('/')) data.url += '/';
+// 			data.items = data.items.map((item, index) => {
+// 				item.index = index;
+// 				item.url = `${data.url}${encodeURIComponent(item.name)}`;
+// 				if (item.isDir) {
+// 					item.url += '/';
+// 				}
 
-				return item;
-			});
-		}
-	} catch (error) {
-		if (loading) {
-			// notifyHide();
-		}
-		throw error;
-	}
+// 				return item;
+// 			});
+// 		}
+// 	} catch (error) {
+// 		if (loading) {
+// 			// notifyHide();
+// 		}
+// 		throw error;
+// 	}
 
-	if (loading) {
-		// notifyHide();
-	}
+// 	if (loading) {
+// 		// notifyHide();
+// 	}
 
-	return data;
-}
+// 	return data;
+// }
 
 export async function resourceAction(url, method, content) {
 	url = removePrefix(url);
