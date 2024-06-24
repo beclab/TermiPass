@@ -1,4 +1,5 @@
 import { createURL, fetchURL, removePrefix } from './utils';
+import { dataAPI } from './index';
 import { useDataStore } from '../stores/data';
 import { formatSeahub, formatSeahubRepos } from '../utils/seahub';
 import {
@@ -117,8 +118,8 @@ export async function resourceAction(url, method, content) {
 	return res;
 }
 
-export async function pasteAction(fromUrl, method, terminusNode) {
-	let opts = { method };
+export async function pasteAction(fromUrl, terminusNode) {
+	let opts = {};
 
 	let res = null;
 	if (checkAppData(fromUrl)) {
@@ -130,7 +131,7 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 				'X-Terminus-Node': node,
 				timeout: 600000
 			};
-			res = await fetchURL(`/api/paste/AppData${path}`, opts);
+			res = await dataAPI.patch(`/api/paste/AppData${path}`, opts);
 		}
 	} else {
 		if (terminusNode) {
@@ -140,7 +141,7 @@ export async function pasteAction(fromUrl, method, terminusNode) {
 				timeout: 600000
 			};
 		}
-		res = await fetchURL(`/api/paste${fromUrl}`, opts);
+		res = await dataAPI.patch(`/api/paste${fromUrl}`, opts);
 	}
 
 	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {
@@ -304,7 +305,7 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 			copy ? 'copy' : 'rename'
 		}&destination=${to}&override=${overwrite}&rename=${rename}&src_type=${src_type}&dst_type=${dst_type}`;
 
-		promises.push(pasteAction(url, 'PATCH', terminusNode));
+		promises.push(pasteAction(url, terminusNode));
 	}
 
 	return Promise.all(promises);

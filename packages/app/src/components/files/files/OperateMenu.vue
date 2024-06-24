@@ -67,27 +67,32 @@ const itemMenuList = ref([
 
 	{
 		name: 'Download',
-		icon: 'bi-download',
+		icon: 'sym_r_browser_updated',
 		action: OPERATE_ACTION.DOWNLOAD
 	},
 	{
 		name: 'Copy',
-		icon: 'bi-stickies',
+		icon: 'sym_r_content_copy',
 		action: OPERATE_ACTION.COPY
 	},
 	{
+		name: 'Cut',
+		icon: 'sym_r_move_up',
+		action: OPERATE_ACTION.CUT
+	},
+	{
 		name: 'Rename',
-		icon: 'bi-pencil-square',
+		icon: 'sym_r_edit_square',
 		action: OPERATE_ACTION.RENAME
 	},
 	{
 		name: 'Delete',
-		icon: 'bi-trash3',
+		icon: 'sym_r_edit_square',
 		action: OPERATE_ACTION.DELETE
 	},
 	{
 		name: 'Attributes',
-		icon: 'bi-exclamation-circle',
+		icon: 'sym_r_ballot',
 		action: OPERATE_ACTION.ATTRIBUTES
 	}
 ]);
@@ -95,49 +100,49 @@ const itemMenuList = ref([
 const hasPasteMenu = [
 	{
 		name: 'New Folder',
-		icon: 'bi-folder-plus',
+		icon: 'sym_r_create_new_folder',
 		action: OPERATE_ACTION.CREATE_FOLDER
 	},
 	{
 		name: 'Upload Files',
-		icon: 'bi-file-earmark-arrow-up',
+		icon: 'sym_r_upload_file',
 		action: OPERATE_ACTION.UPLOAD_FILES
 	},
 	{
 		name: 'Upload Folder',
-		icon: 'bi-folder-minus',
+		icon: 'sym_r_drive_folder_upload',
 		action: OPERATE_ACTION.UPLOAD_FOLDER
 	},
 	{
 		name: 'Paste',
-		icon: 'bi-subtract',
+		icon: 'sym_r_content_paste',
 		action: OPERATE_ACTION.PASTE
 	},
 	{
 		name: 'Refresh',
-		icon: 'bi-arrow-clockwise',
+		icon: 'sym_r_replay',
 		action: OPERATE_ACTION.REFRESH
 	}
 ];
 const noHasPasteMenu = [
 	{
 		name: 'New Folder',
-		icon: 'bi-folder-plus',
+		icon: 'sym_r_create_new_folder',
 		action: OPERATE_ACTION.CREATE_FOLDER
 	},
 	{
 		name: 'Upload Files',
-		icon: 'bi-file-earmark-arrow-up',
+		icon: 'sym_r_upload_file',
 		action: OPERATE_ACTION.UPLOAD_FILES
 	},
 	{
 		name: 'Upload Folder',
-		icon: 'bi-folder-minus',
+		icon: 'sym_r_drive_folder_upload',
 		action: OPERATE_ACTION.UPLOAD_FOLDER
 	},
 	{
 		name: 'Refresh',
-		icon: 'bi-arrow-clockwise',
+		icon: 'sym_r_replay',
 		action: OPERATE_ACTION.REFRESH
 	}
 ];
@@ -152,7 +157,7 @@ watch(
 		if (newVal[0]) {
 			menuListSelf.value = itemMenuList.value;
 		} else {
-			const hasCopy = dataStore.copyFiles && dataStore.copyFiles.length;
+			const hasCopy = dataStore.copyFiles.items.length;
 			let copied = false;
 			if (hasCopy) {
 				copied = true;
@@ -187,7 +192,7 @@ watch(
 );
 
 watch(
-	() => dataStore.copyFiles,
+	() => dataStore.copyFiles.items,
 	(newVaule) => {
 		if (newVaule) {
 			panelMenuList.value = hasPasteMenu;

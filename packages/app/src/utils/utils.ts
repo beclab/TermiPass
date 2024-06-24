@@ -394,3 +394,8 @@ export const formatMinutesTime = (minutes: number) => {
 		t('time.minutes_short')
 	);
 };
+
+export const getParams = (url: string, params: string) => {
+	const res = new RegExp('(?:&|/?)' + params + '=([^&$]+)').exec(url);
+	return res ? res[1] : '';
+};

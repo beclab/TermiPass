@@ -1,5 +1,5 @@
 // import { axiosInstanceProxy } from '../platform/httpProxy';
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { busEmit, NetworkErrorMode } from '../utils/bus';
 import { InOfflineMode } from '../utils/checkTerminusState';
 
@@ -26,37 +26,46 @@ export class Fetch {
 	private instance: AxiosInstance;
 
 	constructor() {
-		this.instance = axios.create({
-			...defaultConfig
-		});
+		this.init();
+	}
+	public async init(): Promise<void> {
+		try {
+			// Delayed reference axiosInstanceProxy
+			const { axiosInstanceProxy } = await import('../platform/httpProxy');
+			this.instance = axiosInstanceProxy({
+				...defaultConfig
+			});
 
-		this.instance.interceptors.request.use(
-			(config) => {
-				const dataStore = useDataStore();
-				config.baseURL = dataStore.baseURL();
+			this.instance.interceptors.request.use(
+				(config) => {
+					const dataStore = useDataStore();
+					config.baseURL = dataStore.baseURL();
 
-				console.log('configconfig', config);
-				return config;
-			},
-			(error) => {
-				return Promise.reject(error);
-			}
-		);
-
-		this.instance.interceptors.response.use(
-			(response) => {
-				return response;
-			},
-			(error) => {
-				if (error.message == InOfflineMode) {
-					throw error;
+					console.log('configconfig', config);
+					return config;
+				},
+				(error) => {
+					return Promise.reject(error);
 				}
-				busEmit('network_error', {
-					type: NetworkErrorMode.file,
-					error: error.message
-				});
-			}
-		);
+			);
+
+			this.instance.interceptors.response.use(
+				(response) => {
+					return response;
+				},
+				(error) => {
+					if (error.message == InOfflineMode) {
+						throw error;
+					}
+					busEmit('network_error', {
+						type: NetworkErrorMode.file,
+						error: error.message
+					});
+				}
+			);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
 	}
 
 	public async get<T = any>(
@@ -102,4 +111,13 @@ export class Fetch {
 	): Promise<AxiosResponse<T>> {
 		return this.instance.delete(url, config);
 	}
+
+	async patch<T = any>(
+		url: string,
+		config?: AxiosRequestConfig
+	): Promise<AxiosResponse<T>> {
+		return this.instance.patch(url, config);
+	}
 }
+
+new Fetch().init();

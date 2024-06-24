@@ -6,7 +6,6 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
 
 import { useDataStore } from './data';
-// import { useSeahubStore } from './seahub';
 
 import { operationAPI } from './../api';
 
@@ -47,11 +46,11 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.UPLOAD_FILES:
-					// _uploadFiles();
+					this.uploadFiles();
 					break;
 
 				case OPERATE_ACTION.UPLOAD_FOLDER:
-					// _uploadFolder();
+					this.uploadFolder();
 					break;
 
 				case OPERATE_ACTION.ATTRIBUTES:
@@ -59,21 +58,21 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.COPY:
-					this._copyCatalogue();
+					this.copyCatalogue();
 					callback(OPERATE_ACTION.COPY, null);
 					break;
 
 				case OPERATE_ACTION.CUT:
-					// _cutCatalogue();
+					this.cutCatalogue();
 					callback(OPERATE_ACTION.CUT, null);
 					break;
 
 				case OPERATE_ACTION.PASTE:
-					// _pasteCatalogue(route, callback);
+					this.pasteCatalogue(route, callback);
 					break;
 
 				case OPERATE_ACTION.MOVE:
-					// _moveCatalogue(route.path, callback);
+					this.moveCatalogue(route.path, callback);
 					break;
 
 				case OPERATE_ACTION.RENAME:
@@ -96,7 +95,10 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER:
-					// callback(OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER, openLocalFolder());
+					callback(
+						OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER,
+						this.openLocalFolder()
+					);
 
 					break;
 
@@ -119,14 +121,51 @@ export const useOperateinStore = defineStore('operation', {
 			}
 		},
 
-		async _copyCatalogue() {
-			console.log('into _copyCatalogue');
+		async copyCatalogue() {
+			console.log('into copyCatalogue');
 			const dataStore = useDataStore();
 
 			const copyStorages = await operationAPI.copy();
-			console.log('_copyCatalogue', copyStorages);
+			console.log('copyCatalogue', copyStorages);
 
 			dataStore.updateCopyFiles(copyStorages);
+		},
+
+		async pasteCatalogue(
+			route: RouteLocationNormalizedLoaded,
+			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
+		) {
+			console.log(route);
+			console.log(callback);
+
+			await operationAPI.paste(route, callback);
+		},
+
+		async cutCatalogue() {
+			const dataStore = useDataStore();
+			const copyStorages = await operationAPI.cut();
+
+			console.log('copyStoragescopyStorages', copyStorages);
+			dataStore.updateCopyFiles(copyStorages);
+		},
+
+		async moveCatalogue(
+			path: string,
+			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
+		) {
+			await operationAPI.move(path, callback);
+		},
+
+		uploadFiles() {
+			operationAPI.uploadFiles();
+		},
+
+		uploadFolder() {
+			operationAPI.uploadFolder();
+		},
+
+		openLocalFolder() {
+			operationAPI.openLocalFolder();
 		}
 	}
 });

@@ -155,4 +155,5 @@ export interface CopyStoragesType {
 	name: any;
 	src_repo_id?: any;
 	parentPath: string;
+	key?: string;
 }

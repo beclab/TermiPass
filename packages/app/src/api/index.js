@@ -13,6 +13,8 @@ import { Data } from './data';
 import { Operation } from './operation';
 
 const dataAPI = new Data();
+
+console.log('dataAPI', dataAPI);
 const operationAPI = new Operation();
 
 export {
