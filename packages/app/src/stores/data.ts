@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
 import { MenuItem, FilesSortType } from '../utils/contact';
-import { dataAPI } from './../api';
+import { dataAPIsa } from './../api';
 
 import { OriginType, CopyStoragesType } from './../api/common/encoding';
 
@@ -110,8 +110,10 @@ export const useDataStore = defineStore('data', {
 	},
 
 	actions: {
-		fetchList(url: string, loading?: boolean, currentItem?: string) {
-			return dataAPI.fetch(url, loading, currentItem);
+		async fetchList(url: string) {
+			const dataAPI = dataAPIsa();
+			console.log('dataAPI', dataAPI);
+			return dataAPI.fetch(url);
 		},
 
 		isFiles(route: any) {

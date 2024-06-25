@@ -1,5 +1,6 @@
 import { createURL, fetchURL, removePrefix } from './utils';
-import { dataAPI } from './index';
+// import { dataAPI } from './index';
+import { dataAPIsa } from './../api';
 import { useDataStore } from '../stores/data';
 import { formatSeahub, formatSeahubRepos } from '../utils/seahub';
 import {
@@ -120,6 +121,7 @@ export async function resourceAction(url, method, content) {
 
 export async function pasteAction(fromUrl, terminusNode) {
 	let opts = {};
+	const dataAPI = dataAPIsa();
 
 	let res = null;
 	if (checkAppData(fromUrl)) {
@@ -131,7 +133,7 @@ export async function pasteAction(fromUrl, terminusNode) {
 				'X-Terminus-Node': node,
 				timeout: 600000
 			};
-			res = await dataAPI.patch(`/api/paste/AppData${path}`, opts);
+			res = await dataAPI.commonAxios.patch(`/api/paste/AppData${path}`, opts);
 		}
 	} else {
 		if (terminusNode) {
@@ -141,7 +143,7 @@ export async function pasteAction(fromUrl, terminusNode) {
 				timeout: 600000
 			};
 		}
-		res = await dataAPI.patch(`/api/paste${fromUrl}`, opts);
+		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, opts);
 	}
 
 	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {

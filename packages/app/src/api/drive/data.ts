@@ -1,25 +1,148 @@
+import { Origin } from './../origin';
+import { removePrefix } from '../utils';
+import {
+	checkOrigin,
+	OriginType,
+	DriveResType,
+	CopyStoragesType
+} from '../common/encoding';
+import { getAppDataPath, isAppData } from '../../utils/file';
+import { formatAppDataNode } from '../../utils/appdata';
+import { MenuItem } from './../../utils/contact';
+import { OPERATE_ACTION } from './../../utils/contact';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { useDataStore } from './../../stores/data';
+import { files } from './../index';
+import { useSeahubStore } from '../../stores/seahub';
+import { formatSeahub } from '../../utils/seahub';
+import { checkAppData } from '../../utils/file';
+import { checkConflict } from '../../utils/upload';
+import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
-import { checkSeahub, checkAppData } from '../utils/file';
-import { getParams } from './../utils/utils';
-import { OPERATE_ACTION } from '../utils/contact';
-import { notifyWaitingShow, notifyHide } from '../utils/notifyRedefinedUtil';
-import { checkConflict } from './../utils/upload';
+import { SyncRepoItemType, SyncRepoSharedItemType } from './../common/encoding';
 
-import { useDataStore } from '../stores/data';
-import { useSeahubStore } from '../stores/seahub';
+import { CommonFetch } from '../fetch';
 
-import { files, seahub } from './index';
+class Data extends Origin {
+	private commonAxios: any;
 
-import { CopyStoragesType, OriginType } from './common/encoding';
-
-export class Operation {
-	public fetchRes: any;
 	constructor() {
-		// super();
+		super();
+		this.commonAxios = CommonFetch;
+	}
+
+	async fetch(url: string): Promise<DriveResType> {
+		url = decodeURIComponent(removePrefix(url));
+		let res: DriveResType | any;
+
+		switch (checkOrigin(url)) {
+			case OriginType.DRIVE:
+				res = await this.fetchDrive(url);
+				break;
+
+			case OriginType.CACHE:
+				res = await this.fetchCache(url);
+				break;
+		}
+
+		console.log('resresres0', res);
+
+		res.url = `/Files${url}`;
+
+		if (res.isDir) {
+			if (!res.url.endsWith('/')) res.url += '/';
+			res.items = res.items.map((item, index) => {
+				item.index = index;
+				item.url = `${res.url}${encodeURIComponent(item.name)}`;
+				if (item.isDir) {
+					item.url += '/';
+				}
+
+				return item;
+			});
+		}
+
+		console.log('resresres', res);
+
+		return res;
+	}
+
+	async fetchSync(url: string): Promise<DriveResType> {
+		const seahubStore = useSeahubStore();
+		const currentItem = seahubStore.repo_name;
+		const pathLen = url.indexOf(currentItem) + currentItem.length;
+		const path = url.slice(pathLen);
+		const res = await this.commonAxios.get(
+			`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
+			{}
+		);
+
+		const data: DriveResType = formatSeahub(
+			url,
+			JSON.parse(JSON.stringify(res))
+		);
+
+		console.log('fetchSyncfetchSync', data);
+
+		return data;
+	}
+
+	async fetchDrive(url: string): Promise<DriveResType> {
+		let res: DriveResType;
+		res = await this.commonAxios.get(`/api/resources${url}`, {});
+
+		if (isAppData(url)) {
+			res = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
+		}
+		return res;
+	}
+
+	async fetchCache(url: string): Promise<DriveResType> {
+		const { path, node } = getAppDataPath(url);
+		const res: DriveResType = await this.commonAxios.get(
+			`/api/resources/AppData${path}`,
+			{},
+			{ auth: true, node }
+		);
+
+		return res;
+	}
+
+	async fetchSyncRepo(
+		menu: string
+	): Promise<SyncRepoItemType[] | SyncRepoSharedItemType[][] | undefined> {
+		if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
+			return undefined;
+		}
+
+		if (menu == MenuItem.MYLIBRARIES) {
+			const res: any = await this.commonAxios.get(
+				'/seahub/api/v2.1/repos/?type=mine',
+				{}
+			);
+
+			const repos: SyncRepoItemType[] = res.repos;
+			return repos;
+		} else {
+			const res2: any = await this.commonAxios.get(
+				'/seahub/api/v2.1/shared-repos/',
+				{}
+			);
+			const res3: any = await this.commonAxios.get(
+				'/seahub/api/v2.1/repos/?type=shared',
+				{}
+			);
+
+			const repos2: SyncRepoSharedItemType[] = res2;
+			const repos3: SyncRepoSharedItemType[] = res3.repos;
+
+			return [repos2, repos3];
+		}
 	}
 
 	async dowload(path: string): Promise<{ url: string; headers: any }> {
+		console.log(path);
+
 		const dataStore = useDataStore();
 		console.log('pathpath', path);
 
@@ -27,14 +150,7 @@ export class Operation {
 			dataStore.selectedCount === 1 &&
 			!dataStore.req.items[dataStore.selected[0]].isDir
 		) {
-			if (checkSeahub(dataStore.req.items[dataStore.selected[0]].path)) {
-				const url = await seahub.downloaFile(
-					dataStore.req.items[dataStore.selected[0]].path
-				);
-				return { url: url, headers: {} };
-			}
-
-			const { url, node } = files.download(
+			const { url, node } = await files.download(
 				null,
 				dataStore.req.items[dataStore.selected[0]].url
 			);
@@ -74,25 +190,12 @@ export class Operation {
 	}
 
 	async copy(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
-		console.log('into copy');
 		const dataStore = useDataStore();
 		const seahubStore = useSeahubStore();
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of dataStore.selected) {
 			const el = dataStore.req.items[item];
 			let from = decodeURIComponent(el.url).slice(6);
-			if (checkSeahub(el.url)) {
-				const pathFromStart =
-					decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
-					seahubStore.repo_name.length;
-				const pathFromEnd = decodeURIComponent(el.url).indexOf(el.name) - 1;
-				from =
-					'/' +
-					seahubStore.repo_id +
-					'/' +
-					decodeURIComponent(el.url).slice(pathFromStart, pathFromEnd) +
-					el.name;
-			}
 			if (checkAppData(el.url)) {
 				from = decodeURIComponent(el.url);
 			}
@@ -105,11 +208,9 @@ export class Operation {
 			});
 		}
 
-		const isSeahub = checkSeahub(dataStore.req.url);
-
 		return {
 			items: copyStorages,
-			from: isSeahub ? OriginType.SYNC : OriginType.DRIVE
+			from: OriginType.DRIVE
 		};
 	}
 
@@ -120,18 +221,6 @@ export class Operation {
 		for (const item of dataStore.selected) {
 			const el = dataStore.req.items[item];
 			let from = decodeURIComponent(el.url).slice(6);
-			if (checkSeahub(el.url)) {
-				const pathFromStart =
-					decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
-					seahubStore.repo_name.length;
-				const pathFromEnd = decodeURIComponent(el.url).indexOf(el.name) - 1;
-				from =
-					'/' +
-					seahubStore.repo_id +
-					'/' +
-					decodeURIComponent(el.url).slice(pathFromStart, pathFromEnd) +
-					el.name;
-			}
 			if (checkAppData(el.url)) {
 				from = decodeURIComponent(el.url);
 			}
@@ -145,11 +234,9 @@ export class Operation {
 			});
 		}
 
-		const isSeahub = checkSeahub(dataStore.req.url);
-
 		return {
 			items: copyStorages,
-			from: isSeahub ? OriginType.SYNC : OriginType.DRIVE
+			from: OriginType.DRIVE
 		};
 	}
 
@@ -158,7 +245,6 @@ export class Operation {
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
 		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
 		const items: CopyStoragesType[] = [];
 
 		for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
@@ -167,16 +253,6 @@ export class Operation {
 				decodeURIComponent(route.path).slice(6) +
 				decodeURIComponent(element.name);
 
-			if (checkSeahub(route.path)) {
-				const pathFromStart =
-					decodeURIComponent(route.path).indexOf(seahubStore.repo_name) +
-					seahubStore.repo_name.length;
-				to =
-					'/' +
-					(seahubStore.repo_id || '') +
-					decodeURIComponent(route.path).slice(pathFromStart) +
-					decodeURIComponent(element.name);
-			}
 			if (checkAppData(route.path)) {
 				to = decodeURIComponent(route.path) + decodeURIComponent(element.name);
 			}
@@ -227,25 +303,6 @@ export class Operation {
 			const element: any = dataStore.req.items[i];
 			let from = decodeURIComponent(element.url).slice(6);
 			let to = decodeURIComponent(path + element.name).slice(6);
-			if (checkSeahub(element.url)) {
-				const fromStart =
-					decodeURIComponent(element.url).indexOf(seahubStore.repo_name) +
-					seahubStore.repo_name.length;
-				const formEnd = decodeURIComponent(element.url).indexOf(element.name);
-				from =
-					'/' +
-					seahubStore.repo_id +
-					decodeURIComponent(element.url).slice(fromStart, formEnd) +
-					element.name;
-				const toStart =
-					decodeURIComponent(path).indexOf(seahubStore.repo_name) +
-					seahubStore.repo_name.length;
-				to =
-					'/' +
-					seahubStore.repo_id +
-					decodeURIComponent(path).slice(toStart) +
-					element.name;
-			}
 			if (checkAppData(element.url)) {
 				from = decodeURIComponent(element.url);
 				to = decodeURIComponent(path + element.name);
@@ -269,7 +326,7 @@ export class Operation {
 		path: string,
 		isMove: boolean | undefined,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
-	) {
+	): Promise<void> {
 		const dataStore = useDataStore();
 		const dest = path;
 
@@ -301,27 +358,16 @@ export class Operation {
 	}
 
 	uploadFiles(): void {
-		const query = getParams(window.location.href, 'id');
 		let element: any = null;
-		if (query) {
-			element = document.getElementById('uploader-input');
-		} else {
-			element = document.getElementById('upload-input');
-		}
-
+		element = document.getElementById('upload-input');
 		element.value = '';
 		element.removeAttribute('webkitdirectory');
 		element.click();
 	}
 
 	uploadFolder(): void {
-		const query = getParams(window.location.href, 'id');
 		let element: any = null;
-		if (query) {
-			element = document.getElementById('uploader-input');
-		} else {
-			element = document.getElementById('upload-folder-input');
-		}
+		element = document.getElementById('upload-folder-input');
 		element.value = '';
 		element.setAttribute('webkitdirectory', 'webkitdirectory');
 		element.click();
@@ -341,3 +387,7 @@ export class Operation {
 		return path;
 	}
 }
+
+// const DriveDataAPI = new Data();
+
+export { Data };

@@ -1,5 +1,6 @@
 import { fetchURL } from './utils';
-import { dataAPI } from './index';
+// import { dataAPI } from './index';
+import { dataAPIsa } from './../api';
 import { useSeahubStore } from '../stores/seahub';
 import { useDataStore } from '../stores/data';
 import { axiosInstanceProxy } from '../platform/httpProxy';
@@ -51,7 +52,11 @@ export const getFormData = (object) =>
 export async function getRepoId(id) {
 	const seahubStore = useSeahubStore();
 
-	const res2 = await dataAPI.get(`seahub/api/v2.1/repos/${id}/`, {});
+	const dataAPI = dataAPIsa();
+	const res2 = await dataAPI.commonAxios.get(
+		`seahub/api/v2.1/repos/${id}/`,
+		{}
+	);
 
 	console.log('getRepoIdgetRepoId', res2);
 

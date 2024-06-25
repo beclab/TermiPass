@@ -7,7 +7,9 @@ import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
 
 import { useDataStore } from './data';
 
-import { operationAPI } from './../api';
+// import { operationAPI } from './../api';
+
+import { dataAPIsa } from './../api';
 
 // export type DataState = {};
 
@@ -42,7 +44,7 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.DOWNLOAD:
-					this._download(route.path);
+					this.download(route.path);
 					break;
 
 				case OPERATE_ACTION.UPLOAD_FILES:
@@ -107,9 +109,11 @@ export const useOperateinStore = defineStore('operation', {
 			}
 		},
 
-		async _download(path: string) {
-			const { url, headers } = await operationAPI.dowload(path);
+		async download(path: string) {
+			const dataAPI = dataAPIsa();
+			const { url, headers } = await dataAPI.dowload(path);
 
+			alert(url);
 			const isElectron = Platform.is.electron;
 
 			if (!isElectron && url) {
@@ -124,8 +128,8 @@ export const useOperateinStore = defineStore('operation', {
 		async copyCatalogue() {
 			console.log('into copyCatalogue');
 			const dataStore = useDataStore();
-
-			const copyStorages = await operationAPI.copy();
+			const dataAPI = dataAPIsa();
+			const copyStorages = await dataAPI.copy();
 			console.log('copyCatalogue', copyStorages);
 
 			dataStore.updateCopyFiles(copyStorages);
@@ -137,13 +141,14 @@ export const useOperateinStore = defineStore('operation', {
 		) {
 			console.log(route);
 			console.log(callback);
-
-			await operationAPI.paste(route, callback);
+			const dataAPI = dataAPIsa();
+			await dataAPI.paste(route, callback);
 		},
 
 		async cutCatalogue() {
 			const dataStore = useDataStore();
-			const copyStorages = await operationAPI.cut();
+			const dataAPI = dataAPIsa();
+			const copyStorages = await dataAPI.cut();
 
 			console.log('copyStoragescopyStorages', copyStorages);
 			dataStore.updateCopyFiles(copyStorages);
@@ -153,19 +158,23 @@ export const useOperateinStore = defineStore('operation', {
 			path: string,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		) {
-			await operationAPI.move(path, callback);
+			const dataAPI = dataAPIsa();
+			await dataAPI.move(path, callback);
 		},
 
 		uploadFiles() {
-			operationAPI.uploadFiles();
+			const dataAPI = dataAPIsa();
+			dataAPI.uploadFiles();
 		},
 
 		uploadFolder() {
-			operationAPI.uploadFolder();
+			const dataAPI = dataAPIsa();
+			dataAPI.uploadFolder();
 		},
 
 		openLocalFolder() {
-			operationAPI.openLocalFolder();
+			const dataAPI = dataAPIsa();
+			dataAPI.openLocalFolder();
 		}
 	}
 });

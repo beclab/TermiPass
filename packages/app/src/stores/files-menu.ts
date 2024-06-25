@@ -3,7 +3,8 @@ import { app } from '../globals';
 import { shareToUser } from '../api';
 import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
-import { dataAPI } from './../api';
+// import { dataAPI } from './../api';
+import { dataAPIsa } from './../api';
 import { SyncRepoMineType, SyncRepoSharedType } from '../api/common/encoding';
 import { IFilesSyncStatus } from 'src/platform/electron/interface';
 
@@ -345,7 +346,10 @@ export const useMenuStore = defineStore('filesMenu', {
 		async getSyncMenu() {
 			const menuStore = useMenuStore();
 			const menu = JSON.parse(JSON.stringify(menuStore.getMenu()));
-			const [res2, res3] = await dataAPI.fetchSyncRepo(MenuItem.SHAREDWITH);
+			const dataAPI = dataAPIsa();
+			const [res2, res3]: any = await dataAPI.fetchSyncRepo(
+				MenuItem.SHAREDWITH
+			);
 			const shareChildren: SyncRepoSharedType[] = [];
 			for (let i = 0; i < res2.length; i++) {
 				const el = res2[i];
@@ -380,7 +384,7 @@ export const useMenuStore = defineStore('filesMenu', {
 				});
 			}
 
-			const res1 = await dataAPI.fetchSyncRepo(MenuItem.MYLIBRARIES);
+			const res1: any = await dataAPI.fetchSyncRepo(MenuItem.MYLIBRARIES);
 			const mineChildren: SyncRepoMineType[] = [];
 			for (let i = 0; i < res1.length; i++) {
 				const el = res1[i];

@@ -22,7 +22,7 @@ const defaultConfig: AxiosRequestConfig = {
 	}
 };
 
-export class Fetch {
+class Fetch {
 	private instance: AxiosInstance;
 
 	constructor() {
@@ -73,6 +73,7 @@ export class Fetch {
 		config?: AxiosRequestConfig,
 		opt?: OptType
 	): Promise<T> {
+		console.log('url-get', url);
 		try {
 			if (opt?.node) {
 				config!.headers = {
@@ -120,4 +121,6 @@ export class Fetch {
 	}
 }
 
-new Fetch().init();
+const CommonFetch = new Fetch();
+
+export { CommonFetch };

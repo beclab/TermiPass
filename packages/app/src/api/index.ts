@@ -9,13 +9,26 @@ import * as ai from './ai';
 import search from './search';
 import commands from './commands';
 
-import { Data } from './data';
+import { Data as DataAPI } from './data';
+import { Data as DriveDataAPI } from './drive/data';
+import { Data as SyncDataAPI } from './sync/data';
+
 import { Operation } from './operation';
+import { getParams } from '../utils/utils';
 
-const dataAPI = new Data();
+function dataAPIsa(): SyncDataAPI | DriveDataAPI {
+	const query = getParams(window.location.href, 'id');
+	if (query) {
+		return new SyncDataAPI();
+	} else {
+		return new DriveDataAPI();
+	}
+}
 
-console.log('dataAPI', dataAPI);
 const operationAPI = new Operation();
+const dataAPI = new DataAPI();
+// const driveAPI = new DriveDataAPI();
+// const syncAPI = new SyncDataAPI();
 
 export {
 	files,
@@ -29,5 +42,8 @@ export {
 	shareToUser,
 	ai,
 	dataAPI,
+	dataAPIsa,
+	// driveAPI,
+	// syncAPI,
 	operationAPI
 };

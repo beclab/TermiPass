@@ -1,4 +1,6 @@
-import { Fetch } from './fetch';
+// import { Fetch } from './fetch';
+import { CommonFetch } from './fetch';
+
 import { removePrefix } from './utils';
 import {
 	checkOrigin,
@@ -14,23 +16,17 @@ import { formatAppDataNode } from '../utils/appdata';
 import { useSeahubStore } from '../stores/seahub';
 import { MenuItem } from '../utils/contact';
 
-export class Data extends Fetch {
+export class Data {
 	public baseURL: string;
+	private commonAxios: any;
 
 	constructor() {
-		super();
+		// super();
+		this.commonAxios = CommonFetch;
 	}
 
-	async fetch(
-		url: string,
-		loading?: boolean,
-		curItem?: string
-	): Promise<DriveResType> {
+	async fetch(url: string): Promise<DriveResType> {
 		url = decodeURIComponent(removePrefix(url));
-
-		console.log('loading', loading);
-		console.log('curItem', curItem);
-
 		let res: DriveResType;
 
 		switch (checkOrigin(url)) {
@@ -67,7 +63,7 @@ export class Data extends Fetch {
 
 	async fetchDrive(url: string): Promise<DriveResType> {
 		let res: DriveResType;
-		res = await this.get(`/api/resources${url}`, {});
+		res = await this.commonAxios.get(`/api/resources${url}`, {});
 
 		if (isAppData(url)) {
 			res = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
@@ -80,7 +76,7 @@ export class Data extends Fetch {
 		const currentItem = seahubStore.repo_name;
 		const pathLen = url.indexOf(currentItem) + currentItem.length;
 		const path = url.slice(pathLen);
-		const res = await this.get(
+		const res = await this.commonAxios.get(
 			`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
 			{}
 		);
@@ -97,7 +93,7 @@ export class Data extends Fetch {
 
 	async fetchCache(url: string): Promise<DriveResType> {
 		const { path, node } = getAppDataPath(url);
-		const res: DriveResType = await this.get(
+		const res: DriveResType = await this.commonAxios.get(
 			`/api/resources/AppData${path}`,
 			{},
 			{ auth: true, node }
@@ -112,13 +108,19 @@ export class Data extends Fetch {
 		}
 
 		if (menu == MenuItem.MYLIBRARIES) {
-			const res: any = await this.get('/seahub/api/v2.1/repos/?type=mine', {});
+			const res: any = await this.commonAxios.get(
+				'/seahub/api/v2.1/repos/?type=mine',
+				{}
+			);
 
 			const repos: SyncRepoItemType[] = res.repos;
 			return repos;
 		} else {
-			const res2: any = await this.get('/seahub/api/v2.1/shared-repos/', {});
-			const res3: any = await this.get(
+			const res2: any = await this.commonAxios.get(
+				'/seahub/api/v2.1/shared-repos/',
+				{}
+			);
+			const res3: any = await this.commonAxios.get(
 				'/seahub/api/v2.1/repos/?type=shared',
 				{}
 			);
