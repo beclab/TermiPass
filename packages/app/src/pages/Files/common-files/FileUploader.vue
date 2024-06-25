@@ -1,15 +1,11 @@
 <template>
-	<div className="file-uploader-container">
-		<div className="file-uploader">
-			<input
-				id="uploader-input"
-				className="upload-input"
-				type="file"
-				ref="uploadInput"
-				multiple
-			/>
-		</div>
-	</div>
+	<input
+		id="uploader-input"
+		className="upload-input"
+		type="file"
+		ref="uploadInput"
+		multiple
+	/>
 
 	<UploadSyncModal
 		v-if="
@@ -28,7 +24,7 @@ import MD5 from 'MD5';
 // import { watch } from 'vue';
 // import { useRoute } from 'vue-router';
 import Resumablejs from '@seafile/resumablejs';
-import { seafileAPI } from '../../../api/seafileAPI.ts';
+import { seafileAPI } from '../../../api/seafileAPI';
 import { useDataStore } from '../../../stores/data';
 import UploadSyncModal from '../../../components/files/UploadSyncModal.vue';
 
@@ -481,3 +477,9 @@ const onCloseUploadDialog = () => {
 	uploadFileList.value = [];
 };
 </script>
+
+<style lang="scss" scoped>
+.upload-input {
+	display: none;
+}
+</style>

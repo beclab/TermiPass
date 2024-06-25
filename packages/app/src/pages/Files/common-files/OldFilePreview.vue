@@ -313,7 +313,7 @@ export default defineComponent({
 			if (!listing.value) {
 				try {
 					const path = url.removeLastDir(route.path);
-					const res = await api.fetch(path);
+					const res = await store.fetchList(path);
 					listing.value = res.items;
 				} catch (e) {
 					//this.$showError(e);

@@ -120,8 +120,8 @@ const seahubStore = useSeahubStore();
 const { t } = useI18n();
 
 onMounted(async () => {
+	await menuStore.getSyncMenu();
 	menuStore.fifterMenu();
-	await sync.getSyncMenu();
 });
 
 const selectHandler = (value) => {
@@ -194,7 +194,6 @@ const getSyncStatus = (repo_id: string) => {
 .myDrawer {
 	overflow: hidden;
 	padding-top: 6px;
-	border-right: 1px solid $separator;
 	// border-right: 1px solid red;
 	// .title-active {
 	// 	color: $ink-1;

@@ -2,8 +2,9 @@ import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
 import { MenuItem, FilesSortType } from '../utils/contact';
+import { dataAPIsa } from './../api';
 
-export type CopyFromMode = 'Sync' | 'Drive' | '';
+import { OriginType, CopyStoragesType } from './../api/common/encoding';
 
 export type DataState = {
 	user: any;
@@ -23,8 +24,10 @@ export type DataState = {
 	hideUploadModal: boolean;
 	isUploadProgressDialogShow: boolean;
 	hideSyncUploadModal: boolean;
-	copyFiles: any;
-	copyFrom: CopyFromMode;
+	copyFiles: {
+		items: any;
+		from: OriginType;
+	};
 
 	//mobile add
 	activeMenu: MenuItem;
@@ -65,7 +68,10 @@ export const useDataStore = defineStore('data', {
 			hideUploadModal: false,
 			isUploadProgressDialogShow: false,
 			hideSyncUploadModal: false,
-			copyFiles: [],
+			copyFiles: {
+				items: [],
+				from: OriginType.DRIVE
+			},
 			activeMenu: MenuItem.HOME,
 			activeSort: {
 				by: FilesSortType.Modified,
@@ -104,6 +110,12 @@ export const useDataStore = defineStore('data', {
 	},
 
 	actions: {
+		async fetchList(url: string) {
+			const dataAPI = dataAPIsa();
+			console.log('dataAPI', dataAPI);
+			return dataAPI.fetch(url);
+		},
+
 		isFiles(route: any) {
 			return (
 				!this.loading &&
@@ -246,14 +258,18 @@ export const useDataStore = defineStore('data', {
 			this.showUploadModal = show;
 		},
 
-		updateCopyFiles(item: any, copyFrom: CopyFromMode) {
-			this.copyFiles = item;
-			this.copyFrom = copyFrom;
+		updateCopyFiles(copyStorages: {
+			items: CopyStoragesType[];
+			from: OriginType;
+		}) {
+			this.copyFiles = copyStorages;
 		},
 
 		resetCopyFiles() {
-			this.copyFiles = [];
-			this.copyFrom = '';
+			this.copyFiles = {
+				items: [],
+				from: OriginType.DRIVE
+			};
 		},
 
 		baseURL() {

@@ -50,6 +50,7 @@ import {
 	onMounted
 } from 'vue';
 import { useDataStore } from '../../stores/data';
+import { useOperateinStore } from '../../stores/operation';
 import { format } from 'quasar';
 const { humanStorageSize } = format;
 import moment from 'moment';
@@ -61,7 +62,7 @@ import TerminusFileIcon from '../common/TerminusFileIcon.vue';
 import { useMenuStore } from '../../stores/files-menu';
 import { notifyWarning } from '../../utils/notifyRedefinedUtil';
 
-import { handleFileOperate } from '../../components/files/files/OperateAction';
+// import { handleFileOperate } from '../../components/files/files/OperateAction';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
 
@@ -88,6 +89,7 @@ export default defineComponent({
 		const router = useRouter();
 		const menuStore = useMenuStore();
 		const route = useRoute();
+		const operateinStore = useOperateinStore();
 		const touches = ref<number>(0);
 		const selectIndex = ref<number | null>(null);
 		const renameRef = ref<any>(null);
@@ -219,7 +221,7 @@ export default defineComponent({
 
 			if (store.selectedCount === 0) return;
 
-			handleFileOperate(
+			operateinStore.handleFileOperate(
 				event,
 				{
 					...route,

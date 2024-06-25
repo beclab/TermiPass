@@ -172,6 +172,7 @@ const checkShardUser = () => {
 };
 
 const handleEvent = async (action: OPERATE_ACTION, e: any) => {
+	console.log('handleEventhandleEvent', action);
 	const path = '/';
 	switch (action) {
 		case OPERATE_ACTION.SHARE_WITH:
