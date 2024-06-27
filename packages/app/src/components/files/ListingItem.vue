@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="item"
+		class="item text-ink-1"
 		role="button"
 		tabindex="0"
 		:draggable="isDraggable"
@@ -11,8 +11,27 @@
 		:data-dir="isDir"
 		:data-type="type"
 		:aria-label="name"
-		:aria-selected="isSelected"
+		:aria-selected="isMutilSelected"
+		:aria-selected-border="isPad && isMutilSelected && viewMode === 'mosaic'"
 	>
+		<p
+			v-if="isPad"
+			class="select-common"
+			:class="isMutilSelected ? 'selected' : 'unselect'"
+			:style="
+				viewMode === 'mosaic'
+					? 'position: absolute;left: 10px;top: 10px;cursor: pointer;'
+					: ''
+			"
+			@click.stop="selectAction()"
+		>
+			<!-- <i class="material-icons">arrow_upward</i> -->
+			<q-icon
+				class="icon text-ink-on-brand"
+				v-if="isMutilSelected"
+				name="check"
+			></q-icon>
+		</p>
 		<terminus-file-icon
 			:name="name"
 			:type="type"
@@ -20,13 +39,45 @@
 			:path="path"
 			:modified="modified"
 			:is-dir="isDir"
+			:icon-size="isPad && viewMode === 'mosaic' ? 64 : 32"
 		/>
+
+		<q-icon
+			v-if="isPad && viewMode === 'mosaic' && store.mutilSelected.length == 0"
+			@click.stop="showMore"
+			name="sym_r_more_horiz"
+			class="text-ink-3"
+			size="20px"
+			style="
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				cursor: pointer;
+				border-radius: 12px;
+			"
+		>
+		</q-icon>
 
 		<div v-if="viewMode === 'mosaic'" style="margin-top: 0.5rem">
 			<span>{{ name }}</span>
 		</div>
 		<div v-else>
-			<p class="name">{{ name }}</p>
+			<p
+				:class="{
+					name: !isPad || store.mutilSelected.length == 0,
+					action_name: isPad && store.mutilSelected.length > 0
+				}"
+			>
+				{{ name }}
+			</p>
+			<p
+				class="action1"
+				v-if="isPad && store.mutilSelected.length == 0"
+				@click.stop="showMore"
+			>
+				<!-- {{ type || 'folder' }} -->
+				<q-icon name="sym_r_more_horiz" size="24px" />
+			</p>
 			<p class="modified">
 				<time :datetime="modified">
 					{{ humanTime() }}
@@ -64,6 +115,7 @@ import { notifyWarning } from '../../utils/notifyRedefinedUtil';
 import { handleFileOperate } from '../../components/files/files/OperateAction';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
+import { getAppPlatform } from '../../platform/appPlatform';
 
 export default defineComponent({
 	name: 'ListingItem',
@@ -126,13 +178,42 @@ export default defineComponent({
 			}
 		);
 
+		const isPad = ref(getAppPlatform() && getAppPlatform().isPad);
+
 		const singleClick = computed(function () {
 			return props.readOnly == undefined && store.user.singleClick;
 		});
 
-		const isSelected = computed(function () {
-			return store.selected.indexOf(props.index) !== -1;
-		});
+		const isMutilSelected = ref(false);
+
+		// const isSelected = computed(function () {
+		// 	return store.selected.indexOf(props.index) !== -1;
+		// });
+
+		if (isPad.value) {
+			watch(
+				() => store.mutilSelected,
+				() => {
+					console.log('store.mutilSelected ===>');
+					console.log(store.mutilSelected);
+					isMutilSelected.value =
+						store.mutilSelected.indexOf(props.index) !== -1;
+				},
+				{
+					deep: true
+				}
+			);
+		} else {
+			watch(
+				() => store.selected,
+				() => {
+					isMutilSelected.value = store.selected.indexOf(props.index) !== -1;
+				},
+				{
+					deep: true
+				}
+			);
+		}
 
 		const isDraggable = computed(function () {
 			return props.readOnly == undefined && store.user?.perm?.rename;
@@ -180,7 +261,7 @@ export default defineComponent({
 				return;
 			}
 
-			if (!isSelected.value) {
+			if (!isMutilSelected.value) {
 				store.resetSelected();
 				store.addSelected(props.index);
 			}
@@ -232,6 +313,9 @@ export default defineComponent({
 		};
 
 		const itemClick = (event: any) => {
+			console.log('itemClick ===>');
+			console.log(event);
+
 			emit('closeMenu');
 			if (singleClick.value && !store.multiple) open();
 			else click(event);
@@ -354,6 +438,21 @@ export default defineComponent({
 			store.closeHovers();
 		};
 
+		const selectAction = () => {
+			console.log('selectAction ===>1111');
+
+			if (store.mutilSelected.indexOf(props.index) !== -1) {
+				store.removeMutilSelected(props.index);
+			} else {
+				store.addMutilSelected(props.index);
+			}
+		};
+
+		const showMore = ($event) => {
+			emit('showMenu', $event);
+			// console.log($event);
+		};
+
 		return {
 			humanTime,
 			humanSize,
@@ -363,12 +462,34 @@ export default defineComponent({
 			itemClick,
 			submit,
 			touches,
-			isSelected,
 			isDraggable,
 			selectIndex,
 			renameRef,
-			fileName
+			fileName,
+			store,
+			selectAction,
+			showMore,
+			isMutilSelected,
+			isPad
 		};
 	}
 });
 </script>
+
+<style lang="scss" scoped>
+#listing.list .item {
+	border-bottom: 1px solid $separator;
+}
+
+#listing .item[aria-selected='true'] {
+	background: $background-hover;
+}
+
+#listing .item[aria-selected-border='true'] {
+	border: 1px solid $light-blue-default;
+}
+
+#listing .item:hover {
+	background: $background-hover;
+}
+</style>

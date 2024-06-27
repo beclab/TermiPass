@@ -1,39 +1,41 @@
 <template>
-	<terminus-title-bar v-if="userStore.current_user" />
-	<terminus-scroll-area
-		class="setup-account-page"
-		:style="
-			userStore.current_user ? 'height: calc(100% - 56px);' : 'height: 100%;'
-		"
-	>
-		<template v-slot:content>
-			<div
-				class="terminus-login-page column justify-start items-center"
-				style="position: relative"
-			>
-				<q-img
-					class="setup-account-page__brand"
-					:src="getRequireImage('login/termipass_brand.svg')"
-				/>
-				<span class="setup-account-page__desc login-sub-title">{{
-					t('setup_account_desc')
-				}}</span>
-				<account-operations
-					v-if="!isBex"
-					class="setup-account-page__create"
-					image-name="add"
-					:title="t('create_a_terminus_name')"
-					@click="createDid"
-				/>
-				<account-operations
-					class="setup-account-page__import"
-					image-name="place_item"
-					:title="t('import_terminus_name')"
-					@click="importDid"
-				/>
-			</div>
-		</template>
-	</terminus-scroll-area>
+	<div class="setup-account-page">
+		<terminus-title-bar v-if="userStore.current_user" />
+		<terminus-scroll-area
+			class="setup-account-page"
+			:style="
+				userStore.current_user ? 'height: calc(100% - 56px);' : 'height: 100%;'
+			"
+		>
+			<template v-slot:content>
+				<div
+					class="terminus-login-page column justify-start items-center"
+					style="position: relative"
+				>
+					<q-img
+						class="setup-account-page__brand"
+						:src="getRequireImage('login/termipass_brand.svg')"
+					/>
+					<span class="setup-account-page__desc login-sub-title">{{
+						t('setup_account_desc')
+					}}</span>
+					<account-operations
+						v-if="!isBex"
+						class="setup-account-page__create"
+						image-name="add"
+						:title="t('create_a_terminus_name')"
+						@click="createDid"
+					/>
+					<account-operations
+						class="setup-account-page__import"
+						image-name="place_item"
+						:title="t('import_terminus_name')"
+						@click="importDid"
+					/>
+				</div>
+			</template>
+		</terminus-scroll-area>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -77,7 +79,7 @@ const importDid = () => {
 <style scoped lang="scss">
 .setup-account-page {
 	width: 100%;
-	background-color: $background;
+	// background-color: $background;
 
 	&__brand {
 		margin-top: 80px;

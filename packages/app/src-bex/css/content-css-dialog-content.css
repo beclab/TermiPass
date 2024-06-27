@@ -3398,7 +3398,7 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 	position: fixed !important;
-	z-index: 6000;
+	z-index: 70001;
 }
 .q-dialog .q-menu--square {
 	border-radius: 0;
@@ -9005,7 +9005,7 @@
 	z-index: 9500;
 }
 .q-dialog .z-fullscreen {
-	z-index: 6000;
+	z-index: 70001;
 }
 .q-dialog .z-inherit {
 	z-index: inherit !important;
@@ -10888,7 +10888,7 @@
 	border-radius: 0 !important;
 	max-height: 100vh;
 	max-width: 100vw;
-	z-index: 6000;
+	z-index: 70001;
 }
 .q-dialog body.q-ios-padding .fullscreen {
 	padding-bottom: env(safe-area-inset-bottom) !important;

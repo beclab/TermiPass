@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" v-model="show" ref="dialogRef" @hide="onCancel">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				:label="t('prompts.rename')"
 				icon=""
@@ -8,13 +8,16 @@
 				@close="onCancel"
 			/>
 
-			<div
-				class="dialog-desc"
-				:style="{ textAlign: isMobile ? 'center' : 'left' }"
-			>
-				<div class="text-body2">{{ t('prompts.renameMessage') }}</div>
-
-				<terminus-edit class="terminus-dialog__edit" v-model="name" />
+			<div class="card-content">
+				<div class="text-body3 text-ink-3 q-mb-xs">
+					{{ t('prompts.renameMessage') }}
+				</div>
+				<input
+					class="input input--block text-ink-1"
+					v-focus
+					type="text"
+					v-model.trim="name"
+				/>
 			</div>
 
 			<terminus-dialog-footer
@@ -31,13 +34,12 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
-import { useQuasar, useDialogPluginComponent } from 'quasar';
+import { useDialogPluginComponent } from 'quasar';
 import { useRouter } from 'vue-router';
 import { files as api, seahub } from '../../../api';
 import url from '../../../utils/url';
 import { useDataStore } from '../../../stores/data';
 import { checkSeahub } from '../../../utils/file';
-import TerminusEdit from '../../common/TerminusEdit.vue';
 import { useI18n } from 'vue-i18n';
 import { useSeahubStore } from '../../../stores/seahub';
 import {
@@ -48,7 +50,6 @@ import {
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
-const $q = useQuasar();
 const name = ref();
 const store = useDataStore();
 const Router = useRouter();
@@ -56,7 +57,6 @@ const repo = useSeahubStore();
 const { t } = useI18n();
 const show = ref(true);
 const loading = ref(false);
-const isMobile = $q.platform.is.mobile;
 
 const { dialogRef, onDialogCancel } = useDialogPluginComponent();
 
@@ -170,11 +170,18 @@ const onCancel = () => {
 .card-dialog {
 	.card-continer {
 		width: 400px;
-		border-radius: 12px;
+		border-radius: 8px;
 
-		.dialog-desc {
-			padding-left: 20px;
-			padding-right: 20px;
+		.card-content {
+			padding: 0 20px;
+			.input {
+				border-radius: 5px;
+				border: 1px solid $input-stroke;
+				background-color: transparent;
+				&:focus {
+					border: 1px solid $yellow-disabled;
+				}
+			}
 		}
 	}
 }

@@ -43,7 +43,7 @@
 	border-radius: 0 !important;
 	max-height: 100vh;
 	max-width: 100vw;
-	z-index: 6000;
+	z-index: 70001;
 }
 
 .q-dialog.fixed,
@@ -90,7 +90,7 @@
 	overflow-x: hidden;
 	overflow-y: auto;
 	position: fixed !important;
-	z-index: 6000;
+	z-index: 70001;
 }
 .q-menu.q-position-engine {
 	margin-left: var(--q-pe-left, 0) !important;

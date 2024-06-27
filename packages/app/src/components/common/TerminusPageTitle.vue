@@ -4,7 +4,7 @@
 		:class="center ? ' column justify-center items-center' : ''"
 	>
 		<div
-			class="text-color-title text-h5"
+			class="text-ink-1 text-h5"
 			:style="center ? 'text-align : center' : ''"
 			v-show="label"
 		>
@@ -12,7 +12,7 @@
 			{{ label }}
 		</div>
 		<div
-			class="login-sub-title page-title__desc"
+			class="login-sub-title page-title__desc text-ink-2"
 			:style="center ? 'text-align : center' : 'color : $prompt-message'"
 			v-show="desc"
 		>

@@ -1,7 +1,11 @@
 <template>
-	<q-layout view="lHh LpR lFr" :container="platform == 'FILES' ? false : true">
+	<q-layout
+		view="lHh LpR lFr"
+		:container="platform == 'FILES' ? false : true"
+		class="bg-background-1"
+	>
 		<q-header
-			class="layoutHeader text-subtitle1 row items-center justify-between"
+			class="layoutHeader text-subtitle1 row items-center justify-between background-1"
 		>
 			<div
 				class="row items-center justify-between header-content drag-content-header q-pl-md"
@@ -15,7 +19,8 @@
 							:disabled="!backFlag ? false : true"
 							@click="goBack"
 							class="btn-no-text btn-no-border btn-size-sm"
-							:class="!backFlag ? 'text-grey-8 items-no-drag' : 'text-grey-5'"
+							:class="!backFlag ? 'items-no-drag' : ''"
+							color="ink-3"
 							:style="{ pointerEvents: `${!backFlag ? 'auto' : 'none'}` }"
 						/>
 						<q-btn
@@ -25,33 +30,32 @@
 							:disabled="!goFlag ? false : true"
 							@click="goForward"
 							class="btn-no-text btn-no-border btn-size-sm"
-							:class="!goFlag ? 'text-grey-8 items-no-drag' : 'text-grey-5'"
+							:class="!goFlag ? 'items-no-drag' : ''"
+							color="ink-3"
 							:style="{ pointerEvents: `${!goFlag ? 'auto' : 'none'}` }"
 						/>
 					</div>
 
-					<div
-						class="ellipsis text-color-title"
-						style="flex: 1; font-weight: 800"
-					>
+					<div class="ellipsis text-ink-1" style="flex: 1; font-weight: 500">
 						{{ fileTitle }}
 					</div>
 				</div>
 
 				<div
 					class="row items-center justify-end items-no-drag"
-					style="width: 220px"
+					:style="isPad ? 'width: 180px' : 'width: 220px'"
 				>
 					<div v-if="hideOption">
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border q-mr-xs"
+							text-color="ink-2"
 							icon="sym_r_drive_folder_upload"
 						>
 							<q-tooltip>{{ t('prompts.upload') }}</q-tooltip>
-							<q-menu class="popup-menu">
+							<q-menu class="popup-menu bg-background-2">
 								<q-list dense padding>
 									<q-item
-										class="popup-item text-grey-8"
+										class="popup-item text-ink-2"
 										clickable
 										@click="uploadFiles"
 										v-close-popup
@@ -62,7 +66,7 @@
 									</q-item>
 
 									<q-item
-										class="popup-item text-grey-8"
+										class="popup-item text-ink-2"
 										clickable
 										v-close-popup
 										@click="uploadFolder"
@@ -78,6 +82,7 @@
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border q-mr-xs"
 							icon="sym_r_create_new_folder"
+							text-color="ink-2"
 							@click="newFloder"
 						>
 							<q-tooltip>{{ t('prompts.newDir') }}</q-tooltip>
@@ -86,6 +91,7 @@
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border q-mr-xs"
 							icon="sym_r_more_horiz"
+							text-color="ink-2"
 							@click="openPopupMenu"
 						>
 							<q-tooltip>{{ t('buttons.more') }}</q-tooltip>
@@ -98,21 +104,37 @@
 					</div>
 
 					<div
-						class="separator q-mx-md bg-grey-2"
+						class="separator q-mx-md bg-separator"
 						style="width: 1px; height: 20px"
 					></div>
 
-					<div class="row items-center q-mr-md swithMode">
+					<div class="row items-center q-mr-md swithMode" v-if="isPad">
+						<q-btn
+							class="btn-size-sm btn-no-text btn-no-border"
+							:icon="
+								store.user.viewMode == 'list'
+									? 'sym_r_grid_view'
+									: 'sym_r_dock_to_right'
+							"
+							text-color="ink-2"
+							@click="
+								switchView(store.user.viewMode == 'list' ? 'mosaic' : 'list')
+							"
+						/>
+					</div>
+					<div class="row items-center q-mr-md swithMode" v-else>
 						<q-btn
 							class="btn-size-sm btn-no-text btn-no-border q-mr-xs"
-							:class="{ active: viewMode == 'list' }"
+							:class="{ 'bg-btn-bg-pressed': viewMode == 'list' }"
 							icon="sym_r_dock_to_right"
+							text-color="ink-2"
 							@click="switchView('list')"
 						/>
 						<q-btn
-							class="btn-size-sm btn-no-text btn-no-border"
-							:class="{ active: viewMode == 'mosaic' }"
+							class="btn-size-sm btn-no-text btn-no-border q-mr-xs"
+							:class="{ 'bg-btn-bg-pressed': viewMode == 'mosaic' }"
 							icon="sym_r_grid_view"
+							text-color="ink-2"
 							@click="switchView('mosaic')"
 						/>
 					</div>
@@ -132,6 +154,8 @@
 						? 'files-content-win'
 						: $q.platform.is.ipad
 						? 'files-content-pad'
+						: $q.platform.is.android
+						? 'files-content-android-pad'
 						: 'files-content-common'
 				"
 			>
@@ -150,7 +174,7 @@ import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { users } from '../api';
 import { useDataStore } from '../stores/data';
-
+import { useQuasar } from 'quasar';
 import { useMenuStore } from '../stores/files-menu';
 import { MenuItem } from '../utils/contact';
 import { hideHeaderOpt } from './../utils/file';
@@ -163,7 +187,9 @@ import PromptsComponent from '../components/files/prompts/PromptsComponent.vue';
 import FilesDrawer from './TermipassLayout/FilesDrawer.vue';
 import TerminusUserHeaderReminder from './../components/common/TerminusUserHeaderReminder.vue';
 import { useI18n } from 'vue-i18n';
+import { getAppPlatform } from '../platform/appPlatform';
 
+const $q = useQuasar();
 const Router = useRouter();
 const Route = useRoute();
 const store = useDataStore();
@@ -181,6 +207,8 @@ const backFlag = ref(true);
 const goFlag = ref(true);
 
 const { t } = useI18n();
+
+const isPad = ref(getAppPlatform() && getAppPlatform().isPad);
 
 watch(
 	() => store.user?.viewMode,
@@ -386,9 +414,9 @@ const openPopupMenu = () => {
 
 <style lang="scss">
 .layoutHeader {
-	background-color: $white;
 	color: $title;
 	padding: 0;
+	background-color: $background-1;
 
 	.header-content {
 		height: 56px;
@@ -404,11 +432,14 @@ const openPopupMenu = () => {
 
 .files-content {
 	width: 100%;
-	background: $white;
 }
 
 .files-content-common {
 	height: calc(100vh - 73px) !important;
+}
+
+.files-content-android-pad {
+	height: calc(100vh - 88px) !important;
 }
 .files-content-ipad {
 	height: calc(100vh - 116px) !important;

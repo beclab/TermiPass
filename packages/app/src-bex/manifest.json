@@ -1,7 +1,7 @@
 {
   "name": "TermiPass",
   "description": "DID APP",
-  "version": "0.4.61",
+  "version": "1.2.4",
   "manifest_version": 3,
   "icons": {
     "16": "icons/icon-16x16.png",
@@ -42,7 +42,7 @@
       "js": [
         "www/js/webextension-polyfill.js",
         "www/js/app.js",
-        "www/js/autofill.js",
+        "www/js/content/trigger-autofill-script-injection.js",
         "www/js/TermiPassProvider.js",
         "www/js/rssContentScript.js"
       ],
@@ -85,6 +85,17 @@
     }
   ],
   "content_security_policy": {
-    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+    "sandbox": "sandbox allow-scripts; script-src 'self'"
+  },
+  "optional_permissions": [
+    "nativeMessaging",
+    "privacy"
+  ],
+  "sandbox": {
+    "pages": [
+      "www/button.html",
+      "www/list.html"
+    ]
   }
 }

@@ -63,7 +63,7 @@ export const userBindTerminus = async (
 		});
 
 		await app.load(userStore.current_id!);
-		await app.unlock(user.mnemonic);
+		await app.unlock(user.mnemonic, false);
 
 		await app.clearSession();
 		app.state._errors = [];

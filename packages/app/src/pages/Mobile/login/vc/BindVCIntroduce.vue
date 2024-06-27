@@ -101,12 +101,14 @@ const enterVC = async () => {
 	}
 
 	&__title {
+		// padding-top: 115px;
 		margin-top: 115px;
 	}
 
 	&__content {
 		white-space: pre-wrap;
 		word-wrap: break-word;
+		// padding-bottom: 40px;
 	}
 }
 </style>

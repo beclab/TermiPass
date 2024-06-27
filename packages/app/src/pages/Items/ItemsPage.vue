@@ -22,7 +22,7 @@
 				/>
 
 				<div
-					class="text-color-sub-title column items-center justify-center full-height bg-white noData"
+					class="text-color-sub-title column items-center justify-center full-height noData"
 					v-if="!itemID"
 				>
 					<img class="q-mt-sm" src="../../assets/layout/nodata.svg" />
@@ -112,6 +112,7 @@ export default defineComponent({
 <style lang="scss">
 .separator-class {
 	width: 1px;
+	background: transparent !important;
 }
 </style>
 
@@ -129,7 +130,6 @@ export default defineComponent({
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	background-color: $white;
 	overflow: hidden;
 	float: right;
 }

@@ -2,7 +2,7 @@
 	<q-layout view="lHh LpR lFr" :container="true">
 		<q-header class="layoutHeader row items-center justify-between">
 			<div
-				class="row items-center justify-start ellipsis text-grey-9 text-weight-medium"
+				class="row items-center justify-start ellipsis text-ink-1 text-weight-medium"
 				style="flex: 1"
 			>
 				<q-icon class="q-mr-sm" name="sym_r_cloud_download" size="24px" />
@@ -11,7 +11,7 @@
 
 			<div class="row items-center justify-end">
 				<div
-					class="upload-btn text-body3 q-mr-sm"
+					class="upload-btn text-body3 q-mr-sm text-ink-1"
 					v-if="transferStore.activeItem != MenuType.Complete"
 					@click="pauseAction"
 					:style="{
@@ -24,7 +24,7 @@
 				</div>
 
 				<div
-					class="upload-btn text-body3 q-mr-sm"
+					class="upload-btn text-body3 q-mr-sm text-ink-1"
 					v-if="transferStore.activeItem != MenuType.Complete"
 					@click="startAction"
 					:style="{
@@ -36,7 +36,10 @@
 					{{ t('transmission.all_Start') }}
 				</div>
 
-				<div class="upload-btn text-body3 q-mr-sm" @click="clearAction">
+				<div
+					class="upload-btn text-body3 q-mr-sm text-ink-1"
+					@click="clearAction"
+				>
 					<q-icon class="q-mr-xs" name="sym_r_delete" size="20px" />
 					{{
 						transferStore.selectList.length > 0
@@ -53,6 +56,8 @@
 				:class="
 					$q.platform.is.win && $q.platform.is.electron
 						? 'transfer-table-win'
+						: isPad
+						? 'transfer-table-pad'
 						: 'transfer-table-common'
 				"
 			>
@@ -68,6 +73,7 @@ import { MenuType, useTransferStore } from '../stores/transfer';
 import TransferDrawer from './TermipassLayout/TransferDrawer.vue';
 import { watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { getAppPlatform } from '../platform/appPlatform';
 
 const transferStore = useTransferStore();
 
@@ -75,6 +81,8 @@ const pauseEnable = ref(false);
 const resumeEnable = ref(false);
 
 const { t } = useI18n();
+
+const isPad = ref(getAppPlatform() && getAppPlatform().isPad);
 
 watch(
 	() => transferStore.datas,
@@ -131,18 +139,14 @@ const pauseAction = async () => {
 
 <style lang="scss" scoped>
 .layoutHeader {
-	background-color: $white;
-	color: $title;
-	// padding: 20px 0px 10px 20px;
 	height: 56px;
 	padding: 0 20px;
 }
 
 .upload-btn {
-	border: 1px solid $grey-2;
+	border: 1px solid $btn-stroke;
 	padding: 6px 8px;
 	border-radius: 8px;
-	color: $sub-title;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -155,5 +159,10 @@ const pauseAction = async () => {
 
 .transfer-table-win {
 	height: calc(100vh - 95px) !important;
+}
+
+.transfer-table-pad {
+	height: calc(100vh - 95px) !important;
+	background: $white;
 }
 </style>

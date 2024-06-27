@@ -22,7 +22,8 @@ import {
 	BIND_STATUS
 } from '../../utils/terminusBindUtils';
 import { AppPlatform } from '../appPlatform';
-import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+// import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
 import { Device } from '@capacitor/device';
 import { appleDeviceNames } from '../apple-device-names';
 import { Clipboard } from '@capacitor/clipboard';
@@ -63,7 +64,6 @@ import {
 	registerNativeScanQRProtocols,
 	NativeScanQRProtocol
 } from './scanQRProtocols';
-import { isPad } from 'src/utils/platform';
 
 declare let cordova: any;
 declare let plugins: any;
@@ -137,8 +137,6 @@ export class CapacitorPlatform
 
 	async appMounted() {
 		super.appMounted();
-
-		this.isPad = isPad();
 
 		this.resetOrientationLockType();
 
@@ -274,20 +272,41 @@ export class CapacitorPlatform
 
 	/// Platform interface
 	async scanQR() {
-		BarcodeScanner.hideBackground();
-		await BarcodeScanner.prepare();
+		return new Promise<string>(async (resolve, reject) => {
+			document.querySelector('body')?.classList.add('barcode-scanner-active');
+			const listener = await BarcodeScanner.addListener(
+				'barcodeScanned',
+				async (result) => {
+					await listener.remove();
+					document
+						.querySelector('body')
+						?.classList.remove('barcode-scanner-active');
+					await BarcodeScanner.stopScan();
+					resolve(result.barcode.rawValue);
+				}
+			);
 
-		const result = await BarcodeScanner.startScan({
-			targetedFormats: ['QR_CODE']
+			const errorListener = await BarcodeScanner.addListener(
+				'scanError',
+				async (result) => {
+					await errorListener.remove();
+					document
+						.querySelector('body')
+						?.classList.remove('barcode-scanner-active');
+					await BarcodeScanner.stopScan();
+					reject(result.message);
+				}
+			);
+
+			await BarcodeScanner.startScan();
 		});
-		if (!result.hasContent || !result.content) {
-			throw Error('scan fail');
-		}
-		return result.content;
 	}
 
 	async stopScanQR() {
-		BarcodeScanner.showBackground();
+		// BarcodeScanner.showBackground();
+		document.querySelector('body')?.classList.remove('barcode-scanner-active');
+		// Remove all listeners
+		await BarcodeScanner.removeAllListeners();
 		BarcodeScanner.stopScan();
 	}
 
@@ -509,30 +528,16 @@ export class CapacitorPlatform
 	};
 
 	scanQRDidUserGrantPermission = async () => {
-		// check if user already granted permission
-		const status = await BarcodeScanner.checkPermission({
-			force: false
-		});
-
-		if (status.granted) {
-			// user granted permission
+		const result = await BarcodeScanner.checkPermissions();
+		if (result.camera == 'granted') {
 			return true;
 		}
 
-		if (status.denied) {
-			// user denied permission
+		if (result.camera == 'denied') {
 			return false;
 		}
 
-		if (status.asked) {
-			// system requested the user for permission during this call
-			// only possible when force set to true
-		}
-
-		if (status.neverAsked) {
-			// user has not been requested this permission before
-			// it is advised to show the user some sort of prompt
-			// this way you will not waste your only chance to ask for the permission
+		if (result.camera == 'prompt-with-rationale' || result.camera == 'prompt') {
 			const c = confirm(
 				'We need your permission to use your camera to be able to scan barcodes'
 			);
@@ -541,41 +546,25 @@ export class CapacitorPlatform
 			}
 		}
 
-		if (status.restricted || status.unknown) {
+		const { camera } = await BarcodeScanner.requestPermissions();
+
+		if (camera == 'granted') {
 			// ios only
 			// probably means the permission has been denied
-			return false;
-		}
-
-		// user has not denied permission
-		// but the user also has not yet granted the permission
-		// so request it
-		const statusRequest = await BarcodeScanner.checkPermission({
-			force: true
-		});
-
-		if (statusRequest.asked) {
-			// system requested the user for permission during this call
-			// only possible when force set to true
-		}
-
-		if (statusRequest.granted) {
-			// the user did grant the permission now
 			return true;
 		}
 
-		// user did not grant the permission, so he must have declined the request
 		return false;
 	};
 
 	scanQrCheckPermission = async () => {
-		const status = await BarcodeScanner.checkPermission({});
-		if (status.denied) {
+		const status = await BarcodeScanner.checkPermissions();
+		if (status.camera == 'denied') {
 			const c = confirm(
 				'If you want to grant permission for using your camera, enable it in the app settings.'
 			);
 			if (c) {
-				BarcodeScanner.openAppSettings();
+				BarcodeScanner.openSettings();
 			}
 		}
 	};
@@ -588,7 +577,7 @@ export class CapacitorPlatform
 				'If you want to grant permission for using your Photos, enable it in the app settings.'
 			);
 			if (c) {
-				BarcodeScanner.openAppSettings();
+				BarcodeScanner.openSettings();
 			}
 			return '';
 		}
@@ -627,7 +616,7 @@ export class CapacitorPlatform
 	};
 
 	async resetOrientationLockType(): Promise<void> {
-		if (this.quasar?.platform.is.ipad) {
+		if (this.isPad) {
 			return;
 		}
 		ScreenOrientation.lock({

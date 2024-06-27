@@ -45,6 +45,7 @@ import { WizardInfo } from './wizard';
 import { userBindTerminus } from '../BindTerminusBusiness';
 import { base64ToString, UserItem } from '@didvault/sdk/src/core';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
 const $q = useQuasar();
 const userStore = useUserStore();
 const menuStore = useMenuStore();
@@ -78,8 +79,12 @@ const startScan = async () => {
 };
 
 onMounted(async () => {
+	if (getNativeAppPlatform().isPad) {
+		await ScreenOrientation.lock({
+			orientation: 'portrait-primary'
+		});
+	}
 	menuStore.changeSafeArea(false);
-	document.body.classList.add('qrscanner');
 	initCanvas();
 	window.addEventListener('onresize', initCanvas);
 
@@ -99,8 +104,10 @@ onMounted(async () => {
 onUnmounted(() => {
 	getNativeAppPlatform().stopScanQR();
 	menuStore.changeSafeArea(true);
-	document.body.classList.remove('qrscanner');
 	window.removeEventListener('onresize', initCanvas);
+	if (getNativeAppPlatform().isPad) {
+		ScreenOrientation.unlock();
+	}
 });
 
 const toPhotoAlbum = async () => {

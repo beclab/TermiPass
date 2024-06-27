@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="uploadModal"
+		class="uploadModal bg-background-2"
 		:style="{
 			visibility: dataState.hideSyncUploadModal ? 'hidden' : 'visible'
 		}"
@@ -12,7 +12,7 @@
 					src="../../assets/images/uploading.png"
 					alt=""
 				/>
-				<span>
+				<span class="text-ink-1">
 					{{ t('vault_t.uploading_loaded') + ' ' + totalProgress + '%' }}
 				</span>
 			</div>
@@ -22,7 +22,7 @@
 					src="../../assets/images/uploaded.png"
 					alt=""
 				/>
-				<span>{{ t('all_uploaded_successfully') }}</span>
+				<span class="text-ink-1">{{ t('all_uploaded_successfully') }}</span>
 			</div>
 			<span>
 				<q-icon
@@ -55,10 +55,10 @@
 			>
 				<img class="fileIcon" :src="filesIcon(item.fileName)" />
 				<div class="content">
-					<div class="file-name">
+					<div class="file-name text-ink-1">
 						{{ item.fileName || item?.file?.name }}
 					</div>
-					<div>
+					<div class="text-ink-2">
 						{{
 							item.progress()
 								? humanStorageSize(Math.round(item.size * item.progress()))
@@ -190,7 +190,7 @@ onUnmounted(() => {
 	box-shadow: 0px 2px 10px $grey-2;
 	border-radius: 10px;
 	overflow: hidden;
-	background-color: $white;
+	box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
 
 	.uploadHeader {
 		width: 100%;
@@ -237,7 +237,7 @@ onUnmounted(() => {
 			}
 
 			&:hover {
-				background-color: $grey-1;
+				background-color: $background-hover;
 			}
 		}
 	}

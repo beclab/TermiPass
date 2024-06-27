@@ -17,8 +17,13 @@
 		<img
 			v-else-if="isDir || !type || type === 'folder'"
 			:src="folderIcon(name)"
+			:style="`width: ${iconSize}px; height: ${iconSize}px`"
 		/>
-		<img v-else :src="fileIcon(name)" />
+		<img
+			v-else
+			:src="fileIcon(name)"
+			:style="`width: ${iconSize}px; height: ${iconSize}px`"
+		/>
 	</div>
 </template>
 
@@ -56,6 +61,11 @@ const props = defineProps({
 	isDir: {
 		type: Boolean,
 		default: false,
+		required: false
+	},
+	iconSize: {
+		type: Number,
+		default: 32,
 		required: false
 	}
 });

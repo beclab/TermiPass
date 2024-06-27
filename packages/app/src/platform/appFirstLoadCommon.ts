@@ -28,19 +28,20 @@ export const appLoadPrepare = (_platform: AppPlatform, data: any) => {
 	ssiStore.setVCUrl('https://vc-gate-v3.bttcdn.com/');
 	cloudStore.setUrl('https://cloud-api.bttcdn.com');
 
-	walletService.load();
+	// walletService.load();
 
 	const quasar = data.quasar as QVueGlobals;
-	if (!quasar.platform.is.bex) {
+
+	if (!process.env.IS_BEX) {
 		walletService.load();
 	}
 
 	if (quasar) {
-		if (!quasar.platform.is.nativeMobile && !quasar.platform.is.bex) {
-			const script = document.createElement('script');
-			script.src = 'https://accounts.google.com/gsi/client';
-			document.body.appendChild(script);
-		}
+		// if (!quasar.platform.is.nativeMobile && !quasar.platform.is.bex) {
+		// 	const script = document.createElement('script');
+		// 	script.src = 'https://accounts.google.com/gsi/client';
+		// 	document.body.appendChild(script);
+		// }
 
 		if (!quasar.platform.is.nativeMobile && !quasar.platform.is.win) {
 			const updateOnlineStatus = () => {

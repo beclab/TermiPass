@@ -48,10 +48,9 @@ import { stripPropertiesRecursive } from '@didvault/sdk/src/core';
 //import { DirectoryProvider, DirectorySync } from "@didvault/core/src/directory";
 import { PostgresLogger } from './logging/postgres';
 import { LevelDBLogger } from './logging/leveldb';
-import { name } from '../../../assets/manifest.json';
 
 if (!process.env.PL_APP_NAME) {
-	process.env.PL_APP_NAME = name;
+	process.env.PL_APP_NAME = 'DIDVault';
 }
 //const bflUrl = process.env.BFL || 'http://bfl';
 const bflUrl = process.env.BFL;
@@ -384,12 +383,7 @@ async function init(config: PadlocConfig) {
 
 	// Notify admin if any uncaught exceptions cause the program to restart
 	process.on('uncaughtException', async (err: Error) => {
-		console.error(
-			'uncaught exception: ',
-			err.message,
-			err.stack,
-			'exiting...'
-		);
+		console.error('uncaught exception: ', err.message, err.stack, 'exiting...');
 		if (config.server.reportErrors) {
 			// try {
 			//     await emailSender.send(

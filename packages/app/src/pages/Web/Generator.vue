@@ -1,7 +1,7 @@
 <template>
-	<q-page class="bg-white generrator">
+	<q-page class="generrator">
 		<div
-			class="text-color-title text-subtitle2 row items-center justify-start q-pl-sm title"
+			class="text-subtitle2 text-ink-1 row items-center justify-start q-pl-sm title"
 		>
 			<q-icon
 				v-if="platform === 'MOBILE'"
@@ -19,13 +19,13 @@
 				<div class="box-toggle">
 					<q-btn
 						class="passphrase text-color-sub-title btn"
-						:class="models === 'passphrase' ? 'text-blue active' : ''"
+						:class="models === 'passphrase' ? 'text-ink-1 active' : ''"
 						:label="t('passphrase')"
 						@click="toggle('passphrase')"
 					/>
 					<q-btn
 						class="random text-color-sub-title btn"
-						:class="models === 'random' ? 'text-blue active' : ''"
+						:class="models === 'random' ? 'text-ink-1 active' : ''"
 						:label="t('random_string')"
 						@click="toggle('random')"
 					/>
@@ -33,7 +33,8 @@
 
 				<div class="separator" v-if="models === 'passphrase'">
 					<q-select
-						outlined
+						class="separator-select"
+						borderless
 						dense
 						emit-value
 						map-options
@@ -48,7 +49,8 @@
 
 				<div class="separator" v-if="models === 'passphrase'">
 					<q-select
-						outlined
+						class="separator-select"
+						borderless
 						dense
 						emit-value
 						map-options
@@ -78,7 +80,7 @@
 					<span> {{ wordsModel }} words </span>
 				</div>
 
-				<div class="wordsPanel bg-grey-11" v-if="models === 'passphrase'">
+				<div class="wordsPanel bg-background-3" v-if="models === 'passphrase'">
 					{{ wordPanel }}
 				</div>
 
@@ -89,7 +91,7 @@
 						</q-item-section>
 						<q-item-section avatar>
 							<q-toggle
-								color="blue"
+								color="yellow"
 								v-model="lowercaseModel"
 								val="battery"
 								@update:model-value="generate"
@@ -105,7 +107,7 @@
 						</q-item-section>
 						<q-item-section avatar>
 							<q-toggle
-								color="blue"
+								color="yellow"
 								v-model="capitalModel"
 								val="battery"
 								@update:model-value="generate"
@@ -121,7 +123,7 @@
 						</q-item-section>
 						<q-item-section avatar>
 							<q-toggle
-								color="blue"
+								color="yellow"
 								v-model="numberModel"
 								val="battery"
 								@update:model-value="generate"
@@ -137,7 +139,7 @@
 						</q-item-section>
 						<q-item-section avatar>
 							<q-toggle
-								color="blue"
+								color="yellow"
 								v-model="otherModel"
 								val="battery"
 								@update:model-value="generate"
@@ -163,21 +165,21 @@
 					<span>{{ mathModel }}</span>
 				</div>
 
-				<div class="mathPanel bg-grey-11" v-if="models === 'random'">
+				<div class="mathPanel bg-background-3" v-if="models === 'random'">
 					{{ chartPanel }}
 				</div>
 
 				<div class="operation row items-center justify-center">
 					<q-btn
-						outlined
-						class="regenerate"
+						borderless
+						class="regenerate text-ink-1 text-caption"
 						label="Regenerate"
 						icon="autorenew"
 						@click="generate"
 					/>
 					<q-btn
-						outlined
-						class="text-color-title text-body2 copy"
+						borderless
+						class="text-ink-1 text-caption copy"
 						label="Copy"
 						icon="content_copy"
 						@click="copy"
@@ -352,7 +354,7 @@ export default defineComponent({
 		.box {
 			width: 100%;
 			max-width: 30em;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			border-radius: 20px;
 			padding-bottom: 20px;
 
@@ -370,11 +372,11 @@ export default defineComponent({
 
 				.btn {
 					width: 45%;
-					border: 1px solid $grey-2;
+					border: 1px solid $separator;
 					border-radius: 10px;
 
 					&.active {
-						border: 1px solid $blue;
+						border: 1px solid $yellow-default;
 					}
 				}
 			}
@@ -382,6 +384,12 @@ export default defineComponent({
 			.separator {
 				width: 90%;
 				margin: 20px auto 0;
+				.separator-select {
+					border: 1px solid $separator;
+					padding: 0 8px;
+					border-radius: 8px;
+					overflow: hidden;
+				}
 			}
 
 			.words {
@@ -394,7 +402,7 @@ export default defineComponent({
 				margin: 12px auto 0;
 				border-radius: 10px;
 				overflow: hidden;
-				border: 1px solid $grey-2;
+				border: 1px solid $separator;
 			}
 
 			.capital {
@@ -402,7 +410,7 @@ export default defineComponent({
 				margin: 12px auto 0;
 				border-radius: 10px;
 				overflow: hidden;
-				border: 1px solid $grey-2;
+				border: 1px solid $separator;
 			}
 
 			.math {
@@ -446,7 +454,7 @@ export default defineComponent({
 
 				.regenerate,
 				.copy {
-					border: 1px solid $grey-2;
+					border: 1px solid $separator;
 					border-radius: 10px;
 				}
 			}

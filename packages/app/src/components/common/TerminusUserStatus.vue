@@ -117,7 +117,7 @@ const emit = defineEmits(['superAction']);
 <style scoped lang="scss">
 .terminus-user-status {
 	height: 20px;
-	border-radius: 4px;
+	border-radius: 10px;
 
 	.status-active {
 		color: $green;
@@ -163,9 +163,9 @@ const emit = defineEmits(['superAction']);
 	}
 
 	.status {
-		overflow: hidden; //超出的文本隐藏
-		text-overflow: ellipsis; //溢出用省略号显示
-		white-space: nowrap; //溢出不换行
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }
 </style>

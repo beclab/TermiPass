@@ -27,7 +27,7 @@
 			v-if="showCancel"
 			clickable
 			dense
-			class="but-cancel text-subtitle3 row justify-center items-center q-px-md q-mr-md"
+			class="but-cancel text-body3 ink-2 row justify-center items-center q-px-md q-mr-md"
 			@click="onCancel"
 		>
 			{{ cancelText }}
@@ -35,7 +35,7 @@
 		<q-item
 			clickable
 			dense
-			class="but-creat text-subtitle3 row justify-center items-center q-px-md q-mr-sm"
+			class="but-creat text-body3 yellow-default ink-on-brand-black row justify-center items-center q-px-md q-mr-sm"
 			@click="onOK"
 			v-if="!loading"
 		>
@@ -44,7 +44,7 @@
 		<q-item
 			v-else
 			dense
-			class="but-creat row justify-center items-center q-px-md q-mr-sm"
+			class="but-creat text-body3 yellow-default ink-on-brand-black row justify-center items-center q-px-md q-mr-sm"
 		>
 			Loading
 		</q-item>
@@ -108,8 +108,7 @@ const mobileCancel = () => {
 }
 .but-cancel {
 	border-radius: 8px;
-	border: 1px solid $grey-2;
-	color: $title;
+	border: 1px solid $btn-stroke;
 }
 
 .card-action {

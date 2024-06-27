@@ -85,7 +85,7 @@ export default defineComponent({
 	components: {
 		MnemonicsComponent
 	},
-	setup(props: any, context: any) {
+	setup(_props: any, context: any) {
 		const $q = useQuasar();
 		const userStore = useUserStore();
 		const menuStore = useMenuStore();

@@ -6,11 +6,19 @@
 		transition-show="slide-up"
 		transition-hide="slide-down"
 	>
-		<q-card>
+		<q-card :class="$q.platform.is.android ? 'android-pad-height' : ''">
 			<div id="previewer">
-				<header-bar style="margin-top: env(safe-area-inset-top)">
+				<header-bar
+					:class="
+						$q.platform.is.ipad
+							? 'ipad-header'
+							: $q.platform.is.android
+							? 'android-pad-header'
+							: ''
+					"
+				>
 					<title
-						class="q-ml-md"
+						class="q-ml-md text-ink-1"
 						:style="
 							$q.platform.is.electron && $q.platform.is.mac
 								? 'margin-left: 90px;'
@@ -21,7 +29,7 @@
 					</title>
 					<template #info v-if="store.req.type === 'image'">
 						<div
-							class="q-px-md q-py-xs view-another-image text-overline cursor-pointer"
+							class="q-px-md q-py-xs view-another-image text-overline cursor-pointer q-mr-sm"
 							@click="store.preview.fullSize = !store.preview.fullSize"
 							style="-webkit-app-region: no-drag"
 						>
@@ -70,7 +78,7 @@
 						/>
 					</template>
 				</header-bar>
-				<div class="content">
+				<div class="content bg-background-2">
 					<BtLoading
 						:show="true"
 						v-if="store.loading"
@@ -126,6 +134,7 @@ import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
 import { checkSeahub } from '../../../utils/file';
 import { nextTick } from 'process';
+import { getAppPlatform } from '../../../platform/appPlatform';
 
 const dialog = ref(false);
 
@@ -202,7 +211,7 @@ onMounted(() => {
 			newVal.type == 'pdf'
 		) {
 			isDark.value = true;
-			if ($q.platform.is.ipad && newVal.type == 'pdf') {
+			if (getAppPlatform().isPad && newVal.type == 'pdf') {
 				return (currentView.value = FilePDFPreview);
 			}
 			return (currentView.value = FilePreview);
@@ -367,8 +376,25 @@ const showOperation = () => {
 <style scoped lang="scss">
 .view-another-image {
 	height: 20px;
-	background: $grey-2;
 	border-radius: 4px;
 	text-align: center;
+	border: 1px solid $btn-stroke;
+}
+
+#previewer .content > button {
+	background-color: $dimmed-background;
+}
+
+.ipad-header {
+	margin-top: env(safe-area-inset-top);
+}
+
+.android-pad-header {
+	margin-top: 30px;
+}
+
+.android-pad-height {
+	height: calc(100vh - 30px);
+	margin-top: 30px;
 }
 </style>

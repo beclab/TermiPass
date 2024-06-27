@@ -36,6 +36,9 @@ import { savePassword } from '../../Mobile/login/unlock/UnlockBusiness';
 import TerminusPageTitle from '../../../components/common/TerminusPageTitle.vue';
 import TerminusPasswordValidator from '../../../components/common/TerminusPasswordValidator.vue';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
+import TerminusTipDialog from '../../../components/dialog/TerminusTipDialog.vue';
+import { getNativeAppPlatform } from '../../../platform/capacitor/capacitorPlatform';
+import { getAppPlatform } from '../../../platform/appPlatform';
 
 const $router = useRouter();
 const $q = useQuasar();
@@ -58,9 +61,42 @@ const verifyPassword = async () => {
 	$q.loading.show();
 	await savePassword(password, {
 		async onSuccess() {
-			$router.push({
-				name: 'InputMnemonic'
-			});
+			const jumpToRegisterDid = () => {
+				if (getAppPlatform().isPad) {
+					$router.replace({
+						name: 'setupSuccess'
+					});
+					return;
+				}
+				$router.push({
+					name: 'InputMnemonic'
+				});
+			};
+
+			if (await getNativeAppPlatform().biometricKeyStore.isSupported()) {
+				$q.dialog({
+					component: TerminusTipDialog,
+					componentProps: {
+						title: t('biometric_unlock'),
+						message: t('biometric_unlock_desc'),
+						navigation: t('skip')
+					}
+				})
+					.onOk(async () => {
+						const result = await getNativeAppPlatform().openBiometric();
+						if (!result.status) {
+							notifyFailed(t('errors.set_biometry_failure'));
+							return;
+						}
+						jumpToRegisterDid();
+					})
+					.onCancel(() => {
+						jumpToRegisterDid();
+					});
+				return;
+			}
+
+			jumpToRegisterDid();
 		},
 		onFailure(message: string) {
 			notifyFailed(message);
@@ -74,7 +110,7 @@ const verifyPassword = async () => {
 .set-unlock-pwd-page {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-2;
 	padding-top: 20px;
 	padding-left: 32px;
 	padding-right: 32px;

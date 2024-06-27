@@ -1,5 +1,5 @@
 <template>
-	<div class="column justify-center items-center full-width full-height">
+	<div class="column justify-center items-center">
 		<q-img src="/termipass.png" class="termipass-logo" />
 		<div class="termipass-tips text-subtitle1 text-ink-1 q-mt-lg">
 			{{ t('welcome_declaration_tips') }}

@@ -34,7 +34,7 @@
 	</div>
 	<div
 		class="column items-center"
-		style="word-wrap: break-word min-height:auto"
+		style="word-wrap: break-word; min-height: auto"
 		v-else
 	>
 		<div class="boot_justify">

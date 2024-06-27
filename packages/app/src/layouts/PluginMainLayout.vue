@@ -134,6 +134,7 @@ const getFileTitle = (path: string) => {
 		width: calc(100%);
 		height: calc(100%);
 		border-radius: 12px;
+		background-color: white;
 	}
 }
 </style>

@@ -1,11 +1,7 @@
 import { WalletCore } from '@trustwallet/wallet-core';
 
 let walletService: any;
-if (
-	process.env.PLATFORM === 'DESKTOP' ||
-	process.env.PLATFORM === 'MOBILE' ||
-	process.env.PLATFORM === 'BEX'
-) {
+if (process.env.PLATFORM !== 'FILES') {
 	const { initWasm } = require('@trustwallet/wallet-core');
 
 	console.log('initWasm', initWasm);

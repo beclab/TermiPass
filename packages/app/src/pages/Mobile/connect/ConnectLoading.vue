@@ -13,7 +13,7 @@
 					:isAnimated="true"
 				/>
 			</div>
-			<p class="wizard-content__detail" style="margin-top: 32px">
+			<p class="wizard-content__detail ink-2" style="margin-top: 32px">
 				{{ t('please_wait_a_monent_checking_the_status_of_the_terminus') }}
 			</p>
 		</div>
@@ -89,6 +89,6 @@ onBeforeUnmount(() => {
 .connect-loading-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-2;
 }
 </style>

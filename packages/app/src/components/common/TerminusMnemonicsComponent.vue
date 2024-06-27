@@ -7,7 +7,7 @@
 		>
 			{{ t('mnemonics') }}
 		</div>
-		<div v-else-if="showTitle" class="login-label">
+		<div v-else-if="showTitle" class="login-label q-mb-xs">
 			{{ t('mnemonics') }}
 		</div>
 		<div class="mnemonics-bg row justify-between" v-if="!forceReloadInput">
@@ -308,7 +308,7 @@ defineExpose({ clearInput, reloadMnemonics });
 		padding: 4px 8px;
 		width: auto;
 		border-radius: 4px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 
 		.paste {
 			margin-left: 4px;

@@ -83,7 +83,7 @@ export const handleFileOperate = (
 
 		case OPERATE_ACTION.COPY:
 			_copyCatalogue();
-			callback(OPERATE_ACTION.COPY, null);
+			callback(OPERATE_ACTION.COPY, callback);
 			break;
 
 		case OPERATE_ACTION.CUT:
@@ -126,6 +126,7 @@ export const handleFileOperate = (
 		default:
 			break;
 	}
+	// dataStore.resetMutilSelected();
 };
 
 const openLocalFolder = () => {

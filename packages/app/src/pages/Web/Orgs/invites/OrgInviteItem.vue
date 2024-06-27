@@ -1,17 +1,17 @@
 <template>
 	<div class="row items-center justify-start">
 		<q-card-section
-			class="row items-center justify-between q-pa-none text-grey-9"
+			class="row items-center justify-between q-pa-none text-ink-1"
 		>
 			<q-icon name="sym_r_mail" size="24px" />
 		</q-card-section>
 		<q-card-section class="column items-start justify-start q-pa-none q-ml-sm">
-			<div class="text-weight-bold text-body1 text-grey-9">
+			<div class="text-weight-bold text-body1 text-ink-1">
 				{{ invite.did }}
 			</div>
 			<div class="row items-center justify-start">
 				<div
-					class="tag text-subtitle3 row items-center justify-center q-mr-sm"
+					class="tag text-subtitle3 text-ink-2 row items-center justify-center q-mr-sm"
 					:class="status.class"
 				>
 					<q-icon :name="status.icon" size="20px" class="q-mr-xs" />
@@ -77,7 +77,7 @@ export default defineComponent({
 	padding: 0 4px;
 	line-height: normal;
 	text-align: center;
-	border: 1px solid $grey-10;
+	border: 1px solid $separator;
 }
 .tag:not(:last-child) {
 	margin-right: 6px;

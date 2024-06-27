@@ -1,7 +1,9 @@
 <template>
 	<div class="rule-checker-root row justify-start items-center">
 		<q-img class="rule-checker-root__img" :src="imgRef" />
-		<div class="rule-checker-root__label login-sub-title">{{ label }}</div>
+		<div class="rule-checker-root__label login-sub-title text-ink-2">
+			{{ label }}
+		</div>
 	</div>
 </template>
 

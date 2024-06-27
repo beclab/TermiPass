@@ -9,7 +9,7 @@
 			v-if="store.req.numDirs + store.req.numFiles == 0"
 		>
 			<img src="../../../assets/images/empty.png" alt="empty" />
-			<span class="text-body2">{{ $t('files.lonely') }}</span>
+			<span class="text-body2 text-ink-1">{{ $t('files.lonely') }}</span>
 			<input
 				style="display: none"
 				type="file"
@@ -32,22 +32,69 @@
 			ref="listing"
 			:class="store.user.viewMode + ' file-icons'"
 		>
-			<BtScrollArea style="height: 100%">
-				<div class="common-div" style="padding: 0 34px">
+			<BtScrollArea
+				:style="`height: calc(100% - 40px - ${
+					(isPad && store.copyFiles && store.copyFiles.length > 0) ||
+					selectFileCount > 0
+						? '48px'
+						: '0px'
+				}`"
+			>
+				<div class="common-div" :style="isPad ? '' : 'padding: 0 34px'">
 					<div class="item header">
 						<div></div>
 						<div>
 							<p
-								:class="{ active: nameSorted }"
-								class="name"
+								:class="{
+									active: nameSorted,
+									name: !isPad || selectFileCount == 0,
+									action_name: isPad && selectFileCount > 0
+								}"
+								tabindex="0"
+							>
+								<span
+									v-if="isPad"
+									class="select-common"
+									:class="
+										totalFileCount > 0 && selectFileCount == totalFileCount
+											? 'selected'
+											: 'unselect'
+									"
+									@click="selectAll"
+								>
+									<q-icon
+										class="icon text-ink-on-brand"
+										v-if="
+											selectFileCount == totalFileCount
+												? 'selected'
+												: 'unselect'
+										"
+										name="check"
+									></q-icon>
+								</span>
+								<span
+									@click="sort('name')"
+									:title="$t('files.sortByName')"
+									:aria-label="$t('files.sortByName')"
+									>{{ $t('files.name') }}</span
+								>
+								<i
+									class="material-icons"
+									@click="sort('name')"
+									:title="$t('files.sortByName')"
+									:aria-label="$t('files.sortByName')"
+									>{{ nameIcon }}</i
+								>
+							</p>
+
+							<p
+								v-if="isPad && selectFileCount == 0"
+								:class="{ active: modifiedSorted }"
+								class="action1"
 								role="button"
 								tabindex="0"
-								@click="sort('name')"
-								:title="$t('files.sortByName')"
-								:aria-label="$t('files.sortByName')"
 							>
-								<span>{{ $t('files.name') }}</span>
-								<i class="material-icons">{{ nameIcon }}</i>
+								<span>{{ 'Action' }}</span>
 							</p>
 
 							<p
@@ -92,7 +139,7 @@
 					</div>
 				</div>
 
-				<div class="common-div" style="padding: 0 34px 40px">
+				<div class="common-div" :style="isPad ? '' : 'padding: 0 34px 40px'">
 					<ListingItem
 						v-for="item in dirs"
 						:key="base64(item.name)"
@@ -110,6 +157,11 @@
 						@contextmenu.stop="rightClick($event, item)"
 						@closeMenu="changeVisible"
 						@resetOpacity="resetOpacity"
+						@showMenu="
+							(event) => {
+								rightClick(event, item);
+							}
+						"
 					>
 					</ListingItem>
 
@@ -130,6 +182,11 @@
 						@contextmenu.stop="rightClick($event, item)"
 						@closeMenu="changeVisible"
 						@resetOpacity="resetOpacity"
+						@showMenu="
+							(event) => {
+								rightClick(event, item);
+							}
+						"
 					>
 					</ListingItem>
 				</div>
@@ -164,14 +221,25 @@
 					</div>
 				</div>
 			</BtScrollArea>
-
+			<div class="file-action-footer" v-if="isPad && selectFileCount > 0">
+				<BottomOperateMenu :menuList="store.mutilSelected" />
+			</div>
+			<div
+				class="file-action-footer"
+				v-if="
+					isPad &&
+					store.copyFiles &&
+					store.copyFiles.length > 0 &&
+					selectFileCount == 0
+				"
+			>
+				<BottomOperateMenu :is-copy="true" />
+			</div>
 			<div class="file-footer" v-if="store.req">
-				{{ selectFileCount || '' }}
+				{{ selectFileCount > 0 ? selectFileCount : '' }}
 				{{
-					selectFileCount === 1
+					selectFileCount >= 1
 						? `item selected (${format.humanStorageSize(selectFileSize)}), `
-						: selectFileCount > 1
-						? `items selected (${format.humanStorageSize(selectFileSize)}), `
 						: ''
 				}}
 				{{ totalFileCount }}
@@ -223,18 +291,21 @@ import { stopScrollMove, startScrollMove } from '../../../utils/utils';
 import { disabledClick } from '../../../utils/file';
 import ListingItem from '../../../components/files/ListingItem.vue';
 import OperateMenuVue from '../../../components/files/files/OperateMenu.vue';
+import BottomOperateMenu from '../../../components/files/files/BottomOperateMenu.vue';
 import { OPERATE_ACTION } from '../../../utils/contact';
 
 import { handleFileOperate } from '../../../components/files/files/OperateAction';
 
 import FileUploader from './FileUploader.vue';
+import { getAppPlatform } from '../../../platform/appPlatform';
 
 export default defineComponent({
 	name: 'ListingFiles',
 	components: {
 		ListingItem,
 		OperateMenuVue,
-		FileUploader
+		FileUploader,
+		BottomOperateMenu
 	},
 	setup() {
 		const store = useDataStore();
@@ -258,27 +329,50 @@ export default defineComponent({
 		const lineHeight = ref('calc(100vh - 64px)');
 		const repoId = ref();
 		const fileUploaderPath = ref();
+		const isPad = ref(getAppPlatform() && getAppPlatform().isPad);
+		if (isPad.value) {
+			watch(
+				() => store.mutilSelected,
+				async (newVaule) => {
+					selectFileCount.value = store.mutilSelected.length;
+					let totalSize = 0;
+					if (store.mutilSelected.length && newVaule.length > 0) {
+						for (let i = 0; i < newVaule.length; i++) {
+							const el = newVaule[i];
 
-		watch(
-			() => store.selected,
-			async (newVaule) => {
-				selectFileCount.value = store.selectedCount;
-				let totalSize = 0;
-				if (store.selectedCount && newVaule.length > 0) {
-					for (let i = 0; i < newVaule.length; i++) {
-						const el = newVaule[i];
-
-						let filesSize: number = store.req.items[el].size || 0;
-						totalSize += filesSize;
+							let filesSize: number = store.req.items[el].size || 0;
+							totalSize += filesSize;
+						}
 					}
-				}
 
-				selectFileSize.value = totalSize;
-			},
-			{
-				deep: true
-			}
-		);
+					selectFileSize.value = totalSize;
+				},
+				{
+					deep: true
+				}
+			);
+		} else {
+			watch(
+				() => store.selected,
+				async (newVaule) => {
+					selectFileCount.value = store.selectedCount;
+					let totalSize = 0;
+					if (store.selectedCount && newVaule.length > 0) {
+						for (let i = 0; i < newVaule.length; i++) {
+							const el = newVaule[i];
+
+							let filesSize: number = store.req.items[el].size || 0;
+							totalSize += filesSize;
+						}
+					}
+
+					selectFileSize.value = totalSize;
+				},
+				{
+					deep: true
+				}
+			);
+		}
 
 		watch(
 			() => store.req,
@@ -301,6 +395,7 @@ export default defineComponent({
 			() => {
 				menuVisible.value = false;
 				repoId.value = route.query.id;
+				store.resetMutilSelected();
 
 				const currentItem = store.currentItem;
 
@@ -835,8 +930,9 @@ export default defineComponent({
 			e.preventDefault();
 
 			if (process.env.PLATFORM !== 'FILES') {
-				clientX.value = e.clientX - 216;
-				clientY.value = e.clientY - 12;
+				clientX.value =
+					e.clientX - (store.user.viewMode == 'mosaic' ? 180 : 140);
+				clientY.value = e.clientY + 10;
 			} else {
 				clientX.value = e.clientX;
 				clientY.value = e.clientY;
@@ -866,6 +962,11 @@ export default defineComponent({
 		const changeVisible = (e: any) => {
 			menuVisible.value = false;
 			startScrollMove(e);
+		};
+
+		const selectAll = () => {
+			store.resetSelected();
+			// store.selected =
 		};
 
 		return {
@@ -911,7 +1012,9 @@ export default defineComponent({
 			lineHeight,
 			resetOpacity,
 			repoId,
-			fileUploaderPath
+			fileUploaderPath,
+			selectAll,
+			isPad
 		};
 	}
 });
@@ -919,16 +1022,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .empty {
-	background: $white;
-
 	img {
 		width: 226px;
 		height: 170px;
 		margin-bottom: 20px;
-	}
-
-	span {
-		color: $grey-14;
 	}
 }
 
@@ -945,8 +1042,18 @@ export default defineComponent({
 	position: absolute;
 	bottom: 0;
 	right: 0;
-	border-top: 1px solid $grey-11;
+	border-top: 1px solid $separator;
 	justify-content: center !important;
-	background: $white;
+}
+
+.file-action-footer {
+	width: 100%;
+	height: 48px;
+	position: absolute;
+	bottom: 40px;
+	right: 0;
+	border-top: 1px solid $separator;
+	text-align: center;
+	justify-content: center !important;
 }
 </style>

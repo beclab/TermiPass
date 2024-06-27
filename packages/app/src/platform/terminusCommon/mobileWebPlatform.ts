@@ -1,7 +1,12 @@
 import { TerminusCommonPlatform } from './terminalCommonPlatform';
 import { i18n } from '../../boot/i18n';
+import { isPad } from 'src/utils/platform';
 
 export class MobileWebPlatform extends TerminusCommonPlatform {
+	async appMounted() {
+		super.appMounted();
+		this.isPad = isPad();
+	}
 	tabbarItems = [
 		{
 			name: i18n.global.t('file'),

@@ -1,6 +1,6 @@
 <template>
 	<q-list
-		class="menu-list"
+		class="menu-list text-ink-2 bg-background-2"
 		v-if="visible"
 		:style="{ top: top + 'px', left: left + 'px' }"
 	>
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { defineEmits, defineProps, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useDataStore } from '../../../stores/data';
 import { useQuasar } from 'quasar';
 import { handleFileOperate } from './OperateAction';
@@ -40,7 +40,6 @@ const props = defineProps({
 });
 
 const Route = useRoute();
-const Router = useRouter();
 const dataStore = useDataStore();
 const menuStore = useMenuStore();
 
@@ -147,6 +146,9 @@ const disableRename = ref(menuStore.disableMenuItem);
 watch(
 	() => [props.menuList, Route.query.type, Route.query.p],
 	(newVal) => {
+		console.log('====>');
+		console.log(props.menuList);
+
 		if (newVal[0]) {
 			menuListSelf.value = itemMenuList.value;
 		} else {
@@ -314,6 +316,7 @@ const handle = (e: any, item: any) => {
 				copyed.value = true;
 			} else if (action == OPERATE_ACTION.PASTE) {
 				copyed.value = false;
+				dataStore.resetMutilSelected();
 			} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
 				const repo_id = Route.query.id as string;
 				const isElectron = $q.platform.is.electron;
@@ -329,8 +332,6 @@ const handle = (e: any, item: any) => {
 
 <style scoped lang="scss">
 .menu-list {
-	background: $white;
-	box-shadow: 0px 2px 10px $grey-2;
 	border-radius: 10px;
 	cursor: pointer;
 	display: flex;
@@ -340,6 +341,7 @@ const handle = (e: any, item: any) => {
 	padding: 5px 8px;
 	position: fixed;
 	z-index: 10;
+	box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
 
 	.menu-item {
 		width: 100%;
@@ -351,7 +353,7 @@ const handle = (e: any, item: any) => {
 		padding-bottom: 2px !important;
 
 		&:hover {
-			background-color: $grey-1;
+			background-color: $background-hover;
 		}
 	}
 }

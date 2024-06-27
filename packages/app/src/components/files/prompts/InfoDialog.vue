@@ -1,6 +1,6 @@
 <template>
 	<q-dialog class="card-dialog" ref="dialogRef" v-model="show" @hide="onCancel">
-		<q-card class="card-continer">
+		<q-card class="card-continer" flat>
 			<terminus-dialog-bar
 				:label="t('files.attributes')"
 				icon=""
@@ -22,8 +22,10 @@
 						style=""
 					/>
 					<div class="column justify-center" style="width: calc(100% - 50px)">
-						<div class="title text-subtitle2">{{ name }}</div>
-						<div class="detail text-body3">{{ modified }}</div>
+						<div class="title text-ink-1 text-subtitle3 q-mb-xs">
+							{{ name }}
+						</div>
+						<div class="detail text-ink-3 text-body3">{{ modified }}</div>
 					</div>
 				</div>
 
@@ -31,29 +33,39 @@
 
 				<div class="info-module column items-center">
 					<div class="info-item row justify-between items-center">
-						<span class="title text-body3">{{ t('files.style') }}</span>
-						<span class="detail text-body3">{{ fileType }}</span>
+						<span class="title text-ink-3 text-body3">{{
+							t('files.style')
+						}}</span>
+						<span class="detail text-ink-1 text-body3">{{ fileType }}</span>
 					</div>
 					<div class="info-item row justify-between items-center">
-						<span class="title text-body3">{{ t('files.path') }}</span>
-						<span class="detail text-body3">{{ path }}</span>
+						<span class="title text-ink-3 text-body3">{{
+							t('files.path')
+						}}</span>
+						<span class="detail text-ink-1 text-body3">{{ path }}</span>
 					</div>
 					<div class="info-item row justify-between items-center">
-						<span class="title text-body3">{{ t('prompts.size') }}</span>
-						<span class="detail text-body3">{{ humanSize }} </span>
+						<span class="title text-ink-3 text-body3">{{
+							t('prompts.size')
+						}}</span>
+						<span class="detail text-ink-1 text-body3">{{ humanSize }} </span>
 					</div>
 					<div
 						class="info-item row justify-between items-center"
 						v-if="fileType === 'folder'"
 					>
-						<span class="title text-body3">{{ t('prompts.contain') }}</span>
-						<span class="detail text-body3">
+						<span class="title text-ink-3 text-body3">{{
+							t('prompts.contain')
+						}}</span>
+						<span class="detail text-ink-1 text-body3">
 							{{ humanNumber }}
 						</span>
 					</div>
 					<div class="info-item row justify-between items-center">
-						<span class="title text-body3">{{ t('files.update_time') }}</span>
-						<span class="detail text-body3">{{ modified }}</span>
+						<span class="title text-ink-3 text-body3">{{
+							t('files.update_time')
+						}}</span>
+						<span class="detail text-ink-1 text-body3">{{ modified }}</span>
 					</div>
 				</div>
 			</div>
@@ -63,7 +75,7 @@
 
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
-import { format, useDialogPluginComponent } from 'quasar';
+import { format, useDialogPluginComponent, useQuasar } from 'quasar';
 import { useDataStore } from 'src/stores/data';
 import TerminusFileIcon from '../../common/TerminusFileIcon.vue';
 import { formatFileModified } from 'src/utils/file';
@@ -73,6 +85,9 @@ import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 // import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
 const { dialogRef } = useDialogPluginComponent();
+
+const $q = useQuasar();
+const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 
 const { humanStorageSize } = format;
 
@@ -176,11 +191,6 @@ const onCancel = () => {
 			.title-module {
 				margin-top: 20px;
 				margin-bottom: 20px;
-
-				.title {
-					color: $title;
-				}
-
 				.detail {
 					text-align: left;
 					color: $sub-title;
@@ -190,6 +200,9 @@ const onCancel = () => {
 					text-overflow: ellipsis;
 					white-space: nowrap;
 					overflow: hidden;
+				}
+				.title {
+					text-align: left;
 				}
 			}
 

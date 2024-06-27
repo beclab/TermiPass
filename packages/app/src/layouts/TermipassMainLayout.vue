@@ -1,5 +1,8 @@
 <template>
-	<div class="container">
+	<div
+		class="container"
+		:class="$q.dark.isActive ? 'container-bg-dark' : 'container-bg-light'"
+	>
 		<DesktopDefaultHeaderView
 			class="headerBar"
 			:height="30"
@@ -18,12 +21,17 @@
 					? 'contain-content-win'
 					: $q.platform.is.ipad
 					? 'contain-content-ipad'
+					: $q.platform.is.android
+					? 'contain-content-android-pad'
 					: 'contain-content-common'
 			"
 		>
 			<TerminusMenu />
 
-			<div class="contain-body">
+			<div
+				class="contain-body"
+				:class="$q.platform.is.android ? 'contain-body-android-pad' : ''"
+			>
 				<FilesMainLayout
 					v-if="menuStore.terminusActiveMenu === LayoutMenuIdetify.FILES"
 				/>
@@ -80,6 +88,7 @@ import { useScaleStore } from '../stores/scale';
 import { busOff, busOn } from '../utils/bus';
 
 import { LayoutMenuIdetify } from '../utils/constants';
+import { StatusBar } from '@capacitor/status-bar';
 
 export default defineComponent({
 	name: 'TermipassMainLayout',
@@ -121,13 +130,17 @@ export default defineComponent({
 
 		onMounted(async () => {
 			if (process.env.PLATFORM === 'DESKTOP') {
-				import('../css/layout-desktop.css').then(() => {});
+				import('../css/layout-desktop.scss').then(() => {});
 			}
 
 			busOn('appSubscribe', stateUpdate);
 			menuStore.pushTerminusMenuCache(LayoutMenuIdetify.FILES);
 
 			getAppPlatform().homeMounted();
+
+			if ($q.platform.is.android) {
+				StatusBar.setOverlaysWebView({ overlay: true });
+			}
 		});
 
 		watch(
@@ -189,13 +202,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.container {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-between;
+.container-bg-light {
 	background: linear-gradient(
 			234.72deg,
 			rgba(254, 251, 228, 0.9) 3.44%,
@@ -209,6 +216,18 @@ export default defineComponent({
 			rgba(254, 255, 228, 0.3) 1.13%,
 			rgba(255, 229, 135, 0.3) 98.87%
 		);
+}
+.container-bg-dark {
+	background: rgba(22, 22, 21, 1);
+}
+
+.container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
 
 	.contain-content {
 		width: 100vw;
@@ -226,6 +245,11 @@ export default defineComponent({
 			justify-content: space-between;
 			overflow: hidden;
 		}
+
+		.contain-body-android-pad {
+			padding-top: 20px;
+			padding-bottom: 8px;
+		}
 	}
 
 	.contain-content-win {
@@ -233,8 +257,13 @@ export default defineComponent({
 	}
 
 	.contain-content-ipad {
-		height: calc(100vh - env(safe-area-inset-top));
+		height: 100vh;
 		padding-top: env(safe-area-inset-top);
+	}
+
+	.contain-content-android-pad {
+		height: 100vh;
+		padding-bottom: 0px;
 	}
 
 	.contain-content-common {

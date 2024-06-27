@@ -1,11 +1,21 @@
 <template>
-	<terminus-drag-node class="contain-bar q-px-sm">
+	<terminus-drag-node
+		class="contain-bar q-px-sm"
+		:class="isLandscape ? 'contain-bar-landscape' : 'contain-bar-portrait'"
+	>
 		<div
-			class="contain-header cursor-pointer"
+			class="contain-header cursor-pointer items-center"
 			:style="
-				$q.platform.is.electron && $q.platform.is.win ? '' : 'margin-top:24px;'
+				($q.platform.is.electron && $q.platform.is.win) || isPad
+					? ''
+					: 'margin-top:24px;'
 			"
 			@dblclick.stop
+			:class="
+				isLandscape
+					? 'contain-header-landscape'
+					: 'row items-center justify-center'
+			"
 		>
 			<div class="avator">
 				<TerminusAvatar
@@ -14,7 +24,7 @@
 					:size="40"
 				/>
 			</div>
-			<div class="userinfo q-ml-sm">
+			<div class="userinfo q-ml-sm" v-if="isLandscape">
 				<div class="text-subtitle1 text-left">
 					{{ current_user?.local_name }}
 				</div>
@@ -35,7 +45,7 @@
 			</q-menu>
 		</div>
 
-		<div class="contain-search q-mt-sm" ref="searchBox">
+		<div class="contain-search q-mt-sm" ref="searchBox" v-if="isLandscape">
 			<q-input
 				dense
 				stack-label
@@ -74,8 +84,17 @@
 				</template>
 			</q-input>
 		</div>
+		<div v-else class="contain-search-portrait row items-center justify-center">
+			<!-- <q-icon name="vector" /> -->
+			<div class="contain-search-bg row items-center justify-center">
+				<q-icon name="sym_r_search" size="18px" color="text-ink-2" />
+			</div>
+		</div>
 
-		<q-list class="menuList">
+		<q-list
+			class="menuList"
+			:style="isLandscape ? 'margin-top: 20px;' : 'margin-top: 10px'"
+		>
 			<template v-for="menu in filterLayoutMenu" :key="menu.name">
 				<q-item
 					clickable
@@ -85,9 +104,15 @@
 					@dblclick.stop
 					@click.stop="handleActive(menu)"
 					:active="menu.identify === menuStore.terminusActiveMenu"
-					class="row items-center justify-start q-px-md q-mb-xs q-py-none text-grey-8 text-body1"
+					class="q-px-md q-mb-md q-py-none text-grey-8 text-body1"
 					active-class="text-grey-10 bg-white"
-					style="border-radius: 8px; height: 32px"
+					style="border-radius: 8px"
+					:class="
+						isLandscape
+							? 'row items-center justify-start '
+							: 'column items-center justify-center '
+					"
+					:style="isLandscape ? 'height: 32px' : ' height: 50px;'"
 				>
 					<q-img
 						class="q-mr-sm"
@@ -115,7 +140,7 @@
 	</terminus-drag-node>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { useMenuStore } from '../stores/menu';
@@ -126,6 +151,10 @@ import TerminusAdmin from './TerminusAdmin.vue';
 import SwitchAccount from './SwitchAccount.vue';
 import TerminusDragNode from './common/TerminusDragNode.vue';
 import TerminusUserStatus from './common/TerminusUserStatus.vue';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { getAppPlatform } from '../platform/appPlatform';
+import UserManagentDialog from '../pages/Pad/account/UserManagentDialog.vue';
+import SettingsDialog from '../pages/Pad/settings/SettingsDialog.vue';
 
 const $q = useQuasar();
 const menuStore = useMenuStore();
@@ -176,6 +205,13 @@ const handleSwitchAccount = () => {
 };
 
 const handleAccountCenter = () => {
+	if (isPad.value) {
+		showing.value = false;
+		$q.dialog({
+			component: UserManagentDialog
+		});
+		return;
+	}
 	menuStore.pushTerminusMenuCache(LayoutMenuIdetify.ACCOUNT_CENTER);
 	router.push({
 		path: '/accountCenter'
@@ -183,6 +219,13 @@ const handleAccountCenter = () => {
 };
 
 const handleSettings = () => {
+	if (isPad.value) {
+		showing.value = false;
+		$q.dialog({
+			component: SettingsDialog
+		});
+		return;
+	}
 	menuStore.pushTerminusMenuCache(LayoutMenuIdetify.SYSTEM_SETTINGS);
 	router.push({
 		path: '/systemSettings'
@@ -190,11 +233,25 @@ const handleSettings = () => {
 };
 
 const showing = ref(false);
+
+const isLandscape = ref(false);
+const isPad = ref(getAppPlatform() && getAppPlatform().isPad);
+
+onMounted(async () => {
+	if ($q.platform.is.nativeMobile) {
+		ScreenOrientation.addListener('screenOrientationChange', (origin) => {
+			// screenOrientation.value = origin.type;
+			isLandscape.value = origin.type.startsWith('landscape');
+		});
+		isLandscape.value = (await ScreenOrientation.orientation()).type.startsWith(
+			'landscape'
+		);
+	}
+});
 </script>
 
 <style lang="scss" scoped>
 .contain-bar {
-	width: 180px;
 	height: 100vh;
 	text-align: center;
 	position: relative;
@@ -210,10 +267,6 @@ const showing = ref(false);
 	.contain-header {
 		width: 100%;
 		height: 62px;
-		display: flex;
-		align-items: center;
-		justify-content: flex-start;
-		-webkit-app-region: no-drag;
 
 		.avator {
 			width: 40px;
@@ -231,6 +284,13 @@ const showing = ref(false);
 				white-space: nowrap;
 			}
 		}
+	}
+
+	.contain-header-landscape {
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
+		-webkit-app-region: no-drag;
 	}
 
 	.contain-search {
@@ -280,8 +340,23 @@ const showing = ref(false);
 		}
 	}
 
+	.contain-search-portrait {
+		width: 100%;
+		height: 40px;
+		// background: $background-alpha;
+		.contain-search-bg {
+			width: 40px;
+			height: 100%;
+			background: $background-alpha;
+			border-radius: 50%;
+		}
+	}
+
 	.menuList {
-		margin-top: 20px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		// background-color: red;
 
 		.title-active {
 			color: $title;
@@ -291,5 +366,12 @@ const showing = ref(false);
 			color: $sub-title;
 		}
 	}
+}
+
+.contain-bar-landscape {
+	width: 180px;
+}
+.contain-bar-portrait {
+	width: 70px;
 }
 </style>

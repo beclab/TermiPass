@@ -5,8 +5,6 @@ export enum ExtensionBadgeLevel {
 }
 
 export interface UpdateBadgeInterface {
-	//priority level
-	//priority number
 	priority: { level: ExtensionBadgeLevel; num: number };
 
 	badgeUpdatable(): Promise<boolean>;

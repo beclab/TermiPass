@@ -30,7 +30,7 @@
 			</div>
 			<template v-if="filterShowing === 'default'">
 				<div
-					v-if="!isMobile"
+					v-if="isPad || !isMobile"
 					class="row items-center q-pl-md"
 					@click="toggleDrawer"
 				>
@@ -39,8 +39,8 @@
 						class="q-ml-sm"
 						:class="
 							$q.platform.is.mobile
-								? 'mobile-title text-subtitle1 text-color-title'
-								: ''
+								? 'mobile-title text-subtitle2 text-ink-1'
+								: 'text-ink-1 text-subtitle2'
 						"
 					>
 						{{ heading.title }}
@@ -63,6 +63,7 @@
 						v-if="!isBex"
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_checklist"
+						text-color="ink-2"
 						@click="() => (filterShowing = 'checkbox')"
 					>
 						<q-tooltip>{{ t('select') }}</q-tooltip>
@@ -71,6 +72,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_add"
+						text-color="ink-2"
 						@click="onCreate"
 					>
 						<q-tooltip>{{ t('create') }}</q-tooltip>
@@ -79,6 +81,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border q-mr-md"
 						icon="sym_r_search"
+						text-color="ink-2"
 						@click="() => (filterShowing = 'search')"
 					>
 						<q-tooltip>{{ t('search') }}</q-tooltip>
@@ -97,6 +100,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_chevron_left"
+						text-color="ink-2"
 						@click="() => (filterShowing = 'default')"
 					>
 						<q-tooltip>{{ t('return') }}</q-tooltip>
@@ -105,6 +109,7 @@
 					<q-btn
 						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_done_all"
+						text-color="ink-2"
 						@click="toggleCheckbox"
 					>
 						<q-tooltip>{{ t('toggle') }}</q-tooltip>
@@ -123,6 +128,7 @@
 							v-if="checkBoxArr.length > 0"
 							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_low_priority"
+							text-color="ink-2"
 							@click="moveItems"
 						>
 							<q-tooltip>{{ t('move_to') }}</q-tooltip>
@@ -132,6 +138,7 @@
 							v-else
 							class="text-grey-6 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_low_priority"
+							text-color="ink-2"
 							disabled
 						>
 							<q-tooltip>{{ t('move_to') }}</q-tooltip>
@@ -143,6 +150,7 @@
 							v-if="checkBoxArr.length > 0"
 							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_delete"
+							text-color="ink-2"
 							@click="removeItem"
 						>
 							<q-tooltip>{{ t('delete') }}</q-tooltip>
@@ -151,6 +159,7 @@
 							v-else
 							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_delete"
+							text-color="ink-2"
 							disabled
 						>
 							<q-tooltip>{{ t('delete') }}</q-tooltip>
@@ -212,24 +221,26 @@
 											:val="item.item.id"
 											size="30px"
 											v-if="filterShowing === 'checkbox'"
+											color="ink-1"
 										/>
 										<q-icon
 											v-else
 											:class="item.class"
 											:name="showItemIcon(item.item.icon)"
 											size="24px"
+											color="ink-1"
 										/>
 										<div class="item-name q-ml-sm">
-											<div class="label text-body3 text-grey-8">
+											<div class="label text-body3 text-ink-3">
 												{{ item.vault.name }}
 											</div>
-											<div class="name text-subtitle2">
+											<div class="name text-subtitle2 text-ink-1">
 												{{ item.item.name ? item.item.name : t('new_item') }}
 											</div>
 										</div>
 									</div>
 									<div
-										class="tag-wrap"
+										class="tag-wrap text-ink-2"
 										:style="{
 											width: `${showTags(item.item).tagWidth}px`
 										}"
@@ -240,9 +251,11 @@
 											:key="index"
 										>
 											<q-icon :name="tag.icon" />
-											<span class="q-ml-xs tag-name" v-if="tag.name">{{
-												tag.name
-											}}</span>
+											<span
+												class="q-ml-xs tag-name text-overline"
+												v-if="tag.name"
+												>{{ tag.name }}</span
+											>
 										</div>
 									</div>
 								</q-card-section>
@@ -275,7 +288,7 @@
 											class="item-unit cursor-pointer q-px-sm q-py-xs"
 											:key="`f` + index2"
 										>
-											<div class="text-blue-4 item-header">
+											<div class="text-light-blue-default item-header">
 												<q-icon :name="filed.icon" size="20px" />
 												<span class="text-caption text-body1 q-ml-xs">
 													{{ filed.name }}
@@ -283,7 +296,7 @@
 											</div>
 											<div
 												v-if="filed.value"
-												class="text-grey-9 text-left item-unit-content q-ml-xs"
+												class="text-ink-2 text-left item-unit-content q-ml-xs"
 											>
 												<span v-if="filed.type === 'totp'">
 													<Totp :secret="filed.value" ref="myTotps" />
@@ -296,7 +309,7 @@
 												[{{ t('empty') }}]
 											</div>
 											<div
-												class="hideCopied text-body3"
+												class="hideCopied text-body3 text-ink-1"
 												v-if="filed.value"
 												@click="copyItem(filed, $event)"
 											>
@@ -314,7 +327,7 @@
 											class="item-unit cursor-pointer q-px-sm q-py-xs"
 											:key="`f` + index2"
 										>
-											<div class="text-blue-4 item-header">
+											<div class="text-light-blue-default item-header">
 												<q-icon name="sym_r_attach_file" size="20px" />
 												<span class="text-caption text-body1 q-ml-xs">
 													{{ filed.name }}
@@ -373,11 +386,11 @@
 				v-else
 			>
 				<img src="../../assets/layout/nodata.svg" />
-				<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+				<span class="q-mb-md text-ink-2" style="margin-top: 32px">
 					{{ t('vault_t.this_vault_don_not_have_any_items_yet') }}
 				</span>
 				<div
-					class="newVault cursor-pointer q-px-md q-py-sm row items-center justify-center"
+					class="newVault cursor-pointer q-px-md q-py-sm row items-center justify-center text-ink-2"
 					@click="onCreate"
 				>
 					<q-icon class="q-mr-sm" name="add" />
@@ -394,7 +407,6 @@
 import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue';
 import { useQuasar, format } from 'quasar';
 import { useRoute, useRouter } from 'vue-router';
-import { Field } from '@didvault/sdk/src/core';
 import CreateItem from './dialog/CreateItem.vue';
 import ExchangeViewAdd from './dialog/ExchangeViewAdd.vue';
 import CryptoViewAdd from './dialog/CryptoViewAdd.vue';
@@ -428,6 +440,9 @@ import { busOn, busOff } from '../../utils/bus';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 import { useI18n } from 'vue-i18n';
 import { useTermipassStore } from '../../stores/termipass';
+import { addItem } from '../../platform/addItem';
+import { getAppPlatform } from '../../platform/appPlatform';
+import { autofillById } from '../../utils/bexFront';
 
 function filterByString(fs: string, rec: VaultItem) {
 	if (!fs) {
@@ -483,32 +498,34 @@ export default defineComponent({
 		);
 		const platform = ref(process.env.PLATFORM);
 
+		const isPad = getAppPlatform() && getAppPlatform().isPad;
+
 		const myF2a = ref();
 
 		const { t } = useI18n();
 
 		const isBex = ref(process.env.IS_BEX);
 
-		async function addItem(
-			name: string,
-			icon: string,
-			fields: any,
-			tags: string[],
-			vault: any
-		) {
-			const item: VaultItem = await app.createItem({
-				name,
-				vault,
-				icon,
-				fields: fields.map(
-					(f: Field) => new Field({ ...f, value: f.value || '' })
-				),
-				tags
-			});
-			if (item) {
-				context.emit('toolabClick', item.id);
-			}
-		}
+		// async function addItem(
+		// 	name: string,
+		// 	icon: string,
+		// 	fields: any,
+		// 	tags: string[],
+		// 	vault: any
+		// ) {
+		// 	const item: VaultItem = await app.createItem({
+		// 		name,
+		// 		vault,
+		// 		icon,
+		// 		fields: fields.map(
+		// 			(f: Field) => new Field({ ...f, value: f.value || '' })
+		// 		),
+		// 		tags
+		// 	});
+		// 	if (item) {
+		// 		context.emit('toolabClick', item.id);
+		// 	}
+		// }
 
 		async function onCreate() {
 			let option: any = null;
@@ -568,8 +585,13 @@ export default defineComponent({
 				}
 			});
 		}
+		async function _getItems() {
+			let filterUrl = '';
+			if (process.env.PLATFORM == 'BEX') {
+				const tab = await (getAppPlatform() as any).getCurrentTab();
+				filterUrl = tab.url;
+			}
 
-		function _getItems() {
 			const filter = filterInput.value || '';
 			const recentThreshold = new Date(
 				Date.now() - app.settings.recentLimit * 24 * 60 * 60 * 1000
@@ -581,8 +603,8 @@ export default defineComponent({
 						.filter((item) => filterByString(filter || '', item))
 						.map((item) => ({ vault, item }))
 				);
-			} else if (meunStore.host) {
-				//items = app.getItemsForUrl(app.state.context.browser?.url!);
+			} else if (filterUrl) {
+				items = app.getItemsForUrl(filterUrl);
 			} else {
 				for (const vault of app.state.vaults) {
 					if (meunStore.vaultId && vault.id !== meunStore.vaultId) {
@@ -698,6 +720,10 @@ export default defineComponent({
 		};
 
 		async function selectItem(item: ListItem) {
+			if (process.env.PLATFORM == 'BEX') {
+				autofillById(item.item.id);
+				return;
+			}
 			if (item) {
 				context.emit('toolabClick', item.item.id);
 			}
@@ -720,8 +746,8 @@ export default defineComponent({
 			return false;
 		}
 
-		function stateUpdate() {
-			itemList.value = _getItems();
+		async function stateUpdate() {
+			itemList.value = await _getItems();
 		}
 
 		onMounted(() => {
@@ -733,7 +759,8 @@ export default defineComponent({
 		onUnmounted(() => {
 			busOff('appSubscribe', stateUpdate);
 		});
-		let itemList = ref<ListItem[]>(_getItems());
+		let itemList = ref<ListItem[]>([]);
+		stateUpdate();
 		const placeholder = computed(function () {
 			return itemList.value.length
 				? {}
@@ -845,8 +872,8 @@ export default defineComponent({
 			return message;
 		});
 
-		let updateItems = debounce(() => {
-			itemList.value = _getItems();
+		let updateItems = debounce(async () => {
+			itemList.value = await _getItems();
 		}, 50);
 
 		async function search() {
@@ -1134,7 +1161,8 @@ export default defineComponent({
 			menu_showing,
 			t,
 			isBex,
-			termipassStore
+			termipassStore,
+			isPad
 		};
 	}
 });
@@ -1144,6 +1172,7 @@ export default defineComponent({
 .itemlist {
 	width: 100%;
 	height: 100%;
+	border-right: 1px solid $separator;
 
 	.searchWrap {
 		width: 100%;
@@ -1225,8 +1254,7 @@ export default defineComponent({
 			left: 0;
 			top: 0;
 			opacity: 0;
-			border-radius: 5px;
-			color: $grey-10;
+			border-radius: 8px;
 
 			display: flex;
 			align-items: center;
@@ -1237,13 +1265,13 @@ export default defineComponent({
 
 		.copied {
 			opacity: 1;
-			border: 1px solid $yellow;
-			background: $grey-1;
+			border: 1px solid $yellow-default;
+			background: $background-1;
 
 			&:after {
 				width: 100%;
 				height: 100%;
-				background: rgba(255, 235, 59, 0.1);
+				background: $yellow-alpha;
 				content: '';
 				position: absolute;
 				top: 0;
@@ -1255,7 +1283,6 @@ export default defineComponent({
 
 	.vaultCard {
 		border: 0;
-		border-radius: 0;
 		box-sizing: border-box;
 		position: relative;
 		padding: 12px 12px 0px 12px;
@@ -1266,12 +1293,12 @@ export default defineComponent({
 			justify-content: flex-end;
 
 			.tag {
-				border: 1px solid $grey-8;
+				border: 1px solid $ink-2;
 				padding: 0 4px;
 				border-radius: 4px;
 				float: right;
-				height: 26px;
-				line-height: 26px;
+				height: 20px;
+				line-height: 20px;
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
@@ -1315,11 +1342,11 @@ export default defineComponent({
 			bottom: 18px;
 			margin: auto;
 			z-index: 1;
-			color: $grey-13;
+			color: $ink-2;
 			cursor: pointer;
 
 			&:hover {
-				color: $grey-10;
+				color: $ink-1;
 			}
 		}
 
@@ -1330,22 +1357,21 @@ export default defineComponent({
 			bottom: 18px;
 			margin: auto;
 			z-index: 1;
-			color: $grey-13;
+			color: $ink-2;
 			cursor: pointer;
 
 			&:hover {
-				color: $grey-10;
+				color: $ink-1;
 			}
 		}
 	}
 
 	.newVault {
-		border: 1px solid $yellow;
-		background-color: rgba(255, 235, 59, 0.1);
 		border-radius: 8px;
+		border: 1px solid $yellow-default;
 
 		&:hover {
-			background: rgba(255, 235, 59, 0.3);
+			background: $background-hover;
 		}
 	}
 

@@ -2,7 +2,7 @@ import { PushNotificationSchema } from '@capacitor/push-notifications';
 import { App } from '@capacitor/app';
 import { busOn, busOff, busEmit } from '../../../utils/bus';
 import { CapacitorPlatform } from '../capacitorPlatform';
-import { updateUIToAddWeb } from '../addItem';
+import { updateUIToAddWeb } from '../../addItem';
 import { addAxiosProxyGlobalRequestInterceptor } from '../../httpProxy';
 import AndroidPlugins from './androidPlugins';
 import { useUserStore } from '../../../stores/user';

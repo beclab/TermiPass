@@ -24,7 +24,9 @@ export default boot(async () => {
 	const bexStore = useBexStore();
 	await userStore.load();
 
-	portMessageListenerBroadcast((data) => busEmit(data.method, data.params));
+	portMessageListenerBroadcast((data) => {
+		busEmit(data.method, data.params);
+	});
 
 	busOn('BROADCAST_TO_BACKGROUND', (data) => {
 		portMessageRequestBroadcast(data);

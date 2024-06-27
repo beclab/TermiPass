@@ -23,7 +23,7 @@
 				class="terminus-mnemonic__bg__input text-body2"
 				borderless
 				:input-style="{ textAlign: 'left' }"
-				input-class="text-color-title"
+				input-class="text-ink-1"
 				:readonly="isReadOnly"
 				@update:model-value="onTextChange"
 				@blur="inputBlur"
@@ -150,12 +150,11 @@ defineExpose({ setInputText });
 		padding: 0;
 		border-radius: 8px;
 		height: 36px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 
 		&__input {
 			width: calc(100% - 25px);
 			margin-top: -3px;
-			color: $title;
 		}
 
 		&__input__index {
@@ -163,7 +162,7 @@ defineExpose({ setInputText });
 			text-align: left;
 			width: 18px;
 			height: 16px;
-			color: $prompt-message;
+			color: $ink-2;
 		}
 	}
 

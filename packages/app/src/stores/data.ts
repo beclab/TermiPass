@@ -14,6 +14,7 @@ export type DataState = {
 	loading: boolean;
 	reload: boolean;
 	selected: any;
+	mutilSelected: any;
 	multiple: boolean;
 	show: any;
 	showShell: boolean;
@@ -56,6 +57,7 @@ export const useDataStore = defineStore('data', {
 			loading: false,
 			reload: false,
 			selected: [],
+			mutilSelected: [],
 			multiple: false,
 			show: null,
 			showShell: false,
@@ -184,6 +186,9 @@ export const useDataStore = defineStore('data', {
 		},
 
 		setReload(value: any) {
+			if (value) {
+				this.resetMutilSelected();
+			}
 			this.reload = value;
 		},
 
@@ -206,6 +211,10 @@ export const useDataStore = defineStore('data', {
 		addSelected(value: any) {
 			this.selected.push(value);
 		},
+		resetSelectedByValue(value: any) {
+			this.resetSelected();
+			this.selected.push(...value);
+		},
 
 		removeSelected(value: any) {
 			const i = this.selected.indexOf(value);
@@ -215,6 +224,28 @@ export const useDataStore = defineStore('data', {
 
 		resetSelected() {
 			this.selected = [];
+		},
+
+		addMutilSelected(value: any) {
+			console.log('addMutilSelected ===>');
+			this.mutilSelected.push(value);
+			console.log(this.mutilSelected);
+		},
+
+		removeMutilSelected(value: any) {
+			console.log('removeMutilSelected ===>');
+			console.log('this.mutilSelected ===> 1');
+			console.log(this.mutilSelected);
+
+			const i = this.mutilSelected.indexOf(value);
+			if (i === -1) return;
+			this.mutilSelected.splice(i, 1);
+			console.log('this.mutilSelected ===> 2');
+			console.log(this.mutilSelected);
+		},
+
+		resetMutilSelected() {
+			this.mutilSelected = [];
 		},
 
 		updateUser(value: any) {

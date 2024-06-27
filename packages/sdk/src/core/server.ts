@@ -286,15 +286,9 @@ export class Controller extends API {
 			auth.sessions.push(session.info);
 		}
 
-		ctx.provisioning = await this.provisioner.getProvisioning(
-			auth,
-			session
-		);
+		ctx.provisioning = await this.provisioner.getProvisioning(auth, session);
 
-		await Promise.all([
-			this.storage.save(session),
-			this.storage.save(auth)
-		]);
+		await Promise.all([this.storage.save(session), this.storage.save(auth)]);
 	}
 
 	async process(req: Request) {
@@ -314,13 +308,11 @@ export class Controller extends API {
 			throw new Err(ErrorCode.INVALID_REQUEST);
 		}
 
-		const clientVersion =
-			(req.device && req.device.appVersion) || undefined;
+		const clientVersion = (req.device && req.device.appVersion) || undefined;
 
 		const param = req.params && req.params[0];
 
-		const input =
-			def.input && param ? new def.input().fromRaw(param) : param;
+		const input = def.input && param ? new def.input().fromRaw(param) : param;
 
 		const result = await this[def.method](input);
 
@@ -458,8 +450,7 @@ export class Controller extends API {
 
 		const availableAuthenticators = authenticators.filter(
 			(m) =>
-				(typeof authenticatorId === 'undefined' ||
-					m.id === authenticatorId) &&
+				(typeof authenticatorId === 'undefined' || m.id === authenticatorId) &&
 				(typeof type === 'undefined' || m.type === type) &&
 				(typeof supportedTypes === 'undefined' ||
 					supportedTypes.includes(m.type)) &&
@@ -470,10 +461,7 @@ export class Controller extends API {
 
 		const authenticator = availableAuthenticators[authenticatorIndex || 0];
 		if (!authenticator) {
-			throw new Err(
-				ErrorCode.NOT_FOUND,
-				'No appropriate authenticator found!'
-			);
+			throw new Err(ErrorCode.NOT_FOUND, 'No appropriate authenticator found!');
 		}
 
 		const provider = this._getAuthServer(authenticator.type);
@@ -494,9 +482,7 @@ export class Controller extends API {
 		const deviceTrusted =
 			auth.disableMFA ||
 			(this.context.device &&
-				auth.trustedDevices.some(
-					({ id }) => id === this.context.device!.id
-				));
+				auth.trustedDevices.some(({ id }) => id === this.context.device!.id));
 
 		const response = new StartAuthRequestResponse({
 			id: request.id,
@@ -515,8 +501,7 @@ export class Controller extends API {
 			provisioning.account.status === ProvisioningStatus.Active
 		) {
 			request.verified = new Date();
-			response.requestStatus = request.status =
-				AuthRequestStatus.Verified;
+			response.requestStatus = request.status = AuthRequestStatus.Verified;
 			response.accountStatus = auth.accountStatus;
 			response.provisioning = provisioning.account;
 		} else {
@@ -583,11 +568,7 @@ export class Controller extends API {
 		let metaData: any = undefined;
 
 		try {
-			metaData = await provider.verifyAuthRequest(
-				authenticator,
-				request,
-				data
-			);
+			metaData = await provider.verifyAuthRequest(authenticator, request, data);
 
 			request.status = AuthRequestStatus.Verified;
 			request.verified = new Date();
@@ -629,9 +610,7 @@ export class Controller extends API {
 		const deviceTrusted =
 			auth &&
 			this.context.device &&
-			auth.trustedDevices.some(
-				({ id }) => id === this.context.device!.id
-			);
+			auth.trustedDevices.some(({ id }) => id === this.context.device!.id);
 
 		const provisioning = await this.provisioner.getProvisioning(auth);
 
@@ -707,9 +686,7 @@ export class Controller extends API {
 		const deviceTrusted =
 			auth &&
 			this.context.device &&
-			auth.trustedDevices.some(
-				({ id }) => id === this.context.device!.id
-			);
+			auth.trustedDevices.some(({ id }) => id === this.context.device!.id);
 
 		if (!deviceTrusted) {
 			if (!authToken) {
@@ -718,9 +695,7 @@ export class Controller extends API {
 				await this._useAuthToken({
 					did,
 					token: authToken,
-					purpose: asAdmin
-						? AuthPurpose.AdminLogin
-						: AuthPurpose.Login
+					purpose: asAdmin ? AuthPurpose.AdminLogin : AuthPurpose.Login
 				});
 			}
 		}
@@ -792,9 +767,7 @@ export class Controller extends API {
 			account
 		));
 		const auth = (this.context.auth = await this._getAuth(acc.did));
-		this.context.provisioning = await this.provisioner.getProvisioning(
-			auth
-		);
+		this.context.provisioning = await this.provisioner.getProvisioning(auth);
 
 		// Get the pending SRP context for the given account
 		const srpSession = auth.srpSessions.find((s) => s.id === srpId);
@@ -870,9 +843,7 @@ export class Controller extends API {
 		auth.sessions.push(session.info);
 
 		// Delete pending SRP context
-		auth.srpSessions = auth.srpSessions.filter(
-			(s) => s.id !== srpSession.id
-		);
+		auth.srpSessions = auth.srpSessions.filter((s) => s.id !== srpSession.id);
 
 		// Persist changes
 		await Promise.all([this.storage.save(session), this.storage.save(acc)]);
@@ -880,9 +851,7 @@ export class Controller extends API {
 		// Check if device isn't trusted
 		if (
 			this.context.device &&
-			!auth.trustedDevices.some(
-				({ id }) => id === this.context.device!.id
-			)
+			!auth.trustedDevices.some(({ id }) => id === this.context.device!.id)
 		) {
 			// Add to trusted devices
 			if (addTrustedDevice) {
@@ -897,10 +866,7 @@ export class Controller extends API {
 						this.context.device
 					);
 
-					this.messenger.send(
-						acc.did,
-						new NewLoginMessage({ location })
-					);
+					this.messenger.send(acc.did, new NewLoginMessage({ location }));
 				} catch (e) {
 					console.log(e);
 				}
@@ -932,10 +898,7 @@ export class Controller extends API {
 		const i = auth.sessions.findIndex((s) => s.id === id);
 		auth.sessions.splice(i, 1);
 
-		await Promise.all([
-			this.storage.delete(session),
-			this.storage.save(auth)
-		]);
+		await Promise.all([this.storage.delete(session), this.storage.save(auth)]);
 
 		this.log('account.revokeSession', {
 			revokedSession: { id, device: session.device }
@@ -985,12 +948,7 @@ export class Controller extends API {
 		}
 	}
 
-	async _bindingDID(
-		token: string,
-		jws: string,
-		bfl_user: string,
-		did: string
-	) {
+	async _bindingDID(token: string, jws: string, bfl_user: string, did: string) {
 		console.log('_bindingDID ' + jws);
 
 		let url = this.bflUrl;
@@ -1378,29 +1336,20 @@ export class Controller extends API {
 			console.log('kid ' + kid);
 			real_did = kid;
 			if (!terminus_name) {
-				throw new Err(
-					ErrorCode.VERIFICATION_ERROR,
-					'DID Not match jws name'
-				);
+				throw new Err(ErrorCode.VERIFICATION_ERROR, 'DID Not match jws name');
 			}
 
 			const TerminusName = await this._getTerminusName(bflToken, bflUser);
 			console.log('TerminusName ' + TerminusName);
 			if (!TerminusName) {
-				throw new Err(
-					ErrorCode.VERIFICATION_ERROR,
-					'Terminus Name error'
-				);
+				throw new Err(ErrorCode.VERIFICATION_ERROR, 'Terminus Name error');
 			}
 
 			if (
 				TerminusName != terminus_name ||
 				account.did != terminus_name.split('@')[0]
 			) {
-				throw new Err(
-					ErrorCode.VERIFICATION_ERROR,
-					'DID Not match jws name'
-				);
+				throw new Err(ErrorCode.VERIFICATION_ERROR, 'DID Not match jws name');
 			}
 		} catch (e) {
 			console.log(e);
@@ -1423,12 +1372,7 @@ export class Controller extends API {
 			throw new Err(ErrorCode.NOT_FOUND, 'Account not found');
 		}
 
-		const real_did = await this.getDIDFromJws(
-			jws,
-			bflToken,
-			bflUser,
-			account
-		);
+		const real_did = await this.getDIDFromJws(jws, bflToken, bflUser, account);
 		console.log('real_did', real_did);
 		console.log('account.kid', account.kid);
 
@@ -1461,12 +1405,7 @@ export class Controller extends API {
 
 		console.log('createAccount');
 
-		const real_did = await this.getDIDFromJws(
-			jws,
-			bflToken,
-			bflUser,
-			account
-		);
+		const real_did = await this.getDIDFromJws(jws, bflToken, bflUser, account);
 
 		const mfa = await this.bind_2fa(sessionId, bflToken, bflUser);
 		console.log(mfa);
@@ -1499,9 +1438,7 @@ export class Controller extends API {
 			const auth = await this._getAuth(account.did);
 			if (
 				this.context.device &&
-				!auth.trustedDevices.some(
-					({ id }) => id === this.context.device!.id
-				)
+				!auth.trustedDevices.some(({ id }) => id === this.context.device!.id)
 			) {
 				console.log('add trust device');
 				auth.trustedDevices.push(this.context.device);
@@ -1513,16 +1450,11 @@ export class Controller extends API {
 		}
 
 		const auth = (this.context.auth = await this._getAuth(account.did));
-		this.context.provisioning = await this.provisioner.getProvisioning(
-			auth
-		);
+		this.context.provisioning = await this.provisioner.getProvisioning(auth);
 
 		// Make sure that no account with this email exists and that the email is not blocked from signing up
 		if (auth.account) {
-			throw new Err(
-				ErrorCode.ACCOUNT_EXISTS,
-				'This account already exists!'
-			);
+			throw new Err(ErrorCode.ACCOUNT_EXISTS, 'This account already exists!');
 		}
 
 		// } else {
@@ -1546,9 +1478,7 @@ export class Controller extends API {
 		// Add device to trusted devices
 		if (
 			this.context.device &&
-			!auth.trustedDevices.some(
-				({ id }) => id === this.context.device!.id
-			)
+			!auth.trustedDevices.some(({ id }) => id === this.context.device!.id)
 		) {
 			console.log('add trust device');
 			auth.trustedDevices.push(this.context.device);
@@ -1579,10 +1509,7 @@ export class Controller extends API {
 		} else {
 			const items = await this.storage.list(Org, new ListParams());
 			if (items.length != 1) {
-				throw new Err(
-					ErrorCode.PROVISIONING_NOT_ALLOWED,
-					'Not Have a team!'
-				);
+				throw new Err(ErrorCode.PROVISIONING_NOT_ALLOWED, 'Not Have a team!');
 			}
 			const org = items[0];
 
@@ -1605,11 +1532,7 @@ export class Controller extends API {
 				await this.storage.save(org);
 
 				// need admin to send a invite to this account
-				await this.sendOrgNotification(
-					org,
-					'create.account',
-					account.did
-				);
+				await this.sendOrgNotification(org, 'create.account', account.did);
 			}
 		}
 
@@ -1645,9 +1568,7 @@ export class Controller extends API {
 
 		const instance = axios.create({
 			baseURL:
-				'http://headscale-authkey-svc.user-space-' +
-				account.name +
-				':9000',
+				'http://headscale-authkey-svc.user-space-' + account.name + ':9000',
 			timeout: 2000,
 			headers: {
 				'Access-Control-Allow-Origin': '*',
@@ -1762,11 +1683,7 @@ export class Controller extends API {
 				await this.updateMetaData(org);
 				await this.storage.save(org);
 
-				await this.sendOrgNotification(
-					org,
-					'update.account',
-					account.did
-				);
+				await this.sendOrgNotification(org, 'update.account', account.did);
 			}
 		}
 
@@ -2060,8 +1977,7 @@ export class Controller extends API {
 			throw new Err(ErrorCode.OUTDATED_REVISION);
 		}
 
-		const isOwner =
-			org.owner?.accountId === account.id || org.isOwner(account);
+		const isOwner = org.owner?.accountId === account.id || org.isOwner(account);
 		const isAdmin = isOwner || org.isAdmin(account);
 
 		// Only admins can make any changes to organizations at all.
@@ -2100,11 +2016,7 @@ export class Controller extends API {
 				removedInvites.length ||
 				members.some(({ did, role, status }) => {
 					const member = org.getMember({ did });
-					return (
-						!member ||
-						member.role !== role ||
-						member.status !== status
-					);
+					return !member || member.role !== role || member.status !== status;
 				}))
 		) {
 			throw new Err(
@@ -2147,12 +2059,8 @@ export class Controller extends API {
 		if (org.directory.syncProvider === 'scim') {
 			if (!org.directory.scim) {
 				org.directory.scim = new ScimSettings();
-				org.directory.scim.secret =
-					await getCryptoProvider().randomBytes(16);
-				const scimSecret = bytesToBase64(
-					org.directory.scim.secret,
-					true
-				);
+				org.directory.scim.secret = await getCryptoProvider().randomBytes(16);
+				const scimSecret = bytesToBase64(org.directory.scim.secret, true);
 				org.directory.scim.secretToken = scimSecret;
 				org.directory.scim.url = `${this.config.scimServerUrl}/${org.id}`;
 			}
@@ -2281,9 +2189,7 @@ export class Controller extends API {
 			try {
 				const auth = await this._getAuth(invite.did);
 
-				auth.invites = auth.invites.filter(
-					(inv) => inv.id !== invite.id
-				);
+				auth.invites = auth.invites.filter((inv) => inv.id !== invite.id);
 
 				await this.storage.save(auth);
 			} catch (e) {
@@ -2337,9 +2243,9 @@ export class Controller extends API {
 						member.did,
 						new JoinOrgInviteCompletedMessage({
 							orgName: org.name,
-							openAppUrl: `${removeTrailingSlash(
-								this.config.clientUrl
-							)}/org/${org.id}`
+							openAppUrl: `${removeTrailingSlash(this.config.clientUrl)}/org/${
+								org.id
+							}`
 						})
 					);
 				} catch (e) {
@@ -2441,9 +2347,7 @@ export class Controller extends API {
 
 		// Delete all associated vaults
 		await Promise.all(
-			org.vaults.map((v) =>
-				this.storage.delete(Object.assign(new Vault(), v))
-			)
+			org.vaults.map((v) => this.storage.delete(Object.assign(new Vault(), v)))
 		);
 
 		// Remove org from all member accounts
@@ -2451,10 +2355,7 @@ export class Controller extends API {
 			org.members
 				.filter((m) => !!m.accountId)
 				.map(async (member) => {
-					const acc = await this.storage.get(
-						Account,
-						member.accountId!
-					);
+					const acc = await this.storage.get(Account, member.accountId!);
 					acc.orgs = acc.orgs.filter(({ id }) => id !== org.id);
 					await this.storage.save(acc);
 				})
@@ -2494,8 +2395,7 @@ export class Controller extends API {
 		this.log('vault.get', {
 			vault: { id: vault.id, name: vault.name },
 			org:
-				(org && { id: org.id, name: org.name, owner: org.owner }) ||
-				undefined
+				(org && { id: org.id, name: org.name, owner: org.owner }) || undefined
 		});
 
 		return vault;
@@ -2595,8 +2495,7 @@ export class Controller extends API {
 		this.log('vault.update', {
 			vault: { id: vault.id, name: vault.name, owner: vault.owner },
 			org:
-				(org && { id: org.id, name: org.name, owner: org.owner }) ||
-				undefined
+				(org && { id: org.id, name: org.name, owner: org.owner }) || undefined
 		});
 
 		return this.storage.get(Vault, vault.id);
@@ -2817,18 +2716,13 @@ export class Controller extends API {
 		}
 
 		if (vault.org) {
-			const prov = provisioning.orgs.find(
-				(o) => o.orgId === vault.org!.id
-			);
+			const prov = provisioning.orgs.find((o) => o.orgId === vault.org!.id);
 			const quota = prov?.quota.storage || 0;
 			const org = await this.storage.get(Org, vault.org.id);
 			const usagePerVault = await Promise.all(
 				org.vaults.map((v) => this.attachmentStorage.getUsage(v.id))
 			);
-			const usage = usagePerVault.reduce(
-				(total, each) => total + each,
-				0
-			);
+			const usage = usagePerVault.reduce((total, each) => total + each, 0);
 
 			if (quota !== -1 && usage + att.size > quota * 1e6) {
 				throw new Err(
@@ -2838,9 +2732,7 @@ export class Controller extends API {
 			}
 		} else {
 			const quota = provisioning.account.quota.storage;
-			const usage = await this.attachmentStorage.getUsage(
-				account.mainVault.id
-			);
+			const usage = await this.attachmentStorage.getUsage(account.mainVault.id);
 
 			if (quota !== -1 && usage + att.size > quota * 1e6) {
 				throw new Err(
@@ -2857,8 +2749,7 @@ export class Controller extends API {
 			attachment: { type: att.type, size: att.size, id: att.id },
 			vault: { id: vault.id, name: vault.name, owner: vault.owner },
 			org:
-				(org && { id: org.id, name: org.name, owner: org.owner }) ||
-				undefined
+				(org && { id: org.id, name: org.name, owner: org.owner }) || undefined
 		});
 
 		return att.id;
@@ -2884,8 +2775,7 @@ export class Controller extends API {
 			attachment: { type: att.type, size: att.size, id: att.id },
 			vault: { id: vault.id, name: vault.name, owner: vault.owner },
 			org:
-				(org && { id: org.id, name: org.name, owner: org.owner }) ||
-				undefined
+				(org && { id: org.id, name: org.name, owner: org.owner }) || undefined
 		});
 
 		return att;
@@ -2911,8 +2801,7 @@ export class Controller extends API {
 			attachment: { id },
 			vault: { id: vault.id, name: vault.name, owner: vault.owner },
 			org:
-				(org && { id: org.id, name: org.name, owner: org.owner }) ||
-				undefined
+				(org && { id: org.id, name: org.name, owner: org.owner }) || undefined
 		});
 	}
 
@@ -2982,10 +2871,7 @@ export class Controller extends API {
 			promises.push(
 				(async () => {
 					try {
-						const vault = await this.storage.get(
-							Vault,
-							vaultInfo.id
-						);
+						const vault = await this.storage.get(Vault, vaultInfo.id);
 
 						if (
 							vaultInfo.name !== vault.name ||
@@ -3020,15 +2906,9 @@ export class Controller extends API {
 			promises.push(
 				(async () => {
 					try {
-						const acc = await this.storage.get(
-							Account,
-							member.accountId!
-						);
+						const acc = await this.storage.get(Account, member.accountId!);
 
-						acc.orgs = [
-							...acc.orgs.filter((o) => o.id !== org.id),
-							org.info
-						];
+						acc.orgs = [...acc.orgs.filter((o) => o.id !== org.id), org.info];
 
 						await this.storage.save(acc);
 
@@ -3068,10 +2948,7 @@ export class Controller extends API {
 				a.purposes.includes(AuthPurpose.AccessKeyStore)
 		);
 		if (!authenticator) {
-			throw new Err(
-				ErrorCode.NOT_FOUND,
-				'No suitable authenticator found!'
-			);
+			throw new Err(ErrorCode.NOT_FOUND, 'No suitable authenticator found!');
 		}
 
 		const entry = new KeyStoreEntry({
@@ -3356,8 +3233,7 @@ export class Controller extends API {
 
 		const authenticators = [
 			...auth.authenticators.sort(
-				(a, b) =>
-					auth.mfaOrder.indexOf(a.id) - auth.mfaOrder.indexOf(b.id)
+				(a, b) => auth.mfaOrder.indexOf(a.id) - auth.mfaOrder.indexOf(b.id)
 			),
 			...adHocAuthenticators
 		];
@@ -3401,9 +3277,7 @@ export class Controller extends API {
 				auth = await this.storage.get(Auth, did);
 				await auth.init();
 				await this.storage.save(auth);
-				await this.storage.delete(
-					Object.assign(new Auth(), { id: auth.did })
-				);
+				await this.storage.delete(Object.assign(new Auth(), { id: auth.did }));
 			} catch (e) {
 				console.log(e);
 			}
@@ -3426,10 +3300,7 @@ export class Controller extends API {
 		// Revoke unused sessions older than 2 weeks
 		const expiredSessions = auth.sessions.filter(
 			(session) =>
-				Math.max(
-					session.created.getTime(),
-					session.lastUsed.getTime()
-				) <
+				Math.max(session.created.getTime(), session.lastUsed.getTime()) <
 				Date.now() - 14 * 24 * 60 * 60 * 1000
 		);
 		for (const session of expiredSessions) {
@@ -3477,9 +3348,7 @@ export class Controller extends API {
 	}
 
 	protected _getAuthServer(type: AuthType) {
-		const provider = this.authServers.find((prov) =>
-			prov.supportsType(type)
-		);
+		const provider = this.authServers.find((prov) => prov.supportsType(type));
 		if (!provider) {
 			console.log('_getAuthServer !provider ' + type);
 			throw new Err(
@@ -3530,9 +3399,7 @@ export class Controller extends API {
 			);
 		}
 
-		auth.authRequests = auth.authRequests.filter(
-			(r) => r.id !== request.id
-		);
+		auth.authRequests = auth.authRequests.filter((r) => r.id !== request.id);
 
 		await this.storage.save(auth);
 	}
@@ -3689,16 +3556,9 @@ export class Server {
 
 			if (this.config.reportErrors) {
 				try {
-					const endpointsWithParams = [
-						'completeRegisterAuthenticator'
-					];
-					const optionalParams = endpointsWithParams.includes(
-						req.method
-					)
-						? `Params:\n${
-								req.params &&
-								JSON.stringify(req.params, null, 4)
-						  }\n`
+					const endpointsWithParams = ['completeRegisterAuthenticator'];
+					const optionalParams = endpointsWithParams.includes(req.method)
+						? `Params:\n${req.params && JSON.stringify(req.params, null, 4)}\n`
 						: '';
 
 					await this.messenger.send(
@@ -3707,11 +3567,8 @@ export class Server {
 							message: `The following error occured at ${e.time.toISOString()}:\n\nEndpoint: ${
 								req.method
 							}\n${optionalParams}Device Info:\n${
-								req.device &&
-								JSON.stringify(req.device?.toRaw(), null, 4)
-							}\n${e.toString()}${
-								evt?.id ? `Event ID: ${evt.id}` : ''
-							}`
+								req.device && JSON.stringify(req.device?.toRaw(), null, 4)
+							}\n${e.toString()}${evt?.id ? `Event ID: ${evt.id}` : ''}`
 						})
 					);
 				} catch (e) {

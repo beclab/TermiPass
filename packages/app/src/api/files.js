@@ -556,10 +556,12 @@ export async function uploadChunks(
 		if (node) {
 			request.setRequestHeader('X-Terminus-Node', node);
 		}
-		const userStore = useUserStore();
-		const user = userStore.users.items.get(userStore.current_id);
-		if (user && user.access_token) {
-			request.setRequestHeader('X-Authorization', user.access_token);
+		if (process.env.PLATFORM != 'FILES') {
+			const userStore = useUserStore();
+			const user = userStore.users.items.get(userStore.current_id);
+			if (user && user.access_token) {
+				request.setRequestHeader('X-Authorization', user.access_token);
+			}
 		}
 
 		request.timeout = 600000;

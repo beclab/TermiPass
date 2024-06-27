@@ -1,18 +1,18 @@
 <template>
-	<div class="mobile-title text-subtitle1" v-if="isMobile">
+	<div class="mobile-title text-subtitle1 text-ink-1" v-if="isMobile">
 		{{ label }}
 	</div>
 
-	<q-bar class="bar q-mb-md" v-else>
-		<q-icon v-if="icon" :name="icon" size="18px" />
+	<q-bar class="bar q-mb-md bg-background-3" v-else>
+		<q-icon v-if="icon" color="ink-1" :name="icon" size="18px" />
 		<div
-			class="title text-subtitle2 col"
+			class="title text-subtitle3 col text-ink-1"
 			:class="titAlign ? titAlign : 'text-left'"
 		>
 			{{ label }}
 		</div>
 		<q-space />
-		<q-btn dense flat icon="close" @click="onCancel">
+		<q-btn dense flat icon="close" color="ink-3" @click="onCancel">
 			<q-tooltip>{{ t('buttons.close') }}</q-tooltip>
 		</q-btn>
 	</q-bar>
@@ -56,11 +56,5 @@ const onCancel = () => {
 	color: $title;
 	text-align: center;
 	margin: 20px 0;
-}
-.bar {
-	background-color: $grey-1;
-	.title {
-		color: $title;
-	}
 }
 </style>

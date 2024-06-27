@@ -36,7 +36,9 @@
 							img-src="../assets/login/termipass_slide_img.svg"
 						/>
 					</q-carousel>
-					<div class="login-layout-data text-h4">{{ carouselData }}</div>
+					<div class="login-layout-data text-h4 text-ink-1">
+						{{ carouselData }}
+					</div>
 					<div class="login-layout-navigation row justify-center items-center">
 						<template v-for="index in 4" :key="index">
 							<div
@@ -86,7 +88,6 @@ const changeActive = (index: number) => {
 .login-layout-root {
 	height: 100vh;
 	width: 100vw;
-	background: $desktop-background;
 
 	.login-layout-box {
 		height: 692px;
@@ -98,13 +99,12 @@ const changeActive = (index: number) => {
 		.login-layout-welcome {
 			height: 100%;
 			width: 480px;
-			background: $desktop-background;
 			position: relative;
 
 			.login-layout-carousel {
 				width: 100%;
 				height: calc(100% - 78px);
-				background: $desktop-background;
+				background: $background-2;
 			}
 
 			.login-layout-data {
@@ -121,6 +121,7 @@ const changeActive = (index: number) => {
 			.login-layout-navigation {
 				width: 100%;
 				height: 78px;
+				background: $background-2;
 
 				.navigation-base {
 					height: 4px;
@@ -146,7 +147,7 @@ const changeActive = (index: number) => {
 			height: 100%;
 			border-radius: 12px;
 			width: 480px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 	}
 }

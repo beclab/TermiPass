@@ -36,6 +36,8 @@ import { useMenuStore } from '../../stores/menu';
 import { getNativeAppPlatform } from '../../platform/capacitor/capacitorPlatform';
 import { useI18n } from 'vue-i18n';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
+import { ScreenOrientation } from '@capacitor/screen-orientation';
+import { onBeforeMount } from 'vue';
 
 const props = defineProps({
 	start: {
@@ -76,13 +78,21 @@ watch(
 	}
 );
 
-onMounted(async () => {
+onBeforeMount(async () => {
+	if (getNativeAppPlatform().isPad) {
+		await ScreenOrientation.lock({
+			orientation: 'portrait-primary'
+		});
+	}
 	menuStore.changeSafeArea(false);
 	menuStore.updateHideBackground(true);
-	document.body.classList.add('qrscanner');
-	initCanvas();
-	window.addEventListener('onresize', initCanvas);
+	setTimeout(() => {
+		initCanvas();
+		window.addEventListener('onresize', initCanvas);
+	}, 300);
+});
 
+onMounted(async () => {
 	setTimeout(() => {
 		checkScanPermissionAndStart();
 	}, 500);
@@ -104,8 +114,10 @@ onUnmounted(() => {
 	getNativeAppPlatform().stopScanQR();
 	menuStore.changeSafeArea(true);
 	menuStore.updateHideBackground(false);
-	document.body.classList.remove('qrscanner');
 	window.removeEventListener('onresize', initCanvas);
+	if (getNativeAppPlatform().isPad) {
+		ScreenOrientation.unlock();
+	}
 });
 
 const toPhotoAlbum = async () => {

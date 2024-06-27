@@ -1,6 +1,5 @@
 import { MobileWebPlatform } from '../../terminusCommon/mobileWebPlatform';
 import { ExtensionStorage, ExtensionUserStorage } from '../storage';
-// import { browser } from 'webextension-polyfill-ts';
 import { useUserStore } from '../../../stores/user';
 import {
 	UserItem,
@@ -11,6 +10,10 @@ import { walletService } from '../../../wallet';
 import PortMessage from '../../../extension/utils/message/portMessage';
 import { useBexStore } from '../../../stores/bex';
 import { AppState } from '@didvault/sdk/src/core/app';
+import { bexFrontBusOn } from '../utils';
+import { unlockByPwd } from 'src/pages/Mobile/login/unlock/UnlockBusiness';
+import { busOn } from 'src/utils/bus';
+import { sendExtensionMessage } from 'src/extension/autofill2/utils/sendMessage';
 
 export interface ExtensionPlatformInterface {
 	portMessage: PortMessage;
@@ -38,6 +41,52 @@ export class ExtensionPlatform
 
 	async appMounted(): Promise<void> {
 		super.appMounted();
+
+		bexFrontBusOn(
+			'UNLOCKED_UPDATE',
+			async (params: { status: boolean; password?: string }) => {
+				const userStore = useUserStore();
+
+				if (userStore.users?.locked != params.status) {
+					return;
+				}
+				if (!this.router) {
+					return;
+				}
+				if (!params.status) {
+					await app.lock();
+					return;
+				}
+				if (!params.password) {
+					return;
+				}
+
+				const router = this.router;
+
+				unlockByPwd(params.password, {
+					async onSuccess(data: any) {
+						if (data) {
+							if (userStore.current_user) {
+								if (userStore.current_user.name) {
+									router.replace('/connectLoading');
+								} else {
+									router.replace('/bind_vc');
+								}
+							}
+						} else {
+							router.replace({ path: '/import_mnemonic' });
+						}
+					},
+					onFailure(message: string) {
+						// notifyFailed(message);
+						console.log(message);
+					}
+				});
+			}
+		);
+		busOn('updateVaultComplete', () => {
+			sendExtensionMessage('updateVaultComplete', {});
+		});
 	}
 
 	async appRedirectUrl(redirect: any, currentRoute: any): Promise<void> {

@@ -161,8 +161,13 @@ const onReturn = () => {
 		return;
 	}
 
-	if (window.history.length <= 1) {
-		return;
+	console.log('window.history.length ===>');
+	console.log(window.history.length);
+
+	if (process.env.PLATFORM !== 'BEX') {
+		if (window.history.length <= 1) {
+			return;
+		}
 	}
 	router.go(-1);
 };

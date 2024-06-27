@@ -71,15 +71,17 @@ export default defineComponent({
 				});
 			}
 
-			let state = $q.platform.is.mobile && !$q.platform.is.ipad;
-			if (state) {
-				import('./css/listing-mobile.css').then(() => {});
-			} else {
-				import('./css/listing.css').then(() => {});
-			}
-
 			if (process.env.PLATFORM !== 'FILES') {
 				getAppPlatform().appMounted();
+			}
+
+			let state = $q.platform.is.mobile && !getAppPlatform().isPad;
+			if (state) {
+				import('./css/listing-mobile.css').then(() => {});
+			} else if (getAppPlatform().isPad) {
+				import('./css/listing-pad.css').then(() => {});
+			} else {
+				import('./css/listing.css').then(() => {});
 			}
 		});
 

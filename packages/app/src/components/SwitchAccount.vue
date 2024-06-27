@@ -64,6 +64,7 @@ import { useUserStore } from '../stores/user';
 import { useI18n } from 'vue-i18n';
 import TerminusAccountItem from './common/TerminusAccountItem.vue';
 import TerminusItem from './common/TerminusItem.vue';
+import { getAppPlatform } from '../platform/appPlatform';
 
 const { dialogRef, onDialogCancel } = useDialogPluginComponent();
 
@@ -116,9 +117,16 @@ const choose = async (id: string) => {
 };
 
 const addAccount = () => {
-	router.push({
-		path: '/import_mnemonic'
-	});
+	if (getAppPlatform() && getAppPlatform().isPad) {
+		router.push({
+			path: '/setup/success'
+		});
+	} else {
+		router.push({
+			path: '/import_mnemonic'
+		});
+	}
+
 	onDialogCancel();
 };
 </script>

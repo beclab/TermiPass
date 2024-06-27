@@ -15,7 +15,7 @@ if (process.env.PLATFORM == 'WEB') {
 	console.log(Platform);
 
 	if (isPad()) {
-		routes = [...routes, ...require('./routes/routes-desktop').default];
+		routes = [...routes, ...require('./routes/routes-pad').default];
 	} else {
 		routes = [
 			...routes,
