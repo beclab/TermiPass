@@ -23,7 +23,10 @@ import {
 } from '../../utils/terminusBindUtils';
 import { AppPlatform } from '../appPlatform';
 // import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
-import { BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
+import {
+	BarcodeFormat,
+	BarcodeScanner
+} from '@capacitor-mlkit/barcode-scanning';
 import { Device } from '@capacitor/device';
 import { appleDeviceNames } from '../apple-device-names';
 import { Clipboard } from '@capacitor/clipboard';
@@ -298,7 +301,23 @@ export class CapacitorPlatform
 				}
 			);
 
-			await BarcodeScanner.startScan();
+			await BarcodeScanner.startScan({
+				formats: [BarcodeFormat.QrCode]
+			});
+			// if (getCapacitorPlatform().quasar?.platform.is.android) {
+			// 	if (
+			// 		!(await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable())
+			// 			.available
+			// 	) {
+			// 		await BarcodeScanner.installGoogleBarcodeScannerModule();
+			// 	}
+			// }
+			// const result = await BarcodeScanner.scan({
+			// 	formats: [BarcodeFormat.QrCode]
+			// });
+			// if (result.barcodes && result.barcodes.length > 0) {
+			// 	resolve(result.barcodes[0].rawValue);
+			// }
 		});
 	}
 

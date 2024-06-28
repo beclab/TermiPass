@@ -9,7 +9,6 @@ android {
 
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
-    //https://github.com/capawesome-team/capacitor-mlkit/issues/53
     implementation project(':capacitor-mlkit-barcode-scanning')
     implementation project(':capacitor-community-facebook-login')
     implementation project(':capacitor-community-fcm')

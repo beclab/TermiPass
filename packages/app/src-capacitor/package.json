@@ -5,9 +5,9 @@
   "author": "TermiPass <billpengpeng@gmail.com>",
   "private": true,
   "dependencies": {
+    "@capacitor-mlkit/barcode-scanning": "^5.4.0",
     "@capacitor-community/facebook-login": "^5.0.0",
     "@capacitor-community/fcm": "^5.0.1",
-    "@capacitor-mlkit/barcode-scanning": "^5.4.0",
     "@capacitor/android": "^5.2.3",
     "@capacitor/app": "^5.0.2",
     "@capacitor/camera": "^5.0.2",
