@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
+		<uses-permission android:name="android.permission.FLASHLIGHT"/>
 
     <!-- to start monitor services during boot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -33,7 +34,12 @@
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher_round" />
 
-        <activity
+				<meta-data
+					android:name="com.google.mlkit.vision.DEPENDENCIES"
+					android:value="barcode_ui"/>
+
+
+			<activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode"
             android:exported="true"

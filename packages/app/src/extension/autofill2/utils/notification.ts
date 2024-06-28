@@ -18,7 +18,7 @@ const NotificationQueueMessageType = {
 } as const;
 
 type NotificationQueueMessageTypes =
-	typeof NotificationQueueMessageType[keyof typeof NotificationQueueMessageType];
+	(typeof NotificationQueueMessageType)[keyof typeof NotificationQueueMessageType];
 
 const NOTIFICATION_BAR_LIFESPAN_MS = 150000;
 

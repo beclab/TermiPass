@@ -21,7 +21,7 @@ const AutofillOverlayVisibility = {
 } as const;
 
 type InlineMenuVisibilitySetting =
-	typeof AutofillOverlayVisibility[keyof typeof AutofillOverlayVisibility];
+	(typeof AutofillOverlayVisibility)[keyof typeof AutofillOverlayVisibility];
 
 export {
 	AutofillOverlayElement,

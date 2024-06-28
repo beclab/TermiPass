@@ -12,7 +12,6 @@ import com.terminus.planeta.plugins.AccessibilityPlugin;
 import com.capacitorjs.plugins.device.DevicePlugin;
 import com.codetrixstudio.capacitor.GoogleAuth.GoogleAuth;
 import com.getcapacitor.Plugin;
-import com.getcapacitor.community.barcodescanner.BarcodeScanner;
 import com.getcapacitor.community.facebooklogin.FacebookLogin;
 import com.terminus.planeta.plugins.HookCapacitorHttp;
 import com.terminus.planeta.plugins.ProxyInfoPlugin;
@@ -21,10 +20,12 @@ import com.terminus.planeta.plugins.SeafilePlugin;
 import com.terminus.planeta.plugins.TailScalePlugin;
 import com.terminus.planeta.plugins.TwitterLoginPlugin;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ee.forgr.biometric.NativeBiometric;
+import io.capawesome.capacitorjs.plugins.mlkit.barcodescanning.BarcodeScannerPlugin;
 
 public class MainActivity extends FileActivity {
 
@@ -32,7 +33,7 @@ public class MainActivity extends FileActivity {
     protected void onCreate(Bundle savedInstanceState) {
         List<Class<? extends Plugin>> plugins = new ArrayList<>();
         plugins.add(HookCapacitorHttp.class);
-        plugins.add(BarcodeScanner.class);
+				plugins.add(BarcodeScannerPlugin.class);
         plugins.add(DevicePlugin.class);
         plugins.add(FacebookLogin.class);
         plugins.add(ScanPhotoQRPlugin.class);
