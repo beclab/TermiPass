@@ -4,7 +4,7 @@
 		style="width: 100%; height: 100%"
 	>
 		<q-btn
-			v-for="item in opendalService.supportAuthList"
+			v-for="item in integrationService.supportAuthList"
 			:key="item.type"
 			flat
 			no-caps
@@ -12,7 +12,7 @@
 		>
 			<div
 				class="text-body3"
-				@click="opendalService.requestOpendalAuth(item.type)"
+				@click="integrationService.requestIntegrationAuth(item.type)"
 			>
 				{{ item.name }}
 			</div>
@@ -30,7 +30,7 @@
 					flat
 					no-caps
 					label="Delete"
-					@click="opendalStore.deleteAccount(item)"
+					@click="integrationStore.deleteAccount(item)"
 				/>
 			</div>
 		</div>
@@ -38,15 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import { useOpendalStore } from '../../../stores/opendal';
+import { useIntegrationStore } from '../../../stores/integration';
 import { onMounted } from 'vue';
-import opendalService from '../../../services/opendal';
+import integrationService from '../../../services/integration';
 import { ref } from 'vue';
-import { IntegrationAccountMiniData } from '../../../services/abstractions/opendal/opendalService';
-const opendalStore = useOpendalStore();
+import { IntegrationAccountMiniData } from '../../../services/abstractions/integration/integrationService';
+const integrationStore = useIntegrationStore();
 const dataList = ref<IntegrationAccountMiniData[]>([]);
 onMounted(async () => {
-	dataList.value = await opendalStore.getAccount('all');
+	dataList.value = await integrationStore.getAccount('all');
 });
 </script>
 

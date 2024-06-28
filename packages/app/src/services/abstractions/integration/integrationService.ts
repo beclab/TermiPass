@@ -12,12 +12,12 @@ export interface IntegrationAccountData {
 	expires_at: number;
 }
 
-export interface GoogleAccountData extends IntegrationAccountData {
+export interface GoogleIntegrationAccountData extends IntegrationAccountData {
 	scope: string;
 	id_token: string;
 }
 
-export interface SpaceAccountData extends IntegrationAccountData {
+export interface SpaceIntegrationAccountData extends IntegrationAccountData {
 	userid: string;
 }
 
@@ -28,35 +28,37 @@ export interface IntegrationAccount {
 }
 
 export interface GoogleIntegrationAccount extends IntegrationAccount {
-	raw_data: GoogleAccountData;
+	raw_data: GoogleIntegrationAccountData;
 }
 
 export interface SpaceIntegrationAccount extends IntegrationAccount {
-	raw_data: SpaceAccountData;
+	raw_data: SpaceIntegrationAccountData;
 }
 
-export interface OpendalAuthResult {
+export interface IntegrationAuthResult {
 	status: boolean;
 	account?: IntegrationAccount;
 	message: string;
 }
 
-export interface OpendalAccountInfo {
+export interface IntegrationAccountInfo {
 	type: AccountType;
 	name: string;
 }
 
-export abstract class OpendalIntegrationAuth<T extends IntegrationAccount> {
+export abstract class OperateIntegrationAuth<T extends IntegrationAccount> {
 	type: AccountType;
 	abstract signIn(): Promise<T>;
 }
 
-export interface OpendalService {
-	supportAuthList: OpendalAccountInfo[];
-	requestOpendalAuth(request_type: AccountType): Promise<OpendalAuthResult>;
+export interface IntegrationService {
+	supportAuthList: IntegrationAccountInfo[];
+	requestIntegrationAuth(
+		request_type: AccountType
+	): Promise<IntegrationAuthResult>;
 	getInstanceByType(
 		request_type: AccountType
-	): OpendalIntegrationAuth<IntegrationAccount> | undefined;
+	): OperateIntegrationAuth<IntegrationAccount> | undefined;
 }
 
 export interface IntegrationAccountMiniData {

@@ -5,9 +5,9 @@ import {
 	AccountType,
 	IntegrationAccount,
 	IntegrationAccountMiniData
-} from 'src/services/abstractions/opendal/opendalService';
+} from 'src/services/abstractions/integration/integrationService';
 
-export const useOpendalStore = defineStore('opendal', {
+export const useIntegrationStore = defineStore('integration', {
 	state: () => ({
 		counter: 0
 	}),

@@ -2,10 +2,10 @@ import { GoogleAuth } from 'src/plugins/googleAuth';
 import {
 	AccountType,
 	GoogleIntegrationAccount,
-	OpendalIntegrationAuth
-} from '../abstractions/opendal/opendalService';
+	OperateIntegrationAuth
+} from '../abstractions/integration/integrationService';
 
-export class GoogleAuthService extends OpendalIntegrationAuth<GoogleIntegrationAccount> {
+export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationAccount> {
 	type = AccountType.Google;
 	async signIn(): Promise<GoogleIntegrationAccount> {
 		const scopes = ['https://www.googleapis.com/auth/drive'];

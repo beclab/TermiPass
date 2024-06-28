@@ -1,9 +1,9 @@
 import { TokenData, useCloudStore } from 'src/stores/cloud';
 import {
 	AccountType,
-	OpendalIntegrationAuth,
+	OperateIntegrationAuth,
 	SpaceIntegrationAccount
-} from '../abstractions/opendal/opendalService';
+} from '../abstractions/integration/integrationService';
 import { useUserStore } from 'src/stores/user';
 import { uid } from 'quasar';
 import { getDID, getPrivateJWK } from 'src/did/did-key';
@@ -11,7 +11,7 @@ import { PrivateJwk } from '@bytetrade/core';
 import { signJWS } from 'src/layouts/dialog/sign';
 import axios from 'axios';
 
-export class SpaceAuthService extends OpendalIntegrationAuth<SpaceIntegrationAccount> {
+export class SpaceAuthService extends OperateIntegrationAuth<SpaceIntegrationAccount> {
 	type = AccountType.Space;
 	async signIn(): Promise<SpaceIntegrationAccount> {
 		return new Promise(async (resolve, reject) => {

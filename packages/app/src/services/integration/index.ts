@@ -1,13 +1,13 @@
-import { useOpendalStore } from 'src/stores/opendal';
+import { useIntegrationStore } from 'src/stores/integration';
 import {
 	AccountType,
-	OpendalAuthResult,
-	OpendalService as OpendalServiceInterface
-} from '../abstractions/opendal/opendalService';
+	IntegrationAuthResult,
+	IntegrationService as IntegrationServiceInterface
+} from '../abstractions/integration/integrationService';
 import { DropboxAuthService } from './dropbox';
 import { GoogleAuthService } from './googleDrive';
 import { SpaceAuthService } from './space';
-class OpendalService implements OpendalServiceInterface {
+class IntegrationService implements IntegrationServiceInterface {
 	supportAuthList = [
 		{
 			type: AccountType.Dropbox,
@@ -23,10 +23,10 @@ class OpendalService implements OpendalServiceInterface {
 		}
 	];
 
-	async requestOpendalAuth(
+	async requestIntegrationAuth(
 		request_type: AccountType
-	): Promise<OpendalAuthResult> {
-		const result: OpendalAuthResult = {
+	): Promise<IntegrationAuthResult> {
+		const result: IntegrationAuthResult = {
 			status: false,
 			message: ''
 		};
@@ -38,7 +38,7 @@ class OpendalService implements OpendalServiceInterface {
 			result.account = await authAccountInstance.signIn();
 			if (result.account) {
 				result.status = true;
-				const opendalStore = useOpendalStore();
+				const opendalStore = useIntegrationStore();
 				await opendalStore.createAccount(result.account);
 			}
 		} catch (e) {
@@ -61,4 +61,4 @@ class OpendalService implements OpendalServiceInterface {
 	}
 }
 
-export default new OpendalService();
+export default new IntegrationService();

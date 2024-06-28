@@ -2,10 +2,10 @@ import { DropboxAuth } from 'src/plugins/dropbox';
 import {
 	AccountType,
 	IntegrationAccount,
-	OpendalIntegrationAuth
-} from '../abstractions/opendal/opendalService';
+	OperateIntegrationAuth
+} from '../abstractions/integration/integrationService';
 
-export class DropboxAuthService extends OpendalIntegrationAuth<IntegrationAccount> {
+export class DropboxAuthService extends OperateIntegrationAuth<IntegrationAccount> {
 	type = AccountType.Dropbox;
 	async signIn(): Promise<IntegrationAccount> {
 		const dropboxSignInResponse = await DropboxAuth.signIn();

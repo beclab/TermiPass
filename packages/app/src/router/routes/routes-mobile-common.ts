@@ -161,11 +161,12 @@ const mobileCommon: RouteRecordRaw[] = [
 					import('src/pages/Mobile/setting/CheckStatusHistory.vue')
 			},
 			{
-				path: '/opendal',
+				path: '/integration',
 				meta: {
-					tabIdentify: 'opendal'
+					tabIdentify: 'integration'
 				},
-				component: () => import('src/pages/Mobile/opendal/OpendalPage.vue')
+				component: () =>
+					import('src/pages/Mobile/integration/IntegrationPage.vue')
 			}
 		]
 	}
