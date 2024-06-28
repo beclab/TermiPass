@@ -602,22 +602,36 @@ export class CapacitorPlatform
 		}
 
 		const photos = await Camera.getPhoto({
-			resultType: CameraResultType.Base64,
+			resultType: CameraResultType.Uri,
 
 			source: CameraSource.Photos,
 
-			quality: 10
+			quality: 100
 		});
 
-		if (!photos || !photos.base64String) {
+		console.log('photos ===> 1');
+		console.log(photos);
+
+		if (!photos || !photos.path) {
 			return '';
 		}
+		console.log('photos ===> 2');
+		console.log(photos.path);
 
-		const result = await DefinePlugins.ScanPhotoQR.scan({
-			content: photos.base64String
+		// return result.result.length > 0 ? result.result[0] : '';
+		const result = await BarcodeScanner.readBarcodesFromImage({
+			formats: [BarcodeFormat.QrCode],
+			path: photos.path
 		});
 
-		return result.result.length > 0 ? result.result[0] : '';
+		console.log('photos ===> 3');
+		console.log(result);
+
+		if (result.barcodes && result.barcodes.length > 0) {
+			return result.barcodes[0].rawValue;
+		}
+
+		return '';
 	};
 
 	private registerNotifications = async () => {

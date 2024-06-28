@@ -1,9 +1,9 @@
 import { registerPlugin } from '@capacitor/core';
 import { PluginListenerHandle } from '@capacitor/core';
 
-export interface ScanPhotoQRPlugin {
-	scan(options: { content: string }): Promise<{ result: string[] }>;
-}
+// export interface ScanPhotoQRPlugin {
+// 	scan(options: { content: string }): Promise<{ result: string[] }>;
+// }
 
 export interface ProxyInfoPlugin {
 	getServerInfo(): Promise<{
@@ -42,13 +42,13 @@ export interface TailScalePluginInterface {
 	}>;
 }
 
-const ScanPhotoQR = registerPlugin<ScanPhotoQRPlugin>('ScanPhotoQR');
+// const ScanPhotoQR = registerPlugin<ScanPhotoQRPlugin>('ScanPhotoQR');
 const ProxyInfo = registerPlugin<ProxyInfoPlugin>('ProxyInfoPlugin');
 const TailscalePlugin =
 	registerPlugin<TailScalePluginInterface>('TailScalePlugin');
 
 export default {
-	ScanPhotoQR,
+	// ScanPhotoQR,
 	ProxyInfo,
 	TailscalePlugin
 };

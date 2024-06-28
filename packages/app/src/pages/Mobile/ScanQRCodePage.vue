@@ -23,7 +23,9 @@ const scanResult = async (result: string) => {
 		if (await element.canResponseQRContent(result)) {
 			const scanResult = await element.method(result);
 			if (!scanResult) {
-				scanCt.value.checkScanPermissionAndStart();
+				setTimeout(() => {
+					scanCt.value.checkScanPermissionAndStart();
+				}, 1500);
 				return;
 			}
 			router.back();
@@ -33,7 +35,9 @@ const scanResult = async (result: string) => {
 			return;
 		}
 	}
-	scanCt.value.checkScanPermissionAndStart();
+	setTimeout(() => {
+		scanCt.value.checkScanPermissionAndStart();
+	}, 1500);
 	notifySuccess(result);
 };
 </script>
