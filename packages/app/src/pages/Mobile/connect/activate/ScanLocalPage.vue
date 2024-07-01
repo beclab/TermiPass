@@ -40,7 +40,7 @@ import ConfirmButton from '../../../../components/common/ConfirmButton.vue';
 import { ConfirmButtonStatus } from '../../../../utils/constants';
 import { useUserStore } from '../../../../stores/user';
 import { WizardInfo } from './wizard';
-import { userBindTerminus } from '../BindTerminusBusiness';
+import { userBindTerminus } from '../../../../utils/BindTerminusBusiness';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
 
 const router = useRouter();

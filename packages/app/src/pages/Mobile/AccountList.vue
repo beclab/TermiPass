@@ -101,12 +101,10 @@ const choose = async (id: string) => {
 		return;
 	}
 	let user: UserItem = userStore.users!.items.get(id)!;
-	let mnemonicItem = userStore.current_mnemonic;
-
 	userStore.userUpdating = true;
 	await app.lock(false);
 	await userStore.setCurrentID(user.id);
-	await userStore.users!.unlock(userStore.password!);
+	let mnemonicItem = userStore.current_mnemonic;
 
 	if (user.setup_finished) {
 		setSenderUrl({

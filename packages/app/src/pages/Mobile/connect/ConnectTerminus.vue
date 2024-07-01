@@ -63,7 +63,7 @@ import {
 	connectTerminus,
 	getTerminusInfo,
 	loginTerminus
-} from './BindTerminusBusiness';
+} from '../../../utils/BindTerminusBusiness';
 import { busEmit } from '../../../utils/bus';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
@@ -85,9 +85,6 @@ let monitorKeyboard: MonitorKeyboard | undefined = undefined;
 const keyboardOpen = ref(false);
 
 const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
-const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
-	userStore.current_id!
-)!;
 
 terminusNameRef.value = user.name;
 
@@ -123,6 +120,12 @@ const isLocalTest = computed(() => {
 const use_local = ref(false);
 
 const onConfirm = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
+	const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+		userStore.current_id!
+	)!;
 	loading.value = true;
 	const pingResult: TerminusInfo | null = await getTerminusInfo(user); //terminus_name
 	if (!pingResult) {

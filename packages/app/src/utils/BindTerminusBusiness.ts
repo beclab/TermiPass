@@ -7,22 +7,23 @@ import {
 	MnemonicItem
 } from '@didvault/sdk/src/core';
 import { TerminusDefaultDomain, Token } from '@bytetrade/core';
-import { onFirstFactor } from '../../../utils/account';
-import { app, clearSenderUrl, setSenderUrl } from '../../../globals';
+import { onFirstFactor } from './account';
+import { app, clearSenderUrl, setSenderUrl } from '../globals';
 import { _authenticate } from '@didvault/sdk/src/authenticate';
 import queryString from 'query-string';
 import { TerminusInfo } from '@bytetrade/core';
-import { useSSIStore } from '../../../stores/ssi';
-import { useUserStore } from '../../../stores/user';
-import { useBexStore } from '../../../stores/bex';
-import { getDID } from '../../../did/did-key';
-import { axiosInstanceProxy } from '../../../platform/httpProxy';
-import { BusinessAsyncCallback, BusinessCallback } from '../login/Callback';
+import { useSSIStore } from '../stores/ssi';
+import { useUserStore } from '../stores/user';
+import { useBexStore } from '../stores/bex';
+import { getDID } from '../did/did-key';
+import { axiosInstanceProxy } from '../platform/httpProxy';
+import { BusinessAsyncCallback, BusinessCallback } from '../utils/Callback';
 import { base32ToBytes, hotp, VaultType } from '@didvault/sdk/src/core';
-import { getVaultsByType } from '../../../utils/terminusBindUtils';
+import { getVaultsByType } from './terminusBindUtils';
 import axios from 'axios';
 import { getAppPlatform } from 'src/platform/appPlatform';
-import { i18n } from '../../../boot/i18n';
+import { i18n } from '../boot/i18n';
+import UnlockAppDialog from '../components/unlock/UnlockAppDialog.vue';
 
 export const userBindTerminus = async (
 	user: UserItem,
@@ -599,3 +600,23 @@ export async function importUser(
 		return null;
 	}
 }
+
+export const unlockUserFirstBusiness = async (props: any) => {
+	if (!getAppPlatform().getQuasar()) {
+		return false;
+	}
+	return new Promise<boolean>((resolve, reject) => {
+		getAppPlatform()
+			.getQuasar()
+			?.dialog({
+				component: UnlockAppDialog,
+				componentProps: props
+			})
+			.onOk(() => {
+				resolve(true);
+			})
+			.onCancel(() => {
+				reject(false);
+			});
+	});
+};

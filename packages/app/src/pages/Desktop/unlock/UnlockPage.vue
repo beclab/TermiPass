@@ -18,7 +18,7 @@
 			/>
 			<confirm-button
 				class="terminus-unlock-box__button"
-				:btn-title="t('unlock')"
+				:btn-title="t('unlock.title')"
 				:btn-status="btnStatusRef"
 				@onConfirm="loginByPassword(passwordRef)"
 			/>

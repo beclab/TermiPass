@@ -23,7 +23,7 @@
 			<confirm-button
 				class="terminus-unlock-box__button"
 				:btn-status="btnStatusRef"
-				:btn-title="t('unlock')"
+				:btn-title="t('unlock.title')"
 				@onConfirm="onSubmit()"
 			/>
 			<!-- :btn-status="btnStatusRef" -->

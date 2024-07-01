@@ -44,7 +44,7 @@ import { UserItem } from '@didvault/sdk/src/core';
 import TerminusWizardView from '../../../../components/common/TerminusWizardView.vue';
 import { ConfirmButtonStatus } from '../../../../utils/constants';
 import { useI18n } from 'vue-i18n';
-import { loginTerminus } from '../BindTerminusBusiness';
+import { loginTerminus } from '../../../../utils/BindTerminusBusiness';
 import { WizardInfo } from './wizard';
 import axios from 'axios';
 import TerminusPasswordValidator from '../../../../components/common/TerminusPasswordValidator.vue';

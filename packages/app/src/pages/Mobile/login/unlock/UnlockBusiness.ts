@@ -1,7 +1,7 @@
 import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import { app, setSenderUrl } from '../../../../globals';
 import { useUserStore } from '../../../../stores/user';
-import { BusinessAsyncCallback } from '../Callback';
+import { BusinessAsyncCallback } from '../../../../utils/Callback';
 import { sendUnlock } from '../../../../utils/bexFront';
 import { PASSWORD_RULE } from '../../../../utils/constants';
 import { i18n } from '../../../../boot/i18n';

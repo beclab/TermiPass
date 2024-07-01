@@ -7,7 +7,10 @@ import { googleTestLogin } from '../../vc/provider/google_test';
 import { createVCItem, submitPresentation } from '../../vc/vcutils';
 import { useUserStore } from '../../../../stores/user';
 import { TERMINUS_VC_TYPE } from '../../../../utils/constants';
-import { BusinessAsyncCallback, BusinessCallback } from '../Callback';
+import {
+	BusinessAsyncCallback,
+	BusinessCallback
+} from '../../../../utils/Callback';
 import { i18n } from '../../../../boot/i18n';
 
 import { getEthereumAddress } from '../../../../did/did-key';

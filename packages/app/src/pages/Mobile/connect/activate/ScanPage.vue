@@ -42,7 +42,7 @@ import { useMenuStore } from '../../../../stores/menu';
 import { getNativeAppPlatform } from '../../../../platform/capacitor/capacitorPlatform';
 import { useI18n } from 'vue-i18n';
 import { WizardInfo } from './wizard';
-import { userBindTerminus } from '../BindTerminusBusiness';
+import { userBindTerminus } from '../../../../utils/BindTerminusBusiness';
 import { base64ToString, UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
 const $q = useQuasar();

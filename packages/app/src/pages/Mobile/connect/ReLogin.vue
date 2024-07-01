@@ -63,7 +63,7 @@ import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vu
 import { ConfirmButtonStatus } from '../../../utils/constants';
 import MonitorKeyboard from '../../../utils/monitorKeyboard';
 import { useI18n } from 'vue-i18n';
-import { connectTerminus } from './BindTerminusBusiness';
+import { connectTerminus } from '../../../utils/BindTerminusBusiness';
 import { getRequireImage } from '../../../utils/imageUtils';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';

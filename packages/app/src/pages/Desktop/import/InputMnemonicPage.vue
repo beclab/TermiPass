@@ -33,7 +33,7 @@ import { ConfirmButtonStatus } from '../../../utils/constants';
 import { useI18n } from 'vue-i18n';
 import { parsingMnemonics } from '../../Mobile/login/account/ImportUserBusiness';
 import TerminusPageTitle from '../../../components/common/TerminusPageTitle.vue';
-import { importUser } from '../../Mobile/connect/BindTerminusBusiness';
+import { importUser } from '../../../utils/BindTerminusBusiness';
 import { TerminusDefaultDomain, TerminusInfo } from '@bytetrade/core';
 import axios from 'axios';
 import {

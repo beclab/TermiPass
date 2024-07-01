@@ -55,6 +55,9 @@ export async function createUser() {
 		}
 
 		const user = await userStore.importUser(did, '', mnemonic);
+		if (!user) {
+			throw new Error(i18n.global.t('errors.add_user_failed'));
+		}
 		if (user) {
 			await userStore.setCurrentID(user.id);
 			await app.load(user.id, getAppPlatform().reconfigAppStateDefaultValue);

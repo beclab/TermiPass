@@ -11,7 +11,7 @@ import { getCapacitorPlatform } from '../capacitorPlatform';
 import TerminusScanQRCodeReminderDialog from '../../../components/dialog/TerminusScanQRCodeReminderDialog.vue';
 // import { base64ToString, UserItem } from '@didvault/sdk/src/core';
 // import { WizardInfo } from 'src/pages/Mobile/connect/activate/wizard';
-// import { userBindTerminus } from 'src/pages/Mobile/connect/BindTerminusBusiness';
+// import { userBindTerminus } from '../../../utils/BindTerminusBusiness';
 
 export const active_vault: NativeScanQRProtocol = {
 	protocol: 'active_vault',

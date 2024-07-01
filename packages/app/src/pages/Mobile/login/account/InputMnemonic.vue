@@ -57,7 +57,7 @@ import { useI18n } from 'vue-i18n';
 import { parsingMnemonics } from './ImportUserBusiness';
 import { getRequireImage } from '../../../../utils/imageUtils';
 import MonitorKeyboard from '../../../../utils/monitorKeyboard';
-import { importUser } from '../../connect/BindTerminusBusiness';
+import { importUser } from '../../../../utils/BindTerminusBusiness';
 import { useUserStore } from '../../../../stores/user';
 import TerminusTitleBar from '../../../../components/common/TerminusTitleBar.vue';
 import TerminusScrollArea from '../../../../components/common/TerminusScrollArea.vue';
@@ -97,8 +97,10 @@ onMounted(() => {
 });
 
 async function onConfirm() {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	loading.value = true;
-
 	btnStatusRef.value = ConfirmButtonStatus.disable;
 	await parsingMnemonics(mnemonic.value, {
 		async onSuccess(data: any) {

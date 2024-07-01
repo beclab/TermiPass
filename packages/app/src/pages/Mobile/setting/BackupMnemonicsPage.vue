@@ -38,11 +38,7 @@
 								class="module-reminder q-mt-lg q-pl-md q-pr-md q-pt-md q-pb-md"
 							>
 								<div class="row module-reminder__item">
-									<q-icon
-										name="sym_r_error"
-										style="color: $negative"
-										size="20px"
-									/>
+									<q-icon name="sym_r_error" color="negative" size="20px" />
 									<div class="module-reminder__text text-body2 q-ml-sm">
 										{{ t('without_the_mnemonic_there_is_no_terminusName') }}
 									</div>
@@ -179,13 +175,6 @@ const stepMap: Record<BackupStep, string> = {
 
 const step = ref(BackupStep.start);
 
-// const reminderInfoRef = ref(
-// 	"<span class='text-red'>The mnemonic phrase</span> is the only way to retrieve your <span class='text-red'>TerminusName</span>.<br><br>\
-//   TerminusName is your unique trusted username in the decentralized network built byTerminus.<br><br>\
-//   Your data is associated with TerminusName.Losing TerminusName will cause your data to be lost forever!<br><br>\
-//   Please provide your protection mnemonic phrase !"
-// );
-
 const btnStatusRef = ref(ConfirmButtonStatus.normal);
 
 const userStore = useUserStore();
@@ -198,7 +187,7 @@ const encrypting = ref(true);
 
 const $q = useQuasar();
 
-const mnemonic = ref(currentUser?.mnemonic || '');
+const mnemonic = ref(userStore.current_mnemonic?.mnemonic || '');
 
 const mnemonicsRef = ref([] as string[]);
 const randomMnemonics = ref([] as string[]);
@@ -304,7 +293,6 @@ const isMnemonicBackup = ref(
 
 		&__item {
 			height: 4px;
-			// width: 100px;
 		}
 
 		&__active {

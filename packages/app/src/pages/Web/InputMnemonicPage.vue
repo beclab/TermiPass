@@ -42,10 +42,7 @@ import TerminusPageTitle from '../../components/common/TerminusPageTitle.vue';
 import TerminusEdit from '../../components/common/TerminusEdit.vue';
 import { useUserStore } from '../../stores/user';
 import { UserItem } from '@didvault/sdk/src/core';
-import {
-	connectTerminus,
-	importUser
-} from '../Mobile/connect/BindTerminusBusiness';
+import { connectTerminus, importUser } from '../../utils/BindTerminusBusiness';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 
 const $q = useQuasar();

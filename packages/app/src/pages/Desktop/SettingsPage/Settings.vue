@@ -87,7 +87,7 @@
 								unchecked-icon="check_box_outline_blank"
 								@update:model-value="changeAutoLock"
 							/>
-							{{ t('auto_lock_when_you_leave') }}
+							{{ t('autolock.title') }}
 						</q-item-label>
 
 						<q-item-label

@@ -87,8 +87,7 @@ import {
 	ITEM_TEMPLATES,
 	Field,
 	UserItem,
-	VaultType,
-	MnemonicItem
+	VaultType
 } from '@didvault/sdk/src/core';
 import {
 	signJWS,
