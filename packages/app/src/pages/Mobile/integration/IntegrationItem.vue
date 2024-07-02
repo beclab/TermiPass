@@ -16,7 +16,7 @@
 				/>
 				<slot name="avatar" v-else />
 				<div
-					class="column justify-start"
+					class="column justify-start info-part"
 					:class="detail && detail.length > 0 ? '' : 'justify-center'"
 					style="margin-left: 8px"
 				>
@@ -99,10 +99,6 @@ const emit = defineEmits(['accountClick']);
 </script>
 
 <style scoped lang="scss">
-.account-title {
-	color: $ink-1;
-}
-
 .status-common {
 	height: 20px;
 	border-radius: 4px;
@@ -131,5 +127,16 @@ const emit = defineEmits(['accountClick']);
 
 .integration-item {
 	height: 64px;
+}
+
+.info-part {
+	width: calc(100% - 48px);
+	.account-title {
+		color: $ink-1;
+		max-width: calc(100% - 60px);
+		overflow: hidden; //超出的文本隐藏
+		text-overflow: ellipsis; //溢出用省略号显示
+		white-space: nowrap; //溢出不换行
+	}
 }
 </style>
