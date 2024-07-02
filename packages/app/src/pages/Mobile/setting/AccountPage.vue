@@ -207,7 +207,7 @@ const isBex = ref(process.env.IS_BEX);
 const { t } = useI18n();
 
 const startBackUp = async () => {
-	if (await userStore.unlockFirst()) {
+	if (!(await userStore.unlockFirst())) {
 		return;
 	}
 	$router.push({ path: '/backup_mnemonics' });
