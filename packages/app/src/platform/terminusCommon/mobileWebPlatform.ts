@@ -18,13 +18,6 @@ export class MobileWebPlatform extends TerminusCommonPlatform {
 			to: '/secret'
 		},
 		{
-			name: 'Integration',
-			identify: 'integration',
-			normalImage: 'tab_secret_normal',
-			activeImage: 'tab_secret_active',
-			to: '/integration'
-		},
-		{
 			name: i18n.global.t('setting'),
 			identify: 'setting',
 			normalImage: 'tab_setting_normal',

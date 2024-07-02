@@ -7,37 +7,41 @@
 		/>
 		<terminus-scroll-area class="integration-scroll">
 			<template v-slot:content>
-				<q-list
-					class="integration-list"
-					v-if="integrationStore.accounts.length > 0"
-				>
-					<integration-item
-						v-for="item in integrationStore.accounts"
-						:key="`${item.type}_${item.name}`"
-						:title="item.name"
-						:available="item.available"
-						:detail="`Authorized time:${formattedDate(item.create_at)}`"
-						@account-click="clickCloud(item)"
+				<q-list class="integration-list">
+					<terminus-item
+						v-for="account in accounts"
+						:key="`${account.type}_${account.name}`"
+						:show-board="true"
+						:item-height="64"
+						:image-path="getAccountIcon(account)"
+						:icon-size="40"
+						class="q-mt-sm"
 					>
-						<template v-slot:avatar>
-							<q-img
-								width="40px"
-								height="40px"
-								:noSpinner="true"
-								:src="getAccountIcon(item)"
-							/>
+						<template v-slot:title>
+							<div class="row items-center">
+								<div class="text-subtitle2 account-title">
+									{{ account.name }}
+								</div>
+								<div
+									class="status-common text-caption q-px-md q-ml-sm row items-center justify-center"
+									:class="
+										account.available ? 'status-available' : 'status-unabled'
+									"
+								>
+									{{ account.available ? t('active') : t('inactive') }}
+								</div>
+							</div>
 						</template>
-					</integration-item>
+						<template v-slot:detail>
+							<div class="text-ink-3">
+								{{ `Authorized time:${formattedDate(account.create_at)}` }}
+							</div>
+						</template>
+						<template v-slot:side>
+							<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+						</template>
+					</terminus-item>
 				</q-list>
-				<div class="integration-list column justify-center items-center" v-else>
-					<img
-						src="../../../assets/layout/nodata.svg"
-						style="margin-top: 180px"
-					/>
-					<span class="q-mb-md text-grey-8" style="margin-top: 32px">
-						{{ t('there_is_nothing_for_now') }}
-					</span>
-				</div>
 			</template>
 		</terminus-scroll-area>
 	</div>
@@ -48,32 +52,26 @@ import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 import { useIntegrationStore } from '../../../stores/integration';
 import { onMounted } from 'vue';
+import { ref } from 'vue';
 import { IntegrationAccountMiniData } from '../../../services/abstractions/integration/integrationService';
-import IntegrationItem from './IntegrationItem.vue';
+import TerminusItem from '../../../components/common/TerminusItem.vue';
 import { useI18n } from 'vue-i18n';
 
 import integrationService from '../../../services/integration';
 import { date } from 'quasar';
-import { useRouter } from 'vue-router';
-import { getRequireImage } from '../../../utils/imageUtils';
 
 const integrationStore = useIntegrationStore();
 
 const { t } = useI18n();
-const router = useRouter();
 
 const addClick = () => {
-	router.push('/integration/add');
+	console.log('add');
 };
 
-function clickCloud(account: IntegrationAccountMiniData) {
-	router.push(
-		'/integration/common/detail/' + account.type + '/' + account.name
-	);
-}
+const accounts = ref<IntegrationAccountMiniData[]>([]);
 
 onMounted(async () => {
-	integrationStore.getAccount('all');
+	accounts.value = await integrationStore.getAccount('all');
 });
 
 const getAccountIcon = (data: IntegrationAccountMiniData) => {
@@ -81,7 +79,7 @@ const getAccountIcon = (data: IntegrationAccountMiniData) => {
 	if (!account) {
 		return '';
 	}
-	return getRequireImage(`setting/integration/${account.detail.icon}`);
+	return `setting/integration/${account.detail.icon}`;
 };
 
 const formattedDate = (datetime: number) => {

@@ -2,7 +2,8 @@ export enum AccountType {
 	Space = 'space',
 	Google = 'google',
 	Dropbox = 'dropbox',
-	OneDrive = 'onedrive'
+	OneDrive = 'onedrive',
+	AWSS3 = 'awss3'
 }
 
 export interface IntegrationAccountData {
@@ -21,6 +22,11 @@ export interface SpaceIntegrationAccountData extends IntegrationAccountData {
 	userid: string;
 }
 
+export interface AWSS3IntegrationAccountData extends IntegrationAccountData {
+	endpoint: string;
+	bucket: string;
+}
+
 export interface IntegrationAccount {
 	name: string;
 	type: AccountType;
@@ -35,26 +41,58 @@ export interface SpaceIntegrationAccount extends IntegrationAccount {
 	raw_data: SpaceIntegrationAccountData;
 }
 
+export interface AWSS3IntegrationAccount extends IntegrationAccount {
+	raw_data: AWSS3IntegrationAccountData;
+}
+
 export interface IntegrationAuthResult {
 	status: boolean;
 	account?: IntegrationAccount;
 	message: string;
+	addMode: AccountAddMode;
+}
+
+export interface IntegrationAccountInfoDetail {
+	name: string;
+	icon: string;
 }
 
 export interface IntegrationAccountInfo {
 	type: AccountType;
-	name: string;
+	// name: string;
+	detail: IntegrationAccountInfoDetail;
+}
+
+export interface IntegrationScopesDetail {
+	icon: string;
+	introduce: string;
+}
+
+export interface IntegrationPermissions {
+	title: string;
+	scopes: IntegrationScopesDetail[];
+}
+
+export enum AccountAddMode {
+	common = 1,
+	direct = 2
 }
 
 export abstract class OperateIntegrationAuth<T extends IntegrationAccount> {
 	type: AccountType;
-	abstract signIn(): Promise<T>;
+	addMode: AccountAddMode;
+	abstract signIn(options: any): Promise<T | undefined>;
+	abstract permissions(): Promise<IntegrationPermissions>;
 }
 
 export interface IntegrationService {
 	supportAuthList: IntegrationAccountInfo[];
-	requestIntegrationAuth(
+	getAccountByType(
 		request_type: AccountType
+	): IntegrationAccountInfo | undefined;
+	requestIntegrationAuth(
+		request_type: AccountType,
+		options: any
 	): Promise<IntegrationAuthResult>;
 	getInstanceByType(
 		request_type: AccountType
@@ -65,4 +103,6 @@ export interface IntegrationAccountMiniData {
 	name: string;
 	type: AccountType;
 	expires_at: number;
+	available: boolean;
+	create_at: number;
 }

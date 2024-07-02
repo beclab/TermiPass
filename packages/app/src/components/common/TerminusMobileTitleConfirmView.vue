@@ -8,9 +8,13 @@
 		>
 			<slot name="content"></slot>
 		</q-scroll-area>
-		<div class="bottom-view-line" v-if="!btnHide"></div>
+		<div class="bottom-view-line" v-if="!btnHide && !bottomLineHide"></div>
 		<div class="bottom-view row items-center q-pl-md q-pr-md" v-if="!btnHide">
+			<template v-if="$slots.buttons">
+				<slot name="buttons" />
+			</template>
 			<confirm-button
+				v-else
 				class="set-unlock-pwd-root-button"
 				:btn-title="btnTitle"
 				@onConfirm="onConfirm"
@@ -49,6 +53,11 @@ defineProps({
 		default: ConfirmButtonStatus.normal
 	},
 	btnHide: {
+		type: Boolean,
+		required: false,
+		default: false
+	},
+	bottomLineHide: {
 		type: Boolean,
 		required: false,
 		default: false

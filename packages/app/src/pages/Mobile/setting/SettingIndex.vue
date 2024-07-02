@@ -155,6 +155,11 @@ const settingMenu = [
 		path: '/setting/account'
 	},
 	{
+		label: 'Integration',
+		icon: 'sym_r_stacks',
+		path: '/integration'
+	},
+	{
 		label: t('Safety'),
 		icon: 'sym_r_arming_countdown',
 		path: '/setting/security'

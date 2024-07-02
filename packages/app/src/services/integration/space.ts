@@ -1,5 +1,6 @@
 import { TokenData, useCloudStore } from 'src/stores/cloud';
 import {
+	AccountAddMode,
 	AccountType,
 	OperateIntegrationAuth,
 	SpaceIntegrationAccount
@@ -13,6 +14,7 @@ import axios from 'axios';
 
 export class SpaceAuthService extends OperateIntegrationAuth<SpaceIntegrationAccount> {
 	type = AccountType.Space;
+	addMode = AccountAddMode.common;
 	async signIn(): Promise<SpaceIntegrationAccount> {
 		return new Promise(async (resolve, reject) => {
 			const cloudStore = useCloudStore();
@@ -65,5 +67,11 @@ export class SpaceAuthService extends OperateIntegrationAuth<SpaceIntegrationAcc
 				reject('Login fail');
 			}
 		});
+	}
+	async permissions() {
+		return {
+			title: '',
+			scopes: []
+		};
 	}
 }

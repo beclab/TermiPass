@@ -7,10 +7,12 @@ import {
 	IntegrationAccountMiniData
 } from 'src/services/abstractions/integration/integrationService';
 
+export type IntegrationState = {
+	accounts: IntegrationAccountMiniData[];
+};
+
 export const useIntegrationStore = defineStore('integration', {
-	state: () => ({
-		counter: 0
-	}),
+	state: () => ({ accounts: [] } as IntegrationState),
 
 	getters: {},
 
@@ -20,6 +22,17 @@ export const useIntegrationStore = defineStore('integration', {
 		): Promise<IntegrationAccountMiniData[]> {
 			const instance = this.createAxiosInstanceProxy();
 			const result = await instance.get('/api/account/' + type);
+			if (type == 'all' && result && result.data) {
+				this.accounts = result.data.data;
+			}
+			return result.data.data;
+		},
+		async getAccountByTypeAndName(
+			type: AccountType,
+			name: string
+		): Promise<IntegrationAccountMiniData[]> {
+			const instance = this.createAxiosInstanceProxy();
+			const result = await instance.get(`/api/account/` + type + '/' + name);
 			return result.data.data;
 		},
 		async createAccount(data: IntegrationAccount) {

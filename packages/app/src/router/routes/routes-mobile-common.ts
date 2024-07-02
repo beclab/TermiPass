@@ -162,11 +162,23 @@ const mobileCommon: RouteRecordRaw[] = [
 			},
 			{
 				path: '/integration',
-				meta: {
-					tabIdentify: 'integration'
-				},
 				component: () =>
 					import('src/pages/Mobile/integration/IntegrationPage.vue')
+			},
+			{
+				path: '/integration/add',
+				component: () =>
+					import('src/pages/Mobile/integration/IntegrationAddPage.vue')
+			},
+			{
+				path: '/integration/common/detail/:type/:name?',
+				component: () =>
+					import('src/pages/Mobile/integration/IntegrationDetailPage.vue')
+			},
+			{
+				path: '/integration/aws/add',
+				component: () =>
+					import('src/pages/Mobile/integration/aws/AwsAddIntegrationPage.vue')
 			}
 		]
 	}
