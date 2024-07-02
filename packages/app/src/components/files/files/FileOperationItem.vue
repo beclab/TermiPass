@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-import { handleFileOperate, handleRepoOperate } from './OperateAction';
+import { useOperateinStore } from './../../../stores/operation';
 import { PropType } from 'vue';
 import { useRoute } from 'vue-router';
 import { OPERATE_ACTION } from '../../../utils/contact';
@@ -30,22 +30,25 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const operateinStore = useOperateinStore();
 
 const emit = defineEmits(['onItemClick']);
 
 const handle = (e: any, action: OPERATE_ACTION) => {
-	if (props.repo) {
-		handleRepoOperate(e, action);
-	} else {
-		handleFileOperate(
-			e,
-			route,
-			action,
-			async (action: OPERATE_ACTION, data: any) => {
+	// if (props.repo) {
+	// 	handleRepoOperate(e, action);
+	// } else {
+	operateinStore.handleFileOperate(
+		e,
+		route,
+		action,
+		async (action: OPERATE_ACTION, data: any) => {
+			if (!props.repo) {
 				emit('onItemClick', action, data);
 			}
-		);
-	}
+		}
+	);
+	// }
 };
 </script>
 

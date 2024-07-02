@@ -41,7 +41,6 @@ class Fetch {
 					const dataStore = useDataStore();
 					config.baseURL = dataStore.baseURL();
 
-					console.log('configconfig', config);
 					return config;
 				},
 				(error) => {
@@ -73,7 +72,6 @@ class Fetch {
 		config?: AxiosRequestConfig,
 		opt?: OptType
 	): Promise<T> {
-		console.log('url-get', url);
 		try {
 			if (opt?.node) {
 				config!.headers = {
@@ -115,9 +113,10 @@ class Fetch {
 
 	async patch<T = any>(
 		url: string,
+		data?: any,
 		config?: AxiosRequestConfig
 	): Promise<AxiosResponse<T>> {
-		return this.instance.patch(url, config);
+		return this.instance.patch(url, data, config);
 	}
 }
 

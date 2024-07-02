@@ -157,3 +157,8 @@ export interface CopyStoragesType {
 	parentPath: string;
 	key?: string;
 }
+
+export interface ShareInfoResType {
+	shared_group_ids: string[];
+	shared_user_emails: string[];
+}

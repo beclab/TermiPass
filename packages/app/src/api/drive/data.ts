@@ -1,5 +1,6 @@
+import { Router } from 'vue-router';
 import { Origin } from './../origin';
-import { removePrefix } from '../utils';
+import { removePrefix, createURL } from '../utils';
 import {
 	checkOrigin,
 	OriginType,
@@ -10,7 +11,6 @@ import { getAppDataPath, isAppData } from '../../utils/file';
 import { formatAppDataNode } from '../../utils/appdata';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { useDataStore } from './../../stores/data';
 import { files } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
@@ -24,7 +24,7 @@ import { SyncRepoItemType, SyncRepoSharedItemType } from './../common/encoding';
 import { CommonFetch } from '../fetch';
 
 class Data extends Origin {
-	private commonAxios: any;
+	public commonAxios: any;
 
 	constructor() {
 		super();
@@ -45,8 +45,6 @@ class Data extends Origin {
 				break;
 		}
 
-		console.log('resresres0', res);
-
 		res.url = `/Files${url}`;
 
 		if (res.isDir) {
@@ -61,8 +59,6 @@ class Data extends Origin {
 				return item;
 			});
 		}
-
-		console.log('resresres', res);
 
 		return res;
 	}
@@ -81,8 +77,6 @@ class Data extends Origin {
 			url,
 			JSON.parse(JSON.stringify(res))
 		);
-
-		console.log('fetchSyncfetchSync', data);
 
 		return data;
 	}
@@ -140,7 +134,7 @@ class Data extends Origin {
 		}
 	}
 
-	async dowload(path: string): Promise<{ url: string; headers: any }> {
+	async download(path: string): Promise<{ url: string; headers: any }> {
 		console.log(path);
 
 		const dataStore = useDataStore();
@@ -241,7 +235,7 @@ class Data extends Origin {
 	}
 
 	async paste(
-		route: RouteLocationNormalizedLoaded,
+		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
 		const dataStore = useDataStore();
@@ -250,11 +244,10 @@ class Data extends Origin {
 		for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
 			const element: any = dataStore.copyFiles.items[i];
 			let to =
-				decodeURIComponent(route.path).slice(6) +
-				decodeURIComponent(element.name);
+				decodeURIComponent(path).slice(6) + decodeURIComponent(element.name);
 
-			if (checkAppData(route.path)) {
-				to = decodeURIComponent(route.path) + decodeURIComponent(element.name);
+			if (checkAppData(path)) {
+				to = decodeURIComponent(path) + decodeURIComponent(element.name);
 			}
 			items.push({
 				from: element.from,
@@ -263,13 +256,13 @@ class Data extends Origin {
 				src_repo_id: element.src_repo_id || undefined,
 				parentPath: element.parentPath
 			});
-			if (route.path + decodeURIComponent(element.name) === element.from) {
-				this.action(false, true, items, route.path, false, callback);
+			if (path + decodeURIComponent(element.name) === element.from) {
+				this.action(false, true, items, path, false, callback);
 				// dataStore.resetCopyFiles();
 				return;
 			}
 		}
-		const dstItems = (await dataStore.fetchList(route.path))!.items;
+		const dstItems = (await dataStore.fetchList(path))!.items;
 		const conflict = checkConflict(items, dstItems);
 		let overwrite = false;
 		let rename = true;
@@ -283,7 +276,7 @@ class Data extends Origin {
 		if (conflict) {
 			rename = true;
 		}
-		this.action(overwrite, rename, items, route.path, isMove, callback);
+		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
 	async move(
@@ -386,8 +379,88 @@ class Data extends Origin {
 		const path = itemUrl.slice(pathFromStart, itemUrl.length - 1);
 		return path;
 	}
-}
 
-// const DriveDataAPI = new Data();
+	async fetchUploader(
+		url: string,
+		content: any,
+		overwrite = false,
+		timer = this.RETRY_TIMER,
+		callback?: (event?: any) => void
+	): Promise<void> {
+		const newurl = removePrefix(decodeURIComponent(url));
+
+		let fileInfo: any;
+		let appNode = '';
+
+		if (checkAppData(newurl)) {
+			const { path, node } = getAppDataPath(newurl);
+			appNode = node;
+			if (node) {
+				fileInfo = await files.getUploadInfo(path, `/appdata`, content);
+			}
+		} else {
+			fileInfo = await files.getUploadInfo(newurl, '/data', content);
+		}
+
+		console.log('fileInfo', fileInfo);
+
+		const fileChunkList = await files.createFileChunk(fileInfo, content);
+
+		const exportProgress = (e) => {
+			if (typeof callback === 'function') {
+				callback(e);
+			}
+		};
+
+		for (let i = 0; i < fileChunkList.length; i++) {
+			const chunkFile = fileChunkList[i];
+			try {
+				await files.uploadChunks(
+					fileInfo,
+					chunkFile,
+					i,
+					exportProgress,
+					appNode
+				);
+			} catch (error) {
+				if (timer === 1) {
+					exportProgress({
+						loaded: -1,
+						total: fileInfo.file_size,
+						lengthComputable: true
+					});
+				}
+				await files.errorRetry(url, content, overwrite, callback, timer);
+			}
+		}
+	}
+
+	openPreview(item: any, Router: Router): void {
+		console.log('into drive');
+		Router.push({
+			path: item.path,
+			query: {
+				type: 'preview'
+			}
+		});
+	}
+
+	getPreviewURL(file: any, thumb: string): string {
+		const params = {
+			inline: 'true',
+			key: Date.parse(file.modified)
+		};
+
+		return createURL('api/preview/' + thumb + file.path, params);
+	}
+
+	getDownloadURL(file: any, inline: boolean): string {
+		const params = {
+			...(inline && { inline: 'true' })
+		};
+		const url = createURL('api/raw' + file.path, params);
+		return url;
+	}
+}
 
 export { Data };

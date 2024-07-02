@@ -139,6 +139,7 @@ import { bytetrade } from '@bytetrade/core';
 import PopupMenu from '../../../components/files/popup/PopupMenu.vue';
 import TerminusUserHeaderReminder from './../../../components/common/TerminusUserHeaderReminder.vue';
 import { useI18n } from 'vue-i18n';
+import { dataAPIs } from '../../../api';
 
 const Router = useRouter();
 const Route = useRoute();
@@ -328,15 +329,13 @@ const goForward = async () => {
 };
 
 const uploadFiles = () => {
-	let element: any = document.getElementById('upload-input');
-	element.value = '';
-	element.click();
+	const dataAPI = dataAPIs();
+	dataAPI.uploadFiles();
 };
 
 const uploadFolder = () => {
-	let element: any = document.getElementById('upload-folder-input');
-	element.value = '';
-	element.click();
+	const dataAPI = dataAPIs();
+	dataAPI.uploadFolder();
 };
 
 const newFloder = () => {

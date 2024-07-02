@@ -134,27 +134,10 @@
 			</BtScrollArea>
 		</div>
 
-		<input
-			style="display: none"
-			type="file"
-			id="upload-input"
-			@change="uploadInput($event)"
-			multiple
-		/>
-		<input
-			style="display: none"
-			type="file"
-			id="upload-folder-input"
-			@change="uploadInput($event)"
-			webkitdirectory
-			multiple
-		/>
-
-		<FileUploader
+		<index-uploader
 			:dragAndDrop="true"
 			:path="fileUploaderPath"
 			:repoID="repoId"
-			:direntList="[]"
 		/>
 
 		<OperateMenuVue
@@ -179,7 +162,7 @@ import {
 	watch,
 	nextTick
 } from 'vue';
-import { format } from 'quasar';
+// import { format } from 'quasar';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';
 import { useDataStore } from '../../../stores/data';
@@ -196,12 +179,13 @@ import ListingItem from '../../../components/files/ListingItem.vue';
 import OperateMenuVue from '../../../components/files/files/OperateMenu.vue';
 import { OPERATE_ACTION } from '../../../utils/contact';
 
-import { handleFileOperate } from '../../../components/files/files/OperateAction';
+import { useOperateinStore } from './../../../stores/operation';
 
-import FileUploader from './FileUploader.vue';
+import IndexUploader from './../uploader/IndexUploader.vue';
 
 const store = useDataStore();
 const route = useRoute();
+const operateinStore = useOperateinStore();
 
 const dragCounter = ref<number>(0);
 const itemWeight = ref<number>(0);
@@ -241,14 +225,11 @@ watch(
 			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
 			'/';
 
+		console.log('fileUploaderPathfileUploaderPath', fileUploaderPath.value);
+
 		if (route.query.id) {
 			store.hideSyncUploadModal = false;
-			if (store.showUploadModal) {
-				store.hideUploadModal = true;
-			}
 		} else {
-			store.hideUploadModal = false;
-
 			if (store.isUploadProgressDialogShow) {
 				store.hideSyncUploadModal = true;
 			}
@@ -426,13 +407,13 @@ const keyEvent = (event: any) => {
 			store.showHover('search');
 			break;
 		case 'c':
-			copy(event);
+			optionAction(event, OPERATE_ACTION.COPY);
 			break;
 		case 'x':
-			copyCut(event);
+			optionAction(event, OPERATE_ACTION.CUT);
 			break;
 		case 'v':
-			paste(event);
+			optionAction(event, OPERATE_ACTION.PASTE);
 			break;
 		case 'a':
 			event.preventDefault();
@@ -459,16 +440,8 @@ const preventDefault = (event: any) => {
 	event.preventDefault();
 };
 
-const copyCut = (event: any) => {
-	handleFileOperate(event, route, OPERATE_ACTION.CUT, async () => {});
-};
-
-const copy = (e: any) => {
-	handleFileOperate(e, route, OPERATE_ACTION.COPY, async () => {});
-};
-
-const paste = (event: any) => {
-	handleFileOperate(event, route, OPERATE_ACTION.PASTE, async () => {});
+const optionAction = (event: any, type: OPERATE_ACTION) => {
+	operateinStore.handleFileOperate(event, route, type, async () => {});
 };
 
 const scrollEvent = throttle(() => {
@@ -567,47 +540,47 @@ const drop = async (event: any) => {
 	await handleFiles(files, path);
 };
 
-const uploadInput = async (event: any) => {
-	store.closeHovers();
-	if (!store.showUploadModal) {
-		store.changeUploadModal(true);
-	}
-	let files = event.currentTarget.files;
-	let folder_upload =
-		files[0].webkitRelativePath !== undefined &&
-		files[0].webkitRelativePath !== '';
+// const uploadInput = async (event: any) => {
+// 	store.closeHovers();
+// 	if (!store.showUploadModal) {
+// 		store.changeUploadModal(true);
+// 	}
+// 	let files = event.currentTarget.files;
+// 	let folder_upload =
+// 		files[0].webkitRelativePath !== undefined &&
+// 		files[0].webkitRelativePath !== '';
 
-	if (folder_upload) {
-		for (let i = 0; i < files.length; i++) {
-			let file = files[i];
-			files[i].fullPath = file.webkitRelativePath;
-		}
-	}
+// 	if (folder_upload) {
+// 		for (let i = 0; i < files.length; i++) {
+// 			let file = files[i];
+// 			files[i].fullPath = file.webkitRelativePath;
+// 		}
+// 	}
 
-	let path = route.path.endsWith('/')
-		? decodeURIComponent(route.path)
-		: decodeURIComponent(route.path) + '/';
-	let conflict = checkConflict(files, store.req.items);
+// 	let path = route.path.endsWith('/')
+// 		? decodeURIComponent(route.path)
+// 		: decodeURIComponent(route.path) + '/';
+// 	let conflict = checkConflict(files, store.req.items);
 
-	if (conflict) {
-		const newfile = await createCopiedFile(files, store.req.items);
-		handleFiles(newfile, path, true);
+// 	if (conflict) {
+// 		const newfile = await createCopiedFile(files, store.req.items);
+// 		handleFiles(newfile, path, true);
 
-		// store.showHover({
-		// 	prompt: 'replace',
-		// 	confirm: async (event: any) => {
-		// 		event.preventDefault();
-		// 		store.closeHovers();
-		//     const newfile =  await createCopiedFile(files, store.req.items)
-		// 		handleFiles(newfile, path, true);
-		// 	}
-		// });
+// 		// store.showHover({
+// 		// 	prompt: 'replace',
+// 		// 	confirm: async (event: any) => {
+// 		// 		event.preventDefault();
+// 		// 		store.closeHovers();
+// 		//     const newfile =  await createCopiedFile(files, store.req.items)
+// 		// 		handleFiles(newfile, path, true);
+// 		// 	}
+// 		// });
 
-		return;
-	}
+// 		return;
+// 	}
 
-	handleFiles(files, path);
-};
+// 	handleFiles(files, path);
+// };
 
 const resetOpacity = () => {
 	let items = document.getElementsByClassName('item');

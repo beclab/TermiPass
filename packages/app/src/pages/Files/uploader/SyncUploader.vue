@@ -6,33 +6,25 @@
 		ref="uploadInput"
 		multiple
 	/>
-
-	<UploadSyncModal
-		v-if="
-			dataStore.isUploadProgressDialogShow && !dataStore.hideSyncUploadModal
-		"
-		:uploadFileList="uploadFileList"
-		:totalProgress="totalProgress"
-		:allFilesUploaded="allFilesUploaded"
-		:key="totalProgress"
-		@onCloseUploadDialog="onCloseUploadDialog"
-	/>
 </template>
 
 <script lang="ts" setup>
 import MD5 from 'MD5';
 // import { watch } from 'vue';
-// import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import Resumablejs from '@seafile/resumablejs';
 import { seafileAPI } from '../../../api/seafileAPI';
+import { seahub } from '../../../api';
 import { useDataStore } from '../../../stores/data';
-import UploadSyncModal from '../../../components/files/UploadSyncModal.vue';
+import { useSeahubStore } from '../../../stores/seahub';
+import { useFilesUploadStore } from '../../../stores/files-upload';
+import { OriginType } from '../../../api/common/encoding';
+import { detectType } from '../../../utils/utils';
 
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
 	repoID: String,
-	direntList: Array,
 	filetypes: String,
 	chunkSize: Number,
 	withCredentials: Boolean,
@@ -53,8 +45,10 @@ type uploadObjType = {
 
 const emits = defineEmits(['onFileUploadSuccess']);
 
-// const route = useRoute();
+const route = useRoute();
 const dataStore = useDataStore();
+const upload = useFilesUploadStore();
+const seahubStore = useSeahubStore();
 
 const retryFileList = ref<any[]>([]);
 const uploadFileList = ref<any[]>([]);
@@ -90,8 +84,7 @@ onMounted(() => {
 		headers: setHeaders || {},
 		withCredentials: props.withCredentials || false,
 		chunkSize:
-			parseInt(uploadObj.resumableUploadFileBlockSize) * 1024 * 1024 ||
-			1 * 1024 * 1024,
+			uploadObj.resumableUploadFileBlockSize * 1024 * 1024 || 1 * 1024 * 1024,
 		simultaneousUploads: uploadObj.simultaneousUploads || 1,
 		fileParameterName: props.fileParameterName,
 		generateUniqueIdentifier: generateUniqueIdentifier,
@@ -181,25 +174,9 @@ const onFileAdded = (resumableFile, files) => {
 
 	// uploading is file and only upload one file
 	if (isFile && files.length === 1) {
-		// let hasRepetition = false;
-		// if (!props.isCustomPermission) {
-		// 	let direntList = props.direntList;
-		// 	for (let i = 0; i < direntList.length; i++) {
-		// 		if (
-		// 			direntList[i].type === 'file' &&
-		// 			direntList[i].name === resumableFile.fileName
-		// 		) {
-		// 			hasRepetition = true;
-		// 			break;
-		// 		}
-		// 	}
-		// }
-		// if (hasRepetition) {
-		// 	isUploadRemindDialogShow.value = true;
-		// 	currentResumableFile.value = resumableFile;
-		// } else {
 		setUploadFileList();
-		let { repoID, path } = props;
+		let { repoID, path = '/' } = props;
+		if (!repoID) return false;
 
 		seafileAPI
 			.getFileServerUploadLink(repoID, path)
@@ -216,7 +193,9 @@ const onFileAdded = (resumableFile, files) => {
 		setUploadFileList();
 		if (!isUploadLinkLoaded.value) {
 			isUploadLinkLoaded.value = true;
-			let { repoID, path } = props;
+			let { repoID, path = '/' } = props;
+			if (!repoID) return false;
+
 			seafileAPI
 				.getFileServerUploadLink(repoID, path)
 				.then((res) => {
@@ -229,18 +208,53 @@ const onFileAdded = (resumableFile, files) => {
 				});
 		}
 	}
+
+	JoinDownloadProcess(files);
+};
+
+const JoinDownloadProcess = async (files: any) => {
+	dataStore.changeUploadModal(true);
+
+	for (let i = 0; i < files.length; i++) {
+		let id = upload.id;
+		let path = route.path + files[i].fileName + '/';
+		let file = files[i].file;
+
+		let item = {
+			id,
+			path: path,
+			file,
+			repo_name: seahubStore.repo_name,
+			repo_id: seahubStore.repo_id,
+			overwrite: false,
+			...(!file.isDir && { type: detectType(file.type) })
+		};
+
+		// console.log('first', item);
+
+		// item = await seahub.formatFileContent(item);
+		// dataStore.updateRequest(item);
+		// console.log('end', item);
+
+		await (function () {
+			return new Promise(async function (res) {
+				await upload.upload(item, OriginType.SYNC);
+				res(true);
+			});
+		})();
+	}
 };
 
 const resumableUpload = (resumableFile) => {
 	let { repoID, path } = props;
+	if (!repoID) return false;
 
 	seafileAPI
 		.getFileUploadedBytes(repoID, path, resumableFile.fileName)
 		.then((res) => {
 			let uploadedBytes = res.data.uploadedBytes;
 			let blockSize =
-				parseInt(uploadObj.resumableUploadFileBlockSize) * 1024 * 1024 ||
-				1024 * 1024;
+				uploadObj.resumableUploadFileBlockSize * 1024 * 1024 || 1024 * 1024;
 
 			let offset = Math.floor(uploadedBytes / blockSize);
 
@@ -290,6 +304,8 @@ const onProgress = () => {
 		}
 	}
 	uploadFileList.value = [...uploadingList, ...uploadedList];
+
+	upload.processSyncUploads(uploadFileList.value);
 };
 
 const onFileUploadSuccess = (resumableFile, message) => {
@@ -302,7 +318,7 @@ const onFileUploadSuccess = (resumableFile, message) => {
 		let dir_name = relative_path.slice(0, relative_path.indexOf('/'));
 
 		let dirent = {
-			id: message.id || new Date().getTime(),
+			id: (message && message.id) || new Date().getTime(),
 			name: dir_name,
 			type: 'dir',
 			mtime: currentTime
@@ -314,7 +330,7 @@ const onFileUploadSuccess = (resumableFile, message) => {
 		});
 		if (!isExist) {
 			notifiedFolders.value.push(dirent);
-			emits('onFileUploadSuccess', dirent);
+			// emits('onFileUploadSuccess', dirent);
 		}
 
 		// update uploadFileList
@@ -327,20 +343,20 @@ const onFileUploadSuccess = (resumableFile, message) => {
 		});
 
 		uploadFileList.value = uploadFileListTemp;
-		dataStore.setReload(true);
+		// dataStore.setReload(true);
 		return;
 	}
 
 	if (formData.replace) {
 		// upload file -- replace exist file
 		let fileName = resumableFile.fileName;
-		let dirent = {
-			id: message,
-			name: fileName,
-			type: 'file',
-			mtime: currentTime
-		};
-		emits('onFileUploadSuccess', dirent);
+		// let dirent = {
+		// 	id: (message && message.id) || new Date().getTime(),
+		// 	name: fileName,
+		// 	type: 'file',
+		// 	mtime: currentTime
+		// };
+		// emits('onFileUploadSuccess', dirent);
 
 		let uploadFileListTemp = uploadFileList.value.map((item) => {
 			if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
@@ -350,20 +366,20 @@ const onFileUploadSuccess = (resumableFile, message) => {
 			return item;
 		});
 		uploadFileList.value = uploadFileListTemp;
-		dataStore.setReload(true);
+		// dataStore.setReload(true);
 		return;
 	}
 
 	// upload file -- add files
-	let dirent = {
-		id: message.id || new Date().getTime(),
-		type: 'file',
-		name: message.name,
-		size: message.size,
-		mtime: currentTime
-	};
+	// let dirent = {
+	// 	id: (message && message.id) || new Date().getTime(),
+	// 	type: 'file',
+	// 	name: message.name,
+	// 	size: message.size,
+	// 	mtime: currentTime
+	// };
 
-	emits('onFileUploadSuccess', dirent); // this contance:  no repetition file
+	// emits('onFileUploadSuccess', dirent); // this contance:  no repetition file
 
 	let uploadFileListTemp = uploadFileList.value.map((item) => {
 		if (item.uniqueIdentifier === resumableFile.uniqueIdentifier) {
@@ -374,7 +390,7 @@ const onFileUploadSuccess = (resumableFile, message) => {
 	});
 
 	uploadFileList.value = uploadFileListTemp;
-	dataStore.setReload(true);
+	// dataStore.setReload(true);
 };
 
 const onFileError = (resumableFile, message) => {

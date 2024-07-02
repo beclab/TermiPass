@@ -1,23 +1,27 @@
-import * as files from './files';
-import * as seahub from './seahub';
+import * as files from './drive';
+import * as seahub from './sync';
 import * as share from './share';
 import * as users from './users';
 import * as settings from './settings';
-import * as pub from './pub';
 import * as shareToUser from './shareToUser';
 import * as ai from './ai';
+import * as common from './common/common';
 import search from './search';
 import commands from './commands';
 
-import { Data as DataAPI } from './data';
 import { Data as DriveDataAPI } from './drive/data';
 import { Data as SyncDataAPI } from './sync/data';
 
-import { Operation } from './operation';
 import { getParams } from '../utils/utils';
+import { OriginType } from './common/encoding';
 
-function dataAPIsa(): SyncDataAPI | DriveDataAPI {
+function dataAPIs(origin?: OriginType): SyncDataAPI | DriveDataAPI {
 	const query = getParams(window.location.href, 'id');
+	if (origin === OriginType.SYNC) {
+		return new SyncDataAPI();
+	} else if (origin === OriginType.DRIVE) {
+		return new DriveDataAPI();
+	}
 	if (query) {
 		return new SyncDataAPI();
 	} else {
@@ -25,8 +29,6 @@ function dataAPIsa(): SyncDataAPI | DriveDataAPI {
 	}
 }
 
-const operationAPI = new Operation();
-const dataAPI = new DataAPI();
 // const driveAPI = new DriveDataAPI();
 // const syncAPI = new SyncDataAPI();
 
@@ -36,14 +38,14 @@ export {
 	share,
 	users,
 	settings,
-	pub,
 	commands,
 	search,
 	shareToUser,
 	ai,
-	dataAPI,
-	dataAPIsa,
+	common,
+	dataAPIs,
+	DriveDataAPI,
+	SyncDataAPI
 	// driveAPI,
 	// syncAPI,
-	operationAPI
 };

@@ -18,7 +18,7 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useQuasar } from 'quasar';
-import { files as api, seahub } from '../../api';
+import { seahub } from '../../api';
 import { useDataStore } from '../../stores/data';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useSeahubStore } from '../../stores/seahub';
@@ -28,7 +28,6 @@ import {
 	InOfflineMode,
 	InOfflineModeCode
 } from '../../utils/checkTerminusState';
-import { useMenuStore } from '../../stores/files-menu';
 
 import { useTermipassStore } from '../../stores/termipass';
 import { MenuItem } from '../../utils/contact';
@@ -45,7 +44,6 @@ const $q = useQuasar();
 const routepath = ref(route.path);
 const termipassStore = useTermipassStore();
 const seahubStore = useSeahubStore();
-const menuStore = useMenuStore();
 
 // import dataAPI from './../../api/data';
 

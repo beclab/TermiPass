@@ -1,9 +1,18 @@
-import { RouteLocationNormalizedLoaded } from 'vue-router';
-
 import { OriginType, DriveResType, CopyStoragesType } from './common/encoding';
 import { OPERATE_ACTION } from '../utils/contact';
+import { Router } from 'vue-router';
 
 export abstract class Origin {
+	/**
+	 * Retry timer when uplaod
+	 */
+	public RETRY_TIMER = 3;
+
+	/**
+	 * Chunk size when uplaod
+	 */
+	public SIZE = 8 * 1024 * 1024;
+
 	/**
 	 * This function retrieves the data from all files in the specified directory.
 	 */
@@ -17,7 +26,7 @@ export abstract class Origin {
 	/**
 	 * Retrieves this menu from the Sync
 	 */
-	abstract dowload(path: string): Promise<{ url: string; headers: any }>;
+	abstract download(path: string): Promise<{ url: string; headers: any }>;
 
 	/**
 	 * This function handles the copying of files or directories in an event
@@ -33,7 +42,7 @@ export abstract class Origin {
 	 * Paste
 	 */
 	abstract paste(
-		route: RouteLocationNormalizedLoaded,
+		route: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void>;
 
@@ -71,4 +80,34 @@ export abstract class Origin {
 	 * Open local folder
 	 */
 	abstract openLocalFolder(): string | undefined;
+
+	/**
+	 * Open preview when upload modal
+	 */
+	abstract openPreview(item: any, Router?: Router): void;
+
+	/**
+	 * get url for preview page
+	 */
+	abstract getPreviewURL(res: any, thumb: string): string;
+
+	/**
+	 * get DownloadURL url for preview page
+	 */
+	abstract getDownloadURL(
+		file: any,
+		inline?: boolean,
+		download?: boolean
+	): string;
+
+	/**
+	 * Upload fetch
+	 */
+	// abstract fetchUploader(
+	// 	url: string,
+	// 	content: string,
+	// 	overwrite: boolean,
+	// 	timer: number,
+	// 	callback: () => Promise<void>
+	// ): Promise<any>;
 }

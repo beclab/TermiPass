@@ -4,19 +4,22 @@ import { OriginType, DriveResType, CopyStoragesType } from '../common/encoding';
 import { formatSeahub } from '../../utils/seahub';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { useDataStore } from './../../stores/data';
 import { files, seahub } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
 import { checkConflict } from '../../utils/upload';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
-import { SyncRepoItemType, SyncRepoSharedItemType } from './../common/encoding';
+import {
+	SyncRepoItemType,
+	SyncRepoSharedItemType,
+	ShareInfoResType
+} from './../common/encoding';
 
 import { CommonFetch } from '../fetch';
 
 class Data extends Origin {
-	private commonAxios: any;
+	public commonAxios: any;
 
 	constructor() {
 		super();
@@ -58,8 +61,6 @@ class Data extends Origin {
 			JSON.parse(JSON.stringify(res))
 		);
 
-		console.log('fetchSyncfetchSync', data);
-
 		return data;
 	}
 
@@ -95,7 +96,15 @@ class Data extends Origin {
 		}
 	}
 
-	async dowload(path: string): Promise<{ url: string; headers: any }> {
+	async fetchShareInfo(repo_id: string): Promise<ShareInfoResType> {
+		const res: ShareInfoResType = await this.commonAxios.get(
+			`/seahub/api/v2.1/repos/${repo_id}/share-info/`,
+			{}
+		);
+		return res;
+	}
+
+	async download(path: string): Promise<{ url: string; headers: any }> {
 		const dataStore = useDataStore();
 		if (
 			dataStore.selectedCount === 1 &&
@@ -195,7 +204,7 @@ class Data extends Origin {
 	}
 
 	async paste(
-		route: RouteLocationNormalizedLoaded,
+		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
 		const dataStore = useDataStore();
@@ -205,12 +214,12 @@ class Data extends Origin {
 		for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
 			const element: any = dataStore.copyFiles.items[i];
 			const pathFromStart =
-				decodeURIComponent(route.path).indexOf(seahubStore.repo_name) +
+				decodeURIComponent(path).indexOf(seahubStore.repo_name) +
 				seahubStore.repo_name.length;
 			const to =
 				'/' +
 				(seahubStore.repo_id || '') +
-				decodeURIComponent(route.path).slice(pathFromStart) +
+				decodeURIComponent(path).slice(pathFromStart) +
 				decodeURIComponent(element.name);
 			items.push({
 				from: element.from,
@@ -219,13 +228,13 @@ class Data extends Origin {
 				src_repo_id: element.src_repo_id || undefined,
 				parentPath: element.parentPath
 			});
-			if (route.path + decodeURIComponent(element.name) === element.from) {
-				this.action(false, true, items, route.path, false, callback);
+			if (path + decodeURIComponent(element.name) === element.from) {
+				this.action(false, true, items, path, false, callback);
 				// dataStore.resetCopyFiles();
 				return;
 			}
 		}
-		const dstItems = (await dataStore.fetchList(route.path))!.items;
+		const dstItems = (await dataStore.fetchList(path))!.items;
 		const conflict = checkConflict(items, dstItems);
 		let overwrite = false;
 		let rename = true;
@@ -238,7 +247,7 @@ class Data extends Origin {
 		if (conflict) {
 			rename = true;
 		}
-		this.action(overwrite, rename, items, route.path, isMove, callback);
+		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
 	async move(
@@ -352,9 +361,50 @@ class Data extends Origin {
 		const path = itemUrl.slice(pathFromStart, itemUrl.length - 1);
 		return path;
 	}
+
+	async openPreview(item: any): Promise<void> {
+		console.log('into sync');
+
+		console.log('item start', item);
+		const dataStore = useDataStore();
+		item.url = item.path;
+		// item.path = item.path.slice(6) + item.name + '/';
+		item = await seahub.formatFileContent(item);
+		console.log('item end', item);
+
+		dataStore.updateRequest(item);
+	}
+
+	getPreviewURL(file: any, thumb: string): string {
+		const dataStore = useDataStore();
+		const startIndex =
+			file.path.indexOf(file.repo_name) + file.repo_name?.length;
+
+		const hasSeahub = file.path.slice(startIndex);
+
+		let seflSize = '1080';
+		if (thumb === 'thumb') {
+			seflSize = '48';
+		}
+
+		return `${dataStore.baseURL()}/seahub/thumbnail/${
+			file.repo_id
+		}/${seflSize}${hasSeahub}`;
+	}
+
+	getDownloadURL(file: any, download?: boolean): string {
+		const store = useDataStore();
+		const startIndex =
+			file.path.indexOf(file.repo_name) + file.repo_name?.length;
+		const hasSeahub = file.path.slice(startIndex);
+		if (['audio', 'video'].includes(file.type) && !download) {
+			return file.url;
+		} else {
+			return `${store.baseURL()}/seahub/lib/${
+				file.repo_id
+			}/file${hasSeahub}?dl=1`;
+		}
+	}
 }
 
-// const SyncDataAPI = new Data();
-
-// export { SyncDataAPI };
 export { Data };

@@ -4,8 +4,13 @@ import { shareToUser } from '../api';
 import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
 // import { dataAPI } from './../api';
-import { dataAPIsa } from './../api';
-import { SyncRepoMineType, SyncRepoSharedType } from '../api/common/encoding';
+import { dataAPIs, SyncDataAPI } from './../api';
+
+import {
+	SyncRepoMineType,
+	SyncRepoSharedType,
+	OriginType
+} from '../api/common/encoding';
 import { IFilesSyncStatus } from 'src/platform/electron/interface';
 
 export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
@@ -346,7 +351,7 @@ export const useMenuStore = defineStore('filesMenu', {
 		async getSyncMenu() {
 			const menuStore = useMenuStore();
 			const menu = JSON.parse(JSON.stringify(menuStore.getMenu()));
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			const [res2, res3]: any = await dataAPI.fetchSyncRepo(
 				MenuItem.SHAREDWITH
 			);
@@ -444,6 +449,12 @@ export const useMenuStore = defineStore('filesMenu', {
 				.concat(shareChildren.map((e) => e.id));
 
 			menuStore.addSyncUpdateRepos(syncIds);
+		},
+
+		async fetchShareInfo(repo_id: string) {
+			const dataAPI = dataAPIs(OriginType.SYNC);
+			const res: any = await (dataAPI as SyncDataAPI).fetchShareInfo(repo_id);
+			return res;
 		}
 	}
 });

@@ -104,8 +104,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useDataStore } from '../../stores/data';
 import { syncStatusInfo, useMenuStore } from '../../stores/files-menu';
 import { useSeahubStore } from '../../stores/seahub';
-import { sync } from '../../api';
-import { handleFileOperate } from '../../components/files/files/OperateAction';
+import { useOperateinStore } from './../../stores/operation';
 import PopupMenu from '../../components/files/popup/PopupMenu.vue';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
@@ -116,6 +115,7 @@ const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
 const seahubStore = useSeahubStore();
+const operateinStore = useOperateinStore();
 
 const { t } = useI18n();
 
@@ -164,7 +164,7 @@ const changeItemMenu = async (
 };
 
 const handleNewLib = (e: any) => {
-	handleFileOperate(
+	operateinStore.handleFileOperate(
 		e,
 		Route,
 		OPERATE_ACTION.CREATE_REPO,

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
 import { MenuItem, FilesSortType } from '../utils/contact';
-import { dataAPIsa } from './../api';
+import { dataAPIs } from './../api';
 
 import { OriginType, CopyStoragesType } from './../api/common/encoding';
 
@@ -21,7 +21,6 @@ export type DataState = {
 	showConfirm: any;
 	currentItem: string;
 	showUploadModal: boolean;
-	hideUploadModal: boolean;
 	isUploadProgressDialogShow: boolean;
 	hideSyncUploadModal: boolean;
 	copyFiles: {
@@ -65,7 +64,6 @@ export const useDataStore = defineStore('data', {
 			showConfirm: null,
 			currentItem: 'Home',
 			showUploadModal: false,
-			hideUploadModal: false,
 			isUploadProgressDialogShow: false,
 			hideSyncUploadModal: false,
 			copyFiles: {
@@ -111,7 +109,7 @@ export const useDataStore = defineStore('data', {
 
 	actions: {
 		async fetchList(url: string) {
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			console.log('dataAPI', dataAPI);
 			return dataAPI.fetch(url);
 		},

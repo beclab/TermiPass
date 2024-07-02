@@ -9,7 +9,7 @@ import { useDataStore } from './data';
 
 // import { operationAPI } from './../api';
 
-import { dataAPIsa } from './../api';
+import { dataAPIs } from './../api';
 
 // export type DataState = {};
 
@@ -70,7 +70,7 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.PASTE:
-					this.pasteCatalogue(route, callback);
+					this.pasteCatalogue(route.path, callback);
 					break;
 
 				case OPERATE_ACTION.MOVE:
@@ -110,8 +110,8 @@ export const useOperateinStore = defineStore('operation', {
 		},
 
 		async download(path: string) {
-			const dataAPI = dataAPIsa();
-			const { url, headers } = await dataAPI.dowload(path);
+			const dataAPI = dataAPIs();
+			const { url, headers } = await dataAPI.download(path);
 
 			alert(url);
 			const isElectron = Platform.is.electron;
@@ -128,7 +128,7 @@ export const useOperateinStore = defineStore('operation', {
 		async copyCatalogue() {
 			console.log('into copyCatalogue');
 			const dataStore = useDataStore();
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			const copyStorages = await dataAPI.copy();
 			console.log('copyCatalogue', copyStorages);
 
@@ -136,18 +136,16 @@ export const useOperateinStore = defineStore('operation', {
 		},
 
 		async pasteCatalogue(
-			route: RouteLocationNormalizedLoaded,
+			path: string,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		) {
-			console.log(route);
-			console.log(callback);
-			const dataAPI = dataAPIsa();
-			await dataAPI.paste(route, callback);
+			const dataAPI = dataAPIs();
+			await dataAPI.paste(path, callback);
 		},
 
 		async cutCatalogue() {
 			const dataStore = useDataStore();
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			const copyStorages = await dataAPI.cut();
 
 			console.log('copyStoragescopyStorages', copyStorages);
@@ -158,22 +156,22 @@ export const useOperateinStore = defineStore('operation', {
 			path: string,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		) {
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			await dataAPI.move(path, callback);
 		},
 
 		uploadFiles() {
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			dataAPI.uploadFiles();
 		},
 
 		uploadFolder() {
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			dataAPI.uploadFolder();
 		},
 
 		openLocalFolder() {
-			const dataAPI = dataAPIsa();
+			const dataAPI = dataAPIs();
 			dataAPI.openLocalFolder();
 		}
 	}

@@ -1,6 +1,6 @@
 import { fetchURL } from './utils';
 // import { dataAPI } from './index';
-import { dataAPIsa } from './../api';
+import { dataAPIs } from '.';
 import { useSeahubStore } from '../stores/seahub';
 import { useDataStore } from '../stores/data';
 import { axiosInstanceProxy } from '../platform/httpProxy';
@@ -52,7 +52,7 @@ export const getFormData = (object) =>
 export async function getRepoId(id) {
 	const seahubStore = useSeahubStore();
 
-	const dataAPI = dataAPIsa();
+	const dataAPI = dataAPIs();
 	const res2 = await dataAPI.commonAxios.get(
 		`seahub/api/v2.1/repos/${id}/`,
 		{}
@@ -94,7 +94,8 @@ export async function fileOperate(path, url, parmas, floder) {
 export async function updateFile(item, content, isNative = false) {
 	const store = useDataStore();
 	const seahubStore = useSeahubStore();
-	let pathLen = item.url.indexOf(store.currentItem) + store.currentItem.length;
+	const pathLen =
+		item.url.indexOf(store.currentItem) + store.currentItem.length;
 	const parent_dir = item.url.slice(pathLen);
 	const res = await fetchURL(
 		`seahub/api2/repos/${seahubStore.repo_id}/update-link/?p=/`,
@@ -107,7 +108,7 @@ export async function updateFile(item, content, isNative = false) {
 		files_content: content
 	};
 
-	let paramsT = {};
+	const paramsT = {};
 	if (isNative) {
 		paramsT['reallyContentType'] = 'multipart/form-data';
 	}
@@ -158,17 +159,17 @@ export async function batchMoveItem(data) {
 	return res;
 }
 
-export async function updateRepoName(repo_id, data) {
-	const seahubStore = useSeahubStore();
-	const res = await instanceAxios({
-		url: `seahub/api2/repos/${seahubStore.repo_id}/?op=rename`,
-		method: 'post',
-		data: data,
-		headers: { 'Content-Type': 'application/json' }
-	});
+// export async function updateRepoName(repo_id, data) {
+// 	const seahubStore = useSeahubStore();
+// 	const res = await instanceAxios({
+// 		url: `seahub/api2/repos/${seahubStore.repo_id}/?op=rename`,
+// 		method: 'post',
+// 		data: data,
+// 		headers: { 'Content-Type': 'application/json' }
+// 	});
 
-	return res;
-}
+// 	return res;
+// }
 
 export async function reRepoName(url, data) {
 	const res = await instanceAxios({
@@ -203,6 +204,8 @@ export async function batchCopyItem(data) {
 }
 
 export const formatFileContent = async (file) => {
+	console.log('sync formatFileContent start', file);
+
 	const store = useDataStore();
 	const seahubStore = useSeahubStore();
 
