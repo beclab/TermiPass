@@ -41,7 +41,7 @@ import ConfirmButton from '../../components/common/ConfirmButton.vue';
 import '../../css/terminus.scss';
 import { useI18n } from 'vue-i18n';
 import { getRequireImage } from '../../utils/imageUtils';
-import { MnemonicItem, UserItem } from '@didvault/sdk/src/core';
+import { MnemonicItem } from '@didvault/sdk/src/core';
 import { useUserStore } from '../../stores/user';
 import { app } from '../../globals';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
