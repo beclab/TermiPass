@@ -75,6 +75,9 @@ const current_user = ref(userStore.current_user);
 const { t } = useI18n();
 
 const choose = async (id: string) => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	if (id == current_user.value?.id) {
 		onDialogCancel();
 		return;

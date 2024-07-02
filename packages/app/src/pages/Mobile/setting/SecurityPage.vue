@@ -162,7 +162,10 @@ const changeBiometric = async () => {
 	}
 };
 
-const changePwd = () => {
+const changePwd = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	$router.push({ path: '/change_pwd' });
 };
 

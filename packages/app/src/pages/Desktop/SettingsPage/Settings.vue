@@ -302,12 +302,15 @@ export default defineComponent({
 			});
 		};
 
-		const changePassword = () => {
+		const changePassword = async () => {
+			if (!(await userStore.unlockFirst())) {
+				return;
+			}
 			$q.dialog({
 				component: DialogResetPassword,
 				componentProps: {
-					title: 'Change Password',
-					navigation: 'Cancel'
+					title: t('settings.changePassword'),
+					navigation: t('cancel')
 				}
 			});
 		};

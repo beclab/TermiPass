@@ -74,11 +74,6 @@ import { app } from '../../../globals';
 import { formatMinutesTime } from '../../../utils/utils';
 
 const props = defineProps({
-	title: {
-		type: String,
-		required: false,
-		default: ''
-	},
 	detailText: {
 		type: String,
 		required: false,

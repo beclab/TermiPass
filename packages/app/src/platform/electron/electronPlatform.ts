@@ -57,7 +57,12 @@ export class ElectronPlatform extends TerminusCommonPlatform {
 			redirect({ path: '/welcome' });
 			return;
 		}
-		redirect({ path: '/unlock' });
+		// redirect({ path: '/unlock' });
+		if (!userStore.current_user) {
+			redirect({ path: '/import_mnemonic' });
+			return;
+		}
+		redirect({ path: '/connectLoading' });
 	}
 
 	async getDeviceInfo() {

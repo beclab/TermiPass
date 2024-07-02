@@ -2,12 +2,21 @@
 	<q-dialog
 		ref="dialogRef"
 		@hide="onDialogHide"
-		maximized
+		:maximized="$q.platform.is.mobile"
 		transition-show="slide-up"
 		transition-hide="slide-down"
+		class="d-creatVault"
 	>
-		<q-card class="q-dialog-plugin column root">
-			<TermipassUnlockContent
+		<q-card class="column root" :class="isDesktop ? 'q-dialog-plugin' : ''">
+			<DesktopTermipassUnlockContent
+				v-if="isDesktop"
+				@unlockSuccess="onDialogOK"
+				@cancel="onDialogCancel"
+				:detail-text="info"
+				logo="login/termipass_brand_desktop.svg"
+			/>
+			<MobileTermipassUnlockContent
+				v-else-if="isMobile"
 				@unlockSuccess="onDialogOK"
 				@cancel="onDialogCancel"
 				:detail-text="info"
@@ -18,9 +27,12 @@
 </template>
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar';
-import TermipassUnlockContent from './mobile/TermipassUnlockContent.vue';
+import MobileTermipassUnlockContent from './mobile/TermipassUnlockContent.vue';
+import DesktopTermipassUnlockContent from './desktop/TermipassUnlockContent.vue';
 import { i18n } from '../../boot/i18n';
-const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
+import { ref } from 'vue';
+const { dialogRef, onDialogCancel, onDialogOK, onDialogHide } =
+	useDialogPluginComponent();
 defineProps({
 	info: {
 		type: String,
@@ -28,4 +40,15 @@ defineProps({
 		default: i18n.global.t('unlock.auth_popup_unlock_introduce')
 	}
 });
+const isDesktop = ref(process.env.PLATFORM == 'DESKTOP');
+const isMobile = ref(process.env.PLATFORM == 'MOBILE');
 </script>
+<style lang="scss" scoped>
+.d-creatVault {
+	.q-dialog-plugin {
+		width: 800px;
+		height: 600px;
+		border-radius: 12px;
+	}
+}
+</style>

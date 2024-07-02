@@ -40,13 +40,18 @@ import {
 	notifyWarning,
 	notifyFailed
 } from '../../../utils/notifyRedefinedUtil';
+import { useUserStore } from '../../../stores/user';
 
 const $q = useQuasar();
 const router = useRouter();
 const mnemonic = ref<string>('');
+const userStore = useUserStore();
 const { t } = useI18n();
 
 async function onConfirm() {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	btnStatusRef.value = ConfirmButtonStatus.disable;
 	$q.loading.show();
 	await parsingMnemonics(mnemonic.value, {

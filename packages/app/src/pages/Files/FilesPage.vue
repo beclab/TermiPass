@@ -236,5 +236,6 @@ export default defineComponent({
 	position: absolute;
 	left: 0;
 	top: 0;
+	background: $background-1;
 }
 </style>
