@@ -267,15 +267,15 @@ export const useMenuStore = defineStore('menu', {
 				elChildren.label = orgs[0].name;
 				elChildren.key = orgs[0].name;
 
-				console.log('--------TEST INVITES START--------');
-				console.log('orgs', orgs);
-				console.log('orgs[0]', orgs[0]);
-				console.log('orgs[0].owner', orgs[0].owner);
-				console.log('app', app);
-				console.log('app.account', app.account);
-				console.log('app.account?.did', app.account?.did);
-				console.log('elChildren.children', elChildren.children);
-				console.log('--------TEST INVITES END--------');
+				// console.log('--------TEST INVITES START--------');
+				// console.log('orgs', orgs);
+				// console.log('orgs[0]', orgs[0]);
+				// console.log('orgs[0].owner', orgs[0].owner);
+				// console.log('app', app);
+				// console.log('app.account', app.account);
+				// console.log('app.account?.did', app.account?.did);
+				// console.log('elChildren.children', elChildren.children);
+				// console.log('--------TEST INVITES END--------');
 
 				if (orgs[0].owner.did !== app.account?.did) {
 					elChildren.children = elChildren.children.filter(

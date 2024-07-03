@@ -39,7 +39,7 @@ async function onConfirm() {
 .welcome-page {
 	width: 100%;
 	height: 100%;
-	background: $background;
+	background: $background-1;
 	padding-top: 20px;
 	padding-left: 32px;
 	padding-right: 32px;

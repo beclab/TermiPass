@@ -12,14 +12,18 @@ import PortMessage from '../utils/message/portMessage';
 import Controller from './controller';
 import { busOn, busOff, busEmit } from 'src/utils/bus';
 import { rssBackground, autofillBackground, providerBackground } from './utils';
-import { Message } from '../rss/utils';
 import { BrowserInterface } from '../interface/browserInterface';
+import { ExtensionMessage } from '../interface/message';
+import { AuthService } from '../services/auth.service';
 
 export class ExtensionBackground {
 	app = new App(new AjaxSender(process.env.PL_SERVER_URL!));
 	private _platform = new ExtensionBackgroundPlatform();
 
-	backgroundList: UpdateBadgeInterface[] | BrowserInterface[] = [];
+	backgroundBrowserInterfaceList: BrowserInterface[] = [];
+	backgroundBadgeInterfaceList: UpdateBadgeInterface[] = [];
+
+	authService = new AuthService();
 
 	async init() {
 		globalThis.webos_app_plugin_id = chrome.runtime.id;
@@ -29,10 +33,16 @@ export class ExtensionBackground {
 		const update = debounce((options: any) => this.update(options), 500);
 
 		rssBackground.init();
-		autofillBackground.init();
+		autofillBackground.init(this.authService);
 		providerBackground.init();
 
-		this.backgroundList = [
+		this.backgroundBrowserInterfaceList = [
+			rssBackground,
+			autofillBackground,
+			providerBackground
+		];
+
+		this.backgroundBadgeInterfaceList = [
 			rssBackground,
 			autofillBackground,
 			providerBackground
@@ -75,19 +85,23 @@ export class ExtensionBackground {
 				return;
 			}
 
-			this.backgroundList.forEach((bg) => {
+			this.backgroundBrowserInterfaceList.forEach((bg) => {
 				bg.runtimeOnConnect(port);
 			});
 		});
 
-		browser.runtime.onMessage.addListener(async (msg: Message, sender) => {
-			this.backgroundList.forEach((bg) => {
-				bg.runtimeOnMessage(msg, sender);
-			});
-		});
+		browser.runtime.onMessage.addListener(
+			async (msg: ExtensionMessage, sender) => {
+				this.backgroundBrowserInterfaceList.forEach((bg) => {
+					if (msg.module == bg.messageModule) {
+						bg.runtimeOnMessage(msg, sender);
+					}
+				});
+			}
+		);
 
 		browser.contextMenus.onClicked.addListener(async (info, tab) => {
-			this.backgroundList.forEach((bg) => {
+			this.backgroundBrowserInterfaceList.forEach((bg) => {
 				bg.contextMenusOnClicked(info, tab);
 			});
 		});
@@ -103,15 +117,30 @@ export class ExtensionBackground {
 			});
 		});
 
+		// browser.windows.onFocusChanged()
+
 		browser.tabs.onRemoved.addListener((tabId, removeInfo) => {
-			this.backgroundList.forEach((bg) => {
+			this.backgroundBrowserInterfaceList.forEach((bg) => {
 				bg.tabsOnRemoved(tabId, removeInfo);
 			});
 		});
 
-		browser.tabs.onUpdated.addListener(update);
+		browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+			this.backgroundBrowserInterfaceList.forEach((bg) => {
+				bg.tabsOnUpdated(tabId, changeInfo, tab);
+			});
+			update({
+				tabId,
+				changeInfo
+			});
+		});
 
-		browser.tabs.onActivated.addListener(update);
+		browser.tabs.onActivated.addListener((info) => {
+			this.backgroundBrowserInterfaceList.forEach((bg) => {
+				bg.tabsOnActivated(info);
+			});
+			update(info);
+		});
 
 		await this.app.load(undefined);
 
@@ -133,12 +162,8 @@ export class ExtensionBackground {
 	};
 
 	async update(options: any) {
-		await autofillBackground.updateAutofillContextMenu(async () => {
-			// await addDownloadMenu();
-		});
-
+		await autofillBackground.updateAutofillContextMenu();
 		await rssBackground.handleRSS(options);
-
 		await this._updateBadge();
 	}
 
@@ -152,8 +177,14 @@ export class ExtensionBackground {
 
 		let badge: UpdateBadgeInterface | undefined = undefined;
 
-		for (let index = 0; index < this.backgroundList.length; index++) {
-			const element = this.backgroundList[index] as UpdateBadgeInterface;
+		for (
+			let index = 0;
+			index < this.backgroundBadgeInterfaceList.length;
+			index++
+		) {
+			const element = this.backgroundBadgeInterfaceList[
+				index
+			] as UpdateBadgeInterface;
 			const updatable = await element.badgeUpdatable();
 			if (!updatable) {
 				continue;

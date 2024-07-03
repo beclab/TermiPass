@@ -1,6 +1,5 @@
 import { getPageRSS } from './utils';
 import { browser } from 'webextension-polyfill-ts';
-
 browser.runtime.onMessage.addListener(async (msg) => {
 	if (msg.type === 'getPageRSS') {
 		return getPageRSS();
@@ -8,7 +7,6 @@ browser.runtime.onMessage.addListener(async (msg) => {
 		return document.documentElement.innerHTML;
 	}
 });
-
 browser.runtime.sendMessage(null, {
 	module: 'rss',
 	type: 'setPageRSS',

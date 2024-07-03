@@ -20,7 +20,6 @@ import DesktopDefaultHeaderView from '../../../components/DesktopDefaultHeaderVi
 .desktop-unlock-layout {
 	height: 100vh;
 	width: 100vw;
-	background: $desktop-background;
 
 	.desktop-unlock-root {
 		padding: 52px;

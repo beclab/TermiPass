@@ -4,7 +4,7 @@
 // More info: https://quasar.dev/quasar-cli/developing-browser-extensions/background-hooks
 import { bexBackground } from 'quasar/wrappers';
 import { default as background } from '../../src/extension/background';
-import { browser } from 'webextension-polyfill-ts';
+// import { browser } from 'webextension-polyfill-ts';
 
 export default bexBackground((bridge /* , allActiveConnections */) => {
 	bridge.on('storage.get', ({ data, respond }) => {

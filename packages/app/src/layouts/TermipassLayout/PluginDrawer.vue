@@ -84,14 +84,14 @@ const menus = ref([
 	},
 	{
 		icon: 'sym_r_apps',
-		identify: 'rss',
+		identify: 'collect',
 		label: 'Collect'
 	},
-	{
-		icon: 'sym_r_apps',
-		identify: 'read',
-		label: 'Read'
-	},
+	// {
+	// 	icon: 'sym_r_apps',
+	// 	identify: 'read',
+	// 	label: 'Read'
+	// },
 	{
 		icon: 'sym_r_apps',
 		identify: 'vault',

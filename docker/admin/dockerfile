@@ -20,7 +20,6 @@ COPY packages/locale/res ./packages/locale/res
 COPY packages/admin/tsconfig.json ./packages/admin/
 COPY packages/sdk/tsconfig.json ./packages/sdk/
 COPY packages/locale/tsconfig*.json ./packages/locale/
-COPY assets/ ./assets
 COPY packages/admin/webpack.config.js ./packages/admin/webpack.config.js
 
 RUN npm run admin:build

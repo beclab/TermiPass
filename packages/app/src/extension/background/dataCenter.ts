@@ -16,6 +16,7 @@ import { Menus } from 'webextension-polyfill-ts';
 import { getDID, getPrivateJWK } from '../../did/did-key';
 import storage from '../provider/storage/storage';
 import { walletService } from 'src/wallet';
+import { bgBusEmit } from '../utils/bus';
 
 export class DataCenter {
 	//extended unlock time in bex background
@@ -112,6 +113,22 @@ export class DataCenter {
 		this._currentItem = undefined;
 
 		this._password = undefined;
+		bgBusEmit('BROADCAST_TO_UI', {
+			method: 'UNLOCKED_UPDATE',
+			params: {
+				status: false
+			}
+		});
+	}
+	unlock(data: string) {
+		this._password = base64ToString(data);
+		bgBusEmit('BROADCAST_TO_UI', {
+			method: 'UNLOCKED_UPDATE',
+			params: {
+				status: true,
+				password: this._password
+			}
+		});
 	}
 
 	encryptPassword(): string | undefined {
@@ -120,10 +137,6 @@ export class DataCenter {
 		} else {
 			return undefined;
 		}
-	}
-
-	decryptPassword(data: string) {
-		this._password = base64ToString(data);
 	}
 
 	async decryptUserItems(data: string, accountId: string) {
@@ -194,6 +207,10 @@ export class DataCenter {
 			`${info.parentMenuItemId}_`,
 			''
 		);
+		return this.findChildItemById(id);
+	}
+
+	findChildItemById(id: string) {
 		return this.getWebVaultItems().find((it) => {
 			return it.id == id;
 		});

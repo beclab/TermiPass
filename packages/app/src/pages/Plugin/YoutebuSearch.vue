@@ -88,8 +88,8 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
-import vaultPluginIcon from 'assets/login/termipass_logo.svg';
-import vaultPluginBtn1 from 'assets/login/vault-plugin-btn-1.svg';
+import vaultPluginIcon from 'assets/images/vault-plugin.svg';
+import vaultPluginBtn1 from 'assets/images/vault-plugin-btn-1.svg';
 import Image80 from 'assets/images/Image80.svg';
 import MyTimeline from './components/MyTimeline.vue';
 import MyLoading from './components/MyLoading.vue';

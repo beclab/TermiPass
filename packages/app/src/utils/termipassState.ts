@@ -323,9 +323,14 @@ export class TermiPassState {
 				return;
 			}
 
+			this.srpTokenCheck = false;
+
+			if (!getAppPlatform().hookServerHttp) {
+				return;
+			}
+
 			this.srpTokenChecking = true;
 
-			this.srpTokenCheck = false;
 			const termipassStore = useTermipassStore();
 
 			const checkResult: CheckHistoryResult = {

@@ -180,7 +180,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { FieldType, VaultItem } from '@didvault/sdk/src/core';
 import { app } from '../../../globals';
-import { updateUIToAddWeb } from '../../../platform/capacitor/addItem';
+import { updateUIToAddWeb } from '../../../platform/addItem';
 import { busOn, busOff } from '../../../utils/bus';
 import { useI18n } from 'vue-i18n';
 import { format } from 'quasar';
@@ -567,3 +567,4 @@ function onAddClicked() {
 	}
 }
 </style>
+../../../platform/addItem

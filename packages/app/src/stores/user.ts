@@ -206,14 +206,11 @@ export const useUserStore = defineStore('user', {
 			if (this.id) {
 				this.users = new LocalUserVault();
 				const res = await userModeGetItem('users');
-				console.log('res --->');
 				if (!res.items) {
 					this.previousUsers = new PreviousLocalUserVault();
 					this.previousUsers.fromRaw(res);
 					return;
 				}
-				console.log(res);
-				console.log('<---res ');
 				this.users.fromRaw(res);
 				if (this.current_id) {
 					await app.load(this.current_id);

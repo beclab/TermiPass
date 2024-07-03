@@ -22,6 +22,13 @@ jobs:
               with:
                 username: ${{ secrets.DOCKERHUB_USERNAME }}
                 password: ${{ secrets.DOCKERHUB_PASS }}
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
+    
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
             - name: get latest tag
               uses: "WyriHaximus/github-action-get-previous-tag@v1"
               id: get-latest-tag
@@ -40,12 +47,27 @@ jobs:
                     ${{ runner.os }}-node-
             - run: npm i -g @quasar/cli
             - run: npm install
+            - name: Install fonttools
+              run: pip3 install fonttools brotli
+            - name: Download fonttools Files
+              run: |
+                pwd
+                curl -L -o fonttools.zip https://cdn.bttcdn.com/common/fonttools.zip
+                unzip fonttools.zip
+            - name: Python Icon
+              run:  pwd; cd ./fonttools; sudo node python-icon.js
+            - name: subset Icon
+              run: |
+                sudo chmod 755 fonttools
+                cd ./fonttools
+                ./subset_font.sh nyTnjDwKNJ_190FjzaqkNCeE.woff2 unicodes.txt MaterialSymbolsRounded.woff2 ../packages/app/src/assets/fonts
             - name: Build
               run: npm run files:build
             - name: Build and push
-              uses: docker/build-push-action@v2
+              uses: docker/build-push-action@v3
               with:
                 context: .
                 file: docker/files/dockerfile
                 push: true
                 tags: beclab/files-frontend:${{ steps.get-latest-tag.outputs.tag }}
+                platforms: linux/amd64,linux/arm64
