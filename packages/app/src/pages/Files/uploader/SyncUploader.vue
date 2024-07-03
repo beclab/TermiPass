@@ -230,12 +230,6 @@ const JoinDownloadProcess = async (files: any) => {
 			...(!file.isDir && { type: detectType(file.type) })
 		};
 
-		// console.log('first', item);
-
-		// item = await seahub.formatFileContent(item);
-		// dataStore.updateRequest(item);
-		// console.log('end', item);
-
 		await (function () {
 			return new Promise(async function (res) {
 				await upload.upload(item, OriginType.SYNC);

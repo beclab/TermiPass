@@ -164,7 +164,6 @@ export default defineComponent({
 		});
 
 		const forWord = async (item: any) => {
-			console.log('forWord-item', item);
 			let dataAPI: any;
 			if (checkSeahub(item.path)) {
 				dataAPI = dataAPIs(OriginType.SYNC);

@@ -106,7 +106,6 @@ const fetchData = async (loading = true) => {
 	try {
 		// const res = await api.fetch(url, loading, currentItem);
 		const res: any = await store.fetchList(url);
-		console.log('resresres', res);
 
 		if (!checkFetchData(url)) {
 			return false;

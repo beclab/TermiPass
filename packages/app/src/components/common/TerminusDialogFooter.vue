@@ -102,7 +102,6 @@ const mobileCancel = () => {
 };
 
 const keydownHandler = (event: KeyboardEvent) => {
-	console.log('event', event);
 	if (event.key === 'Enter') {
 		onOK(event);
 	}
