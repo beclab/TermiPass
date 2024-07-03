@@ -2,7 +2,11 @@
 	<div class="terminus-unlock-page column justify-center items-center">
 		<q-img
 			class="terminus-unlock-page__brand"
-			:src="getRequireImage('login/termipass_brand_desktop.svg')"
+			:src="
+				$q.dark.isActive
+					? getRequireImage('login/Termipasstermipass_brand_desktop_dark.svg')
+					: getRequireImage('login/Termipasstermipass_brand_desktop_light.svg')
+			"
 		/>
 		<div class="terminus-unlock-box column justify-start items-center">
 			<span class="terminus-unlock-box__desc login-sub-title">{{
@@ -29,6 +33,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useQuasar } from 'quasar';
 import { sendUnlock } from '../../../utils/bexFront';
 import { ConfirmButtonStatus } from '../../../utils/constants';
 import TerminusEdit from '../../../components/common/TerminusEdit.vue';
@@ -36,9 +41,10 @@ import ConfirmButton from '../../../components/common/ConfirmButton.vue';
 import { getRequireImage } from '../../../utils/imageUtils';
 import '../../../css/terminus.scss';
 import { useI18n } from 'vue-i18n';
-import { unlockByPwd } from '../../Mobile/login/unlock/UnlockBusiness';
+import { unlockPreviousUsersByPwd } from '../../Mobile/login/unlock/UnlockBusiness';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 
+const $q = useQuasar();
 const router = useRouter();
 const passwordRef = ref('');
 const { t } = useI18n();
@@ -52,7 +58,7 @@ function onTextChange() {
 }
 
 const loginByPassword = async (password: string) => {
-	await unlockByPwd(password, {
+	await unlockPreviousUsersByPwd(password, {
 		async onSuccess(data: any) {
 			if (data) {
 				router.replace('/connectLoading');
@@ -72,11 +78,9 @@ const loginByPassword = async (password: string) => {
 .terminus-unlock-page {
 	width: 100%;
 	height: 100%;
-	background: $desktop-background;
 
 	&__brand {
 		width: 225px;
-		height: 48px;
 	}
 
 	.terminus-unlock-box {
@@ -84,8 +88,8 @@ const loginByPassword = async (password: string) => {
 		margin-top: 32px;
 		border-radius: 12px;
 		padding: 20px;
-		background: $background;
-		border: 1px solid $grey-2;
+		background: $background-2;
+		border: 1px solid $separator;
 
 		&__desc {
 			margin-top: 12px;

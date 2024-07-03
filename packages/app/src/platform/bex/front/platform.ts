@@ -98,6 +98,11 @@ export class ExtensionPlatform
 			return;
 		}
 
+		if (userStore.needUnlockFirst) {
+			redirect({ path: '/unlock' });
+			return;
+		}
+
 		if (userStore.current_id) {
 			redirect({ path: '/connectLoading' });
 		} else {

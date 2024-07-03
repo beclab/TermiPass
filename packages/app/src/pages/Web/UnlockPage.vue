@@ -62,7 +62,11 @@ function onTextChange() {
 }
 
 const loginByPassword = async (password: string) => {
-	await userStore.users!.unlock(password);
+	if (userStore.needUnlockFirst) {
+		await userStore.unlockPreviousUsers(password);
+	} else {
+		await userStore.users!.unlock(password);
+	}
 
 	if (!userStore.current_user) {
 		router.push({ path: '/import_mnemonic' });
