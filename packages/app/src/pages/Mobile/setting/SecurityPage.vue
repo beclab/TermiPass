@@ -37,7 +37,7 @@
 			<q-item>
 				<terminus-settings-module-item
 					:show-content="lockStatus"
-					:title="t('auto_lock_when_you_leave')"
+					:title="t('autolock.title')"
 				>
 					<template v-slot:side>
 						<q-toggle
@@ -57,12 +57,12 @@
 									style="height: 60px"
 								>
 									<div class="text-body3 text-color-title">
-										{{ t('10 min') }}
+										{{ t('after') }}
 									</div>
 									<q-slider
 										v-model="lockTime"
 										:step="5"
-										:min="10"
+										:min="0"
 										:max="3 * 24 * 60"
 										style="width: 70%"
 										color="yellow"
@@ -76,6 +76,31 @@
 						</q-slide-transition>
 					</template>
 				</terminus-settings-module-item>
+			</q-item>
+			<q-item class="q-py-none" v-if="lockStatus">
+				<q-item-section class="userinfo">
+					<q-item-label class="q-pt-md text-color-sub-title q-mb-sm">
+						{{ t('autolock.reminderTitle') }}
+					</q-item-label>
+					<q-item-label
+						class="row text-body3"
+						v-for="item in reminderList"
+						:key="item"
+					>
+						<div
+							class="q-mb-sm text-grey-7 row justify-center"
+							style="width: 20px; padding-top: 4px"
+						>
+							<div
+								style="width: 8px; height: 8px; border-radius: 4px"
+								class="bg-background-5"
+							></div>
+						</div>
+						<div class="q-mb-sm text-ink-3" style="width: calc(100% - 20px)">
+							{{ item }}
+						</div>
+					</q-item-label>
+				</q-item-section>
 			</q-item>
 		</q-list>
 	</div>
@@ -105,6 +130,11 @@ const isBex = ref(process.env.IS_BEX);
 
 const lockTime = ref(app.settings.autoLockDelay);
 const lockStatus = ref(app.settings.autoLock);
+const reminderList = ref([
+	t('autolock.reminder1'),
+	t('autolock.reminder2'),
+	t('autolock.reminder3')
+]);
 
 const changeAutoLockDelay = (value: number) => {
 	app.setSettings({ autoLockDelay: value });
@@ -116,6 +146,9 @@ const changeAutoLock = (value: any) => {
 
 const unlockByBiometricStatus = ref<boolean>(userStore.openBiometric);
 const changeBiometric = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	let result = {
 		status: false,
 		message: ''
@@ -132,7 +165,10 @@ const changeBiometric = async () => {
 	}
 };
 
-const changePwd = () => {
+const changePwd = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	$router.push({ path: '/change_pwd' });
 };
 

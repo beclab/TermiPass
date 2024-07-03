@@ -69,7 +69,7 @@ import { UserItem } from '@didvault/sdk/src/core';
 import TerminusWizardView from '../../../../components/common/TerminusWizardView.vue';
 import pictureImg from '../../../../assets/wizard/activate.svg';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { getTerminusInfo } from '../BindTerminusBusiness';
+import { getTerminusInfo } from '../../../../utils/BindTerminusBusiness';
 import { TerminusInfo } from '@bytetrade/core';
 import TerminusExportMnemonicRoot from '../../../../components/common/TerminusExportMnemonicRoot.vue';
 import TerminusChangeUserHeader from '../../../../components/common/TerminusChangeUserHeader.vue';

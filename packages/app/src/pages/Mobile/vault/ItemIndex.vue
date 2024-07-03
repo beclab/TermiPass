@@ -1,20 +1,31 @@
 <template>
-	<div class="vault-continer">
+	<div class="vault-continer bg-white" v-if="userStore.isUnlocked">
 		<VaultsDrawer />
 		<div class="vault-content">
 			<ItemList @toolabClick="onItemClicked" />
 		</div>
 	</div>
+	<TermipassUnlockContent
+		v-else
+		:cancel="false"
+		:detailText="t('unlock.vault_unlock_introduce')"
+		logo="login/vault_unlock.svg"
+		:biometry-auto-unlock="false"
+		class="bg-white"
+	/>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import VaultsDrawer from '../../../layouts/TermipassLayout/VaultsDrawer.vue';
 import ItemList from './../../Items/ItemList.vue';
-// import { ref } from 'vue';
-// const isBex = ref(process.env.IS_BEX);
-
+import TermipassUnlockContent from '../../../components/unlock/mobile/TermipassUnlockContent.vue';
+import { useUserStore } from '../../../stores/user';
+import { useI18n } from 'vue-i18n';
 const Router = useRouter();
+
+const userStore = useUserStore();
+const { t } = useI18n();
 
 function onItemClicked(itemid: string) {
 	Router.push({
@@ -27,7 +38,6 @@ function onItemClicked(itemid: string) {
 .vault-continer {
 	width: 100%;
 	height: 100%;
-	background: $white;
 	.vault-content {
 		width: 100%;
 		height: 100%;

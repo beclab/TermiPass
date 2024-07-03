@@ -9,6 +9,7 @@ import {
 import {
 	LocalUserVault,
 	UserItem,
+	MnemonicItem,
 	base64ToString,
 	uuid
 } from '@didvault/sdk/src/core';
@@ -29,6 +30,7 @@ import { NetworkUpdateMode, busEmit } from 'src/utils/bus';
 import { useMonitorStore } from './monitor';
 import { seafileAPI } from 'src/api/seafileAPI';
 import { useDataStore } from './data';
+import { unlockUserFirstBusiness } from 'src/utils/BindTerminusBusiness';
 
 type UserStorageSaveType =
 	| 'locale'
@@ -84,6 +86,7 @@ export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
 			users: undefined,
+			previousUsers: undefined,
 			id: undefined,
 			current_id: undefined,
 			temp_url: undefined,
@@ -112,7 +115,10 @@ export const useUserStore = defineStore('user', {
 			return this.id != undefined;
 		},
 		isUnlocked(): boolean {
-			return this.password !== undefined;
+			if (!this.users) {
+				return false;
+			}
+			return !this.users.locked;
 		},
 		connected(): boolean {
 			if (!this.current_id) {
@@ -131,6 +137,16 @@ export const useUserStore = defineStore('user', {
 
 			return this.users.items.get(this.current_id);
 		},
+		current_mnemonic(): MnemonicItem | null {
+			if (!this.current_id) {
+				return null;
+			}
+			if (!this.users) {
+				return null;
+			}
+
+			return this.users.mnemonics.get(this.current_id);
+		},
 		user_name() {
 			return this.current_user ? this.current_user.name.split('@')[0] : '';
 		},
@@ -138,7 +154,7 @@ export const useUserStore = defineStore('user', {
 			if (!this.current_user) {
 				return null;
 			}
-			return await getPrivateJWK(this.current_user?.mnemonic);
+			return await getPrivateJWK(this.current_mnemonic?.mnemonic);
 		},
 		currentUserBackup(): boolean {
 			return this.backupList.find((e) => e == this.current_id) != undefined;
@@ -185,6 +201,9 @@ export const useUserStore = defineStore('user', {
 				this.users = new LocalUserVault();
 				const res = await userModeGetItem('users');
 				this.users.fromRaw(res);
+				if (this.current_id) {
+					await app.load(this.current_id);
+				}
 			}
 		},
 		getModuleSever(
@@ -252,7 +271,7 @@ export const useUserStore = defineStore('user', {
 		},
 
 		async save() {
-			if (!this.users || this.users.locked) {
+			if (!this.users) {
 				console.error('save error ' + JSON.stringify(this.users));
 				return;
 			}
@@ -340,19 +359,20 @@ export const useUserStore = defineStore('user', {
 				await userModeRemoveItem('current-user-id');
 			}
 		},
-		async temporaryCreateUser(did: string, name: string, mnemonic: string) {
-			const user1 = new UserItem();
-			user1.name = name;
-			user1.id = did;
-			user1.mnemonic = mnemonic;
+		// async temporaryCreateUser(did: string, name: string, mnemonic: string) {
+		// 	const user1 = new UserItem();
+		// 	user1.name = name;
+		// 	user1.id = did;
+		// 	user1.mnemonic = mnemonic;
 
-			return user1;
-		},
+		// 	return user1;
+		// },
 		async importTemporaryUser(user: UserItem) {
-			if (!this.users || this.users.locked) {
-				return null;
+			const unlocked = await this.unlockFirst();
+			if (!unlocked) {
+				return;
 			}
-			this.users.items.update(user);
+			this.users!.items.update(user);
 			await this.save();
 			return user;
 		},
@@ -361,21 +381,29 @@ export const useUserStore = defineStore('user', {
 			name: string,
 			mnemonic: string
 		): Promise<UserItem | null> {
-			if (!this.users || this.users.locked) {
-				console.error('importUser error');
+			console.log('users ===>');
+			console.log(this.users);
+
+			const unlocked = await this.unlockFirst();
+			if (!unlocked) {
 				return null;
 			}
 
-			if (this.users.items.get(did)) {
-				return this.users.items.get(did);
+			if (this.users!.items.get(did)) {
+				return this.users!.items.get(did);
 			}
 
 			const user1 = new UserItem();
 			user1.name = name;
 			user1.id = did;
-			user1.mnemonic = mnemonic;
+			//user1.mnemonic = mnemonic;
 
-			this.users.items.update(user1);
+			const m = new MnemonicItem();
+			m.id = did;
+			m.mnemonic = mnemonic;
+
+			this.users!.items.update(user1);
+			this.users!.mnemonics.update(m);
 			await this.save();
 			return user1;
 		},
@@ -386,10 +414,10 @@ export const useUserStore = defineStore('user', {
 					message: 'Empty users'
 				};
 			}
-			if (this.users.locked) {
+			if (!(await this.unlockFirst())) {
 				return {
 					status: false,
-					message: 'Please unlock first'
+					message: i18n.global.t('please_unlock_first')
 				};
 			}
 
@@ -675,6 +703,21 @@ export const useUserStore = defineStore('user', {
 			} else {
 				return TerminusDefaultDomain;
 			}
+		},
+		async unlockFirst(next?: () => void, props?: any) {
+			if (this.users && !this.users.locked) {
+				if (next) {
+					next();
+				}
+				return true;
+			}
+			const unclocked = await unlockUserFirstBusiness(props);
+			if (unclocked) {
+				if (next) {
+					next();
+				}
+			}
+			return unclocked;
 		}
 	}
 });

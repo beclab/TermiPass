@@ -145,7 +145,7 @@ DEPENDENCIES:
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorClipboard (from `../../node_modules/@capacitor/clipboard`)"
-  - "CapacitorCommunityBarcodeScanner (from `../../node_modules/@capacitor-community/barcode-scanner`)"
+  - "CapacitorCommunityBarcodeScanner (from `../../../node_modules/@capacitor-community/barcode-scanner`)"
   - "CapacitorCommunityFacebookLogin (from `../../node_modules/@capacitor-community/facebook-login`)"
   - "CapacitorCommunityFcm (from `../../node_modules/@capacitor-community/fcm`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
@@ -209,7 +209,7 @@ EXTERNAL SOURCES:
   CapacitorClipboard:
     :path: "../../node_modules/@capacitor/clipboard"
   CapacitorCommunityBarcodeScanner:
-    :path: "../../node_modules/@capacitor-community/barcode-scanner"
+    :path: "../../../node_modules/@capacitor-community/barcode-scanner"
   CapacitorCommunityFacebookLogin:
     :path: "../../node_modules/@capacitor-community/facebook-login"
   CapacitorCommunityFcm:

@@ -296,7 +296,7 @@ const syncRepoInfo = (e) => {
 		handleFileOperate(
 			e,
 			route,
-			OPERATE_ACTION.DELETE,
+			OPERATE_ACTION.ATTRIBUTES,
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			async (_action: OPERATE_ACTION, _data: any) => {
 				dataStore.closeHovers();

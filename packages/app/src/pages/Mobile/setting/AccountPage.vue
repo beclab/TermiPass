@@ -79,7 +79,7 @@
 					<terminus-item
 						v-if="isBex || userStore.currentUserBackup"
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -120,7 +120,7 @@
 
 					<terminus-item
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -139,7 +139,7 @@
 					<terminus-item
 						v-if="showCheckHistory"
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -155,7 +155,7 @@
 					<terminus-item
 						v-if="!userStore.current_user?.cloud_id"
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_badge"
 						:whole-picture-size="48"
@@ -204,7 +204,10 @@ const isBex = ref(process.env.IS_BEX);
 
 const { t } = useI18n();
 
-const startBackUp = () => {
+const startBackUp = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	$router.push({ path: '/backup_mnemonics' });
 };
 

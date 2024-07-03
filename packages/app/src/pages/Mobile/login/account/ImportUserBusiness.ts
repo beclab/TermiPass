@@ -1,7 +1,7 @@
 import { getDID } from '../../../../did/did-key';
 import { useUserStore } from '../../../../stores/user';
 import { useSSIStore } from '../../../../stores/ssi';
-import { BusinessAsyncCallback } from '../Callback';
+import { BusinessAsyncCallback } from '../../../../utils/Callback';
 import { i18n } from '../../../../boot/i18n';
 
 export async function parsingMnemonics(

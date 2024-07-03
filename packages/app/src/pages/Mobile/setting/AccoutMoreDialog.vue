@@ -88,6 +88,9 @@ const deleteAction = () => {
 };
 
 const deleteAccount = async () => {
+	if (await userStore.unlockFirst()) {
+		return;
+	}
 	userStore.userUpdating = true;
 
 	if ($q.platform.is.electron) {
@@ -120,7 +123,9 @@ const deleteAccount = async () => {
 				clearSenderUrl();
 			}
 			await app.load(user.id);
-			await app.unlock(user.mnemonic);
+			if (userStore.current_mnemonic?.mnemonic) {
+				await app.unlock(userStore.current_mnemonic.mnemonic);
+			}
 		}
 		websocketStore.restart();
 		if (process.env.IS_BEX && userStore.current_id) {

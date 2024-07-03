@@ -23,11 +23,11 @@ const mobileCommon: RouteRecordRaw[] = [
 				meta: {
 					tabIdentify: 'secret'
 				},
-				component: () => import('pages/Mobile/vault/ItemIndex.vue')
+				component: () => import('src/pages/Mobile/vault/ItemIndex.vue')
 			},
 			{
 				path: 'items/:itemid',
-				component: () => import('pages/Mobile/vault/ItemView.vue')
+				component: () => import('src/pages/Mobile/vault/ItemView.vue')
 			},
 
 			{
@@ -130,7 +130,8 @@ const mobileCommon: RouteRecordRaw[] = [
 			{
 				path: '/backup_mnemonics',
 				name: 'backupMnemonics',
-				component: () => import('pages/Mobile/setting/BackupMnemonicsPage.vue')
+				component: () =>
+					import('src/pages/Mobile/setting/BackupMnemonicsPage.vue')
 			},
 			{
 				path: '/vc_manage',

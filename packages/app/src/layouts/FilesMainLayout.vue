@@ -2,7 +2,7 @@
 	<q-layout
 		view="lHh LpR lFr"
 		:container="platform == 'FILES' ? false : true"
-		class="bg-background-1"
+		:class="platform == 'FILES' ? 'bg-background-1' : ''"
 	>
 		<q-header
 			class="layoutHeader text-subtitle1 row items-center justify-between background-1"

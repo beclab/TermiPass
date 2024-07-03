@@ -28,11 +28,15 @@ export class SpaceAuthService extends OperateIntegrationAuth<SpaceIntegrationAcc
 				time
 			};
 
-			const user = userStore.users!.items.get(userStore.current_id!)!;
+			if (!(await userStore.unlockFirst())) {
+				reject('Need login');
+			}
 
-			const did = await getDID(user.mnemonic);
+			// const user = userStore.users!.items.get(userStore.current_id!)!;
+
+			const did = await getDID(userStore.current_mnemonic?.mnemonic);
 			const privateJWK: PrivateJwk | undefined = await getPrivateJWK(
-				user.mnemonic
+				userStore.current_mnemonic?.mnemonic
 			);
 
 			const jws = await signJWS(did, sign_body, privateJWK);

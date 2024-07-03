@@ -122,7 +122,7 @@ export class WebPlatform extends SubAppPlatform {
 							}
 							await app.login({
 								did: authRes.did,
-								password: userStore.current_user!.mnemonic,
+								password: userStore.current_mnemonic!.mnemonic,
 								authToken: authRes.token
 							});
 						} catch (e) {

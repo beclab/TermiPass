@@ -30,7 +30,7 @@
 		</q-scroll-area>
 		<confirm-button
 			class="terminus-unlock-root-button"
-			:btn-title="t('unlock')"
+			:btn-title="t('unlock.title')"
 			:btn-status="btnStatusRef"
 			@onConfirm="loginByPassword(passwordRef)"
 		/>
