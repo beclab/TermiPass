@@ -54,7 +54,7 @@ import { useApproval } from '../../wallet/approval';
 import { getUiType } from '../../../../utils/utils';
 import { getNativeAppPlatform } from '../../../../platform/capacitor/capacitorPlatform';
 import { useI18n } from 'vue-i18n';
-import { unlockPreviousUsersByPwd } from './UnlockBusiness';
+import { unlockByPwd } from './UnlockBusiness';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
 
 const $q = useQuasar();
@@ -76,7 +76,7 @@ function onTextChange() {
 }
 
 const loginByPassword = async (password: string) => {
-	await unlockPreviousUsersByPwd(password, {
+	await unlockByPwd(password, {
 		async onSuccess(data: any) {
 			if (data) {
 				const UIType = getUiType();

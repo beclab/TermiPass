@@ -80,3 +80,11 @@ packages/app/build/mac/PlanetaMacDev.provisionprofile
 packages/app/build/mac/notarize.js
 
 packages/app/.unimportedrc.json
+
+packages/app/src/assets/fonts/MaterialSymbolsRounded.woff2
+fonttools/*
+
+docker-build-server.sh
+docker-build-front.sh
+build-front.sh
+build-server.sh

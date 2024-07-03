@@ -163,10 +163,6 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			}
 			return;
 		}
-		if (userStore.needUnlockFirst) {
-			redirect({ path: '/unlock' });
-			return;
-		}
 		if (!userStore.current_user) {
 			redirect({ path: '/setup/success' });
 			return;

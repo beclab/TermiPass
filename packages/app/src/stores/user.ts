@@ -11,9 +11,7 @@ import {
 	UserItem,
 	MnemonicItem,
 	base64ToString,
-	uuid,
-	PreviousLocalUserVault,
-	PreviousUserItem
+	uuid
 } from '@didvault/sdk/src/core';
 import { getPrivateJWK } from '../did/did-key';
 import { GeneralJwsSigner } from '../jose/jws/general/signer';
@@ -57,7 +55,6 @@ const userModeRemoveItem = async (key: UserStorageSaveType) => {
 
 export interface UserSate {
 	users: LocalUserVault | undefined;
-	previousUsers: PreviousLocalUserVault | undefined;
 	id: string | undefined;
 	current_id: string | undefined;
 	temp_url: string | undefined;
@@ -122,9 +119,6 @@ export const useUserStore = defineStore('user', {
 				return false;
 			}
 			return !this.users.locked;
-		},
-		needUnlockFirst(): boolean {
-			return this.previousUsers !== undefined;
 		},
 		connected(): boolean {
 			if (!this.current_id) {
@@ -206,11 +200,6 @@ export const useUserStore = defineStore('user', {
 			if (this.id) {
 				this.users = new LocalUserVault();
 				const res = await userModeGetItem('users');
-				if (!res.items) {
-					this.previousUsers = new PreviousLocalUserVault();
-					this.previousUsers.fromRaw(res);
-					return;
-				}
 				this.users.fromRaw(res);
 				if (this.current_id) {
 					await app.load(this.current_id);
@@ -729,35 +718,6 @@ export const useUserStore = defineStore('user', {
 				}
 			}
 			return unclocked;
-		},
-		async unlockPreviousUsers(password: string) {
-			if (!this.previousUsers) {
-				return;
-			}
-			await this.previousUsers.unlock(password);
-			if (!this.users) {
-				this.users = new LocalUserVault();
-			}
-			this.users.name = 'LocalUserVault';
-			this.users.created = new Date();
-			this.users.updated = new Date();
-			await this.users.setPassword(password);
-
-			for (const user of this.previousUsers.items) {
-				if (this.users!.items.get(user.id)) {
-					continue;
-				}
-
-				const user1 = new UserItem(user);
-
-				const m = new MnemonicItem();
-				m.id = user.id;
-				m.mnemonic = (user as PreviousUserItem).mnemonic;
-
-				this.users!.items.update(user1);
-				this.users!.mnemonics.update(m);
-			}
-			await this.save();
 		}
 	}
 });
