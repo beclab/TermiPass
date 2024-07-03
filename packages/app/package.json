@@ -51,7 +51,6 @@
     "@seafile/resumablejs": "^1.1.16",
     "@simplewebauthn/browser": "5.4.0",
     "@simplewebauthn/typescript-types": "5.4.0",
-    "@tigerconnect/ffi-napi": "^4.0.3-tc3",
     "@tiptap/core": "2.0.0-beta.182",
     "@tiptap/starter-kit": "2.0.0-beta.191",
     "@trustwallet/wallet-core": "3.1.28",
@@ -144,7 +143,8 @@
     "workbox-window": "6.1.5",
     "zxcvbn": "4.4.2",
     "tabbable": "6.2.0",
-    "@webcomponents/custom-elements": "1.6.0"
+    "@webcomponents/custom-elements": "1.6.0",
+    "@tigerconnect/ffi-napi": "^4.0.3-tc3"
   },
   "devDependencies": {
     "@electron/notarize": "^2.3.0",

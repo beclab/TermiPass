@@ -38,7 +38,7 @@
 						/>
 					</template>
 				</q-input>
-				<div class="login" @click="login">{{ t('unlock') }}</div>
+				<div class="login" @click="login">{{ t('unlock.title') }}</div>
 			</q-card-section>
 		</q-card>
 	</q-dialog>

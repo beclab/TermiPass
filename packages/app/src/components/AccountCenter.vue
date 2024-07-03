@@ -46,15 +46,15 @@
 					</q-item>
 
 					<q-item
-						v-for="user in users"
-						:key="user.id"
+						v-for="mnemonicItem in mnemonicItems"
+						:key="mnemonicItem.id"
 						class="q-my-sm list-item"
 						clickable
 						bordered
 						@click="handleCopy"
 					>
 						<q-item-section class="userinfo">
-							{{ current_user.mnemonic }}
+							{{ mnemonicItem.mnemonic }}
 						</q-item-section>
 					</q-item>
 				</q-list>
@@ -72,12 +72,13 @@ const show = ref(true);
 const userStore = useUserStore();
 const current_user = ref(userStore.current_user);
 const users = ref(userStore.users?.items);
+const mnemonicItems = ref(userStore.users?.mnemonics);
 
 const handleCopy = () => {
 	if (!current_user.value) {
 		return;
 	}
-	const copyTxt = current_user.value.mnemonic;
+	const copyTxt = userStore.current_mnemonic?.mnemonic;
 	Clipboard.write({
 		string: copyTxt
 	});

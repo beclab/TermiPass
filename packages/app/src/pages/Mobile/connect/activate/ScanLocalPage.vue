@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { base64ToString, UserItem } from '@didvault/sdk/src/core';
+import { base64ToString, UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import MonitorKeyboard from '../../../../utils/monitorKeyboard';
 import { useQuasar } from 'quasar';
 import TerminusEdit from '../../../../components/common/TerminusEdit.vue';
@@ -40,7 +40,7 @@ import ConfirmButton from '../../../../components/common/ConfirmButton.vue';
 import { ConfirmButtonStatus } from '../../../../utils/constants';
 import { useUserStore } from '../../../../stores/user';
 import { WizardInfo } from './wizard';
-import { userBindTerminus } from '../BindTerminusBusiness';
+import { userBindTerminus } from '../../../../utils/BindTerminusBusiness';
 import { notifyFailed } from '../../../../utils/notifyRedefinedUtil';
 
 const router = useRouter();
@@ -104,8 +104,11 @@ async function onSubmit() {
 	}
 
 	const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+	const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+		userStore.current_id!
+	)!;
 
-	await userBindTerminus(user, obj.url, obj.password!, {
+	await userBindTerminus(user, mnemonic, obj.url, obj.password!, {
 		async onSuccess() {
 			const new_user: UserItem = userStore.users!.items.get(
 				userStore.current_id!

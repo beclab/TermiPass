@@ -1,12 +1,9 @@
 <template>
 	<div class="terminus-unlock-page column justify-center items-center">
-		<q-img
-			class="terminus-unlock-page__brand"
-			:src="getRequireImage('login/termipass_brand_desktop.svg')"
-		/>
+		<q-img :src="getRequireImage(logo)" :width="`${logoWidth}px`" />
 		<div class="terminus-unlock-box column justify-start items-center">
 			<span class="terminus-unlock-box__desc login-sub-title">{{
-				t('terminus_unlock_desc')
+				detailText
 			}}</span>
 			<terminus-edit
 				v-model="passwordRef"
@@ -22,24 +19,53 @@
 				:btn-status="btnStatusRef"
 				@onConfirm="loginByPassword(passwordRef)"
 			/>
+			<q-btn
+				v-if="cancel"
+				class="q-mt-md common-width cancel"
+				flat
+				no-caps
+				@click="onCancelClick"
+			>
+				<div>{{ t('cancel') }}</div>
+			</q-btn>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { sendUnlock } from '../../../utils/bexFront';
 import { ConfirmButtonStatus } from '../../../utils/constants';
 import TerminusEdit from '../../../components/common/TerminusEdit.vue';
 import ConfirmButton from '../../../components/common/ConfirmButton.vue';
 import { getRequireImage } from '../../../utils/imageUtils';
 import '../../../css/terminus.scss';
 import { useI18n } from 'vue-i18n';
-import { unlockByPwd } from '../../Mobile/login/unlock/UnlockBusiness';
+import { unlockByPwd } from '../../../pages/Mobile/login/unlock/UnlockBusiness';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 
-const router = useRouter();
+defineProps({
+	detailText: {
+		type: String,
+		required: false,
+		default: ''
+	},
+	logo: {
+		type: String,
+		required: false,
+		default: ''
+	},
+	cancel: {
+		type: Boolean,
+		default: true,
+		required: false
+	},
+	logoWidth: {
+		type: Number,
+		default: 180,
+		required: false
+	}
+});
+
 const passwordRef = ref('');
 const { t } = useI18n();
 const btnStatusRef = ref<ConfirmButtonStatus>(ConfirmButtonStatus.disable);
@@ -54,30 +80,24 @@ function onTextChange() {
 const loginByPassword = async (password: string) => {
 	await unlockByPwd(password, {
 		async onSuccess(data: any) {
-			if (data) {
-				router.replace('/connectLoading');
-			} else {
-				router.replace({ path: '/import_mnemonic' });
-			}
-			sendUnlock();
+			emit('unlockSuccess', data);
 		},
 		onFailure(message: string) {
 			notifyFailed(message);
 		}
 	});
 };
+const onCancelClick = () => {
+	emit('cancel');
+};
+const emit = defineEmits(['unlockSuccess', 'cancel']);
 </script>
 
 <style scoped lang="scss">
 .terminus-unlock-page {
 	width: 100%;
 	height: 100%;
-	background: $desktop-background;
-
-	&__brand {
-		width: 225px;
-		height: 48px;
-	}
+	background: $background-1;
 
 	.terminus-unlock-box {
 		width: 400px;
@@ -89,6 +109,7 @@ const loginByPassword = async (password: string) => {
 
 		&__desc {
 			margin-top: 12px;
+			text-align: center;
 		}
 
 		&__edit {
@@ -99,6 +120,12 @@ const loginByPassword = async (password: string) => {
 		&__button {
 			margin-top: 30px;
 			width: calc(100%);
+		}
+
+		.cancel {
+			height: 48px;
+			width: calc(100%);
+			color: $light-blue-default;
 		}
 
 		.item {

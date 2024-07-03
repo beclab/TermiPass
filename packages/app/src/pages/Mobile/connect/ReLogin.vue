@@ -56,14 +56,14 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../../../stores/user';
 
 import { useQuasar } from 'quasar';
-import { UserItem } from '@didvault/sdk/src/core';
+import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import TerminusEdit from '../../../components/common/TerminusEdit.vue';
 import ConfirmButton from '../../../components/common/ConfirmButton.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 import { ConfirmButtonStatus } from '../../../utils/constants';
 import MonitorKeyboard from '../../../utils/monitorKeyboard';
 import { useI18n } from 'vue-i18n';
-import { connectTerminus } from './BindTerminusBusiness';
+import { connectTerminus } from '../../../utils/BindTerminusBusiness';
 import { getRequireImage } from '../../../utils/imageUtils';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
@@ -80,6 +80,9 @@ let monitorKeyboard: MonitorKeyboard | undefined = undefined;
 const keyboardOpen = ref(false);
 
 const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+	userStore.current_id!
+)!;
 
 terminusNameRef.value = user.name;
 
@@ -107,7 +110,7 @@ const onConfirm = async () => {
 	$q.loading.show();
 
 	try {
-		await connectTerminus(user, osPwd.value);
+		await connectTerminus(user, mnemonic.mnemonic, osPwd.value);
 		router.push({ path: '/home' });
 	} catch (e) {
 		notifyFailed(e.message);

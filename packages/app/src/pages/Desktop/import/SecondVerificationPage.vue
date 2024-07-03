@@ -22,7 +22,7 @@ import { getCurrentInstance, nextTick, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ConfirmButtonStatus } from '../../../utils/constants';
 import { useQuasar } from 'quasar';
-import { importUserCheckFa } from '../../Mobile/connect/BindTerminusBusiness';
+import { importUserCheckFa } from '../../../utils/BindTerminusBusiness';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../../stores/user';
 import OneTimePasswordMethod from '../../../components/common/OneTimePasswordMethod.vue';

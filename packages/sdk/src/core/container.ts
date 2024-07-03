@@ -42,10 +42,7 @@ export abstract class BaseContainer extends Serializable {
 	 */
 	async setData(data: Uint8Array) {
 		if (!this._key) {
-			throw new Err(
-				ErrorCode.ENCRYPTION_FAILED,
-				'No encryption key provided!'
-			);
+			throw new Err(ErrorCode.ENCRYPTION_FAILED, 'No encryption key provided!');
 		}
 
 		// Generate random initialization vector
@@ -56,9 +53,7 @@ export abstract class BaseContainer extends Serializable {
 		// we can't really choose a meaningful value for this. In the future,
 		// we may want to provide the option to pass this as an argument but for now
 		// a random value should be sufficient.
-		this.encryptionParams.additionalData = await getProvider().randomBytes(
-			16
-		);
+		this.encryptionParams.additionalData = await getProvider().randomBytes(16);
 
 		// Encrypt the data and store it.
 		this.encryptedData = await getProvider().encrypt(
@@ -157,7 +152,7 @@ export class Accessor extends Serializable {
 	/**
 	 * Identifier used to map an `Accessor` to the owner of the public key used to encrypt the shared key.
 	 */
-	id: string = '';
+	id = '';
 
 	/** Shared key encrypted with the public key of the entity associated with the `Accessor` object */
 	@AsBytes()
@@ -192,13 +187,7 @@ export class SharedContainer extends BaseContainer {
 	 * The id is used to look up the corresponding encrypted key while the
 	 * private key is used to decrypt it.
 	 */
-	async unlock({
-		id,
-		privateKey
-	}: {
-		id: string;
-		privateKey: RSAPrivateKey;
-	}) {
+	async unlock({ id, privateKey }: { id: string; privateKey: RSAPrivateKey }) {
 		if (this._key) {
 			// Container is already unlocked, no need to unlock it again
 			return;
@@ -209,10 +198,7 @@ export class SharedContainer extends BaseContainer {
 
 		if (!accessor || !accessor.encryptedKey) {
 			// No corresponding accessor found.
-			throw new Err(
-				ErrorCode.MISSING_ACCESS,
-				'No appropriate accessor found.'
-			);
+			throw new Err(ErrorCode.MISSING_ACCESS, 'No appropriate accessor found.');
 		}
 
 		// Decrypt shared key using provided private key

@@ -4,8 +4,10 @@ import {
 	FieldType,
 	stringToBase64,
 	UnlockedAccount,
-	UserItem,
-	UserItemCollection,
+	// UserItem,
+	// UserItemCollection,
+	MnemonicItem,
+	MnemonicItemCollection,
 	Vault,
 	VaultItem
 } from '@didvault/sdk/src/core';
@@ -20,8 +22,9 @@ export class DataCenter {
 	//extended unlock time in bex background
 	private _password: string | undefined = undefined;
 	//data
-	private _userItems: UserItemCollection | undefined = undefined;
-	private _currentItem: UserItem | undefined = undefined;
+	private _mnemonicItems: MnemonicItemCollection | undefined = undefined;
+	private _currentItem: MnemonicItem | undefined = undefined;
+
 	private _appState: AppState | undefined = undefined;
 
 	isLocked() {
@@ -51,14 +54,14 @@ export class DataCenter {
 
 	async getCurrentName() {
 		return !this.isLocked() && (await this.hasUser())
-			? this._currentItem?.name
+			? this._currentItem?.id
 			: '';
 	}
 
 	async includeDidKey(didKey: string): Promise<boolean> {
-		if (this._userItems) {
+		if (this._mnemonicItems) {
 			const didList: string[] = [];
-			for (const item of this._userItems) {
+			for (const item of this._mnemonicItems) {
 				didList.push(item.id);
 			}
 			return didList.includes(didKey);
@@ -106,8 +109,9 @@ export class DataCenter {
 
 	lock() {
 		this._appState = undefined;
-		this._userItems = undefined;
+		this._mnemonicItems = undefined;
 		this._currentItem = undefined;
+
 		this._password = undefined;
 		bgBusEmit('BROADCAST_TO_UI', {
 			method: 'UNLOCKED_UPDATE',
@@ -137,15 +141,18 @@ export class DataCenter {
 
 	async decryptUserItems(data: string, accountId: string) {
 		if (!data) {
-			this._userItems = undefined;
+			this._mnemonicItems = undefined;
 			return;
 		}
-		this._userItems = new UserItemCollection().fromBytes(base64ToBytes(data));
+		this._mnemonicItems = new MnemonicItemCollection().fromBytes(
+			base64ToBytes(data)
+		);
 		if (!accountId) {
 			this._currentItem = undefined;
 			return;
 		}
-		this._currentItem = this._userItems.get(accountId)!;
+		this._currentItem = this._mnemonicItems.get(accountId)!;
+
 		await this._unlockAppState();
 	}
 
@@ -236,7 +243,7 @@ export class DataCenter {
 
 	clearData() {
 		this._appState = undefined;
-		this._userItems = undefined;
+		this._mnemonicItems = undefined;
 		this._currentItem = undefined;
 	}
 }

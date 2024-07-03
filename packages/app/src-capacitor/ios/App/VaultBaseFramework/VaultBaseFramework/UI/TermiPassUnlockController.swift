@@ -159,7 +159,7 @@ open class TermiPassUnlockController: UIViewController {
                 }
                 errorStep = 1
                 
-                guard let userItem = user.items.get(id: standardUserStore.current_id) else {
+                guard let mnemonicItem = user.mnemonics.get(id: standardUserStore.current_id) else {
                     callback(false,"empty user")
                     return
                 }
@@ -185,7 +185,7 @@ open class TermiPassUnlockController: UIViewController {
                         errorStep = 5
                         _unclockApp.load(appState: appState)
                         errorStep = 6
-                        let mnemonics = userItem.mnemonic
+                        let mnemonics = mnemonicItem.mnemonic
                         mnemonicssss = mnemonics
                         try _unclockApp.unlock(password: mnemonics)
                         errorStep = 7
