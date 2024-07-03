@@ -1329,5 +1329,19 @@ If you want to create an organization, please refer to the steps listed in the T
 	pdf_name: 'PDF name',
 	input_pdf_name: 'Input PDF name',
 	please_use_a_gmail_email_address: 'Please use a "{gmail}" email address.',
+	integration: {
+		title: 'Integration',
+		add_account: 'Add Account',
+		account_settings: 'Account Settings',
+		mount_network_drive: 'Mount Network Drive',
+		access_key_id: 'AccessKey ID',
+		access_key_secret: 'AccessKey Secret',
+		endpoint: 'Endpoint',
+		bucket: 'Bucket',
+		optional: 'Optional',
+		aws_create_success_reminder:
+			'Congratulations, you have successfully mounted the object storage service!',
+		object_storage: 'Object Storage'
+	},
 	...termipass_en
 };

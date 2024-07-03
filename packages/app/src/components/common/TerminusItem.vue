@@ -20,7 +20,7 @@
 			:style="`border-radius:${
 				wholePictureSize / 2
 			}px; width:${wholePictureSize}px; height:${wholePictureSize}px;`"
-			v-if="imgBgClasses && (iconName || imagePath)"
+			v-if="iconName || imagePath"
 		>
 			<q-icon
 				:name="iconName"
@@ -151,7 +151,7 @@ const prop = defineProps({
 
 const imageWidth = () => {
 	if (prop.iconName || prop.imagePath || prop.terminusName) {
-		return prop.wholePictureSize + 12;
+		return prop.wholePictureSize + 16;
 	}
 	return 0;
 };
@@ -163,7 +163,7 @@ const imageWidth = () => {
 	padding: 0;
 
 	.img {
-		margin-left: 12px;
+		margin-left: 16px;
 	}
 
 	.item-content {

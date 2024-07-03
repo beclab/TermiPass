@@ -160,6 +160,26 @@ const mobileCommon: RouteRecordRaw[] = [
 				path: '/checkHistory',
 				component: () =>
 					import('src/pages/Mobile/setting/CheckStatusHistory.vue')
+			},
+			{
+				path: '/integration',
+				component: () =>
+					import('src/pages/Mobile/integration/IntegrationPage.vue')
+			},
+			{
+				path: '/integration/add',
+				component: () =>
+					import('src/pages/Mobile/integration/IntegrationAddPage.vue')
+			},
+			{
+				path: '/integration/common/detail/:type/:name?',
+				component: () =>
+					import('src/pages/Mobile/integration/IntegrationDetailPage.vue')
+			},
+			{
+				path: '/integration/aws/add',
+				component: () =>
+					import('src/pages/Mobile/integration/aws/AwsAddIntegrationPage.vue')
 			}
 		]
 	}

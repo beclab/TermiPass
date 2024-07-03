@@ -194,8 +194,6 @@ import { useScaleStore } from '../../../stores/scale';
 import { watch } from 'vue';
 import AccoutMoreDialog from './AccoutMoreDialog.vue';
 import { useI18n } from 'vue-i18n';
-// import { walletService } from '../../../wallet';
-// import { defaultDriverPath, mnemonicToKey } from '../../../layouts/dialog/sign';
 
 const $router = useRouter();
 const userStore = useUserStore();
@@ -254,33 +252,6 @@ const enterCheckHistory = () => {
 
 const onLoginCloud = () => {
 	$router.push({ path: '/space_management' });
-};
-
-const showCheckHistory = ref(false);
-
-// let count = 0;
-
-// let startTime: Date | undefined = undefined;
-
-const updateShowCheckHistory = () => {
-	// if (count === 0) {
-	// 	startTime = new Date();
-	// } else if (count >= 1) {
-	// 	let nextTime = new Date();
-	// 	if (
-	// 		nextTime.getMilliseconds() - (startTime?.getMilliseconds() || 0) >=
-	// 		5000
-	// 	) {
-	// 		startTime = nextTime;
-	// 		count = 0;
-	// 	}
-	// 	if (count === 3) {
-	// 		showCheckHistory.value = !showCheckHistory.value;
-	// 		startTime = nextTime;
-	// 		count = 0;
-	// 	}
-	// }
-	// count++;
 };
 </script>
 
