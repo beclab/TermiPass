@@ -27,7 +27,7 @@ const mobileCommon: RouteRecordRaw[] = [
 			},
 			{
 				path: 'items/:itemid',
-				component: () => import('pages/Mobile/vault/ItemView.vue')
+				component: () => import('src/pages/Mobile/vault/ItemView.vue')
 			},
 
 			{

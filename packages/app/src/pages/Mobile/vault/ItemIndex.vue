@@ -1,5 +1,5 @@
 <template>
-	<div class="vault-continer" v-if="userStore.isUnlocked">
+	<div class="vault-continer bg-white" v-if="userStore.isUnlocked">
 		<VaultsDrawer />
 		<div class="vault-content">
 			<ItemList @toolabClick="onItemClicked" />
@@ -11,6 +11,7 @@
 		:detailText="t('unlock.vault_unlock_introduce')"
 		logo="login/vault_unlock.svg"
 		:biometry-auto-unlock="false"
+		class="bg-white"
 	/>
 </template>
 
@@ -37,7 +38,6 @@ function onItemClicked(itemid: string) {
 .vault-continer {
 	width: 100%;
 	height: 100%;
-	background: $white;
 	.vault-content {
 		width: 100%;
 		height: 100%;

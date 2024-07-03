@@ -69,7 +69,12 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 		AndroidPlugins.Accessibility.addListener(
 			'onAutofillAccessibility',
 			({ uri }) => {
-				this._performAction(() => {
+				this._performAction(async () => {
+					const userStore = useUserStore();
+					if (!(await userStore.unlockFirst())) {
+						this.router?.back();
+						return;
+					}
 					if (this.router && uri) {
 						if (this.route?.path.includes('/autoFillList')) {
 							this.router.replace({
@@ -96,7 +101,13 @@ export class AndroidMobilePlatform extends CapacitorPlatform {
 		AndroidPlugins.AutofillFramework.addListener(
 			'onAutofillFramework',
 			({ uri }) => {
-				this._performAction(() => {
+				this._performAction(async () => {
+					const userStore = useUserStore();
+					if (!(await userStore.unlockFirst())) {
+						// this.router?.back();
+						AndroidPlugins.AndroidUniversal.finish();
+						return;
+					}
 					if (this.router && uri) {
 						this.router.replace({
 							path: '/autoFillList',

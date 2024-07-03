@@ -697,10 +697,15 @@ export default defineComponent({
 
 		const clearChanges = () => {
 			if (props.isNew) {
-				Router.push({
-					path: '/items/'
-				});
 				app.deleteItems([item.value!]);
+				// goBack();
+				if (isMobile.value) {
+					goBack();
+				} else {
+					Router.push({
+						path: '/items/'
+					});
+				}
 			}
 		};
 

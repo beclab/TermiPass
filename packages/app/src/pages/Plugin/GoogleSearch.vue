@@ -83,7 +83,7 @@ import { onMounted, ref } from 'vue';
 // import { useQuasar } from 'quasar';
 import SearchDefault from './components/SearchDefault.vue';
 import SearchCopilot from './components/SearchCopilot.vue';
-import vaultPluginIcon from 'assets/images/vault-plugin.svg';
+import vaultPluginIcon from 'assets/images/termipass_logo.svg';
 import vaultPluginOperation from 'assets/images/vault-plugin-operation.svg';
 import Image65 from 'assets/images/image65.png';
 import Image68 from 'assets/images/image68.png';

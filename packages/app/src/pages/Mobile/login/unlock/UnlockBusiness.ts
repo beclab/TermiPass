@@ -60,7 +60,38 @@ export async function unlockByPwd(
 			await app.load(userStore.current_id!);
 			await app.unlock(mnemonic.mnemonic);
 		}
+		await callback.onSuccess(userStore.current_id);
+	} catch (error) {
+		callback.onFailure(i18n.global.t('password_error'));
+	}
+}
 
+export async function unlockPreviousUsersByPwd(
+	password: string,
+	callback: BusinessAsyncCallback
+) {
+	try {
+		if (!password) {
+			throw new Error(i18n.global.t('password_not_empty'));
+		}
+		const userStore = useUserStore();
+		await userStore.unlockPreviousUsers(password);
+		userStore.password = password;
+		if (userStore.current_id) {
+			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+			if (user.name) {
+				setSenderUrl({
+					url: user.vault_url
+				});
+			}
+
+			const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+				userStore.current_id!
+			)!;
+
+			await app.load(userStore.current_id!);
+			await app.unlock(mnemonic.mnemonic);
+		}
 		await callback.onSuccess(userStore.current_id);
 	} catch (error) {
 		callback.onFailure(i18n.global.t('password_error'));

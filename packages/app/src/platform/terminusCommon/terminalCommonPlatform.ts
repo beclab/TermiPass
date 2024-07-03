@@ -1,7 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SubAppPlatform } from '../subAppPlatform';
 import { useUserStore } from 'src/stores/user';
-import { AuthType, DeviceInfo, ErrorCode } from '@didvault/sdk/src/core';
+import {
+	AuthType,
+	DeviceInfo,
+	ErrorCode,
+	getPlatform
+} from '@didvault/sdk/src/core';
 
 import { app } from 'src/globals';
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
@@ -163,6 +168,10 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			}
 			return;
 		}
+		if (userStore.needUnlockFirst) {
+			redirect({ path: '/unlock' });
+			return;
+		}
 		if (!userStore.current_user) {
 			redirect({ path: '/setup/success' });
 			return;
@@ -212,22 +221,18 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 		const menuStore = useMenuStore();
 		menuStore.updateMenuInfo();
 
-		// if (app.state.locked) {
-		// 	const userStore = useUserStore();
+		if (app.state.locked) {
+			const userStore = useUserStore();
 
-		// 	if (userStore.userUpdating) {
-		// 		return;
-		// 	}
-		// 	const platform = getPlatform() as TerminusCommonPlatform;
-		// 	if (!platform.isOnHomePage) {
-		// 		return;
-		// 	}
-		// 	userStore.password = undefined;
-
-		// if (platform.router) {
-		// 	platform.router.push('/unlock');
-		// }
-		// }
+			if (userStore.userUpdating) {
+				return;
+			}
+			const platform = getPlatform() as TerminusCommonPlatform;
+			if (!platform.isOnHomePage) {
+				return;
+			}
+			userStore.password = undefined;
+		}
 	}
 
 	async homeMounted(): Promise<void> {

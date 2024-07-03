@@ -2,12 +2,7 @@ import { MobileWebPlatform } from '../../terminusCommon/mobileWebPlatform';
 import { ExtensionStorage, ExtensionUserStorage } from '../storage';
 // import { browser } from 'webextension-polyfill-ts';
 import { useUserStore } from '../../../stores/user';
-import {
-	UserItem,
-	MnemonicItem,
-	getPlatform as defaultGetPlatform
-} from '@didvault/sdk/src/core';
-import { app, setSenderUrl } from '../../../globals';
+import { getPlatform as defaultGetPlatform } from '@didvault/sdk/src/core';
 import { walletService } from '../../../wallet';
 import PortMessage from '../../../extension/utils/message/portMessage';
 import { useBexStore } from '../../../stores/bex';
@@ -52,29 +47,16 @@ export class ExtensionPlatform
 			redirect({ path: '/welcome' });
 			return;
 		}
-		if (userStore.users?.locked) {
+
+		if (userStore.needUnlockFirst) {
 			redirect({ path: '/unlock' });
 			return;
 		}
 
 		if (userStore.current_id) {
-			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
-			if (user.setup_finished) {
-				setSenderUrl({
-					url: user.vault_url
-				});
-			}
-
-			const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
-				userStore.current_id!
-			)!;
-
-			await app.load(userStore.current_id!);
-			await app.unlock(mnemonic.mnemonic);
-
-			redirect({ path: '/home' });
+			redirect({ path: '/connectLoading' });
 		} else {
-			redirect({ name: 'setupSuccess' });
+			redirect({ path: '/import_mnemonic' });
 		}
 	}
 

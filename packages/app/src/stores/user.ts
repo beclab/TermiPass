@@ -11,7 +11,9 @@ import {
 	UserItem,
 	MnemonicItem,
 	base64ToString,
-	uuid
+	uuid,
+	PreviousLocalUserVault,
+	PreviousUserItem
 } from '@didvault/sdk/src/core';
 import { getPrivateJWK } from '../did/did-key';
 import { GeneralJwsSigner } from '../jose/jws/general/signer';
@@ -55,6 +57,7 @@ const userModeRemoveItem = async (key: UserStorageSaveType) => {
 
 export interface UserSate {
 	users: LocalUserVault | undefined;
+	previousUsers: PreviousLocalUserVault | undefined;
 	id: string | undefined;
 	current_id: string | undefined;
 	temp_url: string | undefined;
@@ -86,6 +89,7 @@ export const useUserStore = defineStore('user', {
 	state: () => {
 		return {
 			users: undefined,
+			previousUsers: undefined,
 			id: undefined,
 			current_id: undefined,
 			temp_url: undefined,
@@ -118,6 +122,9 @@ export const useUserStore = defineStore('user', {
 				return false;
 			}
 			return !this.users.locked;
+		},
+		needUnlockFirst(): boolean {
+			return this.previousUsers !== undefined;
 		},
 		connected(): boolean {
 			if (!this.current_id) {
@@ -199,6 +206,14 @@ export const useUserStore = defineStore('user', {
 			if (this.id) {
 				this.users = new LocalUserVault();
 				const res = await userModeGetItem('users');
+				console.log('res --->');
+				if (!res.items) {
+					this.previousUsers = new PreviousLocalUserVault();
+					this.previousUsers.fromRaw(res);
+					return;
+				}
+				console.log(res);
+				console.log('<---res ');
 				this.users.fromRaw(res);
 				if (this.current_id) {
 					await app.load(this.current_id);
@@ -416,7 +431,7 @@ export const useUserStore = defineStore('user', {
 			if (!(await this.unlockFirst())) {
 				return {
 					status: false,
-					message: 'Please unlock first'
+					message: i18n.global.t('please_unlock_first')
 				};
 			}
 
@@ -717,6 +732,35 @@ export const useUserStore = defineStore('user', {
 				}
 			}
 			return unclocked;
+		},
+		async unlockPreviousUsers(password: string) {
+			if (!this.previousUsers) {
+				return;
+			}
+			await this.previousUsers.unlock(password);
+			if (!this.users) {
+				this.users = new LocalUserVault();
+			}
+			this.users.name = 'LocalUserVault';
+			this.users.created = new Date();
+			this.users.updated = new Date();
+			await this.users.setPassword(password);
+
+			for (const user of this.previousUsers.items) {
+				if (this.users!.items.get(user.id)) {
+					continue;
+				}
+
+				const user1 = new UserItem(user);
+
+				const m = new MnemonicItem();
+				m.id = user.id;
+				m.mnemonic = (user as PreviousUserItem).mnemonic;
+
+				this.users!.items.update(user1);
+				this.users!.mnemonics.update(m);
+			}
+			await this.save();
 		}
 	}
 });

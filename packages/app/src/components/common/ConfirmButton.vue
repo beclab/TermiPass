@@ -49,7 +49,7 @@ const props = defineProps({
 	bgClasses: {
 		type: String,
 		required: false,
-		default: 'bg-color-yellow'
+		default: 'bg-yellow'
 	},
 	textClasses: {
 		type: String,

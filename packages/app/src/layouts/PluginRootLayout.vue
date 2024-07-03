@@ -19,7 +19,7 @@
 				<img
 					class="aside-icon"
 					:style="asideIconStyle"
-					src="~assets/images/vault-plugin.svg"
+					src="~assets/login/termipass_logo.svg"
 					alt=""
 				/>
 			</div>

@@ -36,7 +36,7 @@ import ConfirmButton from '../../../components/common/ConfirmButton.vue';
 import { getRequireImage } from '../../../utils/imageUtils';
 import '../../../css/terminus.scss';
 import { useI18n } from 'vue-i18n';
-import { unlockByPwd } from '../../Mobile/login/unlock/UnlockBusiness';
+import { unlockPreviousUsersByPwd } from '../../Mobile/login/unlock/UnlockBusiness';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 
 const router = useRouter();
@@ -52,7 +52,7 @@ function onTextChange() {
 }
 
 const loginByPassword = async (password: string) => {
-	await unlockByPwd(password, {
+	await unlockPreviousUsersByPwd(password, {
 		async onSuccess(data: any) {
 			if (data) {
 				router.replace('/connectLoading');

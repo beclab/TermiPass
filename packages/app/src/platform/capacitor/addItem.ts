@@ -7,6 +7,7 @@ import {
 import { app } from '../../globals';
 import { Router } from 'vue-router';
 import { useMenuStore } from '../../stores/menu';
+import { useUserStore } from 'src/stores/user';
 
 export async function updateUIToAddWeb(
 	identify: string,
@@ -14,6 +15,10 @@ export async function updateUIToAddWeb(
 	username = '',
 	password = ''
 ) {
+	const userStore = useUserStore();
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	const meunStore = useMenuStore();
 	const selectedTemplate = ITEM_TEMPLATES.find((i) => i.id == 'web');
 	if (!selectedTemplate) {

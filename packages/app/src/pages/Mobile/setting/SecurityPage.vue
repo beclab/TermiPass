@@ -146,6 +146,9 @@ const changeAutoLock = (value: any) => {
 
 const unlockByBiometricStatus = ref<boolean>(userStore.openBiometric);
 const changeBiometric = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	let result = {
 		status: false,
 		message: ''

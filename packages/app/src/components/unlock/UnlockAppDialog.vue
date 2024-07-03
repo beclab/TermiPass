@@ -40,7 +40,7 @@ defineProps({
 		default: i18n.global.t('unlock.auth_popup_unlock_introduce')
 	}
 });
-const isDesktop = ref(process.env.PLATFORM == 'DESKTOP');
+const isDesktop = ref(process.env.PLATFORM == 'DESKTOP' || process.env.IS_BEX);
 const isMobile = ref(process.env.PLATFORM == 'MOBILE');
 </script>
 <style lang="scss" scoped>

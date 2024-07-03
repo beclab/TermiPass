@@ -605,7 +605,7 @@ export const unlockUserFirstBusiness = async (props: any) => {
 	if (!getAppPlatform().getQuasar()) {
 		return false;
 	}
-	return new Promise<boolean>((resolve, reject) => {
+	return new Promise<boolean>((resolve) => {
 		getAppPlatform()
 			.getQuasar()
 			?.dialog({
@@ -616,7 +616,7 @@ export const unlockUserFirstBusiness = async (props: any) => {
 				resolve(true);
 			})
 			.onCancel(() => {
-				reject(false);
+				resolve(false);
 			});
 	});
 };
