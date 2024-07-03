@@ -20,17 +20,14 @@
 		</q-page-container>
 
 		<prompts-component />
-
-		<UploadModal />
 	</q-layout>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { bytetrade } from '@bytetrade/core';
 
-import UploadModal from '../components/files/UploadModal.vue';
 import FilesPage from '../pages/Files/FilesPage.vue';
 import PromptsComponent from '../components/files/prompts/PromptsComponent.vue';
 import FilesDrawer from './TermipassLayout/FilesDrawer.vue';

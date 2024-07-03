@@ -160,10 +160,11 @@ class Data extends Origin {
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined,
-				parentPath: el.parentPath
+				src_repo_id: seahubStore.repo_id || undefined
 			});
 		}
+
+		console.log('sync-copyStorages', copyStorages);
 
 		return {
 			items: copyStorages,
@@ -192,7 +193,6 @@ class Data extends Origin {
 				to: '',
 				name: el.name,
 				src_repo_id: seahubStore.repo_id || undefined,
-				parentPath: el.parentPath,
 				key: 'x'
 			});
 		}
@@ -225,8 +225,7 @@ class Data extends Origin {
 				from: element.from,
 				to: to,
 				name: element.name,
-				src_repo_id: element.src_repo_id || undefined,
-				parentPath: element.parentPath
+				src_repo_id: element.src_repo_id || undefined
 			});
 			if (path + decodeURIComponent(element.name) === element.from) {
 				this.action(false, true, items, path, false, callback);
@@ -239,6 +238,8 @@ class Data extends Origin {
 		let overwrite = false;
 		let rename = true;
 		let isMove = false;
+
+		console.log('sync-dataStorecopyFiles-items', items);
 
 		if (dataStore.copyFiles.items[0].key === 'x') {
 			overwrite = true;
@@ -256,13 +257,7 @@ class Data extends Origin {
 	): Promise<void> {
 		const dataStore = useDataStore();
 		const seahubStore = useSeahubStore();
-		const items: {
-			from: any;
-			to: string;
-			name: any;
-			src_repo_id?: any;
-			parentPath: string;
-		}[] = [];
+		const items: CopyStoragesType[] = [];
 		for (const i of dataStore.selected) {
 			const element: any = dataStore.req.items[i];
 			const fromStart =
@@ -286,8 +281,7 @@ class Data extends Origin {
 				from: from,
 				to: to,
 				name: element.name,
-				src_repo_id: seahubStore.repo_id,
-				parentPath: element.parentPath
+				src_repo_id: seahubStore.repo_id
 			});
 		}
 		const overwrite = true;

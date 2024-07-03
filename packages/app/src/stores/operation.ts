@@ -1,22 +1,115 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
 import { OPERATE_ACTION } from './../utils/contact';
+import { EventType, ContextType } from './../api/common/encoding';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
 
 import { useDataStore } from './data';
+import { MenuItem } from '../utils/contact';
 
 // import { operationAPI } from './../api';
 
 import { dataAPIs } from './../api';
 
-// export type DataState = {};
+export type DataState = {
+	contextmenu: ContextType[];
+	disableMenuItem: string[];
+};
 
 export const useOperateinStore = defineStore('operation', {
-	// state: () => {
-	// 	return {} as DataState;
-	// },
+	state: () => {
+		return {
+			contextmenu: [
+				{
+					name: 'Open Local Sync Folder',
+					icon: 'sym_r_folder_open',
+					type: 'seahub',
+					action: OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER,
+					condition: (event: EventType) => event.type === 'sync'
+				},
+				{
+					name: 'Download',
+					icon: 'sym_r_browser_updated',
+					action: OPERATE_ACTION.DOWNLOAD,
+					condition: (event: EventType) => event.isSelected
+				},
+				{
+					name: 'Copy',
+					icon: 'sym_r_content_copy',
+					action: OPERATE_ACTION.COPY,
+					condition: (event: EventType) => event.isSelected
+				},
+				{
+					name: 'Cut',
+					icon: 'sym_r_move_up',
+					action: OPERATE_ACTION.CUT,
+					condition: (event: EventType) => event.isSelected
+				},
+				{
+					name: 'Rename',
+					icon: 'sym_r_edit_square',
+					action: OPERATE_ACTION.RENAME,
+					condition: (event: EventType) =>
+						event.isSelected && event.showRename && !event.isHomePage
+				},
+				{
+					name: 'Delete',
+					icon: 'sym_r_edit_square',
+					action: OPERATE_ACTION.DELETE,
+					condition: (event: EventType) => event.isSelected && !event.isHomePage
+				},
+				{
+					name: 'Attributes',
+					icon: 'sym_r_ballot',
+					action: OPERATE_ACTION.ATTRIBUTES,
+					condition: (event: EventType) => event.isSelected
+				},
+				{
+					name: 'New Folder',
+					icon: 'sym_r_create_new_folder',
+					action: OPERATE_ACTION.CREATE_FOLDER,
+					condition: (event: EventType) => !event.isSelected
+				},
+				{
+					name: 'Upload Files',
+					icon: 'sym_r_upload_file',
+					action: OPERATE_ACTION.UPLOAD_FILES,
+					condition: (event: EventType) => !event.isSelected
+				},
+				{
+					name: 'Upload Folder',
+					icon: 'sym_r_drive_folder_upload',
+					action: OPERATE_ACTION.UPLOAD_FOLDER,
+					condition: (event: EventType) => !event.isSelected
+				},
+				{
+					name: 'Paste',
+					icon: 'sym_r_content_paste',
+					action: OPERATE_ACTION.PASTE,
+					condition: (event: EventType) => !event.isSelected && event.hasCopied
+				},
+				{
+					name: 'Refresh',
+					icon: 'sym_r_replay',
+					action: OPERATE_ACTION.REFRESH,
+					condition: (event: EventType) => !event.isSelected
+				}
+			],
+			disableMenuItem: [
+				MenuItem.HOME,
+				MenuItem.DOCUMENTS,
+				MenuItem.PICTURES,
+				MenuItem.MOVIES,
+				MenuItem.DOWNLOADS,
+				MenuItem.DATA,
+				MenuItem.CACHE,
+				MenuItem.CODE,
+				MenuItem.MUSIC
+			]
+		} as DataState;
+	},
 
 	getters: {},
 
@@ -30,9 +123,11 @@ export const useOperateinStore = defineStore('operation', {
 			e.preventDefault();
 			e.stopPropagation();
 
-			console.log('route', route);
-
 			const dataStore = useDataStore();
+
+			console.log('handleFileOperate ===>');
+			console.log('CREATE_FOLDER', OPERATE_ACTION.CREATE_FOLDER);
+			console.log('CREATE_FOLDER => action', action);
 
 			switch (action) {
 				case OPERATE_ACTION.CREATE_FOLDER:
@@ -126,11 +221,9 @@ export const useOperateinStore = defineStore('operation', {
 		},
 
 		async copyCatalogue() {
-			console.log('into copyCatalogue');
 			const dataStore = useDataStore();
 			const dataAPI = dataAPIs();
 			const copyStorages = await dataAPI.copy();
-			console.log('copyCatalogue', copyStorages);
 
 			dataStore.updateCopyFiles(copyStorages);
 		},
@@ -148,7 +241,6 @@ export const useOperateinStore = defineStore('operation', {
 			const dataAPI = dataAPIs();
 			const copyStorages = await dataAPI.cut();
 
-			console.log('copyStoragescopyStorages', copyStorages);
 			dataStore.updateCopyFiles(copyStorages);
 		},
 

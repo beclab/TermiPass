@@ -1,4 +1,5 @@
 import { checkSeahub, checkAppData } from '../../utils/file';
+import { OPERATE_ACTION } from '../../utils/contact';
 
 export enum OriginType {
 	DRIVE = 'drive',
@@ -154,11 +155,25 @@ export interface CopyStoragesType {
 	to: string;
 	name: any;
 	src_repo_id?: any;
-	parentPath: string;
 	key?: string;
 }
 
 export interface ShareInfoResType {
 	shared_group_ids: string[];
 	shared_user_emails: string[];
+}
+
+export interface EventType {
+	type?: OriginType;
+	isSelected: boolean; //	true: Right click on a certain item; false: Right click on a blank area on the files
+	hasCopied: boolean;
+	showRename: boolean;
+	isHomePage: boolean;
+}
+export interface ContextType {
+	name: string;
+	icon: string;
+	type?: string;
+	action: OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER;
+	condition: (event: EventType) => boolean;
 }

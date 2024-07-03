@@ -205,7 +205,9 @@ export default defineComponent({
 		const drop = async (event: any) => {
 			let canMove = true;
 			for (const item of store.selected) {
-				if (menuStore.disableMenuItem.includes(store.req.items[item].name)) {
+				if (
+					operateinStore.disableMenuItem.includes(store.req.items[item].name)
+				) {
 					canMove = false;
 					notifyWarning(t('files.the_files_contains_unmovable_items'));
 					break;

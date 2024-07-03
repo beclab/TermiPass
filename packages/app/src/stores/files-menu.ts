@@ -129,16 +129,7 @@ export const useMenuStore = defineStore('filesMenu', {
 			userList: [],
 			sharedItems: [],
 			avtiveItem: null,
-			syncStatus: false,
-			disableMenuItem: [
-				MenuItem.HOME,
-				MenuItem.DOCUMENTS,
-				MenuItem.PICTURES,
-				MenuItem.MOVIES,
-				MenuItem.DOWNLOADS,
-				MenuItem.DATA,
-				MenuItem.CACHE
-			]
+			syncStatus: false
 		} as DataState;
 	},
 

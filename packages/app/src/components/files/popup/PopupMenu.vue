@@ -29,6 +29,7 @@ import { useOperateinStore } from './../../../stores/operation';
 import ReName from './ReName.vue';
 import DeleteRepo from './DeleteRepo.vue';
 import SyncInfo from './SyncInfo.vue';
+import { BtDialog } from '@bytetrade/ui';
 
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -307,14 +308,25 @@ const syncRepoInfo = (e) => {
 
 const deleteShareRepo = async () => {
 	try {
-		$q.dialog({
+		BtDialog.show({
 			title: t('files_popup_menu.exit_sharing'),
-			message: t('exit_sharing_message')
-		}).onOk(async () => {
-			const path = `seahub/api/v2.1/shared-repos/${props.item?.repo_id}/?share_type=${props.item?.share_type}&user=${props.item?.user_email}`;
-			await seahub.deleteRepo(path);
-			menuStore.getSyncMenu();
-		});
+			message: t('exit_sharing_message'),
+			okStyle: {
+				background: 'yellow-default',
+				color: '#1F1F1F'
+			},
+			cancel: true
+		})
+			.then(async (res: any) => {
+				if (res) {
+					const path = `seahub/api/v2.1/shared-repos/${props.item?.repo_id}/?share_type=${props.item?.share_type}&user=${props.item?.user_email}`;
+					await seahub.deleteRepo(path);
+					menuStore.getSyncMenu();
+				}
+			})
+			.catch((err: Error) => {
+				console.log('click cancel', err);
+			});
 	} catch (error) {
 		return false;
 	}

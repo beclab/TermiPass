@@ -12,6 +12,8 @@
 		<footer>
 			<files-footer />
 		</footer>
+
+		<upload-Modal />
 	</div>
 </template>
 
@@ -36,6 +38,7 @@ import FilesHeader from './common-files/FilesHeader.vue';
 import FilesFooter from './common-files/FilesFooter.vue';
 import ListingFiles from './common-files/ListingFiles.vue';
 import Errors from './Errors.vue';
+import UploadModal from '../../components/files/UploadModal.vue';
 
 const store = useDataStore();
 const route = useRoute();

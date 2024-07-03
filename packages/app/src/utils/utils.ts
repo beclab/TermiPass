@@ -330,3 +330,14 @@ export const detectType = (mimetype: string) => {
 	if (mimetype.startsWith('text')) return 'text';
 	return 'blob';
 };
+
+// Determine if two object arrays contain the same value
+export function containsSameValue<T>(
+	arr1: T[],
+	arr2: T[],
+	key: string
+): boolean {
+	return arr1?.some(
+		(item1) => arr2.find((item2) => item1[key] === item2) !== undefined
+	);
+}
