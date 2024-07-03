@@ -57,7 +57,7 @@ export const UriMatchStrategy = {
 } as const;
 
 export type UriMatchStrategySetting =
-	typeof UriMatchStrategy[keyof typeof UriMatchStrategy];
+	(typeof UriMatchStrategy)[keyof typeof UriMatchStrategy];
 
 export type NeverDomains = { [id: string]: unknown };
 export type EquivalentDomains = string[][];

@@ -13,7 +13,11 @@
 				@unlockSuccess="onDialogOK"
 				@cancel="onDialogCancel"
 				:detail-text="info"
-				logo="login/termipass_brand_desktop.svg"
+				:logo="
+					$q.dark.isActive
+						? 'login/Termipasstermipass_brand_desktop_dark.svg'
+						: 'login/Termipasstermipass_brand_desktop_light.svg'
+				"
 			/>
 			<MobileTermipassUnlockContent
 				v-else-if="isMobile"
