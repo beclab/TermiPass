@@ -32,15 +32,22 @@ class Fetch {
 		try {
 			// Delayed reference axiosInstanceProxy
 			const { axiosInstanceProxy } = await import('../platform/httpProxy');
-			this.instance = axiosInstanceProxy({
+			const instance = axiosInstanceProxy({
 				...defaultConfig
 			});
+
+			instance.interceptRequest((config) => {
+				const dataStore = useDataStore();
+				config.baseURL = dataStore.baseURL();
+				return config;
+			});
+
+			this.instance = instance;
 
 			this.instance.interceptors.request.use(
 				(config) => {
 					const dataStore = useDataStore();
 					config.baseURL = dataStore.baseURL();
-
 					return config;
 				},
 				(error) => {
