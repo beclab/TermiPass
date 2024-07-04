@@ -16,19 +16,19 @@
 					:src="getRequireImage('login/termipass_brand.svg')"
 				/>
 				<span class="setup-account-page__desc login-sub-title">{{
-					t('setup_account_desc')
+					t('Let us own our data again!')
 				}}</span>
 				<account-operations
 					v-if="!isBex"
 					class="setup-account-page__create"
 					image-name="add"
-					:title="t('create_a_terminus_name')"
+					:title="t('Create an account')"
 					@click="createDid"
 				/>
 				<account-operations
 					class="setup-account-page__import"
 					image-name="place_item"
-					:title="t('import_terminus_name')"
+					:title="t('Import an account')"
 					@click="importDid"
 				/>
 			</div>

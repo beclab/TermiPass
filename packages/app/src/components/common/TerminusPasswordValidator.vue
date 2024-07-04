@@ -12,35 +12,35 @@
 		<terminus-rule-checker
 			:value="passwordRef"
 			:pattern="PASSWORD_RULE.LENGTH_RULE"
-			:label="t('length_8_32_characters')"
+			:label="t('Length 8-32 characters')"
 			v-model:result="lengthResult"
 			@update:result="setButtonStatus"
 		/>
 		<terminus-rule-checker
 			:value="passwordRef"
 			:pattern="PASSWORD_RULE.LOWERCASE_RULE"
-			:label="t('contains_lowercase_letters')"
+			:label="t('Contains lowercase letters')"
 			v-model:result="lowercaseResult"
 			@update:result="setButtonStatus"
 		/>
 		<terminus-rule-checker
 			:value="passwordRef"
 			:pattern="PASSWORD_RULE.UPPERCASE_RULE"
-			:label="t('contains_uppercase_letters')"
+			:label="t('Contains uppercase letters')"
 			v-model:result="uppercaseResult"
 			@update:result="setButtonStatus"
 		/>
 		<terminus-rule-checker
 			:value="passwordRef"
 			:pattern="PASSWORD_RULE.DIGIT_RULE"
-			:label="t('contains_numbers')"
+			:label="t('Contains numbers')"
 			v-model:result="digitsResult"
 			@update:result="setButtonStatus"
 		/>
 		<terminus-rule-checker
 			:value="passwordRef"
 			:pattern="PASSWORD_RULE.SYMBOL_RULE"
-			:label="t('contains_symbols')"
+			:label="t('Contains symbols')"
 			v-model:result="symbolResult"
 			@update:result="setButtonStatus"
 		/>

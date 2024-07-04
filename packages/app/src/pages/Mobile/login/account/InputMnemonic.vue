@@ -20,7 +20,9 @@
 						:src="getRequireImage('login/import_terminus_mnemonic.svg')"
 					/>
 					<span class="input-mnemonic-page__desc login-sub-title">{{
-						t('import_terminus_mnemonic_desc')
+						t(
+							'Please enter the 12-word mnemonic phrase to import your Terminus Name.'
+						)
 					}}</span>
 					<q-checkbox
 						v-if="isLocalTest"

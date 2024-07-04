@@ -3,8 +3,12 @@
 		<terminus-page-title
 			:center="true"
 			class="page-title"
-			:label="t('password_settings')"
-			:desc="t('create_a_password_desc')"
+			:label="t('Password settings')"
+			:desc="
+				t('This password is only used for unlocking {AppName} on this device', {
+					AppName: 'TermiPass'
+				})
+			"
 		/>
 
 		<terminus-password-validator

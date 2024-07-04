@@ -3,7 +3,7 @@
 		<terminus-page-title
 			:center="true"
 			class="page-title"
-			:label="t('password_title')"
+			:label="t('Vault')"
 			desc=""
 			imgSrc="/vault-logo.svg"
 		/>

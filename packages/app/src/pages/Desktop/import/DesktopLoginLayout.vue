@@ -67,13 +67,13 @@ const { t } = useI18n();
 const carouselData = computed(() => {
 	switch (slide.value) {
 		case 1:
-			return t('welcome_words_first');
+			return t('System state at a glance');
 		case 2:
-			return t('welcome_words_second');
+			return t('Encrypted connection safe and solid');
 		case 3:
-			return t('welcome_words_third');
+			return t('Password management end-to-end encryption');
 		case 4:
-			return t('welcome_words_fourth');
+			return t('File management take data with you');
 		default:
 			return '';
 	}

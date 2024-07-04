@@ -7,8 +7,12 @@
 		<terminus-page-title
 			:center="true"
 			class="page-title"
-			:label="t('welcome_to_termipass')"
-			:desc="t('welcome_to_termipass_desc')"
+			:label="t('Welcome to TermiPass')"
+			:desc="
+				t(
+					`This is your must-have app for connecting to Terminus. Now let's create a new world together.`
+				)
+			"
 		/>
 		<confirm-button
 			class="welcome-page__button"

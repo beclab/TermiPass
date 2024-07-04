@@ -21,8 +21,15 @@
 					</q-img>
 					<terminus-page-title
 						style="margin-top: 79px"
-						:label="t('create_a_password')"
-						:desc="t('create_a_password_desc')"
+						:label="t('Set up a password')"
+						:desc="
+							t(
+								'This password is only used for unlocking {AppName} on this device',
+								{
+									AppName: 'TermiPass'
+								}
+							)
+						"
 					/>
 					<terminus-password-validator
 						:edt-transaction="true"

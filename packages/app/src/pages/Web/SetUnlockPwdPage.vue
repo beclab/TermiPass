@@ -3,8 +3,12 @@
 		<terminus-page-title
 			:center="true"
 			class="page-title"
-			:label="t('password_title')"
-			:desc="t('create_a_password_desc')"
+			:label="t('Vault')"
+			:desc="
+				t('This password is only used for unlocking {AppName} on this device', {
+					AppName: 'Vault'
+				})
+			"
 			imgSrc="/vault-logo.svg"
 		/>
 

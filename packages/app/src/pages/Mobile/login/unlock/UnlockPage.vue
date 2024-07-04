@@ -10,7 +10,7 @@
 					:src="getRequireImage('login/termipass_brand.svg')"
 				/>
 				<span class="terminus-unlock-page__desc login-sub-title">{{
-					t('terminus_unlock_desc')
+					t('Please enter the password to unlock TermiPass.')
 				}}</span>
 				<terminus-edit
 					v-model="passwordRef"

@@ -1,58 +1,13 @@
 // This is just an example,
 // so you can safely delete all default props below
 
-import termipass_en from '../TermiPass/en-US/index';
+import termipass_en from '../modules/termipass/en-US/index';
+import logint_en from '../modules/termipass/login/en-US/index';
+import vault_en from '../modules/vault/en-US';
 
 export default {
-	//welcome
-	welcome_declaration_tips:
-		'We will use a VPN to help users connect to Terminus',
-	welcome_declaration_desc:
-		'TermiPass employ VPN services to ensure the privacy and security of our users. The VPN service is responsible for connecting your device terminal to the network where the Terminus server is located so that you can access Terminus server resources. The service will not access, hijack, tamper with your content information.',
-	welcome_get_started: 'Get Started',
-	welcome_words_first: 'System state at a glance',
-	welcome_words_second: 'Encrypted connection safe and solid',
-	welcome_words_third: 'Password management end-to-end encryption',
-	welcome_words_fourth: 'File management take data with you',
-
-	welcome_to_termipass: 'Welcome to TermiPass',
-	welcome_to_termipass_desc:
-		"This is your must-have app for connecting to Terminus. Now let's create a new world together.",
-	setup_account_desc: 'Let us own our data again!',
-	create_a_terminus_name: 'Create an account',
-	import_terminus_name: 'Import an account',
-	bind_terminus_vc_desc:
-		'To address fairness in distribution and potential security issues, we need to verify your social media accounts. Your Terminus Name will be aligned with the social accounts you submit.',
-	bind_vc_success_desc: 'Congratulations, you have a Terminus Name now.',
-	bind_vc_success_scan_desc:
-		'Please scan and bind your Terminus to start the exciting journey of exploring Terminus!',
-	import_terminus_mnemonic_desc:
-		'Please enter the 12-word mnemonic phrase to import your Terminus Name.',
-	terminus_login_desc:
-		'Please enter your Terminus account name and password to complete the pairing of your Terminus Name and Terminus device.',
-	terminus_unlock_desc: 'Please enter the password to unlock TermiPass.',
-	terminus_unlock_vault_desc: 'Please enter the password to unlock Vault.',
-	the_terminus_name_you_want_to_bind: 'The Terminus Name you want to bind is',
-	reset_account_warning: 'Important information, Please read carefully',
-	reset_account_warning_desc:
-		'Terminus is a decentralized service system. Our system is designed so that no one except you can access your data, not even us. If you want to reset your TermiPass local client password, please note the following:\n' +
-		'\n' +
-		"1. Resetting the TermiPass local client password means that all your local data will be lost. But don't worry, your data is synchronized on your Terminus device.\n" +
-		'\n' +
-		'2. You need to retrieve the Terminus Name through the mnemonic phrase, and then log in to Terminus to restore data and restore all services to normal availability.',
-	forget_password: 'Forget Password',
 	complete: 'Complete',
-	confirm_reset: 'Confirm Reset',
-	create_a_password: 'Set up a password',
-	password_settings: 'Password settings',
-	password_title: 'Vault',
-	create_a_password_desc:
-		'This password is only used for unlocking TermiPass on this device',
-	length_8_32_characters: 'Length 8-32 characters',
-	contains_lowercase_letters: 'Contains lowercase letters',
-	contains_uppercase_letters: 'Contains uppercase letters',
-	contains_numbers: 'Contains numbers',
-	contains_symbols: 'Contains symbols',
+
 	biometric_unlock: 'Biometric Unlock',
 	biometric_unlock_desc:
 		'Set up fingerprint unlock for a safer and faster way to unlock TermiPass.',
@@ -1343,5 +1298,7 @@ If you want to create an organization, please refer to the steps listed in the T
 			'Congratulations, you have successfully mounted the object storage service!',
 		object_storage: 'Object Storage'
 	},
-	...termipass_en
+	...logint_en,
+	...termipass_en,
+	...vault_en
 };

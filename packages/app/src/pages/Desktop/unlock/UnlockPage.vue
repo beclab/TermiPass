@@ -6,7 +6,7 @@
 		/>
 		<div class="terminus-unlock-box column justify-start items-center">
 			<span class="terminus-unlock-box__desc login-sub-title">{{
-				t('terminus_unlock_desc')
+				t('Please enter the password to unlock TermiPass.')
 			}}</span>
 			<terminus-edit
 				v-model="passwordRef"

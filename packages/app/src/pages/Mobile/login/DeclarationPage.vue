@@ -2,15 +2,19 @@
 	<div class="column justify-center items-center full-width full-height">
 		<q-img src="/termipass.png" class="termipass-logo" />
 		<div class="termipass-tips text-subtitle1 text-ink-1 q-mt-lg">
-			{{ t('welcome_declaration_tips') }}
+			{{ t('We will use a VPN to help users connect to Terminus') }}
 		</div>
 		<q-btn
 			class="bg-yellow-default text-ink-on-brand-black-light text-subtitle1 confirm-btn"
-			:label="t('welcome_get_started')"
+			:label="t('Get Started')"
 			@click="router.replace('/welcome')"
 		/>
 		<div class="text-body3 text-ink-2 termipass-desc">
-			{{ t('welcome_declaration_desc') }}
+			{{
+				t(
+					'TermiPass employ VPN services to ensure the privacy and security of our users. The VPN service is responsible for connecting your device terminal to the network where the Terminus server is located so that you can access Terminus server resources. The service will not access, hijack, tamper with your content information.'
+				)
+			}}
 		</div>
 	</div>
 </template>

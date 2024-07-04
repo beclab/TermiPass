@@ -18,7 +18,7 @@
 
 			<q-card-section>
 				<div class="text-center text-body2">
-					{{ t('terminus_unlock_desc') }}
+					{{ t('Please enter the password to unlock TermiPass.') }}
 				</div>
 				<div class="q-pt-sm q-mb-xs text-left text-grey-7 text-caption">
 					{{ t('password') }}

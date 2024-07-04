@@ -3,8 +3,12 @@
 		<terminus-page-title
 			:center="true"
 			class="page-title"
-			:label="t('import_terminus_name')"
-			:desc="t('import_terminus_mnemonic_desc')"
+			:label="t('Import an account')"
+			:desc="
+				t(
+					'Please enter the 12-word mnemonic phrase to import your Terminus Name.'
+				)
+			"
 		/>
 		<terminus-mnemonics-component
 			ref="mnemonicRef"

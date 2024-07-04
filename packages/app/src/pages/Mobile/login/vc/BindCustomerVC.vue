@@ -9,7 +9,9 @@
 				:src="getRequireImage('login/create_terminus_name.svg')"
 			/>
 			<span class="bind-terminus-vc-page__desc login-sub-title">{{
-				t('bind_terminus_vc_desc')
+				t(
+					'To address fairness in distribution and potential security issues, we need to verify your social media accounts. Your Terminus Name will be aligned with the social accounts you submit.'
+				)
 			}}</span>
 			<div class="bind-terminus-vc-page__title text-color-title text-h6">
 				{{ t('verify_using_gmail') }}
