@@ -6,19 +6,28 @@ import { busEmit, NetworkErrorMode } from '../utils/bus';
 import { axiosInstanceProxy } from '../platform/httpProxy';
 import { InOfflineMode } from '../utils/checkTerminusState';
 
-export async function fetchURL(url, opts, auth = true, node = '') {
+export async function fetchURL(
+	url: string,
+	opts?: any,
+	auth = true,
+	node = ''
+) {
 	const store = useDataStore();
-	let baseURL = store.baseURL();
+	const baseURL: string = store.baseURL();
 	opts = opts || {};
 	opts.headers = opts.headers || {};
 
-	let { headers, ...rest } = opts;
+	const { headers: originalHeaders, ...rest } = opts;
+
+	let headers = {
+		...originalHeaders
+	};
 
 	try {
 		if (node) {
 			headers = {
 				'X-Terminus-Node': node,
-				...headers
+				...originalHeaders
 			};
 		}
 	} catch (e) {
@@ -37,55 +46,20 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 		...headers
 	};
 
-	// const cancelTokenArr = ['api/resources/Home', 'seahub/api/v2.1/repos'];
-	// let pending = [];
-	// const cancelToken = axios.CancelToken;
-	// const removePending = (config) => {
-	// 	if (pending.length <= 0) return;
-	// 	for (const p in pending) {
-	// 		if (pending[p].u === config.url.split('?')[0] + '&' + config.method) {
-	// 			pending[p].f();
-	// 			pending.splice(Number(p), 1);
-	// 		}
-	// 	}
-	// };
-
 	instance.interceptors.request.use(
 		(config) => {
-			// removePending(config);
-			// config.cancelToken = new cancelToken((c) => {
-			// 	const pendingFind = cancelTokenArr.find((item) => {
-			// 		return config.url.indexOf(item) > -1;
-			// 	});
-			// 	if (pendingFind) {
-			// 		pending.push({
-			// 			u: config.url.split('?')[0] + '&' + config.method,
-			// 			f: c
-			// 		});
-			// 	}
-			// });
 			return config;
 		},
 		(error) => {
-			// pending = [];
 			return Promise.reject(error);
 		}
 	);
 
 	instance.interceptors.response.use(
 		(response) => {
-			// for (let p in pending) {
-			// 	if (
-			// 		pending[p].u ===
-			// 		response.config.url.split('?')[0] + '&' + response.config.method
-			// 	) {
-			// 		pending.splice(p, 1);
-			// 	}
-			// }
 			return response;
 		},
 		async (error) => {
-			// pending = [];
 			if (error.message == InOfflineMode) {
 				throw error;
 			}
@@ -96,7 +70,7 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 		}
 	);
 
-	let res = null;
+	let res: any;
 	try {
 		res = await instance({
 			url: url,
@@ -124,7 +98,7 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 		return window.history.go(-1);
 	}
 	if (res.status < 200 || res.status > 299) {
-		const error = new Error(await res.text());
+		const error: any = new Error(await res.text());
 		error.status = res.status;
 		if (auth && res.status == 401) {
 			logout();
@@ -134,7 +108,10 @@ export async function fetchURL(url, opts, auth = true, node = '') {
 	return res;
 }
 
-export async function fetchJSON(url, opts) {
+export async function fetchJSON(
+	url: string,
+	opts?: { method?: string; body?: string } | undefined
+) {
 	const res = await fetchURL(url, opts);
 
 	if (res.status === 200) {
@@ -153,7 +130,7 @@ export function removePrefix(url) {
 
 export function createURL(endpoint, params = {}, auth = true) {
 	const store = useDataStore();
-	const baseURL = store.baseURL();
+	const baseURL: string = store.baseURL();
 
 	let prefix = baseURL;
 	if (!prefix.endsWith('/')) {

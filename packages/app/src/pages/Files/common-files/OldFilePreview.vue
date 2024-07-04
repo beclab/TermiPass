@@ -172,7 +172,7 @@ import {
 import { useRoute, useRouter } from 'vue-router';
 import url from '../../../utils/url';
 import throttle from 'lodash.throttle';
-import { files as api } from '../../../api';
+import { common as api } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import { resizePreview } from '../../../utils/constants';
 import { checkSeahub } from '../../../utils/file';
@@ -313,7 +313,7 @@ export default defineComponent({
 			if (!listing.value) {
 				try {
 					const path = url.removeLastDir(route.path);
-					const res = await api.fetch(path);
+					const res = await store.fetchList(path);
 					listing.value = res.items;
 				} catch (e) {
 					//this.$showError(e);

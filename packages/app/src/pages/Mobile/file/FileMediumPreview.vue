@@ -58,7 +58,7 @@
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { files as api } from '../../../api';
+import { common as api } from '../../../api';
 import { format, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { ScreenOrientation } from '@capacitor/screen-orientation';

@@ -1,5 +1,4 @@
 <template>
-	<!--   v-ripple -->
 	<q-item
 		clickable
 		v-close-popup
@@ -14,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { handleFileOperate, handleRepoOperate } from './OperateAction';
+import { useOperateinStore } from './../../../stores/operation';
 import { PropType } from 'vue';
 import { useRoute } from 'vue-router';
 import { OPERATE_ACTION } from '../../../utils/contact';
@@ -30,32 +29,36 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const operateinStore = useOperateinStore();
 
-const emit = defineEmits(['onItemClick']);
+const emit = defineEmits(['onItemClick', 'hideMenu']);
 
 const handle = (e: any, action: OPERATE_ACTION) => {
-	if (props.repo) {
-		handleRepoOperate(e, action);
-	} else {
-		handleFileOperate(
-			e,
-			route,
-			action,
-			async (action: OPERATE_ACTION, data: any) => {
+	// if (props.repo) {
+	// 	handleRepoOperate(e, action);
+	// } else {
+	emit('hideMenu');
+	operateinStore.handleFileOperate(
+		e,
+		route,
+		action,
+		async (action: OPERATE_ACTION, data: any) => {
+			if (!props.repo) {
 				emit('onItemClick', action, data);
 			}
-		);
-	}
+		}
+	);
+	// }
 };
 </script>
 
 <style scoped lang="scss">
 .file-operation-item {
 	// width: 135px;
-	height: 48px;
-	min-height: 36px;
+	height: 36px;
 	margin: 0;
 	padding: 0;
+	border-radius: 8px;
 
 	.file-operation-div {
 		width: 100%;

@@ -9,9 +9,9 @@ export default async function search(base, query) {
 		base += '/';
 	}
 
-	let res = await fetchURL(`/api/search${base}?query=${query}`, {});
+	const res = await fetchURL(`/api/search${base}?query=${query}`, {});
 
-	let data = await res.json();
+	let data: any = await res.json();
 
 	data = data.map((item) => {
 		item.url = `/files${base}` + url.encodePath(item.path);
