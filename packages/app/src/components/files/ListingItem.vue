@@ -316,47 +316,6 @@ export default defineComponent({
 			}
 		};
 
-		const submit = async () => {
-			let oldLink = '';
-			let newLink = '';
-
-			let isDir = false;
-
-			if (!store.isListing) {
-				oldLink = store.req.url;
-				isDir = store.req.isDir;
-			} else {
-				oldLink = store.req.items[store.selected[0]].url;
-				isDir = store.req.items[store.selected[0]].isDir;
-			}
-
-			newLink =
-				url.removeLastDir(oldLink) + '/' + encodeURIComponent(fileName.value);
-
-			if (checkSeahub(newLink)) {
-				const pathLen =
-					oldLink.indexOf(store.currentItem) + store.currentItem.length;
-				const p = oldLink.slice(pathLen);
-				const parmas = {
-					operation: 'rename',
-					newname: fileName.value
-				};
-
-				const url = 'api/v2.1/repos';
-				await seahub.fileOperate(p, url, parmas, isDir ? 'dir' : 'file');
-				store.setReload(true);
-				return false;
-			}
-
-			try {
-				await api.move([{ from: oldLink, to: newLink }]);
-				store.setReload(true);
-			} catch (e) {
-				store.showError();
-			}
-			store.closeHovers();
-		};
-
 		return {
 			humanTime,
 			humanSize,
@@ -364,7 +323,6 @@ export default defineComponent({
 			dragOver,
 			drop,
 			itemClick,
-			submit,
 			touches,
 			isSelected,
 			isDraggable,
