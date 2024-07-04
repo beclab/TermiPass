@@ -3,6 +3,14 @@ import { app } from '../globals';
 import { shareToUser } from '../api';
 import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
+// import { dataAPI } from './../api';
+import { dataAPIs, SyncDataAPI } from './../api';
+
+import {
+	SyncRepoMineType,
+	SyncRepoSharedType,
+	OriginType
+} from '../api/common/encoding';
 import { IFilesSyncStatus } from 'src/platform/electron/interface';
 
 export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
@@ -121,16 +129,7 @@ export const useMenuStore = defineStore('filesMenu', {
 			userList: [],
 			sharedItems: [],
 			avtiveItem: null,
-			syncStatus: false,
-			disableMenuItem: [
-				MenuItem.HOME,
-				MenuItem.DOCUMENTS,
-				MenuItem.PICTURES,
-				MenuItem.MOVIES,
-				MenuItem.DOWNLOADS,
-				MenuItem.DATA,
-				MenuItem.CACHE
-			]
+			syncStatus: false
 		} as DataState;
 	},
 
@@ -337,6 +336,116 @@ export const useMenuStore = defineStore('filesMenu', {
 				? this.syncReposLastStatusMap[repo_id].status
 				: 0;
 			return status > SYNC_STATE.DISABLE && status != SYNC_STATE.UNKNOWN;
+		},
+
+		//	fetch sync menu data MYLIBRARIES/SHAREDWITH
+		async getSyncMenu() {
+			const menuStore = useMenuStore();
+			const menu = JSON.parse(JSON.stringify(menuStore.getMenu()));
+			const dataAPI = dataAPIs();
+			const [res2, res3]: any = await dataAPI.fetchSyncRepo(
+				MenuItem.SHAREDWITH
+			);
+			const shareChildren: SyncRepoSharedType[] = [];
+			for (let i = 0; i < res2.length; i++) {
+				const el = res2[i];
+				const hsaShareRepo = shareChildren.find(
+					(item) => item.id === el.repo_id
+				);
+				if (hsaShareRepo) {
+					continue;
+				}
+
+				shareChildren.push({
+					label: el.repo_name,
+					key: el.repo_id,
+					icon: 'sym_r_folder_shared',
+					id: el.repo_id,
+					defaultHide: true,
+					...el
+				});
+			}
+
+			const sharedme: SyncRepoSharedType[] = [];
+			for (let i = 0; i < res3.length; i++) {
+				const el = res3[i];
+				sharedme.push({
+					label: el.repo_name,
+					key: el.repo_id,
+					name: el.repo_name,
+					icon: 'sym_r_folder_supervised',
+					id: el.repo_id,
+					defaultHide: true,
+					...el
+				});
+			}
+
+			const res1: any = await dataAPI.fetchSyncRepo(MenuItem.MYLIBRARIES);
+			const mineChildren: SyncRepoMineType[] = [];
+			for (let i = 0; i < res1.length; i++) {
+				const el = res1[i];
+
+				const hasShareWith = shareChildren.find(
+					(item) => item.repo_id === el.repo_id
+				);
+				const hasShareMe = sharedme.find((item) => item.repo_id === el.repo_id);
+				const hasShare = hasShareWith || hasShareMe;
+
+				mineChildren.push({
+					label: el.repo_name,
+					key: el.repo_id,
+					icon: 'sym_r_folder',
+					id: el.repo_id,
+					name: el.repo_name,
+					shard_user_hide_flag: hasShare ? false : true,
+					share_type: hasShare ? hasShare.share_type : undefined,
+					user_email: hasShare ? hasShare.user_email : undefined,
+					defaultHide: true,
+					...el
+				});
+			}
+
+			const myLibraries = {
+				label: MenuItem.MYLIBRARIES,
+				key: 'MyLibraries',
+				icon: '',
+				expationFlag: true,
+				muted: true,
+				disableClickable: true
+			};
+			const shardWith = {
+				label: MenuItem.SHAREDWITH,
+				key: 'SharedLibraries',
+				icon: '',
+				expationFlag: false,
+				muted: true,
+				disableClickable: true
+			};
+
+			for (let index = 0; index < menu.length; index++) {
+				const el = menu[index];
+				if (el.label === MenuItem.SYNC) {
+					let shardArr: any = [];
+					if (shareChildren.length > 0 || sharedme.length > 0) {
+						shardArr = [shardWith, ...shareChildren, ...sharedme];
+					}
+					el.children = [myLibraries, ...mineChildren, ...shardArr];
+				}
+			}
+
+			menuStore.menu = menu;
+
+			const syncIds = mineChildren
+				.map((e) => e.id)
+				.concat(shareChildren.map((e) => e.id));
+
+			menuStore.addSyncUpdateRepos(syncIds);
+		},
+
+		async fetchShareInfo(repo_id: string) {
+			const dataAPI = dataAPIs(OriginType.SYNC);
+			const res: any = await (dataAPI as SyncDataAPI).fetchShareInfo(repo_id);
+			return res;
 		}
 	}
 });

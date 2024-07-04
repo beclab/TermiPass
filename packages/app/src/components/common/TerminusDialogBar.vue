@@ -6,7 +6,10 @@
 		{{ label }}
 	</div>
 
-	<q-bar class="bar q-mb-md bg-background-3" v-else>
+	<div
+		class="bar q-mb-md q-px-sm bg-background-3 row items-center justify-between"
+		v-else
+	>
 		<q-icon v-if="icon" color="ink-1" :name="icon" size="18px" />
 		<div
 			class="title text-subtitle3 col text-ink-1"
@@ -18,7 +21,7 @@
 		<q-btn dense flat icon="close" color="ink-3" @click="onCancel">
 			<q-tooltip>{{ t('buttons.close') }}</q-tooltip>
 		</q-btn>
-	</q-bar>
+	</div>
 </template>
 
 <script lang="ts" setup>

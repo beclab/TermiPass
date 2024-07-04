@@ -13,9 +13,7 @@
 				@click="handleEvent(item.action, $event)"
 			>
 				<q-icon :name="item.icon" size="20px" class="q-mr-sm" />
-				<q-item-section class="menuName">
-					{{ item.name }}
-				</q-item-section>
+				<q-item-section class="menuName"> {{ item.name }}</q-item-section>
 			</q-item>
 		</q-list>
 	</q-menu>
@@ -23,14 +21,15 @@
 <script lang="ts" setup>
 import { useQuasar } from 'quasar';
 import { useRoute } from 'vue-router';
-import { seahub, sync as syncFile } from '../../../api';
+import { seahub } from '../../../api';
 import { popupMenu, OPERATE_ACTION } from '../../../utils/contact';
 import { useDataStore } from '../../../stores/data';
 import { useMenuStore } from '../../../stores/files-menu';
-import { handleFileOperate } from '../files/OperateAction';
+import { useOperateinStore } from './../../../stores/operation';
 import ReName from './ReName.vue';
 import DeleteRepo from './DeleteRepo.vue';
 import SyncInfo from './SyncInfo.vue';
+import { BtDialog } from '@bytetrade/ui';
 
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -69,6 +68,7 @@ const showPopupProxy = (value: boolean) => {
 };
 
 const menuStore = useMenuStore();
+const operateinStore = useOperateinStore();
 
 const menuList = ref<any[]>([]);
 const isElectron = ref($q.platform.is.electron);
@@ -172,6 +172,7 @@ const checkShardUser = () => {
 };
 
 const handleEvent = async (action: OPERATE_ACTION, e: any) => {
+	console.log('handleEventhandleEvent', action);
 	const path = '/';
 	switch (action) {
 		case OPERATE_ACTION.SHARE_WITH:
@@ -232,7 +233,7 @@ const showRename = (e: any) => {
 			}
 		});
 	} else {
-		handleFileOperate(
+		operateinStore.handleFileOperate(
 			e,
 			route,
 			OPERATE_ACTION.RENAME,
@@ -248,7 +249,7 @@ const showRename = (e: any) => {
 const deleteRepo = async (e: any) => {
 	if (props.from === 'sync') {
 		try {
-			const res = await syncFile.getShareInfo(props.item?.repo_id);
+			const res = await menuStore.fetchShareInfo(props.item?.repo_id);
 			const shared_user_emails_length = res.shared_user_emails.length || 0;
 
 			$q.dialog({
@@ -260,13 +261,13 @@ const deleteRepo = async (e: any) => {
 			}).onOk(async () => {
 				const path = `seahub/api/v2.1/repos/${props.item?.repo_id}/`;
 				await seahub.deleteRepo(path);
-				syncFile.getSyncMenu();
+				menuStore.getSyncMenu();
 			});
 		} catch (error) {
 			return false;
 		}
 	} else {
-		handleFileOperate(
+		operateinStore.handleFileOperate(
 			e,
 			route,
 			OPERATE_ACTION.DELETE,
@@ -293,7 +294,7 @@ const syncRepoInfo = (e) => {
 			return false;
 		}
 	} else {
-		handleFileOperate(
+		operateinStore.handleFileOperate(
 			e,
 			route,
 			OPERATE_ACTION.ATTRIBUTES,
@@ -307,14 +308,25 @@ const syncRepoInfo = (e) => {
 
 const deleteShareRepo = async () => {
 	try {
-		$q.dialog({
+		BtDialog.show({
 			title: t('files_popup_menu.exit_sharing'),
-			message: t('exit_sharing_message')
-		}).onOk(async () => {
-			const path = `seahub/api/v2.1/shared-repos/${props.item?.repo_id}/?share_type=${props.item?.share_type}&user=${props.item?.user_email}`;
-			await seahub.deleteRepo(path);
-			syncFile.getSyncMenu();
-		});
+			message: t('exit_sharing_message'),
+			okStyle: {
+				background: 'yellow-default',
+				color: '#1F1F1F'
+			},
+			cancel: true
+		})
+			.then(async (res: any) => {
+				if (res) {
+					const path = `seahub/api/v2.1/shared-repos/${props.item?.repo_id}/?share_type=${props.item?.share_type}&user=${props.item?.user_email}`;
+					await seahub.deleteRepo(path);
+					menuStore.getSyncMenu();
+				}
+			})
+			.catch((err: Error) => {
+				console.log('click cancel', err);
+			});
 	} catch (error) {
 		return false;
 	}

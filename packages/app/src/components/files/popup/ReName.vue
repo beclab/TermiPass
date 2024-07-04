@@ -35,7 +35,8 @@
 <script lang="ts" setup>
 import { useQuasar, useDialogPluginComponent } from 'quasar';
 import { ref, onMounted } from 'vue';
-import { seahub, sync } from '../../../api';
+import { seahub } from '../../../api';
+import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -50,6 +51,7 @@ const props = defineProps({
 const { onDialogHide, dialogRef, onDialogCancel } = useDialogPluginComponent();
 
 const $q = useQuasar();
+const menuStore = useMenuStore();
 
 const name = ref('');
 const showDialog = ref(true);
@@ -75,7 +77,7 @@ const submit = async () => {
 		repo_name: name.value
 	};
 	await seahub.reRepoName(url, data);
-	sync.getSyncMenu();
+	menuStore.getSyncMenu();
 	onDialogHide();
 	submitLoading.value = false;
 };

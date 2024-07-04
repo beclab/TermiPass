@@ -12,7 +12,9 @@ export enum MenuItem {
 	MYLIBRARIES = 'My Libraries',
 	SHAREDWITH = 'Shared Libraries',
 	DATA = 'Data',
-	CACHE = 'Cache'
+	CACHE = 'Cache',
+	CODE = 'Code',
+	MUSIC = 'Music'
 }
 
 export enum VaultMenuItem {
@@ -165,7 +167,6 @@ export interface DataState {
 	avtiveItem: any;
 	syncStatus: boolean;
 	canForward: boolean;
-	disableMenuItem: string[];
 	activeMenu: string;
 }
 

@@ -10,6 +10,7 @@
 	</BtLoading>
 	<template v-else>
 		<div class="preview">
+			{{ raw }}
 			<ExtendedImage
 				v-if="store.req.type == 'image'"
 				:src="raw"
@@ -62,7 +63,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { files as api } from '../../../api';
+import { common as api } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.vue';
