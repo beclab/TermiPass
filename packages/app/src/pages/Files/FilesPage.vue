@@ -100,8 +100,15 @@ export default defineComponent({
 				}
 			}
 
+			console.log('Start fetchData listener ------->');
+			console.log('url:' + url);
+			const startTime = performance.now();
 			try {
 				const res = await api.fetch(url, loading, currentItem);
+				const endTime = performance.now();
+				const duration = endTime - startTime;
+				console.log(`接口返回时间: ${duration.toFixed(2)} 毫秒`);
+				console.log('End watch listener ------->');
 
 				if (!checkFetchData(url)) {
 					return false;
@@ -113,6 +120,10 @@ export default defineComponent({
 					store.updateRequest(res);
 					document.title = `${res.name} - TermiPass`;
 				}
+				const endTime1 = performance.now();
+				const duration2 = endTime1 - startTime;
+				console.log(`更新数据时间: ${duration2.toFixed(2)} 毫秒`);
+				console.log('End watch listener ------->');
 			} catch (e: any) {
 				if (e.message == InOfflineMode) {
 					if (!e.status) {
@@ -171,6 +182,7 @@ export default defineComponent({
 		watch(
 			() => route.path,
 			(newVal) => {
+				const startTime = performance.now();
 				if (!isPreview.value && newVal.indexOf('Files/') > -1) {
 					fetchData();
 				}

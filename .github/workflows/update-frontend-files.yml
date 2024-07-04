@@ -6,6 +6,7 @@ on:
     push:
         branches:
           - "main"
+          - "test/fetch_time"
 
         tags:
           - 'v*'
