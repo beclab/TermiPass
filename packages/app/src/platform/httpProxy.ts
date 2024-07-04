@@ -154,12 +154,6 @@ const requestCommonCallBack = async (
 		? new URL(url, config.baseURL).toString()
 		: url;
 
-	console.log('fullUrl ===>');
-	console.log(config.baseURL);
-	console.log(url);
-	console.log(fullUrl);
-	console.log('<====fullUrl');
-
 	const response: HttpResponse =
 		await getAppPlatform().hookCapacitorHttp.request({
 			method: prop.toUpperCase(),
