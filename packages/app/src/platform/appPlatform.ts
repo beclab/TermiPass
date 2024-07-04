@@ -9,6 +9,7 @@ import { PlatformExtension } from '@didvault/sdk/src/core/PlatformExtension';
 import { HookCapacitorHttpPlugin } from './platformDefined';
 import { AppState } from '@didvault/sdk/src/core/app';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { QVueGlobals } from 'quasar';
 
 /**
  * app App life cycle
@@ -72,6 +73,8 @@ export interface AppPlatform extends Platform, PlatformExtension {
 	getTailscaleId(): Promise<string>;
 
 	reconfigAppStateDefaultValue(appState: AppState): void;
+
+	getQuasar(): QVueGlobals | undefined;
 }
 
 export const setAppPlatform = (p: AppPlatform) => {

@@ -60,7 +60,7 @@ const desktop: RouteRecordRaw[] = [
 			},
 			{
 				path: 'accountCenter',
-				component: () => import('pages/Desktop/SettingsPage/Account.vue')
+				component: () => import('src/pages/Desktop/SettingsPage/Account.vue')
 			},
 			{
 				path: 'Files/:path*',

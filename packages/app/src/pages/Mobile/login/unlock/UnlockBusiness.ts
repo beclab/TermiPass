@@ -1,7 +1,7 @@
-import { UserItem } from '@didvault/sdk/src/core';
+import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import { app, setSenderUrl } from '../../../../globals';
 import { useUserStore } from '../../../../stores/user';
-import { BusinessAsyncCallback } from '../Callback';
+import { BusinessAsyncCallback } from '../../../../utils/Callback';
 import { sendUnlock } from '../../../../utils/bexFront';
 import { PASSWORD_RULE } from '../../../../utils/constants';
 import { i18n } from '../../../../boot/i18n';
@@ -53,10 +53,13 @@ export async function unlockByPwd(
 				});
 			}
 
-			await app.load(userStore.current_id!);
-			await app.unlock(user.mnemonic);
-		}
+			const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+				userStore.current_id!
+			)!;
 
+			await app.load(userStore.current_id!);
+			await app.unlock(mnemonic.mnemonic);
+		}
 		await callback.onSuccess(userStore.current_id);
 	} catch (error) {
 		callback.onFailure(i18n.global.t('password_error'));

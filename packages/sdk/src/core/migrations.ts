@@ -68,16 +68,13 @@ export const MIGRATIONS: Migration[] = [
 			org: {
 				up: ({ members, groups, ...rest }) => ({
 					members,
-					groups: groups.map(
-						({ members: groupMembers, ...rest }: any) => ({
-							members: groupMembers.map(({ id }: any) => ({
-								accountId: id,
-								email: members.find((m: any) => m.id === id)
-									?.email
-							})),
-							...rest
-						})
-					),
+					groups: groups.map(({ members: groupMembers, ...rest }: any) => ({
+						members: groupMembers.map(({ id }: any) => ({
+							accountId: id,
+							email: members.find((m: any) => m.id === id)?.email
+						})),
+						...rest
+					})),
 					...rest
 				}),
 				down: ({ groups, ...rest }) => ({
@@ -128,9 +125,7 @@ export function upgrade(
 	const closestVersion =
 		VERSIONS.find((v) => norm(v) > norm(raw.version)) || LATEST_VERSION;
 	const migrateToVersion =
-		norm(closestVersion) < norm(targetVersion)
-			? closestVersion
-			: targetVersion;
+		norm(closestVersion) < norm(targetVersion) ? closestVersion : targetVersion;
 	const migration = MIGRATIONS.find(
 		(m) => m.to === migrateToVersion && m.to !== raw.version
 	);
@@ -163,9 +158,7 @@ export function downgrade(
 		[...VERSIONS].reverse().find((v) => norm(v) < norm(raw.version)) ||
 		EARLIEST_VERSION;
 	const migrateToVersion =
-		norm(closestVersion) > norm(targetVersion)
-			? closestVersion
-			: targetVersion;
+		norm(closestVersion) > norm(targetVersion) ? closestVersion : targetVersion;
 	const migration = MIGRATIONS.find(
 		(m) => m.from === migrateToVersion && m.from !== raw.version
 	);

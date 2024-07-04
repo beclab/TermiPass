@@ -1,6 +1,8 @@
 // This is just an example,
 // so you can safely delete all default props below
 
+import termipass_en from '../TermiPass/en-US/index';
+
 export default {
 	//welcome
 	welcome_declaration_tips:
@@ -40,7 +42,6 @@ export default {
 		'2. You need to retrieve the Terminus Name through the mnemonic phrase, and then log in to Terminus to restore data and restore all services to normal availability.',
 	forget_password: 'Forget Password',
 	complete: 'Complete',
-	unlock: 'Unlock',
 	confirm_reset: 'Confirm Reset',
 	create_a_password: 'Set up a password',
 	password_settings: 'Password settings',
@@ -1107,7 +1108,6 @@ If you want to create an organization, please refer to the steps listed in the T
 	not_backed_up: 'Not backed up yet',
 	login_cloud: 'Login Cloud',
 	use_biometrics: 'Biometric Unlock',
-	auto_lock_when_you_leave: 'Auto-lock',
 	enable_badges: 'Enable badges',
 	i_have_completed_my_backup: 'Completed',
 	mnemonics_no_match: 'Mnemonic Phrase no match',
@@ -1328,5 +1328,20 @@ If you want to create an organization, please refer to the steps listed in the T
 	rename_file: 'Rename File',
 	pdf_name: 'PDF name',
 	input_pdf_name: 'Input PDF name',
-	please_use_a_gmail_email_address: 'Please use a "{gmail}" email address.'
+	please_use_a_gmail_email_address: 'Please use a "{gmail}" email address.',
+	integration: {
+		title: 'Integration',
+		add_account: 'Add Account',
+		account_settings: 'Account Settings',
+		mount_network_drive: 'Mount Network Drive',
+		access_key_id: 'AccessKey ID',
+		access_key_secret: 'AccessKey Secret',
+		endpoint: 'Endpoint',
+		bucket: 'Bucket',
+		optional: 'Optional',
+		aws_create_success_reminder:
+			'Congratulations, you have successfully mounted the object storage service!',
+		object_storage: 'Object Storage'
+	},
+	...termipass_en
 };

@@ -79,7 +79,7 @@
 					<terminus-item
 						v-if="isBex || userStore.currentUserBackup"
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -120,7 +120,7 @@
 
 					<terminus-item
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -139,7 +139,7 @@
 					<terminus-item
 						v-if="showCheckHistory"
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -155,7 +155,7 @@
 					<terminus-item
 						v-if="!userStore.current_user?.cloud_id"
 						:show-board="true"
-						img-bg-classes="bg-color-yellow"
+						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_badge"
 						:whole-picture-size="48"
@@ -194,8 +194,6 @@ import { useScaleStore } from '../../../stores/scale';
 import { watch } from 'vue';
 import AccoutMoreDialog from './AccoutMoreDialog.vue';
 import { useI18n } from 'vue-i18n';
-// import { walletService } from '../../../wallet';
-// import { defaultDriverPath, mnemonicToKey } from '../../../layouts/dialog/sign';
 
 const $router = useRouter();
 const userStore = useUserStore();
@@ -206,20 +204,11 @@ const isBex = ref(process.env.IS_BEX);
 
 const { t } = useI18n();
 
-const startBackUp = () => {
+const startBackUp = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	$router.push({ path: '/backup_mnemonics' });
-	// const message =
-	// 	'{"types":{"Complaint":[{"name":"srcChainId","type":"uint64"},{"name":"srcAddress","type":"uint256"},{"name":"srcToken","type":"string"},{"name":"dstChainId","type":"uint64"},{"name":"dstAddress","type":"uint256"},{"name":"dstToken","type":"string"},{"name":"srcAmount","type":"string"},{"name":"dstAmount","type":"string"},{"name":"dstNativeAmount","type":"string"},{"name":"requestor","type":"string"},{"name":"lpId","type":"string"},{"name":"stepTimeLock","type":"uint64"},{"name":"agreementReachedTime","type":"uint64"},{"name":"userSign","type":"string"},{"name":"lpSign","type":"string"}]},"domain":{"name":"Otmoic Reputation","version":"1","chainId":11155420,"verifyingContract":"0xe69257d83b2c50b2d7496348d053d76c744753e4"},"message":{"srcChainId":60,"srcAddress":"0x3c73D73a500373C7689b480a0f7b4b3F35600d52","srcToken":"0x30DfEC4d5Cd6f819492A04c34E20f5F15171e934","dstChainId":60,"dstAddress":"0x597bab881d340e359a4e6264fe9ac5a656d297d5","dstToken":"0x1016A0886b4AeD69043367d501a99cfBAaB052B5","srcAmount":"100000000000000000","dstAmount":"2057574550000000000","dstNativeAmount":"0","requestor":"0x597bab881d340e359a4e6264fe9ac5a656d297d5","stepTimeLock":240,"agreementReachedTime":1713244298,"userSign":"0xfd1bcbdf36e6d86305f69946e9ff9e2ee6c4dc78b06d1c0dbc6a115568d976905f3712e7a7f2bcd4aadcf51ec49e6270a775de2c03a391cd82a95ba988c651fa1b","lpSign":"0x575a6759e6ee9f32c66adcf454c3d19a643c3f2672d2cd100bbd100c0645d0820ff67315d6d4411c60b16cf73e1c6b59bfa3d3315893a7fdc8f8cd3e1d95e2c51c"}}';
-	// const { EthereumMessageSigner } = walletService.walletCore;
-	// const ownerKey = mnemonicToKey(
-	// 	userStore.current_user!.mnemonic,
-	// 	defaultDriverPath(0)
-	// );
-	// const outputData = EthereumMessageSigner.signTypedMessage(
-	// 	ownerKey,
-	// 	JSON.stringify(message)
-	// );
-	// // return `0x${outputData}`;
 };
 
 const enterVCManagement = () => {
@@ -263,33 +252,6 @@ const enterCheckHistory = () => {
 
 const onLoginCloud = () => {
 	$router.push({ path: '/space_management' });
-};
-
-const showCheckHistory = ref(false);
-
-// let count = 0;
-
-// let startTime: Date | undefined = undefined;
-
-const updateShowCheckHistory = () => {
-	// if (count === 0) {
-	// 	startTime = new Date();
-	// } else if (count >= 1) {
-	// 	let nextTime = new Date();
-	// 	if (
-	// 		nextTime.getMilliseconds() - (startTime?.getMilliseconds() || 0) >=
-	// 		5000
-	// 	) {
-	// 		startTime = nextTime;
-	// 		count = 0;
-	// 	}
-	// 	if (count === 3) {
-	// 		showCheckHistory.value = !showCheckHistory.value;
-	// 		startTime = nextTime;
-	// 		count = 0;
-	// 	}
-	// }
-	// count++;
 };
 </script>
 

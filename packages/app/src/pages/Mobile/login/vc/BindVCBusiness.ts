@@ -1,4 +1,4 @@
-import { UserItem } from '@didvault/sdk/src/core';
+import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import { getDID, getPrivateJWK } from '../../../../did/did-key';
 import { facebookLogin } from '../../vc/provider/facebook';
 import { twitterLogin } from '../../vc/provider/twitter';
@@ -7,7 +7,10 @@ import { googleTestLogin } from '../../vc/provider/google_test';
 import { createVCItem, submitPresentation } from '../../vc/vcutils';
 import { useUserStore } from '../../../../stores/user';
 import { TERMINUS_VC_TYPE } from '../../../../utils/constants';
-import { BusinessAsyncCallback, BusinessCallback } from '../Callback';
+import {
+	BusinessAsyncCallback,
+	BusinessCallback
+} from '../../../../utils/Callback';
 import { i18n } from '../../../../boot/i18n';
 
 import { getEthereumAddress } from '../../../../did/did-key';
@@ -29,8 +32,16 @@ export async function requestBindVC(
 			throw new Error(i18n.global.t('errors.get_user_failure'));
 		}
 
-		const did = await getDID(user.mnemonic);
-		const privateJWK = await getPrivateJWK(user.mnemonic);
+		const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+			userStore.current_id!
+		)!;
+
+		if (!mnemonic) {
+			throw new Error(i18n.global.t('errors.get_user_failure'));
+		}
+
+		const did = await getDID(mnemonic.mnemonic);
+		const privateJWK = await getPrivateJWK(mnemonic.mnemonic);
 
 		if (!did) {
 			throw new Error(i18n.global.t('errors.get_did_failure'));
@@ -104,10 +115,16 @@ export const readySubmitPresentation = async (
 		if (user.name) {
 			throw new Error(i18n.global.t('errors.already_has_terminus_name'));
 		}
+		const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+			userStore.current_id!
+		)!;
+		if (!mnemonic) {
+			throw new Error(i18n.global.t('errors.get_user_failure'));
+		}
 
-		const did = await getDID(user.mnemonic);
-		const privateJWK = await getPrivateJWK(user.mnemonic);
-		const address = await getEthereumAddress(user.mnemonic);
+		const did = await getDID(mnemonic.mnemonic);
+		const privateJWK = await getPrivateJWK(mnemonic.mnemonic);
+		const address = await getEthereumAddress(mnemonic.mnemonic);
 
 		if (!did) {
 			throw new Error(i18n.global.t('errors.get_did_failure'));

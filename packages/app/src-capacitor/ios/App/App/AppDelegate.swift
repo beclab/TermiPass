@@ -7,6 +7,7 @@ import SwiftyRSA
 import VaultBaseFramework
 import FirebaseCore
 import AppTrackingTransparency
+import SwiftyDropbox
 
 
 @UIApplicationMain
@@ -22,14 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
-
+        
         return true
     }
 
     private func enterBackground() {
         self.background = true
     }
-
+    
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -78,6 +79,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             sourceApplication: options[UIApplication.OpenURLOptionsKey.sourceApplication] as? String,
             annotation: options[UIApplication.OpenURLOptionsKey.annotation]
         )) {
+            return true;
+        }
+        
+        let oauthCompletion: DropboxOAuthCompletion = {
+              if let authResult = $0 {
+                  switch authResult {
+                  case .success:
+                      print("Success! User is logged into DropboxClientsManager.")
+                  case .cancel:
+                      print("Authorization flow was manually canceled by user!")
+                  case .error(_, let description):
+                      print("Error: \(String(describing: description))")
+                  }
+              }
+            }
+        let canHandleUrl = DropboxClientsManager.handleRedirectURL(url, includeBackgroundClient: false, completion: DropboxOauthManager.standManager.authResultCallBack ?? oauthCompletion)
+        if (canHandleUrl) {
             return true;
         }
 

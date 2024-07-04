@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, watchEffect } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
-import { configPlatform } from './platform/appFirstLoadCommon';
+import { configPlatform } from './platform/appConfigCommon';
 import { useQuasar } from 'quasar';
 import { getAppPlatform } from './platform/appPlatform';
 import { getNativeAppPlatform } from './platform/capacitor/capacitorPlatform';

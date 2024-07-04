@@ -95,9 +95,13 @@ async function readySubmitPresentation(chooseCard: VCCardInfo) {
 		if (user.name) {
 			throw new Error(t('errors.already_has_terminus_name'));
 		}
-		const did = await getDID(user.mnemonic);
-		const privateJWK = await getPrivateJWK(user.mnemonic);
-		const address = await getEthereumAddress(user.mnemonic);
+		const did = await getDID(userStore.current_mnemonic?.mnemonic);
+		const privateJWK = await getPrivateJWK(
+			userStore.current_mnemonic?.mnemonic
+		);
+		const address = await getEthereumAddress(
+			userStore.current_mnemonic?.mnemonic
+		);
 		if (!did) {
 			throw new Error(t('errors.get_did_failure'));
 		}

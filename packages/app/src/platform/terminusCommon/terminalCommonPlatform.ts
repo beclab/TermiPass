@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { SubAppPlatform } from '../subAppPlatform';
 import { useUserStore } from 'src/stores/user';
-import {
-	AuthType,
-	DeviceInfo,
-	ErrorCode,
-	getPlatform
-} from '@didvault/sdk/src/core';
+import { AuthType, DeviceInfo, ErrorCode } from '@didvault/sdk/src/core';
 
 import { app } from 'src/globals';
 import { RouteLocationNormalizedLoaded, Router } from 'vue-router';
@@ -48,6 +43,10 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 	dealMssagesListTimer: NodeJS.Timer | undefined;
 
 	isOnHomePage = false;
+
+	getQuasar() {
+		return this.quasar;
+	}
 
 	async appLoadPrepare(data: any): Promise<void> {
 		super.appLoadPrepare(data);
@@ -164,7 +163,18 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			}
 			return;
 		}
-		redirect({ path: '/unlock' });
+		if (!userStore.current_user) {
+			redirect({ path: '/setup/success' });
+			return;
+		}
+		if (userStore.current_user.name) {
+			// router.replace('/connectLoading');
+			redirect({ path: '/connectLoading' });
+		} else {
+			// router.replace('/bind_vc');
+			redirect({ path: '/bind_vc' });
+		}
+		// redirect({ path: '/unlock' });
 	}
 
 	stateUpdate() {
@@ -201,23 +211,6 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 
 		const menuStore = useMenuStore();
 		menuStore.updateMenuInfo();
-
-		if (app.state.locked) {
-			const userStore = useUserStore();
-
-			if (userStore.userUpdating) {
-				return;
-			}
-			const platform = getPlatform() as TerminusCommonPlatform;
-			if (!platform.isOnHomePage) {
-				return;
-			}
-			userStore.password = undefined;
-
-			if (platform.router) {
-				platform.router.push('/unlock');
-			}
-		}
 	}
 
 	async homeMounted(): Promise<void> {
@@ -385,7 +378,7 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			return;
 		}
 		const userStore = useUserStore();
-		if (!userStore.isUnlocked) {
+		if (!(await userStore.unlockFirst())) {
 			return;
 		}
 		const message = this.signMessagesList[0];

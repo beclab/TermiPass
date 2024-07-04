@@ -59,6 +59,9 @@ const userStore = useUserStore();
 const isBex = ref(process.env.IS_BEX);
 
 const createDid = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	$q.loading.show();
 	const { message } = await createUser();
 	$q.loading.hide();

@@ -278,6 +278,7 @@ const openItem = (item: any) => {
 <style lang="scss">
 .transer-page-root {
 	height: 100%;
+	background: $background-1;
 
 	.select-box {
 		width: 24px;

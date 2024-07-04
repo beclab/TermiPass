@@ -1,7 +1,6 @@
 <template>
 	<div
 		class="authenticator-card row items-center justify-between"
-		v-show="totpFiledRef"
 		@click="onCardClick"
 	>
 		<div>
@@ -39,6 +38,7 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import { base32ToBytes, Field, hotp, VaultType } from '@didvault/sdk/src/core';
 import { getVaultsByType } from '../../../utils/terminusBindUtils';
 import { useI18n } from 'vue-i18n';
+import { useUserStore } from '../../../stores/user';
 
 const { t } = useI18n();
 
@@ -53,30 +53,42 @@ const updateTimeoutRef = ref(-1);
 const totpFiledRef = ref<Field | undefined>();
 const isHideRef = ref(true);
 
-const itemList = getVaultsByType(VaultType.TerminusTotp);
-if (itemList.length > 0) {
-	totpFiledRef.value = itemList[0].fields.find((value) => {
-		return value.type === 'totp';
-	});
-}
+const userStore = useUserStore();
 
-const onCardClick = () => {
-	isHideRef.value = !isHideRef.value;
+const onCardClick = async () => {
+	await userStore.unlockFirst(
+		async () => {
+			if (!totpFiledRef.value) {
+				const itemList = getVaultsByType(VaultType.TerminusTotp);
+				if (itemList.length > 0) {
+					totpFiledRef.value = itemList[0].fields.find((value) => {
+						return value.type === 'totp';
+					});
+					await refreshTokenRef();
+				}
+			}
+			isHideRef.value = !isHideRef.value;
+		},
+		{
+			info: t('unlock.one_time_unlock_introduce')
+		}
+	);
 };
 
 const _update = async (updInt = 2000) => {
 	window.clearTimeout(updateTimeoutRef.value);
+	await refreshTokenRef();
+	ageRef.value = (((Date.now() / 1000) % interval) / interval) * 100;
 
-	if (!totpFiledRef.value || !totpFiledRef.value?.value) {
-		tokenRef.value = '';
-		ageRef.value = 0;
-		return;
+	if (updInt) {
+		updateTimeoutRef.value = window.setTimeout(() => _update(updInt), updInt);
 	}
+};
 
+const refreshTokenRef = async () => {
 	const time = Date.now();
-
 	const tempCounter = Math.floor(time / 1000 / interval);
-	if (tempCounter !== counter) {
+	if (totpFiledRef.value && tempCounter !== counter) {
 		try {
 			tokenRef.value = await hotp(
 				base32ToBytes(totpFiledRef.value!.value),
@@ -90,12 +102,6 @@ const _update = async (updInt = 2000) => {
 			return;
 		}
 		counter = tempCounter;
-	}
-
-	ageRef.value = (((Date.now() / 1000) % interval) / interval) * 100;
-
-	if (updInt) {
-		updateTimeoutRef.value = window.setTimeout(() => _update(updInt), updInt);
 	}
 };
 

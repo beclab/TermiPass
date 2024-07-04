@@ -112,7 +112,7 @@
 				</div>
 				<div class="row align-center justify-center">
 					<q-select
-						class="select-vault q-px-sm"
+						class="select-vault"
 						outlined
 						dense
 						behavior="menu"
@@ -173,7 +173,7 @@
 				<q-item
 					clickable
 					v-ripple
-					class="bg-color-yellow text-body1 but-creat"
+					class="bg-yellow text-body1 but-creat"
 					@click="onOKClick"
 				>
 					{{ t('create') }}
@@ -335,10 +335,10 @@ onMounted(async () => {
 		width: 400px;
 		border-radius: 12px;
 
-		.select-vault {
-			border: 1px solid $input-stroke;
-			border-radius: 8px;
-		}
+		// .select-vault {
+		// 	border: 1px solid $input-stroke;
+		// 	border-radius: 8px;
+		// }
 
 		.item-web {
 			border-radius: 8px;

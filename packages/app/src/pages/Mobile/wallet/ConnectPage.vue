@@ -65,8 +65,8 @@ const rejectAction = async () => {
 
 const approveAction = async () => {
 	const userStore = useUserStore();
-	let user = userStore.users!.items.get(userStore.current_id!);
-	const didKey: string = await getDID(user?.mnemonic);
+	let mnemonicItem = userStore.current_mnemonic;
+	const didKey: string = await getDID(mnemonicItem?.mnemonic);
 	const { resolveApproval } = useApproval($router);
 	await resolveApproval({ didKey: didKey });
 };

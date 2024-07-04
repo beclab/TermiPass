@@ -35,17 +35,25 @@ import AccountOperations from '../../../../components/common/AccountOperations.v
 import { useRouter } from 'vue-router';
 import TerminusTitleBar from '../../../../components/common/TerminusTitleBar.vue';
 import TerminusChangeUserHeader from '../../../../components/common/TerminusChangeUserHeader.vue';
+import { useUserStore } from '../../../../stores/user';
 
 const { t } = useI18n();
 const router = useRouter();
+const userStore = useUserStore();
 
-const joinAnOrg = () => {
+const joinAnOrg = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	router.push({
 		path: '/JoinOrganization'
 	});
 };
 
-const createAOrg = () => {
+const createAOrg = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	router.push({
 		path: '/CloudDomainManage'
 	});

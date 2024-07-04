@@ -128,7 +128,7 @@ public class UnlockController: UIViewController {
                 }
 //                errorStep = 1
                 
-                guard let userItem = user.items.get(id: standardUserStore.current_id) else {
+                guard let mnemonicItem = user.mnemonics.get(id: standardUserStore.current_id) else {
                     callback(false,"empty user")
                     return
                 }
@@ -147,7 +147,7 @@ public class UnlockController: UIViewController {
 //                        errorStep = 5
                         autoFillapp.load(appState: appState)
 //                        errorStep = 6
-                        let mnemonics = userItem.mnemonic
+                        let mnemonics = mnemonicItem.mnemonic
                         do {
                             try autoFillapp.unlock(password: mnemonics)
                         } catch {

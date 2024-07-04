@@ -106,11 +106,14 @@ export default defineComponent({
 		const userStore = useUserStore();
 
 		const currentUser = userStore.users?.items.get(userStore.current_id || '');
+		const currentMnemonic = userStore.users?.mnemonics.get(
+			userStore.current_id || ''
+		);
 
 		const displayLocalName = ref(currentUser?.local_name || '');
 		const displayDomainName = ref('@' + currentUser?.domain_name);
 		const originDisplayName = ref('');
-		const mnemonic = ref(currentUser?.mnemonic || '');
+		const mnemonic = ref(currentMnemonic?.mnemonic);
 
 		const updateInput = (data) => {
 			if (data === originDisplayName.value) {
