@@ -126,7 +126,6 @@ export const useOperateinStore = defineStore('operation', {
 			const dataStore = useDataStore();
 
 			console.log('handleFileOperate ===>');
-			console.log('CREATE_FOLDER', OPERATE_ACTION.CREATE_FOLDER);
 			console.log('CREATE_FOLDER => action', action);
 
 			switch (action) {
@@ -208,7 +207,6 @@ export const useOperateinStore = defineStore('operation', {
 			const dataAPI = dataAPIs();
 			const { url, headers } = await dataAPI.download(path);
 
-			alert(url);
 			const isElectron = Platform.is.electron;
 
 			if (!isElectron && url) {

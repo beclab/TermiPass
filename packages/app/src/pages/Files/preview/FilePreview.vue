@@ -10,7 +10,6 @@
 	</BtLoading>
 	<template v-else>
 		<div class="preview">
-			{{ raw }}
 			<ExtendedImage
 				v-if="store.req.type == 'image'"
 				:src="raw"
@@ -96,7 +95,7 @@ export default defineComponent({
 				return store.req.url;
 			}
 
-			return api.getDownloadURL(store.req, true);
+			return api.getDownloadURL(store.req);
 		});
 		const autoPlay = shallowRef(true);
 		return {

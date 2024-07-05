@@ -111,7 +111,7 @@ import HeaderBar from '../../../components/files/header/HeaderBar.vue';
 import Action from '../../../components/files/header/Action.vue';
 
 import { useDataStore } from '../../../stores/data';
-import FilePreview from '../common-files/FilePreview.vue';
+import FilePreview from './FilePreview.vue';
 import FileEditor from '../common-files/FileEditor.vue';
 import FileUnavailable from '../common-files/FileUnavailable.vue';
 
@@ -120,7 +120,7 @@ import { useRouter } from 'vue-router';
 import { format, useQuasar } from 'quasar';
 import { computed } from 'vue';
 
-import { files as api, seahub } from '../../../api';
+import { common as api, seahub } from '../../../api';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
 import { checkSeahub } from '../../../utils/file';
@@ -312,7 +312,7 @@ watch(
 );
 
 const downloadUrl = computed(function () {
-	return api.getDownloadURL(store.req, false, true);
+	return api.getDownloadURL(store.req, true);
 });
 
 const download = async () => {

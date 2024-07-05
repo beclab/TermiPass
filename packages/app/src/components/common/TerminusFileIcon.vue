@@ -1,8 +1,6 @@
 <template>
 	<div class="row items-center justify-center">
-		<template
-			v-if="readOnly == undefined && type === 'image' && isThumbsEnabled"
-		>
+		<template v-if="type === 'image' && isThumbsEnabled">
 			<img
 				style="border-radius: 4px"
 				:src="thumbnailUrl"
@@ -25,10 +23,11 @@
 
 <script lang="ts" setup>
 import { getFileType } from '../../utils/file';
-import { computed } from 'vue';
+import { computed, PropType } from 'vue';
 import { enableThumbs } from '../../utils/constants';
 import { common as api } from '../../api';
 import { useSeahubStore } from '../../stores/seahub';
+import { DriveItemType, OriginType } from './../../api/common/encoding';
 
 const props = defineProps({
 	name: {
@@ -40,10 +39,6 @@ const props = defineProps({
 		type: String,
 		default: '',
 		required: true
-	},
-	readOnly: {
-		default: undefined,
-		required: false
 	},
 	modified: {
 		type: String,
@@ -58,6 +53,11 @@ const props = defineProps({
 	isDir: {
 		type: Boolean,
 		default: false,
+		required: false
+	},
+	origin: {
+		type: String as PropType<OriginType>,
+		default: OriginType.DRIVE,
 		required: false
 	}
 });
@@ -103,11 +103,19 @@ const isThumbsEnabled = computed(function () {
 });
 
 const thumbnailUrl = computed(function () {
-	const file = {
-		path: props.path,
-		modified: props.modified,
+	const file: DriveItemType = {
 		repo_id: seahubStore.repo_id,
-		repo_name: seahubStore.repo_name
+		repo_name: seahubStore.repo_name,
+		extension: '',
+		isDir: false,
+		isSymlink: false,
+		mode: 0,
+		modified: props.modified,
+		name: props.name,
+		path: props.path,
+		size: 0,
+		type: 'image',
+		origin: props.origin
 	};
 
 	return api.getPreviewURL(file, 'thumb');

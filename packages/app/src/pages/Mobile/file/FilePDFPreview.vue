@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { useDataStore } from '../../../stores/data';
-import { files as api } from '../../../api';
+import { common as api } from '../../../api';
 import Pdfh5 from 'pdfh5';
 import { onMounted, ref } from 'vue';
 import { axiosInstanceProxy } from '../../../platform/httpProxy';
@@ -23,7 +23,7 @@ const store = useDataStore();
 const loading = ref(false);
 
 const rawUrl = () => {
-	return api.getDownloadURL(store.req, true);
+	return api.getDownloadURL(store.req);
 };
 
 onMounted(async () => {

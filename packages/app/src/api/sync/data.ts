@@ -6,7 +6,7 @@ import {
 	CopyStoragesType,
 	DriveItemType
 } from '../common/encoding';
-import { formatSeahub } from '../../utils/seahub';
+import { formatSeahub } from '../common/filesFormat';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
@@ -61,10 +61,12 @@ class Data extends Origin {
 			{}
 		);
 
-		const data: DriveResType = formatSeahub(
+		const data: DriveResType = await formatSeahub(
 			url,
 			JSON.parse(JSON.stringify(res))
 		);
+
+		console.log('fetchsync -->', data);
 
 		return data;
 	}
@@ -110,6 +112,8 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
+		console.log('sync download', path);
+
 		const dataStore = useDataStore();
 		if (
 			dataStore.selectedCount === 1 &&

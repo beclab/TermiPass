@@ -17,7 +17,7 @@ import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
 import { files } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
-import { formatSeahub } from '../../utils/seahub';
+import { formatDrive } from '../common/filesFormat';
 import { checkAppData } from '../../utils/file';
 import { checkConflict } from '../../utils/upload';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
@@ -64,32 +64,20 @@ class Data extends Origin {
 		return res;
 	}
 
-	async fetchSync(url: string): Promise<DriveResType> {
-		const seahubStore = useSeahubStore();
-		const currentItem = seahubStore.repo_name;
-		const pathLen = url.indexOf(currentItem) + currentItem.length;
-		const path = url.slice(pathLen);
-		const res = await this.commonAxios.get(
-			`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
-			{}
-		);
-
-		const data: DriveResType = formatSeahub(
-			url,
-			JSON.parse(JSON.stringify(res))
-		);
-
-		return data;
-	}
-
 	async fetchDrive(url: string): Promise<DriveResType> {
-		let res: DriveResType;
-		res = await this.commonAxios.get(`/api/resources${url}`, {});
+		let res = await this.commonAxios.get(`/api/resources${url}`, {});
 
 		if (isAppData(url)) {
 			res = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
 		}
-		return res;
+
+		const data: DriveResType = await formatDrive(
+			JSON.parse(JSON.stringify(res))
+		);
+
+		console.log('fetchDrive res -->', data);
+
+		return data;
 	}
 
 	async fetchCache(url: string): Promise<DriveResType> {
@@ -136,7 +124,7 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		console.log(path);
+		console.log('drive download', path);
 
 		const dataStore = useDataStore();
 		console.log('pathpath', path);
@@ -449,11 +437,8 @@ class Data extends Origin {
 		return createURL('api/preview/' + thumb + file.path, params);
 	}
 
-	getDownloadURL(file: any, inline: boolean): string {
-		const params = {
-			...(inline && { inline: 'true' })
-		};
-		const url = createURL('api/raw' + file.path, params);
+	getDownloadURL(file: any): string {
+		const url = createURL('api/raw' + file.path);
 		return url;
 	}
 

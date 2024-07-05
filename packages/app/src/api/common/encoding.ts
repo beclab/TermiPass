@@ -39,6 +39,7 @@ export interface DriveResType {
 	items: DriveItemType[];
 	sorting: DriveSortingType;
 	url?: string;
+	origin: OriginType;
 }
 
 export interface DriveItemType {
@@ -60,6 +61,9 @@ export interface DriveItemType {
 	index?: number;
 	url?: string;
 	content?: string;
+	origin: OriginType;
+	repo_id?: string;
+	repo_name?: string;
 }
 
 export interface DriveSortingType {
@@ -152,10 +156,10 @@ export interface SyncRepoSharedType extends SyncRepoSharedItemType {
 // }
 
 export interface CopyStoragesType {
-	from: any;
+	from: string;
 	to: string;
-	name: any;
-	src_repo_id?: any;
+	name: string;
+	src_repo_id?: string;
 	key?: string;
 }
 

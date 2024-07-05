@@ -1,29 +1,29 @@
-import { checkSeahub } from '../../utils/file';
-import { dataAPIs } from '../index';
-import { OriginType } from './encoding';
+// import { checkSeahub } from '../../utils/file';
+import { dataAPIs, DriveDataAPI, SyncDataAPI } from '../index';
+import { DriveItemType, OriginType } from './encoding';
 
-export function getDownloadURL(
-	file: any,
-	inline: boolean,
-	download?: boolean
-): string {
-	let dataAPI: any;
-	if (checkSeahub(file.path)) {
-		dataAPI = dataAPIs(OriginType.SYNC);
-		return dataAPI.getDownloadURL(file, download);
+export async function shuntModel(
+	origin: OriginType
+): Promise<DriveDataAPI | SyncDataAPI> {
+	if (origin === OriginType.SYNC) {
+		return dataAPIs(OriginType.SYNC);
 	} else {
-		dataAPI = dataAPIs(OriginType.DRIVE);
-		return dataAPI.getDownloadURL(file, inline);
+		return dataAPIs(OriginType.DRIVE);
 	}
 }
 
-export function getPreviewURL(file: any, size: any): string {
-	let dataAPI: any;
-	if (checkSeahub(file.path)) {
-		dataAPI = dataAPIs(OriginType.SYNC);
-	} else {
-		dataAPI = dataAPIs(OriginType.DRIVE);
-	}
+export async function getDownloadURL(
+	file: DriveItemType,
+	download?: boolean
+): Promise<string> {
+	const dataAPI = await shuntModel(file.origin);
+	return dataAPI.getDownloadURL(file, download);
+}
 
+export async function getPreviewURL(
+	file: DriveItemType,
+	size: string
+): Promise<string> {
+	const dataAPI = await shuntModel(file.origin);
 	return dataAPI.getPreviewURL(file, size);
 }
