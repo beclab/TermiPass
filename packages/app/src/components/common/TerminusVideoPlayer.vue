@@ -15,7 +15,7 @@ import Player from 'video.js/dist/types/player';
 import 'video.js/dist/video-js.css';
 
 const props = defineProps({
-	path: {
+	raw: {
 		type: String
 	},
 	req: Object as PropType<any>
@@ -28,8 +28,8 @@ const videoOptions = {
 	controls: true,
 	sources: [
 		{
-			// src: props.path,
-			src: `/videos/play?PlayPath=${props.path}`,
+			// src: props.raw,
+			src: `/videos/play?PlayPath=${props.raw}`,
 			// type: 'video/mp4'
 			type: 'application/vnd.apple.mpegurl'
 		}
