@@ -1,6 +1,11 @@
 import { Origin } from './../origin';
 import { removePrefix } from '../utils';
-import { OriginType, DriveResType, CopyStoragesType } from '../common/encoding';
+import {
+	OriginType,
+	DriveResType,
+	CopyStoragesType,
+	DriveItemType
+} from '../common/encoding';
 import { formatSeahub } from '../../utils/seahub';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
@@ -363,7 +368,7 @@ class Data extends Origin {
 		const dataStore = useDataStore();
 		item.url = item.path;
 		// item.path = item.path.slice(6) + item.name + '/';
-		item = await seahub.formatFileContent(item);
+		item = await this.formatFileContent(item);
 		console.log('item end', item);
 
 		dataStore.updateRequest(item);
@@ -398,6 +403,43 @@ class Data extends Origin {
 				file.repo_id
 			}/file${hasSeahub}?dl=1`;
 		}
+	}
+
+	async formatFileContent(file: DriveItemType): Promise<DriveItemType> {
+		const store = useDataStore();
+		const seahubStore = useSeahubStore();
+
+		if (
+			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
+				file.type
+			)
+		) {
+			return file;
+		}
+
+		const currentItemLength = store.currentItem.length;
+		const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
+		const hasSeahub = file.path.slice(startIndex);
+
+		const res = await this.commonAxios.get(
+			`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
+			{}
+		);
+
+		if (['audio', 'video', 'pdf'].includes(file.type)) {
+			file.url = store.baseURL() + res.data.raw_path;
+		} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
+			file.content = res.data.file_content;
+		}
+
+		return file;
+	}
+
+	async openFile(file: DriveItemType): Promise<void> {
+		const store = useDataStore();
+		const item = await this.formatFileContent(file);
+		console.log('checkSeahub file', item);
+		store.updateRequest(item);
 	}
 }
 

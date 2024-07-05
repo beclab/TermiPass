@@ -1,4 +1,9 @@
-import { OriginType, DriveResType, CopyStoragesType } from './common/encoding';
+import {
+	OriginType,
+	DriveResType,
+	CopyStoragesType,
+	DriveItemType
+} from './common/encoding';
 import { OPERATE_ACTION } from '../utils/contact';
 import { Router } from 'vue-router';
 
@@ -99,6 +104,16 @@ export abstract class Origin {
 		inline?: boolean,
 		download?: boolean
 	): string;
+
+	/**
+	 * Format File Content for 'audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'
+	 */
+	abstract formatFileContent(file: DriveItemType): Promise<DriveItemType>;
+
+	/**
+	 * open file
+	 */
+	abstract openFile(file: DriveItemType, Router?: Router): Promise<void>;
 
 	/**
 	 * Upload fetch

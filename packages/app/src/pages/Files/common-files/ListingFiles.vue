@@ -81,16 +81,7 @@
 					<ListingItem
 						v-for="item in dirs"
 						:key="base64(item.name)"
-						v-bind:index="item.index"
-						v-bind:name="item.name"
-						v-bind:isDir="item.isDir"
-						v-bind:url="item.url"
-						v-bind:modified="item.modified"
-						v-bind:type="item.type"
-						v-bind:size="item.size"
-						v-bind:fileSize="item.fileSize"
-						v-bind:path="item.path"
-						v-bind:extension="item.extension"
+						:item="item"
 						v-bind:viewMode="store.user.viewMode"
 						@contextmenu.stop="rightClick($event, item)"
 						@closeMenu="changeVisible"
@@ -101,16 +92,7 @@
 					<ListingItem
 						v-for="item in files"
 						:key="base64(item.name)"
-						v-bind:index="item.index"
-						v-bind:name="item.name"
-						v-bind:isDir="item.isDir"
-						v-bind:url="item.url"
-						v-bind:modified="item.modified"
-						v-bind:type="item.type"
-						v-bind:size="item.size"
-						v-bind:fileSize="item.fileSize"
-						v-bind:path="item.path"
-						v-bind:extension="item.extension"
+						:item="item"
 						v-bind:viewMode="store.user.viewMode"
 						@contextmenu.stop="rightClick($event, item)"
 						@closeMenu="changeVisible"
@@ -153,15 +135,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-	defineComponent,
-	ref,
-	onMounted,
-	onUnmounted,
-	computed,
-	watch,
-	nextTick
-} from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 // import { format } from 'quasar';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';

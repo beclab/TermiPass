@@ -67,6 +67,7 @@ import { common as api } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.vue';
+import { OriginType } from './../../../api/common/encoding';
 // import VueOfficeDocx from '@vue-office/docx';
 // import VueOfficeExcel from '@vue-office/excel';
 
@@ -91,7 +92,7 @@ export default defineComponent({
 				return api.getPreviewURL(store.req, 'big');
 			}
 
-			if (store.req.type === 'pdf' && store.req.checkSeahub) {
+			if (store.req.type === 'pdf' && store.req.origin === OriginType.SYNC) {
 				return store.req.url;
 			}
 

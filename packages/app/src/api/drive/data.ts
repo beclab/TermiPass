@@ -7,7 +7,8 @@ import {
 	DriveResType,
 	CopyStoragesType,
 	SyncRepoSharedItemType,
-	SyncRepoItemType
+	SyncRepoItemType,
+	DriveItemType
 } from '../common/encoding';
 import { getAppDataPath, isAppData } from '../../utils/file';
 import { formatAppDataNode } from '../../utils/appdata';
@@ -454,6 +455,42 @@ class Data extends Origin {
 		};
 		const url = createURL('api/raw' + file.path, params);
 		return url;
+	}
+
+	async formatFileContent(file: DriveItemType): Promise<DriveItemType> {
+		console.log('drive formatFileContent start', file);
+		if (
+			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
+				file.type
+			)
+		) {
+			return file;
+		}
+
+		if (['text', 'txt', 'textImmutable'].includes(file.type)) {
+			try {
+				const url = decodeURIComponent(file.path);
+				const res = await this.commonAxios.get(`/api/resources${url}`, {});
+
+				console.log('formatFileContent', res);
+				file.content = res.data.content;
+
+				console.log('formatFileContent-file', file);
+			} catch (error) {
+				console.error(error.message);
+			}
+		}
+		console.log('formatFileContent end', file);
+		return file;
+	}
+
+	async openFile(file: DriveItemType, Router: Router): Promise<void> {
+		Router.push({
+			path: file.url,
+			query: {
+				type: 'preview'
+			}
+		});
 	}
 }
 

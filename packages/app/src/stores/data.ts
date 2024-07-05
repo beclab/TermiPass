@@ -1,10 +1,15 @@
 import { defineStore } from 'pinia';
+import { Router } from 'vue-router';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
 import { MenuItem, FilesSortType } from '../utils/contact';
 import { dataAPIs } from './../api';
 
-import { OriginType, CopyStoragesType } from './../api/common/encoding';
+import {
+	OriginType,
+	CopyStoragesType,
+	DriveItemType
+} from './../api/common/encoding';
 
 export type DataState = {
 	user: any;
@@ -298,6 +303,35 @@ export const useDataStore = defineStore('data', {
 				asc
 			};
 			this.req.items = this.sortList(this.req.items);
+		},
+
+		async openFile(item: DriveItemType, router: Router) {
+			const dataAPI = dataAPIs();
+			await dataAPI.openFile(item, router);
+
+			// let item = { ...props };
+			// if (checkSeahub(item.path) && item.isDir === false) {
+			// 	item = await seahub.formatFileContent(item);
+			// 	console.log('checkSeahub item', item);
+			// 	store.updateRequest(item);
+			// } else {
+			// 	if (item.isDir === false) {
+			// 		router.push({
+			// 			path: props.url,
+			// 			query: {
+			// 				type: 'preview'
+			// 			}
+			// 		});
+			// 	} else {
+			// 		router.push({
+			// 			path: props.url,
+			// 			query: {
+			// 				id: route.query.id,
+			// 				type: route.query.type
+			// 			}
+			// 		});
+			// 	}
+			// }
 		}
 	}
 });

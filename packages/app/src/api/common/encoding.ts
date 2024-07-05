@@ -59,6 +59,7 @@ export interface DriveItemType {
 	encoded_thumbnail_src?: string;
 	index?: number;
 	url?: string;
+	content?: string;
 }
 
 export interface DriveSortingType {
