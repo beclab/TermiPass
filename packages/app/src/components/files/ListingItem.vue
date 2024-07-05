@@ -78,8 +78,6 @@ const props = defineProps({
 	}
 });
 
-console.log('propsprops', props.item);
-
 const emits = defineEmits(['resetOpacity', 'closeMenu']);
 
 const { humanStorageSize } = format;
@@ -301,28 +299,6 @@ const open = () => {
 		});
 	}
 	store.openFile(props.item, router);
-	// let itemOpen = { ...props };
-	// if (checkSeahub(props.item.path) && props.item.isDir === false) {
-	// 	itemOpen = await seahub.formatFileContent(props.item);
-	// 	store.updateRequest(itemOpen);
-	// } else {
-	// 	if (itemOpen.isDir === false) {
-	// 		router.push({
-	// 			path: props.item.url,
-	// 			query: {
-	// 				type: 'preview'
-	// 			}
-	// 		});
-	// 	} else {
-	// 		router.push({
-	// 			path: props.item.url,
-	// 			query: {
-	// 				id: route.query.id,
-	// 				type: route.query.type
-	// 			}
-	// 		});
-	// 	}
-	// }
 };
 </script>
 

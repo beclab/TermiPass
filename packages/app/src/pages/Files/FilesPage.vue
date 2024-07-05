@@ -117,8 +117,6 @@ const fetchData = async (loading = true) => {
 			store.updateRequest(res);
 			document.title = `${res.name} - TermiPass`;
 		}
-
-		console.log('store req', store.req);
 	} catch (e: any) {
 		if (e.message == InOfflineMode) {
 			if (!e.status) {

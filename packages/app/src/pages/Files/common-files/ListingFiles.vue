@@ -199,8 +199,6 @@ watch(
 			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
 			'/';
 
-		console.log('fileUploaderPathfileUploaderPath', fileUploaderPath.value);
-
 		if (route.query.id) {
 			store.hideSyncUploadModal = false;
 		} else {
@@ -499,62 +497,11 @@ const drop = async (event: any) => {
 	if (conflict) {
 		const newfile = await createCopiedFile(files, items);
 		handleFiles(newfile, path, true);
-		// store.showHover({
-		// 	prompt: 'replace',
-		// 	confirm: (event: any) => {
-		// 		event.preventDefault();
-		// 		store.closeHovers();
-		// 		handleFiles(files, path, true);
-		// 	}
-		// });
-
 		return;
 	}
 
 	await handleFiles(files, path);
 };
-
-// const uploadInput = async (event: any) => {
-// 	store.closeHovers();
-// 	if (!store.showUploadModal) {
-// 		store.changeUploadModal(true);
-// 	}
-// 	let files = event.currentTarget.files;
-// 	let folder_upload =
-// 		files[0].webkitRelativePath !== undefined &&
-// 		files[0].webkitRelativePath !== '';
-
-// 	if (folder_upload) {
-// 		for (let i = 0; i < files.length; i++) {
-// 			let file = files[i];
-// 			files[i].fullPath = file.webkitRelativePath;
-// 		}
-// 	}
-
-// 	let path = route.path.endsWith('/')
-// 		? decodeURIComponent(route.path)
-// 		: decodeURIComponent(route.path) + '/';
-// 	let conflict = checkConflict(files, store.req.items);
-
-// 	if (conflict) {
-// 		const newfile = await createCopiedFile(files, store.req.items);
-// 		handleFiles(newfile, path, true);
-
-// 		// store.showHover({
-// 		// 	prompt: 'replace',
-// 		// 	confirm: async (event: any) => {
-// 		// 		event.preventDefault();
-// 		// 		store.closeHovers();
-// 		//     const newfile =  await createCopiedFile(files, store.req.items)
-// 		// 		handleFiles(newfile, path, true);
-// 		// 	}
-// 		// });
-
-// 		return;
-// 	}
-
-// 	handleFiles(files, path);
-// };
 
 const resetOpacity = () => {
 	let items = document.getElementsByClassName('item');
@@ -604,15 +551,6 @@ const sort = async (by: string) => {
 	// store.setReload(true);
 };
 
-const openSearch = () => {
-	store.showHover('search');
-};
-
-const toggleMultipleSelection = () => {
-	store.setMultiple(!store.multiple);
-	store.closeHovers();
-};
-
 const windowsResize = throttle(() => {
 	width.value = window.innerWidth;
 
@@ -625,43 +563,6 @@ const windowsResize = throttle(() => {
 	// Fill but not fit the window
 	fillWindow();
 }, 100);
-
-const download = () => {
-	if (store.selectedCount === 1 && !store.req.items[store.selected[0]].isDir) {
-		api.download(null, undefined, store.req.items[store.selected[0]].url);
-		return;
-	}
-
-	store.showHover({
-		prompt: 'download',
-		confirm: (format: any) => {
-			store.closeHovers();
-
-			let files: any = [];
-
-			if (store.selectedCount > 0) {
-				for (let i of store.selected) {
-					files.push(store.req.items[i].url);
-				}
-			} else {
-				files.push(route.path);
-			}
-
-			api.download(format, undefined, ...files);
-		}
-	});
-};
-
-const upload = () => {
-	if (
-		typeof window.DataTransferItem !== 'undefined' &&
-		typeof DataTransferItem.prototype.webkitGetAsEntry !== 'undefined'
-	) {
-		store.showHover('upload');
-	} else {
-		document.getElementById('upload-input')?.click();
-	}
-};
 
 const setItemWeight = () => {
 	// Listing element is not displayed

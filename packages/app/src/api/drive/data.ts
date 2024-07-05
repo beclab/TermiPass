@@ -437,13 +437,15 @@ class Data extends Origin {
 		return createURL('api/preview/' + thumb + file.path, params);
 	}
 
-	getDownloadURL(file: any): string {
-		const url = createURL('api/raw' + file.path);
+	getDownloadURL(file: any, inline: boolean, _download: boolean): string {
+		const params = {
+			...(inline && { inline: 'true' })
+		};
+		const url = createURL('api/raw' + file.path, params);
 		return url;
 	}
 
 	async formatFileContent(file: DriveItemType): Promise<DriveItemType> {
-		console.log('drive formatFileContent start', file);
 		if (
 			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
 				file.type
@@ -457,15 +459,11 @@ class Data extends Origin {
 				const url = decodeURIComponent(file.path);
 				const res = await this.commonAxios.get(`/api/resources${url}`, {});
 
-				console.log('formatFileContent', res);
 				file.content = res.data.content;
-
-				console.log('formatFileContent-file', file);
 			} catch (error) {
 				console.error(error.message);
 			}
 		}
-		console.log('formatFileContent end', file);
 		return file;
 	}
 

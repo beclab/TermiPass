@@ -23,7 +23,7 @@ const store = useDataStore();
 const loading = ref(false);
 
 const rawUrl = () => {
-	return api.getDownloadURL(store.req);
+	return api.getDownloadURL(store.req, true);
 };
 
 onMounted(async () => {

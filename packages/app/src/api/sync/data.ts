@@ -395,7 +395,7 @@ class Data extends Origin {
 		}/${seflSize}${hasSeahub}`;
 	}
 
-	getDownloadURL(file: any, download?: boolean): string {
+	getDownloadURL(file: any, _inline: boolean, download?: boolean): string {
 		const store = useDataStore();
 		const startIndex =
 			file.path.indexOf(file.repo_name) + file.repo_name?.length;
@@ -442,7 +442,6 @@ class Data extends Origin {
 	async openFile(file: DriveItemType): Promise<void> {
 		const store = useDataStore();
 		const item = await this.formatFileContent(file);
-		console.log('checkSeahub file', item);
 		store.updateRequest(item);
 	}
 }

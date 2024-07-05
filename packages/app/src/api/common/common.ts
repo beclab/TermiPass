@@ -2,9 +2,7 @@
 import { dataAPIs, DriveDataAPI, SyncDataAPI } from '../index';
 import { DriveItemType, OriginType } from './encoding';
 
-export async function shuntModel(
-	origin: OriginType
-): Promise<DriveDataAPI | SyncDataAPI> {
+export function shuntModel(origin: OriginType): DriveDataAPI | SyncDataAPI {
 	if (origin === OriginType.SYNC) {
 		return dataAPIs(OriginType.SYNC);
 	} else {
@@ -12,18 +10,17 @@ export async function shuntModel(
 	}
 }
 
-export async function getDownloadURL(
+export function getDownloadURL(
 	file: DriveItemType,
-	download?: boolean
-): Promise<string> {
-	const dataAPI = await shuntModel(file.origin);
-	return dataAPI.getDownloadURL(file, download);
+	inline: boolean,
+	download = false
+): string {
+	const dataAPI = shuntModel(file.origin);
+	return dataAPI.getDownloadURL(file, inline, download);
 }
 
-export async function getPreviewURL(
-	file: DriveItemType,
-	size: string
-): Promise<string> {
-	const dataAPI = await shuntModel(file.origin);
+export function getPreviewURL(file: DriveItemType, size: string): string {
+	const dataAPI = shuntModel(file.origin);
+
 	return dataAPI.getPreviewURL(file, size);
 }

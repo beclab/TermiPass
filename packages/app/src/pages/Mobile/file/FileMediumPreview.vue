@@ -80,7 +80,7 @@ const raw = computed(function () {
 	if (store.req.type === 'image' && !fullSize.value) {
 		return api.getPreviewURL(store.req, 'big');
 	}
-	return api.getDownloadURL(store.req);
+	return api.getDownloadURL(store.req, true);
 });
 
 onMounted(() => {

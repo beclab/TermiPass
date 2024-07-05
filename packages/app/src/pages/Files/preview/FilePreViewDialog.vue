@@ -125,6 +125,7 @@ import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
 import { checkSeahub } from '../../../utils/file';
 import { nextTick } from 'process';
+import { dataAPIs } from '../../../api';
 
 const dialog = ref(false);
 
@@ -226,6 +227,7 @@ const deleteFile = () => {
 };
 
 const prev = async () => {
+	const dataAPI = dataAPIs();
 	const items = store.oldReq.items.filter((e) => !e.isDir);
 
 	const index = items.findIndex((e) => e.name == store.req.name);
@@ -240,7 +242,7 @@ const prev = async () => {
 		preItem.type == 'pdf'
 	) {
 		if (checkSeahub(preItem.path) && preItem.isDir === false) {
-			preItem = await seahub.formatFileContent(preItem);
+			preItem = await dataAPI.formatFileContent(preItem);
 		}
 	}
 
@@ -248,6 +250,7 @@ const prev = async () => {
 };
 
 const next = async () => {
+	const dataAPI = dataAPIs();
 	const items = store.oldReq.items.filter((e) => !e.isDir);
 	const index = items.findIndex((e) => e.name == store.req.name);
 	if (index + 1 > items.length) {
@@ -260,7 +263,7 @@ const next = async () => {
 		nextItem.type == 'pdf'
 	) {
 		if (checkSeahub(nextItem.path) && nextItem.isDir === false) {
-			nextItem = await seahub.formatFileContent(nextItem);
+			nextItem = await dataAPI.formatFileContent(nextItem);
 		}
 	}
 	store.req = nextItem;
@@ -312,7 +315,7 @@ watch(
 );
 
 const downloadUrl = computed(function () {
-	return api.getDownloadURL(store.req, true);
+	return api.getDownloadURL(store.req, false, true);
 });
 
 const download = async () => {

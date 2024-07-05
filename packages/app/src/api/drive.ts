@@ -253,46 +253,6 @@ export async function checksum(url, algo) {
 	return (await data.json()).checksums[algo];
 }
 
-// export const formatFileContent = async (file) => {
-// 	console.log('drive formatFileContent start', file);
-// 	const store = useDataStore();
-// 	const seahubStore = useSeahubStore();
-// 	if (
-// 		!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
-// 			file.type
-// 		)
-// 	) {
-// 		return file;
-// 	}
-
-// 	if (checkSeahub(file.path)) {
-// 		const currentItemLength = store.currentItem.length;
-// 		const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-// 		const hasSeahub = file.path.slice(startIndex);
-// 		const res = await fetchURL(
-// 			`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
-// 			{}
-// 		);
-// 		if (['audio', 'video', 'pdf'].includes(file.type)) {
-// 			file.url = store.baseURL() + res.data.raw_path; //res.data.raw_path
-// 		} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
-// 			file.content = res.data.file_content;
-// 		}
-// 	} else {
-// 		if (['text', 'txt', 'textImmutable'].includes(file.type)) {
-// 			try {
-// 				const url = decodeURIComponent(file.path);
-// 				const res = await fetchURL(`/api/resources${url}`, {});
-// 				file.content = res.data.content;
-// 			} catch (error) {
-// 				console.error(error.message);
-// 			}
-// 		}
-// 	}
-// 	console.log('formatFileContent end', file);
-// 	return file;
-// };
-
 export function getSubtitlesURL(file) {
 	const params = {
 		inline: 'true'

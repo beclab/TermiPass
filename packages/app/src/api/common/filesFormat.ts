@@ -1,4 +1,5 @@
 import { getFileType } from '../../utils/file';
+import { useSeahubStore } from 'src/stores/seahub';
 import { DriveResType, DriveItemType, OriginType } from './encoding';
 
 export function formatSeahub(url: string, data: { dirent_list: any }) {
@@ -30,6 +31,7 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 	};
 
 	dirent_lists.forEach((el) => {
+		const seahubStore = useSeahubStore();
 		const extension = getextension(el.name);
 		const fileTypeName = el.type === 'dir' ? 'folder' : getFileType(el.name);
 
@@ -53,7 +55,9 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 			numFiles: el.numFiles,
 			numTotalFiles: el.numTotalFiles,
 			encoded_thumbnail_src: el.encoded_thumbnail_src || undefined,
-			origin: OriginType.SYNC
+			origin: OriginType.SYNC,
+			repo_id: seahubStore.repo_id,
+			repo_name: seahubStore.repo_name
 		};
 		seahubDir.items.push(obj);
 	});

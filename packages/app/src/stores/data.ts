@@ -308,30 +308,6 @@ export const useDataStore = defineStore('data', {
 		async openFile(item: DriveItemType, router: Router) {
 			const dataAPI = dataAPIs();
 			await dataAPI.openFile(item, router);
-
-			// let item = { ...props };
-			// if (checkSeahub(item.path) && item.isDir === false) {
-			// 	item = await seahub.formatFileContent(item);
-			// 	console.log('checkSeahub item', item);
-			// 	store.updateRequest(item);
-			// } else {
-			// 	if (item.isDir === false) {
-			// 		router.push({
-			// 			path: props.url,
-			// 			query: {
-			// 				type: 'preview'
-			// 			}
-			// 		});
-			// 	} else {
-			// 		router.push({
-			// 			path: props.url,
-			// 			query: {
-			// 				id: route.query.id,
-			// 				type: route.query.type
-			// 			}
-			// 		});
-			// 	}
-			// }
 		}
 	}
 });

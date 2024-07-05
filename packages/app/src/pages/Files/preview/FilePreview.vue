@@ -42,7 +42,6 @@
 				:src="raw"
 			/> -->
 			<terminus-video-player v-else-if="store.req.type == 'video'" :raw="raw" />
-
 			<object
 				v-else-if="store.req?.extension?.toLowerCase() == '.pdf'"
 				class="pdf"
@@ -95,7 +94,7 @@ export default defineComponent({
 				return store.req.url;
 			}
 
-			return api.getDownloadURL(store.req);
+			return api.getDownloadURL(store.req, true);
 		});
 		const autoPlay = shallowRef(true);
 		return {

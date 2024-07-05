@@ -159,18 +159,6 @@ export async function batchMoveItem(data) {
 	return res;
 }
 
-// export async function updateRepoName(repo_id, data) {
-// 	const seahubStore = useSeahubStore();
-// 	const res = await instanceAxios({
-// 		url: `seahub/api2/repos/${seahubStore.repo_id}/?op=rename`,
-// 		method: 'post',
-// 		data: data,
-// 		headers: { 'Content-Type': 'application/json' }
-// 	});
-
-// 	return res;
-// }
-
 export async function reRepoName(url, data) {
 	const res = await instanceAxios({
 		url: url,
@@ -202,39 +190,6 @@ export async function batchCopyItem(data) {
 
 	return res;
 }
-
-// export const formatFileContent = async (file) => {
-// 	console.log('sync formatFileContent start', file);
-
-// 	const store = useDataStore();
-// 	const seahubStore = useSeahubStore();
-
-// 	if (
-// 		!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
-// 			file.type
-// 		)
-// 	) {
-// 		return file;
-// 	}
-
-// 	file.checkSeahub = true;
-// 	const currentItemLength = store.currentItem.length;
-// 	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-// 	const hasSeahub = file.path.slice(startIndex);
-
-// 	const res = await fetchURL(
-// 		`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
-// 		{}
-// 	);
-
-// 	if (['audio', 'video', 'pdf'].includes(file.type)) {
-// 		file.url = store.baseURL() + res.data.raw_path; //res.data.raw_path
-// 	} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
-// 		file.content = res.data.file_content;
-// 	}
-
-// 	return file;
-// };
 
 export const createThumbnail = async (path) => {
 	const seahubStore = useSeahubStore();
