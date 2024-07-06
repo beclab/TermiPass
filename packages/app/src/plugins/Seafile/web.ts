@@ -3,7 +3,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import { SeafilePlugin } from './definitions';
-import { getContentUrlByPath } from '../../api/drive';
+import { getContentUrlByPath } from '../../api/drive/drive';
 
 export enum SeaHubType {
 	file = 'file',

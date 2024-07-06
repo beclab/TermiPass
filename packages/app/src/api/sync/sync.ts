@@ -1,9 +1,9 @@
-import { fetchURL } from './utils';
+import { fetchURL } from '../utils';
 // import { dataAPI } from './index';
-import { dataAPIs } from '.';
-import { useSeahubStore } from '../stores/seahub';
-import { useDataStore } from '../stores/data';
-import { axiosInstanceProxy } from '../platform/httpProxy';
+import { dataAPIs } from '..';
+import { useSeahubStore } from '../../stores/seahub';
+import { useDataStore } from '../../stores/data';
+import { axiosInstanceProxy } from '../../platform/httpProxy';
 
 export async function instanceAxios(config) {
 	const store = useDataStore();

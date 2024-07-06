@@ -22,6 +22,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useQuasar } from 'quasar';
 import { seahub } from '../../api';
 import { useDataStore } from '../../stores/data';
+import { useFilesStore } from '../../stores/files';
 import { useRoute, onBeforeRouteUpdate } from 'vue-router';
 import { useSeahubStore } from '../../stores/seahub';
 import { UserStatusActive } from '../../utils/checkTerminusState';
@@ -47,6 +48,7 @@ const $q = useQuasar();
 const routepath = ref(route.path);
 const termipassStore = useTermipassStore();
 const seahubStore = useSeahubStore();
+const fileStore = useFilesStore();
 
 // import dataAPI from './../../api/data';
 
@@ -173,9 +175,9 @@ const isPreview = ref(false);
 watch(
 	() => route.path,
 	(newVal) => {
-		if (!isPreview.value && newVal.indexOf('Files/') > -1) {
-			fetchData();
-		}
+		// if (!isPreview.value && newVal.indexOf('Files/') > -1) {
+		// 	fetchData();
+		// }
 	}
 );
 
@@ -209,7 +211,9 @@ onBeforeRouteUpdate((_to, from, next) => {
 onMounted(async () => {
 	let url = route.path;
 	if (url.indexOf('Files') < 0) return;
-	fetchData();
+	//fetchData();
+
+	fileStore.setBrowserUrl(url);
 
 	window.addEventListener('keydown', keyEvent);
 });

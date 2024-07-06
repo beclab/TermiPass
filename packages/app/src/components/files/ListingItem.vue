@@ -50,14 +50,15 @@ import {
 	onMounted
 } from 'vue';
 import { useDataStore } from '../../stores/data';
+import { useFilesStore } from '../../stores/files';
 import { useOperateinStore } from '../../stores/operation';
 import { format } from 'quasar';
 const { humanStorageSize } = format;
 import moment from 'moment';
 import { files as api, seahub } from '../../api';
 import { useRouter, useRoute } from 'vue-router';
-import url from './../../utils/url';
-import { checkSeahub } from '../../utils/file';
+//import url from './../../utils/url';
+//import { checkSeahub } from '../../utils/file';
 import TerminusFileIcon from '../common/TerminusFileIcon.vue';
 import { useMenuStore } from '../../stores/files-menu';
 import { notifyWarning } from '../../utils/notifyRedefinedUtil';
@@ -94,6 +95,7 @@ export default defineComponent({
 		const renameRef = ref<any>(null);
 		const fileName = ref('');
 		const { t } = useI18n();
+		const filesStore = useFilesStore();
 
 		onMounted(() => {
 			fileName.value = props.name;
@@ -293,27 +295,33 @@ export default defineComponent({
 
 		const open = async () => {
 			let item = { ...props };
-			if (checkSeahub(item.path) && item.isDir === false) {
-				item = await seahub.formatFileContent(item);
-				store.updateRequest(item);
-			} else {
-				if (item.isDir === false) {
-					router.push({
-						path: props.url,
-						query: {
-							type: 'preview'
-						}
-					});
-				} else {
-					router.push({
-						path: props.url,
-						query: {
-							id: route.query.id,
-							type: route.query.type
-						}
-					});
-				}
-			}
+			// if (checkSeahub(item.path) && item.isDir === false) {
+			// 	item = await seahub.formatFileContent(item);
+			// 	store.updateRequest(item);
+			// } else {
+			// 	if (item.isDir === false) {
+			// 		router.push({
+			// 			path: props.url,
+			// 			query: {
+			// 				type: 'preview'
+			// 			}
+			// 		});
+			// 	} else {
+			// 		router.push({
+			// 			path: props.url,
+			// 			query: {
+			// 				id: route.query.id,
+			// 				type: route.query.type
+			// 			}
+			// 		});
+			// 	}
+			// }
+			filesStore.setFilePath({
+				path: item.url,
+				isDir: item.isDir,
+				driveType: item.driveType,
+				param: ''
+			});
 		};
 
 		return {

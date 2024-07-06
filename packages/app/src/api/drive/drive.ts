@@ -1,8 +1,8 @@
-import { createURL, fetchURL, removePrefix } from './utils';
-import { dataAPIs, DriveDataAPI } from './index';
-import { useDataStore } from '../stores/data';
-import { checkSeahub, checkAppData, getAppDataPath } from '../utils/file';
-import { useSeahubStore } from '../stores/seahub';
+import { createURL, fetchURL, removePrefix } from '../utils';
+import { dataAPIs, DriveDataAPI } from '../index';
+import { useDataStore } from '../../stores/data';
+import { checkSeahub, checkAppData, getAppDataPath } from '../../utils/file';
+import { useSeahubStore } from '../../stores/seahub';
 // import { seahubGetRepos } from './syncMenu';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
 
