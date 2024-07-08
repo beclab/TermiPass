@@ -59,6 +59,10 @@ export class ElectronPlatform extends TerminusCommonPlatform {
 			return;
 		}
 
+		if (userStore.needUnlockFirst) {
+			redirect({ path: '/unlock' });
+			return;
+		}
 		if (!userStore.current_user) {
 			redirect({ path: '/import_mnemonic' });
 			return;

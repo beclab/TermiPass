@@ -44,6 +44,7 @@ export async function unlockByPwd(
 
 		await userStore.users!.unlock(password);
 		userStore.password = password;
+		await userStore.save();
 
 		if (userStore.current_id) {
 			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;

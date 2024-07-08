@@ -171,6 +171,9 @@ export const useUserStore = defineStore('user', {
 			}
 
 			return '';
+		},
+		needUnlockFirst(): boolean {
+			return this.current_id != undefined && !this.current_user;
 		}
 	},
 	actions: {
@@ -381,9 +384,6 @@ export const useUserStore = defineStore('user', {
 			name: string,
 			mnemonic: string
 		): Promise<UserItem | null> {
-			console.log('users ===>');
-			console.log(this.users);
-
 			const unlocked = await this.unlockFirst();
 			if (!unlocked) {
 				return null;
