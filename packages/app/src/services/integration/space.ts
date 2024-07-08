@@ -11,12 +11,14 @@ import { getDID, getPrivateJWK } from 'src/did/did-key';
 import { PrivateJwk } from '@bytetrade/core';
 import { signJWS } from 'src/layouts/dialog/sign';
 import axios from 'axios';
+import { Loading } from 'quasar';
 
 export class SpaceAuthService extends OperateIntegrationAuth<SpaceIntegrationAccount> {
 	type = AccountType.Space;
 	addMode = AccountAddMode.common;
 	async signIn(): Promise<SpaceIntegrationAccount> {
 		return new Promise(async (resolve, reject) => {
+			Loading.hide();
 			const cloudStore = useCloudStore();
 			const userStore = useUserStore();
 
@@ -31,8 +33,7 @@ export class SpaceAuthService extends OperateIntegrationAuth<SpaceIntegrationAcc
 			if (!(await userStore.unlockFirst())) {
 				reject('Need login');
 			}
-
-			// const user = userStore.users!.items.get(userStore.current_id!)!;
+			Loading.show();
 
 			const did = await getDID(userStore.current_mnemonic?.mnemonic);
 			const privateJWK: PrivateJwk | undefined = await getPrivateJWK(

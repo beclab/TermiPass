@@ -150,11 +150,6 @@ const settingMenu = [
 		path: '/setting/account'
 	},
 	{
-		label: t('integration.title'),
-		icon: 'sym_r_stacks',
-		path: '/integration'
-	},
-	{
 		label: t('settings.safety'),
 		icon: 'sym_r_arming_countdown',
 		path: '/setting/security'
@@ -171,6 +166,11 @@ const monitorStore = useMonitorStore();
 const settingsMenus = [...settingMenu];
 
 if ($q.platform.is.nativeMobile) {
+	settingsMenus.splice(1, 0, {
+		label: t('integration.title'),
+		icon: 'sym_r_stacks',
+		path: '/integration'
+	});
 	settingsMenus.push({
 		label: t('autofill'),
 		icon: 'sym_r_ink_highlighter',
