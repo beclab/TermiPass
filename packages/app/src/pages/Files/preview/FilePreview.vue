@@ -41,7 +41,12 @@
 				@play="autoPlay = true"
 				:src="raw"
 			/> -->
-			<terminus-video-player v-else-if="store.req.type == 'video'" :raw="raw" />
+			<terminus-video-player
+				v-else-if="store.req.type == 'video'"
+				:raw="store.req.path"
+				:req="store.req"
+			/>
+
 			<object
 				v-else-if="store.req?.extension?.toLowerCase() == '.pdf'"
 				class="pdf"

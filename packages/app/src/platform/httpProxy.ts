@@ -143,10 +143,6 @@ const requestCommonCallBack = async (
 	config: AxiosRequestConfig,
 	prop: Method
 ) => {
-	const fullUrl = config.baseURL
-		? new URL(url, config.baseURL).toString()
-		: url;
-
 	for (const interceptor of interceptors.request) {
 		config = (await interceptor(config)) || config;
 	}
@@ -154,6 +150,9 @@ const requestCommonCallBack = async (
 	for (const interceptor of target.requestIntercepts) {
 		config = (await interceptor(config)) || config;
 	}
+	const fullUrl = config.baseURL
+		? new URL(url, config.baseURL).toString()
+		: url;
 
 	const response: HttpResponse =
 		await getAppPlatform().hookCapacitorHttp.request({

@@ -1,8 +1,5 @@
 <template>
-	<div
-		class="mobile-title text-subtitle1 bg-background-3 text-ink-1"
-		v-if="isMobile"
-	>
+	<div class="mobile-title text-subtitle1 text-ink-1" v-if="isMobile">
 		{{ label }}
 	</div>
 

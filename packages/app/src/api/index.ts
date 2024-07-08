@@ -1,5 +1,5 @@
-import * as files from './drive';
-import * as seahub from './sync';
+import * as files from './drive/drive';
+import * as seahub from './sync/sync';
 import * as share from './share';
 import * as users from './users';
 import * as settings from './settings';

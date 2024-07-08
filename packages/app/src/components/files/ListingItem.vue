@@ -52,12 +52,14 @@ import {
 	defineEmits
 } from 'vue';
 import { useDataStore } from '../../stores/data';
+import { useFilesStore, FileItem } from '../../stores/files';
 import { useOperateinStore } from '../../stores/operation';
 import { format } from 'quasar';
 import moment from 'moment';
 import { files as api, seahub } from '../../api';
 import { useRouter, useRoute } from 'vue-router';
-import { checkSeahub } from '../../utils/file';
+//import url from './../../utils/url';
+//import { checkSeahub } from '../../utils/file';
 import TerminusFileIcon from '../common/TerminusFileIcon.vue';
 import { useMenuStore } from '../../stores/files-menu';
 import { notifyWarning } from '../../utils/notifyRedefinedUtil';
@@ -65,11 +67,11 @@ import { notifyWarning } from '../../utils/notifyRedefinedUtil';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
 
-import { DriveItemType } from './../../api/common/encoding';
+// import { DriveItemType } from './../../api/common/encoding';
 
 const props = defineProps({
 	item: {
-		type: DriveItemType,
+		type: FileItem,
 		require: true
 	},
 	viewMode: {
@@ -82,6 +84,7 @@ const emits = defineEmits(['resetOpacity', 'closeMenu']);
 
 const { humanStorageSize } = format;
 
+const filesStore = useFilesStore();
 const store = useDataStore();
 const router = useRouter();
 const menuStore = useMenuStore();
@@ -299,6 +302,13 @@ const open = () => {
 		});
 	}
 	store.openFile(props.item, router);
+
+	filesStore.setFilePath({
+		path: props.item.url,
+		isDir: props.item.isDir,
+		driveType: props.item.driveType,
+		param: ''
+	});
 };
 </script>
 
