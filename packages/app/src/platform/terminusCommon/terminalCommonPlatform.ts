@@ -163,6 +163,11 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			}
 			return;
 		}
+
+		if (userStore.needUnlockFirst) {
+			redirect({ path: '/unlock' });
+			return;
+		}
 		if (!userStore.current_user) {
 			redirect({ path: '/setup/success' });
 			return;
@@ -174,7 +179,7 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			// router.replace('/bind_vc');
 			redirect({ path: '/bind_vc' });
 		}
-		// redirect({ path: '/unlock' });
+		//
 	}
 
 	stateUpdate() {
