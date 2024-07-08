@@ -42,9 +42,10 @@ export async function unlockByPwd(
 		}
 		const userStore = useUserStore();
 
-		await userStore.users!.unlock(password);
-		userStore.password = password;
-		await userStore.save();
+		// await userStore.users!.unlock(password);
+		// userStore.password = password;
+		// await userStore.save();
+		await userStore.unlock(password);
 
 		if (userStore.current_id) {
 			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;

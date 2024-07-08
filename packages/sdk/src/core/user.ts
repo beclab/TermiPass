@@ -369,10 +369,10 @@ export class LocalUserVault extends PBES2Container implements Storable {
 	 */
 	async unlock(password: string) {
 		await super.unlock(password);
-		if (this.items.size == 0) {
+		this.mnemonics.fromBytes(await this.getData());
+		if (this.mnemonics.size > 0 && this.items.size == 0) {
 			this.items.fromBytes(await this.getData());
 		}
-		this.mnemonics.fromBytes(await this.getData());
 	}
 
 	async lock() {

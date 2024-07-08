@@ -718,6 +718,14 @@ export const useUserStore = defineStore('user', {
 				}
 			}
 			return unclocked;
+		},
+		async unlock(password: string) {
+			const isSave = this.needUnlockFirst;
+			await this.users?.unlock(password);
+			this.password = password;
+			if (isSave) {
+				await this.save();
+			}
 		}
 	}
 });
