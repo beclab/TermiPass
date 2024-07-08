@@ -6,6 +6,7 @@ on:
     push:
         branches:
             - "build/release"
+            - "feat/format-i18n"
         tags:
           - 'v*'
 
