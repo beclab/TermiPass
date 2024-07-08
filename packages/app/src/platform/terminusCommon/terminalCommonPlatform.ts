@@ -383,9 +383,7 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 			return;
 		}
 		const userStore = useUserStore();
-		if (!(await userStore.unlockFirst())) {
-			return;
-		}
+
 		const message = this.signMessagesList[0];
 		if (
 			message.terminusName &&
@@ -396,6 +394,11 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 		}
 
 		this.currentMessage = message;
+		if (!(await userStore.unlockFirst())) {
+			this.currentMessage = undefined;
+			this.signMessagesList.splice(0, 1);
+			return;
+		}
 
 		const index = this.signMessagesList.findIndex(
 			(e) => e == this.currentMessage

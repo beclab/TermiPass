@@ -5,6 +5,7 @@
 		:width="240"
 		class="myDrawer"
 		:dark="$q.dark.isActive"
+		:class="isFiles ? 'files-border' : ''"
 	>
 		<BtScrollArea style="height: 100%; width: 100%">
 			<bt-menu
@@ -117,6 +118,8 @@ const menuStore = useMenuStore();
 const seahubStore = useSeahubStore();
 const operateinStore = useOperateinStore();
 
+const isFiles = process.env.PLATFORM == 'FILES';
+
 const { t } = useI18n();
 
 onMounted(async () => {
@@ -198,6 +201,10 @@ const getSyncStatus = (repo_id: string) => {
 	// .title-active {
 	// 	color: $ink-1;
 	// }
+}
+
+.files-border {
+	border-right: 1px solid $separator;
 }
 
 .sync-icon {
