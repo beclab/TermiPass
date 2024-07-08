@@ -46,7 +46,6 @@ import FileRootPage from 'pages/Mobile/file/FileRootPage.vue';
 import AccountList from 'pages/Mobile/AccountList.vue';
 import AddVCPage from 'pages/Mobile/secret/AddVCPage.vue';
 import VCCardList from 'src/pages/Mobile/secret/VCCardList.vue';
-import SelectTerminusName from 'pages/Mobile/secret/SelectTerminusName.vue';
 import AccountPage from 'pages/Mobile/setting/AccountPage.vue';
 import DisplayPage from 'pages/Mobile/setting/DisplayPage.vue';
 import SecurityPage from 'pages/Mobile/setting/SecurityPage.vue';
@@ -57,7 +56,6 @@ import ChangePwdPage from 'pages/Mobile/setting/ChangePwdPage.vue';
 import BackupMnemonicsPage from 'pages/Mobile/setting/BackupMnemonicsPage.vue';
 import VCManagePage from 'pages/Mobile/setting/VCManagePage.vue'; //error customElements.define("verifiable-credential",fi)
 // import FilePreviewPage from 'pages/Mobile/file/FilePreviewPage.vue'; //error Function("r","regeneratorRuntime = r")
-import IndexMobile from 'src/pages/Mobile/cloud/login/IndexMobile.vue';
 import AuthorizationPage from 'src/pages/Mobile/wallet/AuthorizationPage.vue';
 import ConnectPage from 'src/pages/Mobile/wallet/ConnectPage.vue';
 import SubmitPage from 'src/pages/Mobile/wallet/SubmitVCInfoPage.vue';
@@ -280,10 +278,6 @@ const mobileCommon: RouteRecordRaw[] = [
 				component: VCCardList
 			},
 			{
-				path: '/select_terminus_name',
-				component: SelectTerminusName
-			},
-			{
 				path: '/setting/account',
 				component: AccountPage
 			},
@@ -321,16 +315,12 @@ const mobileCommon: RouteRecordRaw[] = [
 				path: '/vc_manage',
 				name: 'vcManage',
 				component: VCManagePage
-			},
+			}
 			// {
 			// 	path: 'file_preview_view',
 			// 	name: 'filePreviewView',
 			// 	component: FilePreviewPage
-			// },
-			{
-				path: 'LoginCloud',
-				component: IndexMobile
-			}
+			// }
 		]
 	}
 ];

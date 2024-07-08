@@ -4,14 +4,14 @@ import { i18n } from '../../boot/i18n';
 export class MobileWebPlatform extends TerminusCommonPlatform {
 	tabbarItems = [
 		{
-			name: i18n.global.t('file'),
+			name: i18n.global.t('files.files'),
 			identify: 'file',
 			normalImage: 'tab_files_normal',
 			activeImage: 'tab_files_active',
 			to: '/home'
 		},
 		{
-			name: i18n.global.t('vault'),
+			name: i18n.global.t('Vault'),
 			identify: 'secret',
 			normalImage: 'tab_secret_normal',
 			activeImage: 'tab_secret_active',

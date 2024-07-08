@@ -17,7 +17,7 @@ export interface TOTPValidationOpts extends TOTPOpts {
 	window: number;
 }
 
-function getToken(hmac: Uint8Array, digits: number = 6): string {
+function getToken(hmac: Uint8Array, digits = 6): string {
 	const offset = hmac[hmac.length - 1] & 0xf;
 	const bin = new Uint8Array([
 		hmac[offset] & 0x7f,
@@ -120,7 +120,7 @@ export function generateURL({
 	params.set('digits', digits.toString());
 	params.set('algorithm', hash.replace('-', ''));
 	params.set('period', interval.toString());
-	return `otpauth://${type}/${encodeURIComponent(
-		issuer
-	)}:${encodeURIComponent(account)}?${params.toString()}`;
+	return `otpauth://${type}/${encodeURIComponent(issuer)}:${encodeURIComponent(
+		account
+	)}?${params.toString()}`;
 }

@@ -52,7 +52,7 @@ onMounted(async () => {
 			busEmit('account_update');
 			if (process.env.PLATFORM == 'DESKTOP') {
 				router.replace('/Files/Home/');
-			} else if (process.env.PLATFORM == 'WEB') {
+			} else if (process.env.PLATFORM == 'VAULT') {
 				router.replace('/items');
 			} else {
 				router.replace({ path: '/home' });

@@ -19,7 +19,7 @@
 
 			<q-card-section class="q-pt-md">
 				<div class="text-caption text-left q-mb-xs text-grey-7">
-					{{ t('vault') }}
+					{{ t('Vault') }}
 				</div>
 				<q-select
 					outlined

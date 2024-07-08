@@ -21,7 +21,7 @@
 						"
 					>
 						<div class="module-title text-subtitle3">
-							{{ t('domain_name') }}
+							{{ t('domain.title') }}
 						</div>
 						<div
 							class="domain-name text-body2 row items-center q-pl-md q-mt-xs"
@@ -396,7 +396,7 @@ const btnTitle = computed(function () {
 		domain.value.status == DOMAIN_STATUS.WAIT_REQUEST_VC ||
 		domain.value.status == DOMAIN_STATUS.WAIT_SUBMIT_VP
 	) {
-		return t('request_domain_name_on_blockchain');
+		return t('confirm');
 	}
 
 	if (

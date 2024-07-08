@@ -124,7 +124,7 @@ import { useDataStore } from '../../stores/data';
 import { useFilesUploadStore } from '../../stores/files-upload';
 import { fileList } from '../../utils/constants';
 import { scrollBarStyle } from '../../utils/contact';
-import { useRouter, useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { dataAPIs } from '../../api';
 import { OriginType } from '../../api/common/encoding';
@@ -140,7 +140,7 @@ export default defineComponent({
 		const { t } = useI18n();
 
 		const Router = useRouter();
-		const Route = useRoute();
+		// const Route = useRoute();
 		const showUpload = ref(true);
 		const showUploadModal = ref(store.showUploadModal);
 		const uploadQueue = ref(uploadSrore.uploadQueue);

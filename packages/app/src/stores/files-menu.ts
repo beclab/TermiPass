@@ -5,6 +5,7 @@ import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
 // import { dataAPI } from './../api';
 import { dataAPIs, SyncDataAPI } from './../api';
+import { i18n } from 'src/boot/i18n';
 
 import {
 	SyncRepoMineType,
@@ -55,39 +56,39 @@ export const useMenuStore = defineStore('filesMenu', {
 			activeMenu: 'Home',
 			menu: [
 				{
-					label: MenuItem.DRIVE,
+					label: i18n.global.t('files.drive'),
 					key: MenuItem.DRIVE,
 					icon: '',
 					children: [
 						{
-							label: MenuItem.HOME,
+							label: i18n.global.t('files.home'),
 							key: MenuItem.HOME,
 							icon: 'sym_r_other_houses'
 						},
 						{
-							label: MenuItem.DOCUMENTS,
+							label: i18n.global.t('files.documents'),
 							key: MenuItem.DOCUMENTS,
 							icon: 'sym_r_news'
 						},
 						{
-							label: MenuItem.PICTURES,
+							label: i18n.global.t('files.pictures'),
 							key: MenuItem.PICTURES,
 							icon: 'sym_r_art_track'
 						},
 						{
-							label: MenuItem.MOVIES,
+							label: i18n.global.t('files.movies'),
 							key: MenuItem.MOVIES,
 							icon: 'sym_r_smart_display'
 						},
 						{
-							label: MenuItem.DOWNLOADS,
+							label: i18n.global.t('files.downloads'),
 							key: MenuItem.DOWNLOADS,
 							icon: 'sym_r_browser_updated'
 						}
 					]
 				},
 				{
-					label: MenuItem.SYNC,
+					label: i18n.global.t('files.sync'),
 					key: MenuItem.SYNC,
 					icon: '',
 					children: []
@@ -109,17 +110,17 @@ export const useMenuStore = defineStore('filesMenu', {
 					// ]
 				},
 				{
-					label: MenuItem.APPLICATION,
+					label: i18n.global.t('files.application'),
 					key: MenuItem.APPLICATION,
 					icon: '',
 					children: [
 						{
-							label: MenuItem.DATA,
+							label: i18n.global.t('files.data'),
 							key: MenuItem.DATA,
 							icon: 'bi-database'
 						},
 						{
-							label: MenuItem.CACHE,
+							label: i18n.global.t('files.cache'),
 							key: MenuItem.CACHE,
 							icon: 'bi-file-bar-graph'
 						}

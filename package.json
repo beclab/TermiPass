@@ -61,7 +61,7 @@
         "dev:1": "PL_SERVER_URL=http://127.0.0.1:3000 lerna run --scope '@didvault/{server,mockbfl}' --parallel dev",
         "dev:2": "PL_SERVER_URL=http://127.0.0.1:3010 lerna run --scope '@didvault/{server2,mockbfl2}' --parallel dev",
         "dev:desktop": "PL_SERVER_URL=http://127.0.0.1:3000 SERVER_PROXY_NNME=guojianmin lerna run --scope '@didvault/app' --parallel dev:desktop",
-        "dev:files": "PL_SERVER_URL=http://127.0.0.1:3000 SERVER_PROXY_NNME=zhaohuaiyuan lerna run --scope '@didvault/app' --parallel dev:files",
+        "dev:files": "PL_SERVER_URL=http://127.0.0.1:3000 SERVER_PROXY_NNME=guojianmin lerna run --scope '@didvault/app' --parallel dev:files",
         "clean:2": "lerna run --scope '@didvault/{server,server2,mockbfl,mockbfl2,sign2}' --parallel clean",
         "dev:mobile": "PL_SERVER_URL=http://127.0.0.1:3000 SERVER_PROXY_NNME=guojianmin lerna run --scope '@didvault/app' --parallel dev:mobile",
         "dev:member": "PL_SERVER_URL=http://127.0.0.1:3000 SERVER_PROXY_NNME=zhaohuaiyuan lerna run --scope '@didvault/app' --parallel dev:member",

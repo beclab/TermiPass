@@ -1,5 +1,5 @@
 <template>
-	<div class="file-footer" v-if="store.req">
+	<div class="file-footer" v-if="store.req && totalFileCount > 0">
 		{{ selectFileCount || '' }}
 		{{
 			selectFileCount === 1
@@ -16,11 +16,11 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { format } from 'quasar';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
 import { useDataStore } from '../../../stores/data';
 
 const store = useDataStore();
-const route = useRoute();
+// const route = useRoute();
 
 const selectFileCount = ref(0);
 const selectFileSize = ref(0);

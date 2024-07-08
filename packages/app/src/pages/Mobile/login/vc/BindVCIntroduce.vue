@@ -54,7 +54,7 @@ const title = ref(
 );
 
 const btnStatus = ref(ConfirmButtonStatus.disable);
-const btnTitle = t('i_have_read');
+const btnTitle = t('i_got_it');
 let leftTime = 1;
 const btnTitleRef = ref(btnTitle + ' ' + leftTime + 's');
 

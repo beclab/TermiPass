@@ -3,7 +3,7 @@
 		<div
 			class="auto-fill-title row justify-between items-center q-px-md q-py-sm"
 		>
-			<div class="auto-fill-label text-grey-10">{{ t('vault') }}</div>
+			<div class="auto-fill-label text-grey-10">{{ t('Vault') }}</div>
 			<div
 				class="auto-fill-add-background row justify-center items-center"
 				@click="onAddClicked"

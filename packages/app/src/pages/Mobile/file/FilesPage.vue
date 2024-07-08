@@ -29,7 +29,7 @@ import { onMounted } from 'vue';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { checkSeahub } from '../../../utils/file';
-import { files as api, seahub } from '../../../api';
+import { seahub } from '../../../api';
 import Errors from '../../Files/Errors.vue';
 import { watch } from 'vue';
 import ListingFiles from './ListingFiles.vue';

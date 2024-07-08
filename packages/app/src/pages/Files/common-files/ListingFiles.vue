@@ -153,20 +153,12 @@
 </template>
 
 <script lang="ts" setup>
-import {
-	defineComponent,
-	ref,
-	onMounted,
-	onUnmounted,
-	computed,
-	watch,
-	nextTick
-} from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 // import { format } from 'quasar';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';
 import { useDataStore } from '../../../stores/data';
-import { files as api } from '../../../api';
+// import { files as api } from '../../../api';
 import {
 	checkConflict,
 	createCopiedFile,
@@ -203,7 +195,7 @@ const fileUploaderPath = ref();
 
 watch(
 	() => store.req,
-	(newVal) => {
+	() => {
 		showLimit = 50;
 
 		nextTick(() => {
@@ -314,21 +306,21 @@ const typeIcon = computed(function () {
 	return 'arrow_downward';
 });
 
-const headerButtons = computed(function () {
-	return {
-		upload: store.user?.perm?.create,
-		download: store.user?.perm?.download,
-		delete: store.selectedCount > 0 && store.user?.perm?.delete,
-		rename: store.selectedCount === 1 && store.user?.perm?.rename,
-		share: store.selectedCount === 1 && store.user?.perm?.share,
-		move: store.selectedCount > 0 && store.user?.perm?.rename,
-		copy: store.selectedCount > 0 && store.user?.perm?.create
-	};
-});
+// const headerButtons = computed(function () {
+// 	return {
+// 		upload: store.user?.perm?.create,
+// 		download: store.user?.perm?.download,
+// 		delete: store.selectedCount > 0 && store.user?.perm?.delete,
+// 		rename: store.selectedCount === 1 && store.user?.perm?.rename,
+// 		share: store.selectedCount === 1 && store.user?.perm?.share,
+// 		move: store.selectedCount > 0 && store.user?.perm?.rename,
+// 		copy: store.selectedCount > 0 && store.user?.perm?.create
+// 	};
+// });
 
-const isMobile = computed(function () {
-	return width.value <= 736;
-});
+// const isMobile = computed(function () {
+// 	return width.value <= 736;
+// });
 
 onMounted(() => {
 	// How much every listing item affects the window height
@@ -630,14 +622,14 @@ const sort = async (by: string) => {
 	// store.setReload(true);
 };
 
-const openSearch = () => {
-	store.showHover('search');
-};
+// const openSearch = () => {
+// 	store.showHover('search');
+// };
 
-const toggleMultipleSelection = () => {
-	store.setMultiple(!store.multiple);
-	store.closeHovers();
-};
+// const toggleMultipleSelection = () => {
+// 	store.setMultiple(!store.multiple);
+// 	store.closeHovers();
+// };
 
 const windowsResize = throttle(() => {
 	width.value = window.innerWidth;
@@ -652,42 +644,42 @@ const windowsResize = throttle(() => {
 	fillWindow();
 }, 100);
 
-const download = () => {
-	if (store.selectedCount === 1 && !store.req.items[store.selected[0]].isDir) {
-		api.download(null, undefined, store.req.items[store.selected[0]].url);
-		return;
-	}
+// const download = () => {
+// 	if (store.selectedCount === 1 && !store.req.items[store.selected[0]].isDir) {
+// 		api.download(null, undefined, store.req.items[store.selected[0]].url);
+// 		return;
+// 	}
 
-	store.showHover({
-		prompt: 'download',
-		confirm: (format: any) => {
-			store.closeHovers();
+// 	store.showHover({
+// 		prompt: 'download',
+// 		confirm: (format: any) => {
+// 			store.closeHovers();
 
-			let files: any = [];
+// 			let files: any = [];
 
-			if (store.selectedCount > 0) {
-				for (let i of store.selected) {
-					files.push(store.req.items[i].url);
-				}
-			} else {
-				files.push(route.path);
-			}
+// 			if (store.selectedCount > 0) {
+// 				for (let i of store.selected) {
+// 					files.push(store.req.items[i].url);
+// 				}
+// 			} else {
+// 				files.push(route.path);
+// 			}
 
-			api.download(format, undefined, ...files);
-		}
-	});
-};
+// 			api.download(format, undefined, ...files);
+// 		}
+// 	});
+// };
 
-const upload = () => {
-	if (
-		typeof window.DataTransferItem !== 'undefined' &&
-		typeof DataTransferItem.prototype.webkitGetAsEntry !== 'undefined'
-	) {
-		store.showHover('upload');
-	} else {
-		document.getElementById('upload-input')?.click();
-	}
-};
+// const upload = () => {
+// 	if (
+// 		typeof window.DataTransferItem !== 'undefined' &&
+// 		typeof DataTransferItem.prototype.webkitGetAsEntry !== 'undefined'
+// 	) {
+// 		store.showHover('upload');
+// 	} else {
+// 		document.getElementById('upload-input')?.click();
+// 	}
+// };
 
 const setItemWeight = () => {
 	// Listing element is not displayed

@@ -1,5 +1,5 @@
 <template>
-	<q-layout view="lhr lpr lfr" :container="platform == 'WEB' ? false : true">
+	<q-layout view="lhr lpr lfr" :container="platform == 'VAULT' ? false : true">
 		<VaultsDrawer />
 
 		<q-page-container>

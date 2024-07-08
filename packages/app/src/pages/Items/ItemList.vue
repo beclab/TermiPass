@@ -50,7 +50,7 @@
 					<TerminusAccountAvatar />
 					<div @click="toggleDrawer">
 						<div class="text-color-title text-h6 user-header__title">
-							{{ t('vault') }}
+							{{ t('Vault') }}
 						</div>
 						<div class="text-grey-6 text-subtitle3 row items-center">
 							{{ heading.title }}

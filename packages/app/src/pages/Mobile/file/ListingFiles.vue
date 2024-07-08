@@ -158,7 +158,7 @@ import { format, useQuasar } from 'quasar';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';
 import { useDataStore } from '../../../stores/data';
-import { users, files as api } from '../../../api';
+import { users } from '../../../api';
 import { checkConflict, scanFiles, handleFiles } from '../../../utils/upload';
 import ListingItem from './ListingItem.vue';
 import { filesSortTypeInfo } from '../../../utils/contact';

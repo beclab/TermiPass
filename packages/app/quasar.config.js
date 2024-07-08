@@ -50,7 +50,7 @@ module.exports = configure(function (ctx) {
 		// https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-css
 		css: [
 			'app.scss',
-			!ctx.dev && ['FILES', 'WEB'].includes(process.env.PLATFORM)
+			!ctx.dev && ['FILES', 'VAULT'].includes(process.env.PLATFORM)
 				? 'font.pro.scss'
 				: 'font.dev.scss'
 		],

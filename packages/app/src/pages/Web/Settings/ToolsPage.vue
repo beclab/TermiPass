@@ -7,16 +7,16 @@
 	<q-list class="q-ma-md sItem" separator>
 		<q-item class="titleBg">
 			<q-item-section>{{
-				t('web.settings.tools.import') + ' / ' + t('web.settings.tools.export')
+				t('web.tools.import') + ' / ' + t('web.tools.export')
 			}}</q-item-section>
 		</q-item>
 		<q-item class="row items-center justify-center">
 			<q-avatar icon="upload" />
-			{{ t('web.settings.tools.import') }}...
+			{{ t('web.tools.import') }}...
 		</q-item>
 		<q-item class="row items-center justify-center">
 			<q-avatar icon="download" />
-			{{ t('web.settings.tools.export') }}...
+			{{ t('web.tools.export') }}...
 		</q-item>
 	</q-list>
 </template>

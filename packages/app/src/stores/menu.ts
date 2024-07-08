@@ -231,7 +231,7 @@ export const useMenuStore = defineStore('menu', {
 			let invitesMenus = this.invitesMenus;
 			const toolsMenus = this.toolsMenus;
 			let utilityMenus = this.utilityMenus;
-			const isWeb = process.env.PLATFORM == 'WEB';
+			const isWeb = process.env.PLATFORM == 'VAULT';
 
 			const elChildren = vaultMenus.children;
 			for (let j = 0; j < elChildren.length; j++) {

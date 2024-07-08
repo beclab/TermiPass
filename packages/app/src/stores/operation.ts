@@ -9,9 +9,9 @@ import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
 import { useDataStore } from './data';
 import { MenuItem } from '../utils/contact';
 
-// import { operationAPI } from './../api';
-
 import { dataAPIs } from './../api';
+
+import { i18n } from 'src/boot/i18n';
 
 export type DataState = {
 	contextmenu: ContextType[];
@@ -23,75 +23,75 @@ export const useOperateinStore = defineStore('operation', {
 		return {
 			contextmenu: [
 				{
-					name: 'Open Local Sync Folder',
+					name: i18n.global.t('files_popup_menu.open_local_sync_folder'),
 					icon: 'sym_r_folder_open',
 					type: 'seahub',
 					action: OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER,
 					condition: (event: EventType) => event.type === 'sync'
 				},
 				{
-					name: 'Download',
+					name: i18n.global.t('buttons.download'),
 					icon: 'sym_r_browser_updated',
 					action: OPERATE_ACTION.DOWNLOAD,
 					condition: (event: EventType) => event.isSelected
 				},
 				{
-					name: 'Copy',
+					name: i18n.global.t('copy'),
 					icon: 'sym_r_content_copy',
 					action: OPERATE_ACTION.COPY,
 					condition: (event: EventType) => event.isSelected
 				},
 				{
-					name: 'Cut',
+					name: i18n.global.t('files.cut'),
 					icon: 'sym_r_move_up',
 					action: OPERATE_ACTION.CUT,
 					condition: (event: EventType) => event.isSelected
 				},
 				{
-					name: 'Rename',
+					name: i18n.global.t('files_popup_menu.rename'),
 					icon: 'sym_r_edit_square',
 					action: OPERATE_ACTION.RENAME,
 					condition: (event: EventType) =>
 						event.isSelected && event.showRename && !event.isHomePage
 				},
 				{
-					name: 'Delete',
+					name: i18n.global.t('files_popup_menu.delete'),
 					icon: 'sym_r_edit_square',
 					action: OPERATE_ACTION.DELETE,
 					condition: (event: EventType) => event.isSelected && !event.isHomePage
 				},
 				{
-					name: 'Attributes',
+					name: i18n.global.t('files_popup_menu.attributes'),
 					icon: 'sym_r_ballot',
 					action: OPERATE_ACTION.ATTRIBUTES,
 					condition: (event: EventType) => event.isSelected
 				},
 				{
-					name: 'New Folder',
+					name: i18n.global.t('files_popup_menu.new_folder'),
 					icon: 'sym_r_create_new_folder',
 					action: OPERATE_ACTION.CREATE_FOLDER,
 					condition: (event: EventType) => !event.isSelected
 				},
 				{
-					name: 'Upload Files',
+					name: i18n.global.t('files_popup_menu.upload_file'),
 					icon: 'sym_r_upload_file',
 					action: OPERATE_ACTION.UPLOAD_FILES,
 					condition: (event: EventType) => !event.isSelected
 				},
 				{
-					name: 'Upload Folder',
+					name: i18n.global.t('files_popup_menu.upload_folder'),
 					icon: 'sym_r_drive_folder_upload',
 					action: OPERATE_ACTION.UPLOAD_FOLDER,
 					condition: (event: EventType) => !event.isSelected
 				},
 				{
-					name: 'Paste',
+					name: i18n.global.t('paste'),
 					icon: 'sym_r_content_paste',
 					action: OPERATE_ACTION.PASTE,
 					condition: (event: EventType) => !event.isSelected && event.hasCopied
 				},
 				{
-					name: 'Refresh',
+					name: i18n.global.t('files.refresh'),
 					icon: 'sym_r_replay',
 					action: OPERATE_ACTION.REFRESH,
 					condition: (event: EventType) => !event.isSelected

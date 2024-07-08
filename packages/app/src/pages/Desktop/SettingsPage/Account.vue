@@ -46,7 +46,7 @@
 							{{ t('mnemonic_backup') }}
 						</q-item-label>
 						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs">
-							<div class="q-mb-xs text-grey-7">{{ t('mnemonics') }}</div>
+							<div class="q-mb-xs text-grey-7">{{ t('mnemonic_phrase') }}</div>
 							<div class="mnemonics_wrap">
 								<terminus-mnemonics-component
 									ref="selectMnemonicsView"

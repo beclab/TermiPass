@@ -95,10 +95,6 @@ const mobileCommon: RouteRecordRaw[] = [
 				component: () => import('pages/Mobile/secret/VCCardList.vue')
 			},
 			{
-				path: '/select_terminus_name',
-				component: () => import('pages/Mobile/secret/SelectTerminusName.vue')
-			},
-			{
 				path: '/setting/account',
 				component: () => import('pages/Mobile/setting/AccountPage.vue')
 			},
@@ -142,10 +138,6 @@ const mobileCommon: RouteRecordRaw[] = [
 				path: 'file_preview_view',
 				name: 'filePreviewView',
 				component: () => import('pages/Mobile/file/FilePreviewPage.vue')
-			},
-			{
-				path: 'LoginCloud',
-				component: () => import('src/pages/Mobile/cloud/login/IndexMobile.vue')
 			},
 			{
 				path: '/scanQrCode',

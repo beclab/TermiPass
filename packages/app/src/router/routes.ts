@@ -2,7 +2,7 @@ import { RouteRecordRaw } from 'vue-router';
 
 let routes: RouteRecordRaw[] = [];
 
-if (process.env.PLATFORM == 'WEB') {
+if (process.env.PLATFORM == 'VAULT') {
 	routes = [
 		...routes,
 		...require('./routes/routes-common').default,

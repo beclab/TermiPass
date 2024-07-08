@@ -86,7 +86,7 @@
 						class="q-mt-lg"
 						@click="startBackUp"
 					>
-						<template v-slot:title> {{ t('mnemonics') }} </template>
+						<template v-slot:title> {{ t('mnemonic_phrase') }} </template>
 						<template v-slot:detail>
 							{{ t('view_your_mnemonic_phrase') }}
 						</template>

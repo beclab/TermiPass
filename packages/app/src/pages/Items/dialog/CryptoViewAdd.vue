@@ -47,7 +47,7 @@
 										class="input-area"
 										bg-color="transparent"
 										borderless
-										:label="t('mnemonic')"
+										:label="t('mnemonic_phrase')"
 										v-on:update:model-value="checkMnemonic()"
 									/>
 								</div>
@@ -260,7 +260,7 @@ export default {
 		const options = ref([
 			{
 				value: 'mnemonic',
-				label: t('mnemonic')
+				label: t('mnemonic_phrase')
 			},
 			{
 				value: 'privatekey',

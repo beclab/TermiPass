@@ -1,4 +1,4 @@
-import { useFilesUploadStore } from '../stores/files-upload';
+// import { useFilesUploadStore } from '../stores/files-upload';
 
 export function checkConflict(files, items) {
 	if (typeof items === 'undefined' || items === null) {

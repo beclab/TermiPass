@@ -13,7 +13,7 @@
 			<template v-slot:content>
 				<terminus-edit
 					v-model="domainRef"
-					:label="t('domain_name')"
+					:label="t('domain.title')"
 					class="q-mt-lg"
 					@update:model-value="domainUpdate"
 					input-type="email"

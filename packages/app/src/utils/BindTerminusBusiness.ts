@@ -457,7 +457,7 @@ export async function connectTerminus(
 		throw new Error(i18n.global.t('errors.user_is_empty'));
 	}
 	let isWebPlatform = false;
-	if (process.env.PLATFORM == 'WEB') {
+	if (process.env.PLATFORM == 'VAULT') {
 		isWebPlatform = true;
 	}
 
@@ -524,7 +524,7 @@ export async function importUser(
 ): Promise<UserItem | null> {
 	try {
 		let isWebPlatform = false;
-		if (process.env.PLATFORM == 'WEB') {
+		if (process.env.PLATFORM == 'VAULT') {
 			isWebPlatform = true;
 		}
 

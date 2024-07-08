@@ -14,7 +14,7 @@ import MD5 from 'MD5';
 import { useRoute } from 'vue-router';
 import Resumablejs from '@seafile/resumablejs';
 import { seafileAPI } from '../../../api/seafileAPI';
-import { seahub } from '../../../api';
+// import { seahub } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import { useSeahubStore } from '../../../stores/seahub';
 import { useFilesUploadStore } from '../../../stores/files-upload';
@@ -43,7 +43,7 @@ type uploadObjType = {
 	simultaneousUploads: number;
 };
 
-const emits = defineEmits(['onFileUploadSuccess']);
+// const emits = defineEmits(['onFileUploadSuccess']);
 
 const route = useRoute();
 const dataStore = useDataStore();
@@ -479,13 +479,13 @@ const onDragStart = () => {
 	// uploadInput.value.setAttribute('webkitdirectory', 'webkitdirectory');
 };
 
-const onCloseUploadDialog = () => {
-	resumable.files = [];
-	// reset upload link loaded
-	isUploadLinkLoaded.value = false;
-	dataStore.isUploadProgressDialogShow = false;
-	uploadFileList.value = [];
-};
+// const onCloseUploadDialog = () => {
+// 	resumable.files = [];
+// 	// reset upload link loaded
+// 	isUploadLinkLoaded.value = false;
+// 	dataStore.isUploadProgressDialogShow = false;
+// 	uploadFileList.value = [];
+// };
 </script>
 
 <style lang="scss" scoped>

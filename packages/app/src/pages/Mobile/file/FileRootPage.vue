@@ -2,79 +2,72 @@
 	<div class="files-page-root">
 		<div class="flur1"></div>
 		<div class="flur2"></div>
-		<Terminus-user-header :title="t('Files')" />
+		<Terminus-user-header :title="t('files.files')" />
 		<terminus-scroll-area class="files-content-mobile q-mt-sm">
 			<template v-slot:content>
-				<bind-terminus-name :border-show="false">
-					<template v-slot:success>
-						<div class="home-module-title">
-							{{ t('files.drive') }}
-						</div>
-						<div class="module-content q-mt-md bg-color-white">
-							<div v-for="(cell, index) in driveMenus" :key="index">
-								<terminus-item
-									:show-board="false"
-									img-bg-classes="bg-grey-1"
-									:image-path="cell.icon"
-									:whole-picture-size="32"
-									:icon-size="16"
-									@click="seahubAtion(cell.menu, cell.name)"
-								>
-									<template v-slot:title>
-										<div class="text-subtitle1">{{ cell.name }}</div>
-									</template>
-									<template v-slot:side>
-										<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
-									</template>
-								</terminus-item>
-								<q-separator
-									inset
-									color="grey-2"
-									v-if="index + 1 < driveMenus.length"
-								/>
-							</div>
-						</div>
+				<div class="home-module-title">
+					{{ t('files.drive') }}
+				</div>
+				<div class="module-content q-mt-md bg-color-white">
+					<div v-for="(cell, index) in driveMenus" :key="index">
+						<terminus-item
+							:show-board="false"
+							img-bg-classes="bg-grey-1"
+							:image-path="cell.icon"
+							:whole-picture-size="32"
+							:icon-size="16"
+							@click="seahubAtion(cell.menu, cell.name)"
+						>
+							<template v-slot:title>
+								<div class="text-subtitle1">{{ cell.name }}</div>
+							</template>
+							<template v-slot:side>
+								<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+							</template>
+						</terminus-item>
+						<q-separator
+							inset
+							color="grey-2"
+							v-if="index + 1 < driveMenus.length"
+						/>
+					</div>
+				</div>
 
-						<div class="home-module-title q-mt-lg">
-							{{ $t('files.sync') }}
-						</div>
-						<div class="module-content q-mt-md bg-color-white">
-							<div v-for="(cell, index) in syncMenus" :key="index">
-								<terminus-item
-									:show-board="false"
-									img-bg-classes="bg-grey-1"
-									:icon-name="cell.icon"
-									:whole-picture-size="32"
-									@click="seahubAtion(cell.menu, cell.name)"
-								>
-									<template v-slot:title>
-										<div class="text-subtitle1">{{ cell.name }}</div>
-									</template>
-									<template v-slot:side>
-										<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
-									</template>
-								</terminus-item>
-								<q-separator
-									inset
-									color="grey-2"
-									v-if="index + 1 < syncMenus.length"
-								/>
-							</div>
-						</div>
-						<div
-							v-if="
-								termipassStore &&
-								termipassStore.totalStatus &&
-								termipassStore.totalStatus.isError == 2
-							"
-							style="padding-bottom: 60px; width: 100%; height: 1px"
+				<div class="home-module-title q-mt-lg">
+					{{ $t('files.sync') }}
+				</div>
+				<div class="module-content q-mt-md bg-color-white">
+					<div v-for="(cell, index) in syncMenus" :key="index">
+						<terminus-item
+							:show-board="false"
+							img-bg-classes="bg-grey-1"
+							:icon-name="cell.icon"
+							:whole-picture-size="32"
+							@click="seahubAtion(cell.menu, cell.name)"
+						>
+							<template v-slot:title>
+								<div class="text-subtitle1">{{ cell.name }}</div>
+							</template>
+							<template v-slot:side>
+								<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+							</template>
+						</terminus-item>
+						<q-separator
+							inset
+							color="grey-2"
+							v-if="index + 1 < syncMenus.length"
 						/>
-						<div
-							v-else
-							style="padding-bottom: 30px; width: 100%; height: 1px"
-						/>
-					</template>
-				</bind-terminus-name>
+					</div>
+				</div>
+				<div
+					v-if="
+						termipassStore &&
+						termipassStore.totalStatus &&
+						termipassStore.totalStatus.isError == 2
+					"
+					style="padding-bottom: 60px; width: 100%; height: 1px"
+				/>
+				<div v-else style="padding-bottom: 30px; width: 100%; height: 1px" />
 			</template>
 		</terminus-scroll-area>
 	</div>
@@ -88,9 +81,7 @@ import { ref } from 'vue';
 import { MenuItem } from '../../../utils/contact';
 import { useDataStore } from '../../../stores/data';
 import { useRouter } from 'vue-router';
-import BindTerminusName from '../../../components/common/BindTerminusName.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
-// import { useUserStore } from '../../../stores/user';
 import { UserStatusActive } from '../../../utils/checkTerminusState';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
@@ -100,7 +91,6 @@ const { t } = useI18n();
 const dataStore = useDataStore();
 
 const Router = useRouter();
-// const userStore = useUserStore();
 const termipassStore = useTermipassStore();
 
 const driveMenus = ref([

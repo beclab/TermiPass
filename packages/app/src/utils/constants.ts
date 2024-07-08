@@ -10,27 +10,27 @@ export const SETTING_MENU: Record<string, SettingType> = {
 	account: {
 		icon: 'person',
 		mode: 1,
-		name: i18n.global.t('web.settings.account.title')
+		name: i18n.global.t('web.account.title')
 	},
 	security: {
 		icon: 'security',
 		mode: 2,
-		name: i18n.global.t('web.settings.security.title')
+		name: i18n.global.t('web.security.title')
 	},
 	display: {
 		icon: 'desktop_windows',
 		mode: 3,
-		name: i18n.global.t('web.settings.display.title')
+		name: i18n.global.t('web.display.title')
 	},
 	tools: {
 		icon: 'construction',
 		mode: 4,
-		name: i18n.global.t('web.settings.tools.title')
+		name: i18n.global.t('web.tools.title')
 	},
 	rebinding: {
 		icon: 'person',
 		mode: 5,
-		name: i18n.global.t('web.settings.rebinding.title')
+		name: i18n.global.t('web.rebinding.title')
 	}
 };
 
@@ -83,7 +83,7 @@ export enum LayoutMenuIdetify {
 
 export const LayoutMenu: LayoutItem[] = [
 	{
-		name: i18n.global.t('file'),
+		name: i18n.global.t('files.files'),
 		icon: 'files',
 		icon_active: 'files-active',
 		identify: LayoutMenuIdetify.FILES,
@@ -91,7 +91,7 @@ export const LayoutMenu: LayoutItem[] = [
 	},
 
 	{
-		name: i18n.global.t('vault'),
+		name: i18n.global.t('Vault'),
 		icon: 'vault',
 		icon_active: 'vault-active',
 		identify: LayoutMenuIdetify.VAULT,

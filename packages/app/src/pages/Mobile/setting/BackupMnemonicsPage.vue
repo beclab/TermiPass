@@ -57,7 +57,7 @@
 							</div>
 
 							<div class="q-mt-md text-body3 module-sub-title">
-								{{ t('mnemonics') }}
+								{{ t('mnemonic_phrase') }}
 							</div>
 							<div class="q-mt-sm mnemonics_bg">
 								<terminus-mnemonics-component
@@ -87,7 +87,7 @@
 								}}
 							</div>
 							<div class="q-mt-md text-body3 module-sub-title">
-								{{ t('mnemonics') }}
+								{{ t('mnemonic_phrase') }}
 							</div>
 							<div class="q-mt-sm" style="width: calc(100% - 8px)">
 								<terminus-mnemonics-component
@@ -117,7 +117,7 @@
 				</div>
 				<div v-else>
 					<div class="q-mt-md text-body3 module-sub-title">
-						{{ t('mnemonics') }}
+						{{ t('mnemonic_phrase') }}
 					</div>
 					<div class="q-mt-sm mnemonics_bg">
 						<terminus-mnemonics-component
@@ -168,9 +168,9 @@ enum BackupStep {
 const { t } = useI18n();
 
 const stepMap: Record<BackupStep, string> = {
-	[BackupStep.start]: t('Start'),
+	[BackupStep.start]: t('start'),
 	[BackupStep.display]: t('buttons.next'),
-	[BackupStep.select]: t('i_have_completed_my_backup')
+	[BackupStep.select]: t('completed')
 };
 
 const step = ref(BackupStep.start);

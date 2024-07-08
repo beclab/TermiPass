@@ -129,10 +129,10 @@ const selectHandler = (value) => {
 		return false;
 	}
 	if (value.item.repo_id) {
-		changeItemMenu(value.item.label, value.item.id, value.item);
+		changeItemMenu(value.item.key, value.item.id, value.item);
 	} else {
 		seahubStore.setRepoId({ id: '', name: '' });
-		changeItemMenu(value.item.label);
+		changeItemMenu(value.item.key);
 	}
 };
 

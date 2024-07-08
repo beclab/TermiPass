@@ -151,7 +151,7 @@ const hoverItemAvtive = ref();
 const isSeahub = ref(false);
 const hideOption = ref(false);
 
-const platform = ref(process.env.PLATFORM);
+// const platform = ref(process.env.PLATFORM);
 const viewMode = ref((store.user && store.user.viewMode) || 'list');
 
 const backFlag = ref(true);

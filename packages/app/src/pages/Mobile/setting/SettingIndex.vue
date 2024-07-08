@@ -15,45 +15,41 @@
 		<terminus-scroll-area class="setting-content q-mt-sm">
 			<template v-slot:content>
 				<div class="terminus-info q-pt-xs">
-					<bind-terminus-name :border-show="false">
-						<template v-slot:success>
-							<div class="home-module-title">
-								{{ t('settings.authenticator') }}
+					<div class="home-module-title">
+						{{ t('settings.authenticator') }}
+					</div>
+					<auth-item-card class="q-mt-sm" />
+					<div class="home-module-title q-mt-lg">
+						{{ t('settings.equipment_usage') }}
+					</div>
+					<div class="terminus-info__name text-body3">
+						{{ userName }}
+					</div>
+					<div
+						class="terminus-bind__system-info row justify-between items-center"
+					>
+						<div
+							class="info-item column items-center justify-top q-pt-md"
+							:style="`background:${monitorStore.background[index]}`"
+							v-for="(item, index) in monitorStore.usages"
+							:key="`d` + index"
+						>
+							<q-knob
+								readonly
+								v-model="item.ratio"
+								size="58px"
+								:thickness="0.5"
+								:color="item.color"
+								track-color="grey-1"
+							/>
+							<div class="amount text-body2 text-color-title">
+								{{ item.ratio }}%
 							</div>
-							<auth-item-card class="q-mt-sm" />
-							<div class="home-module-title q-mt-lg">
-								{{ t('settings.equipment_usage') }}
+							<div class="name text-body3 text-color-sub-title">
+								{{ item.name?.toUpperCase() }}
 							</div>
-							<div class="terminus-info__name text-body3">
-								{{ userName }}
-							</div>
-							<div
-								class="terminus-bind__system-info row justify-between items-center"
-							>
-								<div
-									class="info-item column items-center justify-top q-pt-md"
-									:style="`background:${monitorStore.background[index]}`"
-									v-for="(item, index) in monitorStore.usages"
-									:key="`d` + index"
-								>
-									<q-knob
-										readonly
-										v-model="item.ratio"
-										size="58px"
-										:thickness="0.5"
-										:color="item.color"
-										track-color="grey-1"
-									/>
-									<div class="amount text-body2 text-color-title">
-										{{ item.ratio }}%
-									</div>
-									<div class="name text-body3 text-color-sub-title">
-										{{ item.name?.toUpperCase() }}
-									</div>
-								</div>
-							</div>
-						</template>
-					</bind-terminus-name>
+						</div>
+					</div>
 
 					<div class="home-module-title q-mt-lg">
 						{{ t('settings.settings') }}
@@ -138,7 +134,6 @@ import TerminusUserHeader from '../../../components/common/TerminusUserHeader.vu
 import '../../../css/terminus.scss';
 import { useMonitorStore } from '../../../stores/monitor';
 import TerminusItem from '../../../components/common/TerminusItem.vue';
-import BindTerminusName from '../../../components/common/BindTerminusName.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 
 import AuthItemCard from '../items/AuthItemCard.vue';
@@ -155,12 +150,12 @@ const settingMenu = [
 		path: '/setting/account'
 	},
 	{
-		label: 'Integration',
+		label: t('integration.title'),
 		icon: 'sym_r_stacks',
 		path: '/integration'
 	},
 	{
-		label: t('Safety'),
+		label: t('settings.safety'),
 		icon: 'sym_r_arming_countdown',
 		path: '/setting/security'
 	}

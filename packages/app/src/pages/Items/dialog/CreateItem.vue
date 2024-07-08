@@ -207,7 +207,7 @@ const dialogModel = ref(true);
 const { t } = useI18n();
 
 const isWeb = ref(
-	process.env.PLATFORM == 'WEB' || process.env.PLATFORM == 'DESKTOP'
+	process.env.PLATFORM == 'VAULT' || process.env.PLATFORM == 'DESKTOP'
 );
 
 let templates: ItemTemplate[] = ITEM_TEMPLATES;

@@ -41,7 +41,9 @@
 
 		<q-item>
 			<q-item-section>
-				<q-item-label class="text-blue-6">{{ t('mnemonic') }}</q-item-label>
+				<q-item-label class="text-blue-6">{{
+					t('mnemonic_phrase')
+				}}</q-item-label>
 				<div
 					class="displayName cursor-pointer"
 					style="margin-top: 10px"

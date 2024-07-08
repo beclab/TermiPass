@@ -5,10 +5,10 @@
 			class="text-color-title text-h6"
 			style="margin-bottom: 12px"
 		>
-			{{ t('mnemonics') }}
+			{{ t('mnemonic_phrase') }}
 		</div>
 		<div v-else-if="showTitle" class="login-label q-mb-xs">
-			{{ t('mnemonics') }}
+			{{ t('mnemonic_phrase') }}
 		</div>
 		<div class="mnemonics-bg row justify-between" v-if="!forceReloadInput">
 			<terminus-mnemonic-item

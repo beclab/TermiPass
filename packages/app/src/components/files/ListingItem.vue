@@ -54,12 +54,11 @@ import { useOperateinStore } from '../../stores/operation';
 import { format } from 'quasar';
 const { humanStorageSize } = format;
 import moment from 'moment';
-import { files as api, seahub } from '../../api';
+import { seahub } from '../../api';
 import { useRouter, useRoute } from 'vue-router';
-import url from './../../utils/url';
 import { checkSeahub } from '../../utils/file';
 import TerminusFileIcon from '../common/TerminusFileIcon.vue';
-import { useMenuStore } from '../../stores/files-menu';
+// import { useMenuStore } from '../../stores/files-menu';
 import { notifyWarning } from '../../utils/notifyRedefinedUtil';
 
 import { OPERATE_ACTION } from '../../utils/contact';
@@ -86,7 +85,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const store = useDataStore();
 		const router = useRouter();
-		const menuStore = useMenuStore();
+		// const menuStore = useMenuStore();
 		const route = useRoute();
 		const operateinStore = useOperateinStore();
 		const touches = ref<number>(0);
