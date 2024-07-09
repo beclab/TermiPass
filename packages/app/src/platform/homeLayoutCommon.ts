@@ -1,4 +1,5 @@
 import { app } from 'src/globals';
+import { useUserStore } from 'src/stores/user';
 import { sendLock } from 'src/utils/bexFront';
 
 let _lockTimeout = 0;
@@ -42,7 +43,8 @@ async function _doLock() {
 	}
 
 	await app.lock();
-
+	const user = useUserStore();
+	user.users?.lock();
 	sendLock();
 }
 
