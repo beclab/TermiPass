@@ -54,6 +54,9 @@ const router = useRouter();
 const userStore = useUserStore();
 
 async function request(request_type: TERMINUS_VC_TYPE) {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	$q.loading.show();
 	await requestBindVC(request_type, null, {
 		async onSuccess(data: any) {
