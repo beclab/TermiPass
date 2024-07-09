@@ -101,6 +101,7 @@ import {
 	onMounted
 } from 'vue';
 import { useDataStore } from '../../stores/data';
+import { useOperateinStore } from '../../stores/operation';
 import { format } from 'quasar';
 const { humanStorageSize } = format;
 import moment from 'moment';
@@ -112,7 +113,6 @@ import TerminusFileIcon from '../common/TerminusFileIcon.vue';
 import { useMenuStore } from '../../stores/files-menu';
 import { notifyWarning } from '../../utils/notifyRedefinedUtil';
 
-import { handleFileOperate } from '../../components/files/files/OperateAction';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
 import { getAppPlatform } from '../../platform/appPlatform';
@@ -140,6 +140,7 @@ export default defineComponent({
 		const router = useRouter();
 		const menuStore = useMenuStore();
 		const route = useRoute();
+		const operateinStore = useOperateinStore();
 		const touches = ref<number>(0);
 		const selectIndex = ref<number | null>(null);
 		const renameRef = ref<any>(null);
@@ -285,7 +286,9 @@ export default defineComponent({
 		const drop = async (event: any) => {
 			let canMove = true;
 			for (const item of store.selected) {
-				if (menuStore.disableMenuItem.includes(store.req.items[item].name)) {
+				if (
+					operateinStore.disableMenuItem.includes(store.req.items[item].name)
+				) {
 					canMove = false;
 					notifyWarning(t('files.the_files_contains_unmovable_items'));
 					break;
@@ -300,7 +303,7 @@ export default defineComponent({
 
 			if (store.selectedCount === 0) return;
 
-			handleFileOperate(
+			operateinStore.handleFileOperate(
 				event,
 				{
 					...route,
@@ -397,50 +400,7 @@ export default defineComponent({
 			}
 		};
 
-		const submit = async () => {
-			let oldLink = '';
-			let newLink = '';
-
-			let isDir = false;
-
-			if (!store.isListing) {
-				oldLink = store.req.url;
-				isDir = store.req.isDir;
-			} else {
-				oldLink = store.req.items[store.selected[0]].url;
-				isDir = store.req.items[store.selected[0]].isDir;
-			}
-
-			newLink =
-				url.removeLastDir(oldLink) + '/' + encodeURIComponent(fileName.value);
-
-			if (checkSeahub(newLink)) {
-				const pathLen =
-					oldLink.indexOf(store.currentItem) + store.currentItem.length;
-				const p = oldLink.slice(pathLen);
-				const parmas = {
-					operation: 'rename',
-					newname: fileName.value
-				};
-
-				const url = 'api/v2.1/repos';
-				await seahub.fileOperate(p, url, parmas, isDir ? 'dir' : 'file');
-				store.setReload(true);
-				return false;
-			}
-
-			try {
-				await api.move([{ from: oldLink, to: newLink }]);
-				store.setReload(true);
-			} catch (e) {
-				store.showError();
-			}
-			store.closeHovers();
-		};
-
 		const selectAction = () => {
-			console.log('selectAction ===>1111');
-
 			if (store.mutilSelected.indexOf(props.index) !== -1) {
 				store.removeMutilSelected(props.index);
 			} else {
@@ -450,7 +410,6 @@ export default defineComponent({
 
 		const showMore = ($event) => {
 			emit('showMenu', $event);
-			// console.log($event);
 		};
 
 		return {
@@ -460,7 +419,6 @@ export default defineComponent({
 			dragOver,
 			drop,
 			itemClick,
-			submit,
 			touches,
 			isDraggable,
 			selectIndex,

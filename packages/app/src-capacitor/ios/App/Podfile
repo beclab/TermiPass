@@ -55,6 +55,7 @@ target 'App' do
   pod 'SnapKit', '~> 5.6.0'
 #  pod 'IQKeyboardManagerSwift'
   pod 'Kingfisher'
+  pod 'SwiftyDropbox'
 #  pod 'BaseLib', :path => '../BaseLib'
 
   # Add your Pods here

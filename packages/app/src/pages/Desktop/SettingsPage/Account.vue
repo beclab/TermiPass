@@ -48,15 +48,29 @@
 						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs">
 							<div class="q-mb-xs text-grey-7">{{ t('mnemonics') }}</div>
 							<div class="mnemonics_wrap">
-								<MnemonicsComponent ref="mnemonicRef" :mnemonic="mnemonic" />
+								<terminus-mnemonics-component
+									ref="selectMnemonicsView"
+									:readonly="true"
+									:show-title="false"
+									:is-backup="false"
+									:is-copy="true"
+									:is-paste="false"
+									:mnemonics="mnemonic"
+								/>
 								<div class="mnemonics_login" v-if="encrypting">
-									<q-icon name="visibility_off" />
-									<div class="q-my-md content">
-										{{ t('backup_mnemonics_reminder_info') }}
+									<q-icon
+										name="sym_r_visibility_off"
+										class="text-ink-on-brand"
+										size="26px"
+									/>
+									<div class="q-mt-md q-ml-md q-mr-md content">
+										{{ t('back_up_your_mnemonic_phrase_immediately_to_safe') }}
 									</div>
-									<div class="click" @click="openCheckLogin">
-										{{ t('click_to_view') }}
-									</div>
+									<TerminusEnterBtn
+										@sure-action="openCheckLogin"
+										class="q-mt-lg"
+										:title="t('click_to_view')"
+									/>
 								</div>
 							</div>
 						</q-item-label>
@@ -75,15 +89,18 @@ import { app, setSenderUrl, clearSenderUrl } from '../../../globals';
 import { useUserStore } from '../../../stores/user';
 import { useMenuStore } from '../../../stores/menu';
 import { useSocketStore } from '../../../stores/websocketStore';
-import MnemonicsComponent from './MnemonicsComponent.vue';
+// import MnemonicsComponent from './MnemonicsComponent.vue';
 import DialogLogin from './DialogLogin.vue';
 import DialogDelete from './DialogDelete.vue';
 import { useI18n } from 'vue-i18n';
+import TerminusMnemonicsComponent from '../../../components/common/TerminusMnemonicsComponent.vue';
+import TerminusEnterBtn from '../../../components/common/TerminusEnterBtn.vue';
 
 export default defineComponent({
 	name: 'AccountPage',
 	components: {
-		MnemonicsComponent
+		TerminusMnemonicsComponent,
+		TerminusEnterBtn
 	},
 	setup(_props: any, context: any) {
 		const $q = useQuasar();
@@ -94,10 +111,23 @@ export default defineComponent({
 
 		const { t } = useI18n();
 
-		const currentUser = userStore.users?.items.get(userStore.current_id || '');
+		const selectMnemonicsView = ref();
 
-		const mnemonic = ref(currentUser?.mnemonic || '');
-		const openCheckLogin = () => {
+		const currentUser = userStore.users?.items.get(userStore.current_id || '');
+		const mnemonicItem = userStore.current_mnemonic;
+
+		const mnemonic = ref(mnemonicItem?.mnemonic || '');
+		const openCheckLogin = async () => {
+			if (!(await userStore.unlockFirst())) {
+				return;
+			}
+			if (!mnemonic.value) {
+				mnemonic.value = userStore.current_mnemonic?.mnemonic || '';
+				selectMnemonicsView.value.reloadMnemonics(mnemonic.value.split(' '));
+				encrypting.value = false;
+				return;
+			}
+
 			$q.dialog({
 				component: DialogLogin
 			}).onOk(() => {
@@ -114,7 +144,10 @@ export default defineComponent({
 			}
 		};
 
-		const deleteAccount = () => {
+		const deleteAccount = async () => {
+			if (!(await userStore.unlockFirst())) {
+				return;
+			}
 			$q.dialog({
 				component: DialogDelete,
 				componentProps: {
@@ -148,7 +181,8 @@ export default defineComponent({
 			} else {
 				await userStore.users!.unlock(userStore.password!);
 				const user = userStore.current_user;
-				if (user) {
+				const mneminicItem = userStore.current_mnemonic;
+				if (user && mneminicItem) {
 					$q.loading.show();
 					if (user.setup_finished) {
 						setSenderUrl({
@@ -158,8 +192,7 @@ export default defineComponent({
 						clearSenderUrl();
 					}
 					await app.load(user.id);
-
-					await app.unlock(user.mnemonic);
+					await app.unlock(mneminicItem.mnemonic);
 					$q.loading.hide();
 				} else {
 					console.error('user not found');
@@ -177,7 +210,8 @@ export default defineComponent({
 			goBack,
 			deleteAccount,
 			userStore,
-			t
+			t,
+			selectMnemonicsView
 		};
 	}
 });

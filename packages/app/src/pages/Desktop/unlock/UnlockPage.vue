@@ -2,11 +2,7 @@
 	<div class="terminus-unlock-page column justify-center items-center">
 		<q-img
 			class="terminus-unlock-page__brand"
-			:src="
-				$q.dark.isActive
-					? getRequireImage('login/Termipasstermipass_brand_desktop_dark.svg')
-					: getRequireImage('login/Termipasstermipass_brand_desktop_light.svg')
-			"
+			:src="getRequireImage('login/termipass_brand_desktop.svg')"
 		/>
 		<div class="terminus-unlock-box column justify-start items-center">
 			<span class="terminus-unlock-box__desc login-sub-title">{{
@@ -29,7 +25,7 @@
 			/>
 			<confirm-button
 				class="terminus-unlock-box__button"
-				:btn-title="t('unlock')"
+				:btn-title="t('unlock.title')"
 				:btn-status="btnStatusRef"
 				@onConfirm="loginByPassword(passwordRef)"
 			/>
@@ -55,7 +51,6 @@ import { BiometryType } from '@capgo/capacitor-native-biometric';
 import { onMounted } from 'vue';
 import MonitorKeyboard from '../../../utils/monitorKeyboard';
 
-const $q = useQuasar();
 const router = useRouter();
 const passwordRef = ref('');
 const { t } = useI18n();
@@ -63,6 +58,7 @@ const btnStatusRef = ref<ConfirmButtonStatus>(ConfirmButtonStatus.disable);
 const userStore = useUserStore();
 let monitorKeyboard: MonitorKeyboard | undefined = undefined;
 const keyboardOpen = ref(false);
+const $q = useQuasar();
 
 onMounted(async () => {
 	await setBiometric();
@@ -161,9 +157,11 @@ const unlockByBiometric = async () => {
 .terminus-unlock-page {
 	width: 100%;
 	height: 100%;
+	background: $desktop-background;
 
 	&__brand {
 		width: 225px;
+		height: 48px;
 	}
 
 	.terminus-unlock-box {
@@ -171,8 +169,8 @@ const unlockByBiometric = async () => {
 		margin-top: 32px;
 		border-radius: 12px;
 		padding: 20px;
-		background: $background-2;
-		border: 1px solid $separator;
+		background: $background;
+		border: 1px solid $grey-2;
 
 		&__desc {
 			margin-top: 12px;

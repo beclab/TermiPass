@@ -33,20 +33,25 @@ import { ConfirmButtonStatus } from '../../../utils/constants';
 import { useI18n } from 'vue-i18n';
 import { parsingMnemonics } from '../../Mobile/login/account/ImportUserBusiness';
 import TerminusPageTitle from '../../../components/common/TerminusPageTitle.vue';
-import { importUser } from '../../Mobile/connect/BindTerminusBusiness';
+import { importUser } from '../../../utils/BindTerminusBusiness';
 import { TerminusDefaultDomain, TerminusInfo } from '@bytetrade/core';
 import axios from 'axios';
 import {
 	notifyWarning,
 	notifyFailed
 } from '../../../utils/notifyRedefinedUtil';
+import { useUserStore } from '../../../stores/user';
 
 const $q = useQuasar();
 const router = useRouter();
 const mnemonic = ref<string>('');
+const userStore = useUserStore();
 const { t } = useI18n();
 
 async function onConfirm() {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	btnStatusRef.value = ConfirmButtonStatus.disable;
 	$q.loading.show();
 	await parsingMnemonics(mnemonic.value, {

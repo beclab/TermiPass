@@ -44,5 +44,6 @@ const updateCurrentMenu = (item: { key: string }) => {
 .myDrawer {
 	overflow: hidden;
 	padding-top: 6px;
+	border-right: 1px solid $separator;
 }
 </style>

@@ -42,10 +42,7 @@ import TerminusPageTitle from '../../components/common/TerminusPageTitle.vue';
 import TerminusEdit from '../../components/common/TerminusEdit.vue';
 import { useUserStore } from '../../stores/user';
 import { UserItem } from '@didvault/sdk/src/core';
-import {
-	connectTerminus,
-	importUser
-} from '../Mobile/connect/BindTerminusBusiness';
+import { connectTerminus, importUser } from '../../utils/BindTerminusBusiness';
 import { notifyFailed } from '../../utils/notifyRedefinedUtil';
 
 const $q = useQuasar();
@@ -57,6 +54,7 @@ const userStore = useUserStore();
 async function onConfirm() {
 	btnStatusRef.value = ConfirmButtonStatus.disable;
 	$q.loading.show();
+
 	try {
 		await importUser(userStore.terminusInfo().terminusName, mnemonic.value);
 	} catch (e) {
@@ -67,8 +65,9 @@ async function onConfirm() {
 	}
 
 	const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
+
 	try {
-		await connectTerminus(user, '');
+		await connectTerminus(user, mnemonic.value, '');
 		router.push({ path: '/items' });
 	} catch (e) {
 		notifyFailed(e.message);

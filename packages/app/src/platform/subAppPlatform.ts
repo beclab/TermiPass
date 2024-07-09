@@ -9,10 +9,11 @@ import {
 	appMounted as commonAppMounted,
 	appUnMounted as commonUnMounted,
 	appLoadPrepare as commonAppLoadPrepare
-} from './appFirstLoadCommon';
+} from './appConfigCommon';
 import { CapacitorHttp } from '@capacitor/core';
 import { AppState } from '@didvault/sdk/src/core/app';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
+import { QVueGlobals } from 'quasar';
 
 export class SubAppPlatform extends WebPlatform implements AppPlatform {
 	async appLoadPrepare(data: any): Promise<void> {
@@ -60,6 +61,10 @@ export class SubAppPlatform extends WebPlatform implements AppPlatform {
 
 	async getTailscaleId() {
 		return '';
+	}
+
+	getQuasar(): QVueGlobals | undefined {
+		return undefined;
 	}
 
 	reconfigAppStateDefaultValue(_appState: AppState) {}

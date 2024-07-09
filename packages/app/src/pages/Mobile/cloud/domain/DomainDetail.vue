@@ -246,9 +246,13 @@ async function requestVC() {
 	try {
 		let user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
 
-		let did = await getDID(user.mnemonic);
-		let privateJWK: PrivateJwk | undefined = await getPrivateJWK(user.mnemonic);
-		const owner = await getEthereumAddress(user.mnemonic);
+		let did = await getDID(userStore.current_mnemonic?.mnemonic);
+		let privateJWK: PrivateJwk | undefined = await getPrivateJWK(
+			userStore.current_mnemonic?.mnemonic
+		);
+		const owner = await getEthereumAddress(
+			userStore.current_mnemonic?.mnemonic
+		);
 
 		if (!did) {
 			throw new Error(t('errors.get_did_failure'));

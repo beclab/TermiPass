@@ -26,7 +26,7 @@ import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useUserStore } from '../../../stores/user';
 import { TerminusInfo } from '@bytetrade/core';
-import { getTerminusInfo } from './BindTerminusBusiness';
+import { getTerminusInfo } from '../../../utils/BindTerminusBusiness';
 import animationPage from './activate/animation.vue';
 import './activate/wizard.scss';
 import waiting_image from '../../../assets/wizard/waiting.png';

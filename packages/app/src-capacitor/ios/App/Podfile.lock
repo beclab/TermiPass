@@ -170,6 +170,7 @@ PODS:
   - nanopb/encode (2.30909.0)
   - PromisesObjC (2.2.0)
   - SnapKit (5.6.0)
+  - SwiftyDropbox (10.0.7)
   - SwiftyRSA (1.7.0):
     - SwiftyRSA/ObjC (= 1.7.0)
   - SwiftyRSA/ObjC (1.7.0)
@@ -201,6 +202,7 @@ DEPENDENCIES:
   - HandyJSON (~> 5.0.2)
   - Kingfisher
   - SnapKit (~> 5.6.0)
+  - SwiftyDropbox
   - SwiftyRSA
 
 SPEC REPOS:
@@ -239,6 +241,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - SnapKit
+    - SwiftyDropbox
     - SwiftyRSA
 
 EXTERNAL SOURCES:
@@ -326,8 +329,9 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   SnapKit: e01d52ebb8ddbc333eefe2132acf85c8227d9c25
+  SwiftyDropbox: bd1e6f84cf36fa8d1440d4b54421d297e292dcd5
   SwiftyRSA: 8c6dd1ea7db1b8dc4fb517a202f88bb1354bc2c6
 
-PODFILE CHECKSUM: ff008499ff450c8f0d2fbf0059fb5e6246c30629
+PODFILE CHECKSUM: 75ef55b6c8fc7dfe21af3a37866fd4d944a65256
 
 COCOAPODS: 1.12.1

@@ -657,20 +657,13 @@ module.exports = configure(function (ctx) {
 					changeOrigin: true
 				},
 				'/seahub': {
-					target: `https://seafile.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
-					changeOrigin: true,
-					secure: false,
-					pathRewrite: {
-						'^/seahub': ''
-					}
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
+					changeOrigin: true
 				},
 				'/seafhttp': {
-					target: `https://seafile.${process.env.SERVER_PROXY_NNME}.myterminus.com/seafhttp`,
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
 					changeOrigin: true,
-					secure: false,
-					pathRewrite: {
-						'^/seafhttp': ''
-					}
+					secure: false
 				},
 				'/settingsApi': {
 					target: `https://settings.${process.env.SERVER_PROXY_NNME}.myterminus.com`,

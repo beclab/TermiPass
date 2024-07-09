@@ -1,11 +1,7 @@
 import { MobileWebPlatform } from '../../terminusCommon/mobileWebPlatform';
 import { ExtensionStorage, ExtensionUserStorage } from '../storage';
 import { useUserStore } from '../../../stores/user';
-import {
-	UserItem,
-	getPlatform as defaultGetPlatform
-} from '@didvault/sdk/src/core';
-import { app, setSenderUrl } from '../../../globals';
+import { getPlatform as defaultGetPlatform } from '@didvault/sdk/src/core';
 import { walletService } from '../../../wallet';
 import PortMessage from '../../../extension/utils/message/portMessage';
 import { useBexStore } from '../../../stores/bex';
@@ -14,6 +10,7 @@ import { bexFrontBusOn } from '../utils';
 import { unlockByPwd } from 'src/pages/Mobile/login/unlock/UnlockBusiness';
 import { busOn } from 'src/utils/bus';
 import { sendExtensionMessage } from 'src/extension/autofill2/utils/sendMessage';
+import { app } from 'src/globals';
 
 export interface ExtensionPlatformInterface {
 	portMessage: PortMessage;
@@ -100,25 +97,15 @@ export class ExtensionPlatform
 			redirect({ path: '/welcome' });
 			return;
 		}
-		if (userStore.users?.locked) {
+		if (userStore.needUnlockFirst) {
 			redirect({ path: '/unlock' });
 			return;
 		}
 
 		if (userStore.current_id) {
-			const user: UserItem = userStore.users!.items.get(userStore.current_id!)!;
-			if (user.setup_finished) {
-				setSenderUrl({
-					url: user.vault_url
-				});
-			}
-
-			await app.load(userStore.current_id!);
-			await app.unlock(user.mnemonic);
-
-			redirect({ path: '/home' });
+			redirect({ path: '/connectLoading' });
 		} else {
-			redirect({ name: 'setupSuccess' });
+			redirect({ path: '/import_mnemonic' });
 		}
 	}
 

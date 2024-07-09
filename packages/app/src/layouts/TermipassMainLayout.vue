@@ -37,7 +37,24 @@
 				/>
 
 				<VaultMainLayout
-					v-if="menuStore.terminusActiveMenu === LayoutMenuIdetify.VAULT"
+					v-if="
+						menuStore.terminusActiveMenu === LayoutMenuIdetify.VAULT &&
+						userStore.isUnlocked
+					"
+				/>
+				<TermipassUnlockContent
+					v-if="
+						menuStore.terminusActiveMenu === LayoutMenuIdetify.VAULT &&
+						!userStore.isUnlocked
+					"
+					:logo="
+						$q.dark.isActive
+							? 'login/vault_brand_web_dark.svg'
+							: 'login/vault_brand_web_light.svg'
+					"
+					:detail-text="t('unlock.vault_unlock_introduce')"
+					:cancel="false"
+					:logo-width="144"
 				/>
 
 				<TransferLayout
@@ -62,7 +79,7 @@
 
 <script lang="ts">
 import { ref, defineComponent, onMounted, onUnmounted } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { app } from '../globals';
 import { getAppPlatform } from '../platform/appPlatform';
@@ -85,10 +102,11 @@ import TerminusMenu from './../components/TerminusMenu.vue';
 
 import { watch } from 'vue';
 import { useScaleStore } from '../stores/scale';
-import { busOff, busOn } from '../utils/bus';
+import TermipassUnlockContent from '../components/unlock/desktop/TermipassUnlockContent.vue';
 
 import { LayoutMenuIdetify } from '../utils/constants';
 import { StatusBar } from '@capacitor/status-bar';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
 	name: 'TermipassMainLayout',
@@ -100,12 +118,13 @@ export default defineComponent({
 		SettingsPage,
 		AccountCenter,
 		DesktopDefaultHeaderView,
-		TerminusMenu
+		TerminusMenu,
+		TermipassUnlockContent
 	},
 
 	setup() {
 		const $q = useQuasar();
-		const router = useRouter();
+		// const router = useRouter();
 		const route = useRoute();
 		const scaleStore = useScaleStore();
 		const userStore = useUserStore();
@@ -113,18 +132,7 @@ export default defineComponent({
 		const dataStore = useDataStore();
 		const socketStore = useSocketStore();
 		const current_user = ref(userStore.current_user);
-
-		function goto(path: string) {
-			router.push({
-				path: path
-			});
-		}
-
-		function stateUpdate() {
-			if (app.state.locked) {
-				goto('/unlock');
-			}
-		}
+		const { t } = useI18n();
 
 		const vpnToggleStatus = ref(scaleStore.isOn);
 
@@ -133,7 +141,6 @@ export default defineComponent({
 				import('../css/layout-desktop.scss').then(() => {});
 			}
 
-			busOn('appSubscribe', stateUpdate);
 			menuStore.pushTerminusMenuCache(LayoutMenuIdetify.FILES);
 
 			getAppPlatform().homeMounted();
@@ -163,7 +170,6 @@ export default defineComponent({
 		);
 
 		onUnmounted(() => {
-			busOff('appSubscribe', stateUpdate);
 			getAppPlatform().homeUnMounted();
 		});
 
@@ -195,7 +201,9 @@ export default defineComponent({
 			menuStore,
 			dataStore,
 			scaleStore,
-			LayoutMenuIdetify
+			LayoutMenuIdetify,
+			userStore,
+			t
 		};
 	}
 });
@@ -240,10 +248,12 @@ export default defineComponent({
 		.contain-body {
 			width: 100%;
 			height: 100%;
+			border-radius: 12px;
 			display: flex;
 			align-items: self-start;
 			justify-content: space-between;
 			overflow: hidden;
+			// background-color: red;
 		}
 
 		.contain-body-android-pad {

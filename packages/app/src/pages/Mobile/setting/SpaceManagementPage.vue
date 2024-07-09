@@ -8,7 +8,7 @@
 					class="column text-color-sub-title items-center"
 					style="margin-top: 180px"
 				>
-					<img src="../../../assets//layout/nodata.svg" />
+					<img src="../../../assets/layout/nodata.svg" />
 					<span class="q-mb-md text-body2" style="margin-top: 32px">
 						{{ t('there_is_nothing_for_now') }}
 					</span>

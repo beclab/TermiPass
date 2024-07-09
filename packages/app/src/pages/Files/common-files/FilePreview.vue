@@ -41,7 +41,11 @@
 				@play="autoPlay = true"
 				:src="raw"
 			/> -->
-			<terminus-video-player v-else-if="store.req.type == 'video'" :raw="raw" />
+			<terminus-video-player
+				v-else-if="store.req.type == 'video'"
+				:raw="store.req.path"
+				:req="store.req"
+			/>
 
 			<object
 				v-else-if="store.req?.extension?.toLowerCase() == '.pdf'"
@@ -62,7 +66,7 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
-import { files as api } from '../../../api';
+import { common as api } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.vue';

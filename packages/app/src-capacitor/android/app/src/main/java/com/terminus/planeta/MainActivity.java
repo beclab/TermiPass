@@ -13,6 +13,8 @@ import com.capacitorjs.plugins.device.DevicePlugin;
 import com.codetrixstudio.capacitor.GoogleAuth.GoogleAuth;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.community.facebooklogin.FacebookLogin;
+import com.terminus.planeta.plugins.CustomGooglePlugin;
+import com.terminus.planeta.plugins.DropboxPlugin;
 import com.terminus.planeta.plugins.HookCapacitorHttp;
 import com.terminus.planeta.plugins.ProxyInfoPlugin;
 import com.terminus.planeta.plugins.ScanPhotoQRPlugin;
@@ -49,6 +51,8 @@ public class MainActivity extends FileActivity {
         plugins.add(TailScalePlugin.class);
         plugins.add(NativeBiometric.class);
         plugins.add(StatusBarPlugin.class);
+        plugins.add(DropboxPlugin.class);
+        plugins.add(CustomGooglePlugin.class);
         registerPlugins(plugins);
         super.onCreate(savedInstanceState);
         NotificationChannelManager.loadNotificationChannel();

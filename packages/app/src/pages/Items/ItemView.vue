@@ -698,11 +698,16 @@ export default defineComponent({
 
 		const clearChanges = async () => {
 			if (props.isNew) {
-				Router.push({
-					path: '/items/'
-				});
-				await app.deleteItems([item.value!]);
+				app.deleteItems([item.value!]);
 				bexVaultUpdate();
+				// goBack();
+				if (isMobile.value) {
+					goBack();
+				} else {
+					Router.push({
+						path: '/items/'
+					});
+				}
 			}
 		};
 

@@ -9,10 +9,15 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../../stores/user';
 
 const router = useRouter();
+const userStore = useUserStore();
 
-const exportMnemonics = () => {
+const exportMnemonics = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	router.push('/backup_mnemonics');
 };
 </script>

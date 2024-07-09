@@ -10,6 +10,7 @@
 			flat
 			padding="0px"
 			@click="confirmAction()"
+			@keydown.enter="confirmAction()"
 			:disable="btnStatus === ConfirmButtonStatus.disable"
 			no-caps
 			class="row items-center justify-center"
@@ -49,7 +50,12 @@ const props = defineProps({
 	bgClasses: {
 		type: String,
 		required: false,
-		default: 'bg-color-yellow'
+		default: 'bg-yellow'
+	},
+	bgDisabledClasses: {
+		type: String,
+		required: false,
+		default: 'bg-yellow-2'
 	},
 	textClasses: {
 		type: String,
@@ -93,7 +99,7 @@ const getCurrentStatusClass = () => {
 	}
 
 	if (props.btnStatus === ConfirmButtonStatus.disable) {
-		classes.push('bg-color-disable');
+		classes.push(props.bgDisabledClasses);
 	}
 
 	return classes.join(' ');
@@ -116,10 +122,6 @@ const getCurrentStatusClass = () => {
 		width: 100%;
 		height: 100%;
 		border-radius: 8px;
-	}
-
-	.bg-color-disable {
-		background-color: $yellow-2;
 	}
 
 	.bg-color-error {

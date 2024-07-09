@@ -17,7 +17,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, onUnmounted, watchEffect } from 'vue';
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
-import { configPlatform } from './platform/appFirstLoadCommon';
+import { configPlatform } from './platform/appConfigCommon';
 import { useQuasar } from 'quasar';
 import { getAppPlatform } from './platform/appPlatform';
 import { getNativeAppPlatform } from './platform/capacitor/capacitorPlatform';
@@ -79,6 +79,8 @@ export default defineComponent({
 			if (state) {
 				import('./css/listing-mobile.css').then(() => {});
 			} else if (getAppPlatform().isPad) {
+				console.log('333333444');
+
 				import('./css/listing-pad.css').then(() => {});
 			} else {
 				import('./css/listing.css').then(() => {});

@@ -22,7 +22,7 @@ export function formatSeahub(url, data) {
 			by: 'modified',
 			asc: true
 		},
-
+		fileSize: 0,
 		numTotalFiles: 0,
 		items: []
 	};

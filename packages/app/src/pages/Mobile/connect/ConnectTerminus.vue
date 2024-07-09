@@ -52,7 +52,7 @@ import { useRouter } from 'vue-router';
 import { useUserStore } from '../../../stores/user';
 import { TerminusInfo } from '@bytetrade/core';
 import { useQuasar } from 'quasar';
-import { UserItem } from '@didvault/sdk/src/core';
+import { UserItem, MnemonicItem } from '@didvault/sdk/src/core';
 import TerminusEdit from '../../../components/common/TerminusEdit.vue';
 import ConfirmButton from '../../../components/common/ConfirmButton.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
@@ -63,7 +63,7 @@ import {
 	connectTerminus,
 	getTerminusInfo,
 	loginTerminus
-} from './BindTerminusBusiness';
+} from '../../../utils/BindTerminusBusiness';
 import { busEmit } from '../../../utils/bus';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
@@ -121,6 +121,12 @@ const isLocalTest = computed(() => {
 const use_local = ref(false);
 
 const onConfirm = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
+	const mnemonic: MnemonicItem = userStore.users!.mnemonics.get(
+		userStore.current_id!
+	)!;
 	loading.value = true;
 	const pingResult: TerminusInfo | null = await getTerminusInfo(user); //terminus_name
 	if (!pingResult) {
@@ -133,7 +139,12 @@ const onConfirm = async () => {
 		return;
 	}
 	try {
-		await connectTerminus(user, osPwd.value, use_local.value);
+		await connectTerminus(
+			user,
+			mnemonic.mnemonic,
+			osPwd.value,
+			use_local.value
+		);
 		await loginTerminus(user, osPwd.value, true, use_local.value);
 
 		busEmit('account_update', true);

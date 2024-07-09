@@ -1,5 +1,5 @@
 <template>
-	<header class="q-pa-xs">
+	<header class="q-pa-xs header-bar">
 		<slot />
 
 		<div>
@@ -58,4 +58,56 @@ export default defineComponent({
 });
 </script>
 
-<style></style>
+<style lang="scss">
+header.header-bar {
+	z-index: 1000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	padding: 0;
+	display: flex;
+	padding: 0.5em 0.5em 0.5em 1em;
+	align-items: center;
+
+	> * {
+		flex: 0 0 auto;
+	}
+
+	title {
+		display: block;
+		flex: 1 1 auto;
+		padding: 0 1em;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		font-size: 1.2em;
+	}
+
+	.overlay {
+		width: 0;
+		height: 0;
+	}
+
+	a,
+	a:hover {
+		color: inherit;
+	}
+
+	> div:first-child > .action,
+	img {
+		margin-right: 1em;
+	}
+
+	img {
+		height: 2.5em;
+	}
+
+	.action span {
+		display: none;
+	}
+
+	> div div {
+		vertical-align: middle;
+		position: relative;
+	}
+}
+</style>
