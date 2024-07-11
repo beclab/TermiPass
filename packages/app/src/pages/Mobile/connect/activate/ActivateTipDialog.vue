@@ -58,7 +58,7 @@ defineProps({
 			padding: 20px;
 
 			&__title {
-				color: $title;
+				color: $ink-1;
 			}
 
 			&__desc {

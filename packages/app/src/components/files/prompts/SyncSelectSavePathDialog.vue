@@ -111,7 +111,7 @@ onMounted(async () => {
 				text-align: center;
 				margin-left: 20px;
 				cursor: pointer;
-				color: $title;
+				color: $grey-10;
 
 				border: 1px solid $yellow;
 

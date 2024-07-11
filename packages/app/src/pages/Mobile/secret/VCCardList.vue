@@ -18,7 +18,7 @@
 					@click="addNew"
 					class="vc-card-list__item"
 					:whole-picture-size="36"
-					title-classes="text-color-sub-title"
+					title-classes="text-ink-2"
 					:icon-size="12"
 					v-if="!notificationRef"
 					image-path="secret/add.svg"

@@ -818,7 +818,7 @@ export default defineComponent({
 	}
 
 	.isedit {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 	}
 
 	.view-option {
@@ -886,7 +886,7 @@ export default defineComponent({
 .footer {
 	width: 100%;
 	padding: 10px 20px;
-	border-top: 1px solid $grey-2;
+	border-top: 1px solid $separator;
 
 	.confirm {
 		width: 48%;

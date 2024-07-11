@@ -1,5 +1,5 @@
 <template>
-	<q-page class="column orgs bg-white" :style-fn="myTweak">
+	<q-page class="column orgs" :style-fn="myTweak">
 		<OrgDashboardIndex v-if="orgMode === OrgMenu.DASHBOARD" />
 		<OrgVaultsList v-if="orgMode === OrgMenu.VAULTES" />
 		<OrgInvitesList v-if="orgMode === OrgMenu.INVITES" />
@@ -62,7 +62,6 @@ export default defineComponent({
 <style scoped lang="scss">
 .orgs {
 	width: 100%;
-	background-color: red;
 	.settingItem {
 		height: 58px;
 		line-height: 58px;

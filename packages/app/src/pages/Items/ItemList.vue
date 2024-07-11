@@ -49,10 +49,10 @@
 				<div v-else class="row items-center" style="padding-left: 20px">
 					<TerminusAccountAvatar />
 					<div @click="toggleDrawer">
-						<div class="text-color-title text-h6 user-header__title">
+						<div class="text-ink-1 text-h6 user-header__title">
 							{{ t('vault') }}
 						</div>
-						<div class="text-grey-6 text-subtitle3 row items-center">
+						<div class="text-ink-2 text-subtitle3 row items-center">
 							{{ heading.title }}
 							<q-icon name="chevron_right" size="16px" />
 						</div>
@@ -381,7 +381,7 @@
 			</template>
 
 			<div
-				class="column text-color-sub-title items-center justify-center"
+				class="column text-ink-2 items-center justify-center"
 				style="height: 100%"
 				v-else
 			>
@@ -1257,7 +1257,7 @@ export default defineComponent({
 			align-items: center;
 			justify-content: center;
 			background: $grey-2;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 
 		.copied {

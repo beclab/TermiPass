@@ -8,10 +8,10 @@
 				class="bind-terminus-vc-page__image"
 				:src="getRequireImage('login/create_terminus_name.svg')"
 			/>
-			<span class="bind-terminus-vc-page__desc login-sub-title">{{
+			<span class="bind-terminus-vc-page__desc login-ink-2">{{
 				t('bind_terminus_vc_desc')
 			}}</span>
-			<div class="bind-terminus-vc-page__title text-color-title text-h6">
+			<div class="bind-terminus-vc-page__title text-ink-1 text-h6">
 				{{ t('verify_using_gmail') }}
 			</div>
 			<terminus-v-c-card
@@ -95,7 +95,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 .bind-terminus-vc-scroll {
 	width: 100%;
 	height: 100%;
-	background: $background;
 
 	.bind-terminus-vc-page {
 		width: 100%;

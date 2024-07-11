@@ -5,7 +5,7 @@
 
 			<div class="row iterm-center justify-center calcelButton">
 				<q-btn
-					class="bg-grep-11 text-color-sub-title cancel"
+					class="bg-grep-11 text-ink-2 cancel"
 					:label="confirmTxt"
 					@click="onCancelClick"
 				/>

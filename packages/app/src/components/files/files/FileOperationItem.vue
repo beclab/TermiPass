@@ -5,7 +5,7 @@
 		class="file-operation-item q-pb-md"
 		@click="handle($event, action!)"
 	>
-		<div class="file-operation-div row justify-start items-center">
+		<div class="file-operation-div row justify-start items-center text-ink-1">
 			<q-icon :name="icon" size="20px" />
 			<div class="file-operation-text text-body3">{{ label }}</div>
 		</div>
@@ -66,7 +66,6 @@ const handle = (e: any, action: OPERATE_ACTION) => {
 		padding: 8px;
 
 		.file-operation-text {
-			color: $sub-title;
 			margin-left: 8px;
 		}
 	}

@@ -7,14 +7,14 @@
 			<img class="vc-card__brand" :src="brandRef" />
 			<div
 				class="vc-card__name q-mt-sm"
-				:class="item ? 'text-color-title text-h6' : 'login-subTitle'"
+				:class="item ? 'text-ink-1 text-h6' : 'login-ink-2'"
 			>
 				{{ nameRef }}
 			</div>
 		</div>
 		<terminus-avatar v-if="item" :size="40" :image-uri="avatarRef" />
 		<div class="vc-card__avatar row justify-center items-center" v-else>
-			<q-icon name="sym_r_add" size="20px" color="grey-10" />
+			<q-icon name="sym_r_add" size="20px" color="text-ink-2" />
 		</div>
 	</div>
 </template>
@@ -140,12 +140,12 @@ if (props.type) {
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
-		color: $title;
+		color: $ink-1;
 	}
 
 	&__avatar {
 		height: 40px;
-		background: $white;
+		background: $background-3;
 		width: 40px;
 		border-radius: 50%;
 	}

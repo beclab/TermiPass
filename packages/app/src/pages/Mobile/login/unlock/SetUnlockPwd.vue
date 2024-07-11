@@ -154,7 +154,6 @@ const verifyPassword = async () => {
 .set-unlock-pwd-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
 
 	.bex-scroll-area-conf {
 		width: 100%;

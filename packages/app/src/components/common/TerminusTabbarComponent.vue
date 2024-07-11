@@ -1,7 +1,7 @@
 <template>
 	<div class="tabs-root">
 		<div class="tabs-content">
-			<div class="bg-grey-2" style="width: 100%; height: 1px"></div>
+			<div class="bg-separator" style="width: 100%; height: 1px"></div>
 			<div class="items-bg" />
 		</div>
 
@@ -23,7 +23,7 @@
 
 				<div
 					class="tab-title-base text-body3"
-					:class="current !== index ? 'text-grey-6' : 'text-title'"
+					:class="current !== index ? 'text-grey-6' : 'text-ink-1'"
 				>
 					{{ item.name }}
 				</div>
@@ -93,7 +93,7 @@ const updateCurrent = (index: number) => {
 		.items-bg {
 			width: 100%;
 			height: 64px;
-			background-color: $white;
+			background-color: $background-1;
 		}
 	}
 
@@ -119,10 +119,10 @@ const updateCurrent = (index: number) => {
 			.tab-icon-active-bg {
 				margin-top: 5px;
 				border-radius: 30px;
-				background-color: $white;
+				background-color: $background-1;
 				width: 60px;
 				height: 60px;
-				border-color: $grey-2;
+				border-color: $separator;
 				border-width: 1px;
 				border-style: solid;
 				border-top: 50%;
@@ -142,7 +142,7 @@ const updateCurrent = (index: number) => {
 		top: 10px;
 		border-radius: 23px;
 		border-width: 1px;
-		border-color: $grey-2;
+		border-color: $separator;
 		border-style: solid;
 	}
 
@@ -151,7 +151,7 @@ const updateCurrent = (index: number) => {
 		top: 17px;
 		width: 65px;
 		height: 46px;
-		background-color: $white;
+		background-color: $background-1;
 	}
 }
 </style>

@@ -11,11 +11,7 @@
 				<q-list class="accountCentent">
 					<div class="column items-center">
 						<div class="accountCentent__avatar">
-							<TerminusAvatar
-								:info="userStore.terminusInfo()"
-								:size="64"
-								@click="updateShowCheckHistory"
-							/>
+							<TerminusAvatar :info="userStore.terminusInfo()" :size="64" />
 						</div>
 
 						<div class="accountCentent__name q-mt-xs text-h5">
@@ -29,7 +25,12 @@
 
 					<div class="row items-center justify-between q-mt-xl">
 						<div
-							class="accountCentent__action_base accountCentent__action_offline q-px-md q-pt-md q-pb-lg column justify-between"
+							class="accountCentent__action_base q-px-md q-pt-md q-pb-lg column justify-between"
+							:class="
+								!$q.dark.isActive
+									? 'accountCentent__action_offline'
+									: 'bg-background-1'
+							"
 						>
 							<div class="row items-center justify-between">
 								<div class="icon-bg row items-center justify-center">
@@ -51,7 +52,12 @@
 							</div>
 						</div>
 						<div
-							class="accountCentent__action_base q-px-md accountCentent__action_vpn q-px-md q-pt-md q-pb-lg column justify-between"
+							class="accountCentent__action_base q-px-md q-px-md q-pt-md q-pb-lg column justify-between"
+							:class="
+								!$q.dark.isActive
+									? 'accountCentent__action_vpn'
+									: 'bg-background-1'
+							"
 						>
 							<div class="row items-center justify-between">
 								<div class="icon-bg row items-center justify-center">
@@ -97,6 +103,9 @@
 
 					<div
 						class="accountCentent__backup-mneminic q-mt-lg q-pl-lg q-py-lg row items-center justify-between"
+						:class="
+							!$q.dark.isActive ? 'backup-mnemonic-bg' : 'bg-background-1'
+						"
 						v-else
 					>
 						<div class="accountCentent__backup-mneminic__introduce">
@@ -303,16 +312,16 @@ const onLoginCloud = () => {
 	}
 
 	&__name {
-		color: $title;
+		color: $ink-1;
 	}
 
 	&__info {
 		text-align: center;
-		color: $sub-title;
+		color: $ink-2;
 	}
 
 	&__action_base {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 16px;
 		width: calc(50% - 10px);
 		height: 128px;
@@ -322,12 +331,12 @@ const onLoginCloud = () => {
 			height: 32px;
 			overflow: hidden;
 			border-radius: 16px;
-			background-color: $white;
-			color: $grey-8;
+			background-color: $background-3;
+			color: $ink-2;
 		}
 
 		.title {
-			color: $title;
+			color: $ink-1;
 		}
 	}
 
@@ -350,14 +359,15 @@ const onLoginCloud = () => {
 	}
 
 	&__backup-mneminic {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		width: 100%;
-		background: linear-gradient(
-			127.05deg,
-			#fffef7 4.41%,
-			rgba(249, 254, 199, 0.5) 49.41%,
-			rgba(243, 254, 194, 0.5) 84.8%
-		);
+		// background: linear-gradient(
+		// 	127.05deg,
+		// 	#fffef7 4.41%,
+		// 	rgba(249, 254, 199, 0.5) 49.41%,
+		// 	rgba(243, 254, 194, 0.5) 84.8%
+		// );
+		// background-color: $background-1;
 		border-radius: 16px;
 		position: relative;
 
@@ -366,11 +376,11 @@ const onLoginCloud = () => {
 			height: 100%;
 
 			.title {
-				color: $title;
+				color: $ink-1;
 			}
 
 			.detail {
-				color: $sub-title;
+				color: $ink-2;
 			}
 
 			.backup {
@@ -378,7 +388,7 @@ const onLoginCloud = () => {
 				border-radius: 8px;
 				height: 32px;
 				text-align: center;
-				color: $title;
+				color: $grey-10;
 				width: 93px;
 			}
 		}
@@ -389,6 +399,15 @@ const onLoginCloud = () => {
 			right: 15px;
 			bottom: 20px;
 		}
+	}
+
+	.backup-mnemonic-bg {
+		background: linear-gradient(
+			127.05deg,
+			#fffef7 4.41%,
+			rgba(249, 254, 199, 0.5) 49.41%,
+			rgba(243, 254, 194, 0.5) 84.8%
+		);
 	}
 }
 </style>

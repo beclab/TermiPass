@@ -23,6 +23,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             application,
             didFinishLaunchingWithOptions: launchOptions
         )
+//        UIUserInterfaceStyle mode = UITraitCollection.currentTraitCollection.userInterfaceStyle;
+
+        let mode = UITraitCollection.current.userInterfaceStyle
         
         return true
     }

@@ -65,11 +65,11 @@
 					<div class="listRow">
 						<div class="header q-px-md q-py-sm row justify-between">
 							<div class="items-center">
-								<span class="text-color-sub-title text-li-title">
+								<span class="text-ink-2 text-li-title">
 									<q-icon name="sym_r_share_reviews" size="18px" />
 									{{ t('invites') }}
 								</span>
-								<span class="q-ml-md text-color-sub-title">{{
+								<span class="q-ml-md text-ink-2">{{
 									org?.invites.length
 								}}</span>
 							</div>
@@ -81,7 +81,7 @@
 								:thumb-style="scrollBarStyle.thumbStyle"
 							>
 								<div
-									class="text-color-sub-title column items-center justify-center"
+									class="text-ink-2 column items-center justify-center"
 									style="height: 304px"
 									v-if="org?.invites.length == 0"
 								>
@@ -115,11 +115,11 @@
 					<div class="listRow column justify-start">
 						<div class="header q-px-md q-py-sm row justify-between">
 							<div class="items-center">
-								<span class="text-color-sub-title text-li-title">
+								<span class="text-ink-2 text-li-title">
 									<q-icon name="sym_r_groups" size="18px" />
 									{{ t('members') }}
 								</span>
-								<span class="q-ml-md text-color-sub-title"
+								<span class="q-ml-md text-ink-2"
 									>{{ _availableMembers.length }}
 									{{
 										quota?.members !== -1 ? ` / ${quota?.members}` : ''
@@ -134,7 +134,7 @@
 								:thumb-style="scrollBarStyle.thumbStyle"
 							>
 								<div
-									class="text-color-sub-title column items-center justify-center"
+									class="text-ink-2 column items-center justify-center"
 									style="height: 304px"
 									v-if="_availableMembers.length == 0"
 								>
@@ -206,11 +206,11 @@
 					<div class="listRow column justify-start">
 						<div class="header q-px-md q-py-sm row justify-between">
 							<div class="items-center">
-								<span class="text-color-sub-title text-li-title">
+								<span class="text-ink-2 text-li-title">
 									<q-icon name="sym_r_apps" size="18px"> </q-icon>
 									{{ t('vaults') }}
 								</span>
-								<span class="q-ml-md text-color-sub-title"
+								<span class="q-ml-md text-ink-2"
 									>{{ org?.vaults.length }}
 									{{ quota?.vaults !== -1 ? ` / ${quota?.vaults}` : '' }}
 								</span>
@@ -233,7 +233,7 @@
 								:thumb-style="scrollBarStyle.thumbStyle"
 							>
 								<div
-									class="text-color-sub-title column items-center justify-center"
+									class="text-ink-2 column items-center justify-center"
 									style="height: 304px"
 									v-if="org?.vaults.length == 0"
 								>
@@ -466,7 +466,7 @@ export default defineComponent({
 		// grid-template-rows: 400px 400px;
 		.listRow {
 			// width: 90%;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			border-radius: 8px;
 			cursor: pointer;
 
@@ -493,7 +493,7 @@ export default defineComponent({
 						white-space: nowrap;
 						overflow: hidden;
 						text-overflow: ellipsis;
-						color: $title;
+						color: $ink-1;
 					}
 
 					.tag {

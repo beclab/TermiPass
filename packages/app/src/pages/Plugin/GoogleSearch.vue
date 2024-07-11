@@ -268,7 +268,7 @@ onMounted(() => {
 	width: 369px;
 	padding: 16px 16px 20px 16px;
 	border-radius: 12px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	.my-tabs-active-class {
 		color: $grey-10;
 		background: white;

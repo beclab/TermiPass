@@ -64,7 +64,6 @@ const createAOrg = async () => {
 .bind_org_vc_root {
 	width: 100%;
 	height: 100%;
-	background: $background;
 	position: relative;
 
 	.bind-terminus-vc-root {

@@ -48,10 +48,7 @@
 									<ReportCard :auditedItems="item" />
 								</q-card>
 							</template>
-							<div
-								class="text-center q-mt-lg text-color-sub-title q-pb-lg"
-								v-else
-							>
+							<div class="text-center q-mt-lg text-ink-2 q-pb-lg" v-else>
 								{{ t('nothing_found') }}
 							</div>
 						</q-card>
@@ -80,10 +77,7 @@
 									<ReportCard :auditedItems="item" />
 								</q-card>
 							</template>
-							<div
-								class="text-center q-mt-lg text-color-sub-title q-pb-lg"
-								v-else
-							>
+							<div class="text-center q-mt-lg text-ink-2 q-pb-lg" v-else>
 								{{ t('nothing_found') }}
 							</div>
 						</q-card>
@@ -114,10 +108,7 @@
 									<ReportCard :auditedItems="item" />
 								</q-card>
 							</template>
-							<div
-								class="text-center q-mt-lg text-color-sub-title q-pb-lg"
-								v-else
-							>
+							<div class="text-center q-mt-lg text-ink-2 q-pb-lg" v-else>
 								{{ t('nothing_found') }}
 							</div>
 						</q-card>
@@ -146,10 +137,7 @@
 									<ReportCard :auditedItems="item" />
 								</q-card>
 							</template>
-							<div
-								class="text-center q-mt-lg text-color-sub-title q-pb-lg"
-								v-else
-							>
+							<div class="text-center q-mt-lg text-ink-2 q-pb-lg" v-else>
 								{{ t('nothing_found') }}
 							</div>
 						</q-card>
@@ -261,14 +249,14 @@ export default defineComponent({
 		.containe {
 			.reportCard {
 				box-shadow: none;
-				border: 1px solid $grey-2;
+				border: 1px solid $separator;
 				border-radius: 10px;
 				padding-top: 0;
 				padding-left: 0;
 				margin: 16px;
 
 				.repo-files {
-					border-bottom: 1px solid $grey-2;
+					border-bottom: 1px solid $separator;
 					&:hover {
 						background: $grey-1;
 					}

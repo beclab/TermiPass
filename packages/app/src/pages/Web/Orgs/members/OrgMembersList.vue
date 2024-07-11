@@ -71,7 +71,7 @@
 			</q-scroll-area>
 
 			<div
-				class="column text-color-sub-title items-center justify-center full-height"
+				class="column text-ink-2 items-center justify-center full-height"
 				v-else
 			>
 				<img src="../../../../assets/layout/nodata.svg" />

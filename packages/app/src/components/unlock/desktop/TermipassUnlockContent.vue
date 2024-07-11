@@ -104,8 +104,8 @@ const emit = defineEmits(['unlockSuccess', 'cancel']);
 		margin-top: 32px;
 		border-radius: 12px;
 		padding: 20px;
-		background: $background;
-		border: 1px solid $grey-2;
+		background: $background-2;
+		border: 1px solid $separator;
 
 		&__desc {
 			margin-top: 12px;
@@ -129,7 +129,7 @@ const emit = defineEmits(['unlockSuccess', 'cancel']);
 		}
 
 		.item {
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			padding: 5rem;
 			margin: 0.25rem;
 			position: relative;

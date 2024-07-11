@@ -67,7 +67,7 @@
 		<q-item class="row items-center justify-between biometricItem">
 			<q-avatar icon="desktop_windows" />
 			<div class="text-left section q-pb-sm">
-				<q-item-label class="text-color-sub-title q-mb-sm">{{
+				<q-item-label class="text-ink-2 q-mb-sm">{{
 					t('macos_device')
 				}}</q-item-label>
 				<q-item-label>
@@ -92,7 +92,7 @@
 		>
 			<q-avatar icon="desktop_windows" />
 			<div class="text-left section q-pb-sm">
-				<q-item-label class="text-color-sub-title q-mb-sm">{{
+				<q-item-label class="text-ink-2 q-mb-sm">{{
 					device?.description || t('unknown_device')
 				}}</q-item-label>
 				<q-item-label>
@@ -285,7 +285,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .sItem {
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 10px;
 }
 .biometric {
@@ -301,7 +301,7 @@ export default defineComponent({
 			}
 			.sectionTag2 {
 				padding: 3px 5px;
-				border: 1px solid $grey-2;
+				border: 1px solid $separator;
 				border-radius: 4px;
 			}
 		}

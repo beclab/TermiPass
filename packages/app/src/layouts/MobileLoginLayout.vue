@@ -72,6 +72,6 @@ if (Route.meta && Route.meta.backgroundHide != undefined) {
 }
 
 .background-white {
-	background-color: $white;
+	background-color: $background-1;
 }
 </style>

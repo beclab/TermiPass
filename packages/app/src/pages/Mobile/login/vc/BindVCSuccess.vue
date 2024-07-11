@@ -55,12 +55,12 @@ const enterActive = () => {
 
 	&__name {
 		text-align: center;
-		color: $title;
+		color: $ink-1;
 	}
 
 	&__info {
 		text-align: center;
-		color: $sub-title;
+		color: $ink-2;
 	}
 }
 </style>

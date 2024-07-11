@@ -148,7 +148,7 @@ export default defineComponent({
 			height: 48px;
 			line-height: 48px;
 			text-align: center;
-			color: $title;
+			color: $ink-1;
 			background: $white;
 			box-shadow: 0px 2px 12px 0px $grey-2;
 			opacity: 1;

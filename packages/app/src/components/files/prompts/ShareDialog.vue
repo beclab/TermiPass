@@ -275,6 +275,6 @@ onMounted(async () => {
 .added {
 	padding: 4px 8px;
 	border-radius: 4px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 }
 </style>

@@ -14,10 +14,7 @@
 			<template v-slot:header-selection="scope">
 				<div
 					class="select-box row items-center justify-center"
-					:style="{
-						background: `${scope.selected ? 'yellow' : 'white'}`,
-						border: `${scope.selected ? '0' : '1px solid #E0E0E0'}`
-					}"
+					:class="scope.selected ? 'selected' : 'un-selected'"
 				>
 					<q-checkbox
 						dense
@@ -285,6 +282,14 @@ const openItem = (item: any) => {
 		height: 24px;
 		border-radius: 4px;
 		box-sizing: border-box;
+	}
+	.un-selected {
+		background-color: $background-1;
+		border: 1px solid $separator;
+	}
+
+	.selected {
+		background-color: $yellow;
 	}
 
 	.empty {

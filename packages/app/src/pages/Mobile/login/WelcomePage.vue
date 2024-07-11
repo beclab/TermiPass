@@ -38,7 +38,9 @@
 
 			<div class="welcome-control row justify-between items-center">
 				<span @click="onSkip">{{ t('skip') }}</span>
-				<div class="welcome-next column justify-center items-center">
+				<div
+					class="welcome-next text-grey-10 column justify-center items-center"
+				>
 					<q-icon size="20px" name="sym_r_arrow_forward_ios" @click="onNext" />
 				</div>
 			</div>
@@ -90,12 +92,10 @@ const onSkip = () => {
 .welcome-page {
 	width: 100%;
 	height: 100%;
-	background-color: $background;
 
 	.welcome-carousel-parent {
 		width: 100%;
 		height: 100%;
-		background-color: $background;
 		position: relative;
 
 		.welcome-carousel {
@@ -104,7 +104,7 @@ const onSkip = () => {
 		}
 
 		.welcome-data {
-			color: $title;
+			color: $ink-1;
 			position: absolute;
 			bottom: 239px;
 			width: calc(100% - 64px);

@@ -40,7 +40,7 @@ const action = () => {
 
 	&__title {
 		text-align: left;
-		color: $title;
+		color: $grey-10;
 	}
 }
 </style>

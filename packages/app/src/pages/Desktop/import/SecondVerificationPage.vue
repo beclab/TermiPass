@@ -99,7 +99,6 @@ const handleClearInput = () => {
 .second-verification-page {
 	width: 100%;
 	height: 100%;
-	background-color: $background;
 
 	&__fa {
 		width: 100%;

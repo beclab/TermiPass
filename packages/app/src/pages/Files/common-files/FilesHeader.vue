@@ -361,7 +361,7 @@ const openPopupMenu = () => {
 
 <style lang="scss">
 .layoutHeader {
-	color: $title;
+	color: $ink-1;
 	padding: 0;
 	background-color: $background-1;
 

@@ -108,7 +108,7 @@
 						</template>
 					</q-input>
 				</div>
-				<div class="color-text-title userInfo" v-else>
+				<div class="text-ink-1 userInfo" v-else>
 					<div
 						v-if="
 							['password', 'pin', 'apiSecret', 'mnemonic'].includes(
@@ -144,9 +144,7 @@
 					</div>
 					<div
 						v-else
-						:class="
-							displayVaule !== 'empty' ? 'hasValue' : 'text-color-sub-title'
-						"
+						:class="displayVaule !== 'empty' ? 'hasValue' : 'text-ink-2'"
 					>
 						<q-input
 							input-class="text-ink-1"

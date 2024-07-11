@@ -155,7 +155,7 @@ const onCancel = () => {
 				margin-bottom: 20px;
 				.detail {
 					text-align: left;
-					color: $sub-title;
+					color: $ink-2;
 					max-width: 100%;
 					width: 100%;
 
@@ -185,7 +185,7 @@ const onCancel = () => {
 
 					.detail {
 						text-align: left;
-						color: $title;
+						color: $ink-1;
 						flex: 1;
 
 						text-overflow: ellipsis;

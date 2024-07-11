@@ -44,13 +44,13 @@
 						/>
 					</div>
 
-					<div class="text-color-title text-h5 title">
+					<div class="text-ink-1 text-h5 title">
 						{{
 							body.notification?.title || defaultMessageInfo(body.event).title
 						}}
 					</div>
 
-					<div class="text-color-sub-title text-body3 content">
+					<div class="text-ink-2 text-body3 content">
 						{{
 							body.notification?.body || defaultMessageInfo(body.event).content
 						}}
@@ -65,7 +65,7 @@
 					:disable="!confirmEnable"
 				>
 					<q-spinner-dots color="sub-title" v-if="!confirmEnable" />
-					<div v-else>{{ t('confirm') }}</div>
+					<div v-else class="text-grey-10">{{ t('confirm') }}</div>
 				</q-btn>
 				<q-btn class="cancel" flat no-caps @click="onCancelClick">
 					<div>{{ t('cancel') }}</div>
@@ -331,7 +331,7 @@ const defaultMessageInfo = (eventType: string) => {
 .root {
 	border-radius: 10px;
 	padding: 10px 20px;
-	background: $grey-1;
+	background: $background-2;
 	.header {
 		height: 40px;
 		width: 100%;
@@ -346,7 +346,7 @@ const defaultMessageInfo = (eventType: string) => {
 	}
 
 	.sign-content-container {
-		background: $white;
+		background: $background-1;
 		height: calc(100% - 81px);
 		border-radius: 12px;
 		width: 100%;
@@ -392,7 +392,7 @@ const defaultMessageInfo = (eventType: string) => {
 	.password {
 		width: 100%;
 		margin-top: 10px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 10px;
 		padding: 0 10px;
 	}

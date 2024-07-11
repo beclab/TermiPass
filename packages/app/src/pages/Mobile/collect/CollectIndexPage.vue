@@ -1,10 +1,10 @@
 <template>
 	<div class="collect-root q-px-lg">
-		<div class="collect-root__header text-h4 text-grey-10 row items-center">
+		<div class="collect-root__header text-h4 text-ink-1 row items-center">
 			Collect
 		</div>
 		<div
-			class="collect-root__slider bg-grey-1 q-mt-md row items-center"
+			class="collect-root__slider q-mt-md row items-center"
 			v-if="items.length > 0"
 		>
 			<div
@@ -13,7 +13,7 @@
 				class="slider-item row items-center justify-center text-body2 text-grey-6"
 				:class="
 					item.identify === activeItem
-						? 'slider-item-select text-subtitle2 text-grey-10'
+						? 'slider-item-select text-subtitle2 text-ink-1'
 						: ''
 				"
 				:style="`width:calc((100% - ${(items.length - 1) * 4}px)/${
@@ -131,7 +131,6 @@ getInfos();
 .collect-root {
 	width: 100%;
 	height: 100%;
-	background-color: #fff;
 
 	&__header {
 		width: 100%;
@@ -143,12 +142,13 @@ getInfos();
 		height: 44px;
 		border-radius: 32px;
 		padding: 4px;
+		background-color: $background-3;
 		.slider-item {
 			height: 100%;
 		}
 
 		.slider-item-select {
-			background-color: #fff;
+			background-color: $background-1;
 			border-radius: 18px;
 		}
 	}

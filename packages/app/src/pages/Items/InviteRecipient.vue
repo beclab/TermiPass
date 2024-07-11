@@ -253,7 +253,7 @@ export default defineComponent({
 	padding: 0 20px;
 	display: flex;
 	flex-direction: column;
-	background-color: $white;
+	background-color: $background-1;
 
 	.header {
 		width: 100%;
@@ -269,7 +269,7 @@ export default defineComponent({
 	}
 
 	.stretch {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 8px;
 		padding: 20px;
 		margin: 20px auto 0;

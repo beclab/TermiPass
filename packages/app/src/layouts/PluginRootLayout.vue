@@ -140,7 +140,7 @@ const asideIconStyle: any = {
 <style></style>
 <style lang="scss" scoped>
 .webos-app-container {
-	background: #ffffff;
+	background: $background-1;
 	z-index: 70000;
 	filter: drop-shadow(0px 0px 12px rgba(0, 0, 0, 0.12));
 	text-align: left;

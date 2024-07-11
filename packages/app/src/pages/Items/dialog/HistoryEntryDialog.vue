@@ -30,7 +30,7 @@
 						<div class="text-color-title text-body1 date">
 							{{ formatDateTime(updated) }}
 						</div>
-						<div class="text-color-sub-title text-body1 updated">
+						<div class="text-ink-2 text-body1 updated">
 							<span class="semibold">
 								{{ formatDateFromNow(updated) }}
 							</span>
@@ -42,9 +42,7 @@
 						<div class="horizontal row items-center justify-start">
 							<div class="row items-center justify-start">
 								<BtIcon src="name" :width="14" :height="14" />
-								<span class="text-color-sub-title q-ml-xs">{{
-									t('name')
-								}}</span>
+								<span class="text-ink-2 q-ml-xs">{{ t('name') }}</span>
 							</div>
 							<div class="q-mx-md text-color-title">
 								<span v-if="name !== item.name">
@@ -59,9 +57,7 @@
 						<div class="horizontal row items-center justify-start">
 							<div class="row items-center justify-center">
 								<BtIcon src="tags" :width="14" :height="14" />
-								<span class="text-color-sub-title q-ml-xs">{{
-									t('tags')
-								}}</span>
+								<span class="text-ink-2 q-ml-xs">{{ t('tags') }}</span>
 							</div>
 							<div class="q-mx-md text-color-title">
 								<template v-for="(tag, index) in unchanged" :key="index">
@@ -95,9 +91,7 @@
 						<div class="horizontal row items-center justify-start">
 							<div class="row items-center justify-center">
 								<BtIcon src="fileds" :width="14" :height="14" />
-								<span class="text-color-sub-title q-ml-xs">{{
-									t('fields')
-								}}</span>
+								<span class="text-ink-2 q-ml-xs">{{ t('fields') }}</span>
 							</div>
 						</div>
 
@@ -130,7 +124,7 @@
 							</div>
 							<div class="field-value">
 								<s
-									class="text-color-sub-title"
+									class="text-ink-2"
 									v-if="
 										!historyField(index) ||
 										field.value !== historyField(index).value
@@ -278,7 +272,7 @@ export default defineComponent({
 
 		.stretch {
 			.horizontal {
-				border-bottom: 1px solid $grey-2;
+				border-bottom: 1px solid $separator;
 				padding: 0 20px;
 				line-height: 44px;
 
@@ -286,7 +280,7 @@ export default defineComponent({
 					height: 22px;
 					line-height: 22px;
 					padding: 0px 4px;
-					border: 1px solid $grey-2;
+					border: 1px solid $separator;
 					border-radius: 4px;
 					display: inline-block;
 					margin-right: 10px;
@@ -328,7 +322,7 @@ export default defineComponent({
 
 		.but-cancel-web {
 			border-radius: 8px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 	}
 }

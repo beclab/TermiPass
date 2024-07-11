@@ -97,7 +97,7 @@
 				</div>
 			</q-item>
 
-			<q-item
+			<!-- <q-item
 				dense
 				clickable
 				@click="lock"
@@ -107,7 +107,7 @@
 					<q-icon name="sym_r_lock" size="20px" />
 					<span class="text-body2 text-grey-8 q-ml-xs">{{ t('lock') }}</span>
 				</div>
-			</q-item>
+			</q-item> -->
 		</q-list>
 	</q-card>
 </template>
@@ -142,9 +142,10 @@ const handleSettings = () => {
 	emit('handleSettings');
 };
 
-const lock = () => {
-	app.lock();
-};
+// const lock = () => {
+// 	app.lock();
+// 	userStore.users?.lock();
+// };
 
 const updateOffLineMode = async () => {
 	userStore.updateOfflineMode(offLineModeRef.value);

@@ -489,7 +489,6 @@ const copyFunc = async (content: string) => {
 .domain-detail-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
 	position: relative;
 
 	.module-title {
@@ -498,21 +497,21 @@ const copyFunc = async (content: string) => {
 	}
 
 	.domain-name {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		width: 100%;
 		height: 36px;
 		border-radius: 8px;
 		background: $grey-1;
-		color: $title;
+		color: $ink-1;
 	}
 
 	.copy-item {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		width: 100%;
 		height: 36px;
 		border-radius: 8px;
 
-		color: $title;
+		color: $ink-1;
 
 		.content {
 			max-width: 80%;
@@ -529,11 +528,11 @@ const copyFunc = async (content: string) => {
 	.binding-rule-select {
 		height: 36px;
 		border-radius: 8px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		margin-right: 4px;
 
 		.rule-select {
-			color: $title;
+			color: $ink-1;
 			width: 100%;
 		}
 	}
@@ -552,7 +551,7 @@ const copyFunc = async (content: string) => {
 	}
 
 	.common-border {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 8px;
 	}
 }

@@ -22,7 +22,7 @@
 				/>
 
 				<div
-					class="text-color-sub-title column items-center justify-center full-height noData"
+					class="text-ink-2 column items-center justify-center full-height noData"
 					v-if="!itemID"
 				>
 					<img class="q-mt-sm" src="../../assets/layout/nodata.svg" />

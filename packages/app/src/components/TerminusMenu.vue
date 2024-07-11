@@ -99,7 +99,9 @@
 						:src="
 							require(`../assets/layout/${
 								menu.identify === menuStore.terminusActiveMenu
-									? menu.icon_active
+									? $q.dark.isActive
+										? menu.icon_active_dark
+										: menu.icon_active
 									: menu.icon
 							}.svg`)
 						"
@@ -204,13 +206,6 @@ const showing = ref(false);
 	position: relative;
 	padding-top: 12px;
 
-	.contain-bar-footer {
-		background: $white;
-		position: absolute;
-		bottom: 0;
-		border-radius: 8px;
-	}
-
 	.contain-header {
 		width: 100%;
 		height: 62px;
@@ -255,12 +250,10 @@ const showing = ref(false);
 
 			.search_icon {
 				margin-bottom: 8px;
-				color: $title;
 			}
 
 			.search_clean {
 				margin-bottom: 8px;
-				color: $title;
 			}
 
 			.command {
@@ -286,14 +279,6 @@ const showing = ref(false);
 
 	.menuList {
 		margin-top: 20px;
-
-		.title-active {
-			color: $title;
-		}
-
-		.title-normal {
-			color: $sub-title;
-		}
 	}
 }
 </style>

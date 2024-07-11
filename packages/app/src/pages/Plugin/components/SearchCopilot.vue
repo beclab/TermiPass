@@ -88,7 +88,7 @@ const list = [
 	}
 
 	.more-search {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 12px;
 		.more-search-content {
 			padding: 16px;

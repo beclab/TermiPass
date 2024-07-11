@@ -64,7 +64,7 @@ const showDeleteAccountDialog = async () => {
 		padding: 8px;
 
 		.account-operation-text {
-			color: $sub-title;
+			color: $ink-2;
 			margin-left: 8px;
 		}
 	}

@@ -3,7 +3,7 @@
 		<div class="user-header row items-center justify-between">
 			<div class="row items-center">
 				<TerminusAccountAvatar />
-				<div class="text-color-title text-h5 user-header__title">
+				<div class="text-ink-1 text-h5 user-header__title">
 					{{ title }}
 				</div>
 			</div>

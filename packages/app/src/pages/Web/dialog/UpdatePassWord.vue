@@ -12,7 +12,7 @@
 			<div class="row iterm-center justify-between button">
 				<q-btn class="bg-blue confirm" :label="confirmTxt" @click="onOKClick" />
 				<q-btn
-					class="bg-grey-11 text-color-sub-title cancel"
+					class="bg-grey-11 text-ink-2 cancel"
 					:label="cancelTxt"
 					@click="onCancelClick"
 				/>
@@ -134,7 +134,7 @@ const onCancelClick = () => {
 	.password {
 		width: 100%;
 		margin-top: 10px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 10px;
 		padding: 0 10px;
 	}

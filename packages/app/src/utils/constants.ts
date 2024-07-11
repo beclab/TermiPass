@@ -71,6 +71,7 @@ export interface LayoutItem {
 	icon_active: string;
 	identify: LayoutMenuIdetify;
 	path: string;
+	icon_active_dark: string;
 }
 
 export enum LayoutMenuIdetify {
@@ -87,7 +88,8 @@ export const LayoutMenu: LayoutItem[] = [
 		icon: 'files',
 		icon_active: 'files-active',
 		identify: LayoutMenuIdetify.FILES,
-		path: '/Files/Home/'
+		path: '/Files/Home/',
+		icon_active_dark: 'files-active-dark'
 	},
 
 	{
@@ -95,14 +97,16 @@ export const LayoutMenu: LayoutItem[] = [
 		icon: 'vault',
 		icon_active: 'vault-active',
 		identify: LayoutMenuIdetify.VAULT,
-		path: '/items'
+		path: '/items',
+		icon_active_dark: 'vault-active'
 	},
 	{
 		name: i18n.global.t('transmission.title'),
 		icon: 'transfer',
 		icon_active: 'transfer-active',
 		identify: LayoutMenuIdetify.TRANSMISSION,
-		path: '/transmission'
+		path: '/transmission',
+		icon_active_dark: 'transfer-active'
 	}
 ];
 

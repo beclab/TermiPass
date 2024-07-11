@@ -138,7 +138,7 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .sItem {
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 10px;
 }
 </style>

@@ -81,7 +81,7 @@ const action = async (name: IPCWindowsHeaderMenusEventName) => {
 		cursor: pointer;
 		transition: 0.2s ease all;
 		border: 0;
-		color: $sub-title;
+		color: $ink-2;
 		background: transparent;
 		box-shadow: none;
 	}

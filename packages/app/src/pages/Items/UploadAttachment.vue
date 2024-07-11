@@ -172,7 +172,7 @@ export default {
 
 		.item-web {
 			border-radius: 10px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 
 		.but-creat-web {
@@ -182,7 +182,7 @@ export default {
 
 		.but-cancel-web {
 			border-radius: 6px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 	}
 }

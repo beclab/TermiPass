@@ -5,7 +5,7 @@
 		:style="{
 			border: check ? '1px solid $blue' : ''
 		}"
-		:class="check ? 'text-blue' : 'text-color-sub-title'"
+		:class="check ? 'text-blue' : 'text-ink-2'"
 	>
 		<q-icon class="walletIcon" :name="icon" />
 		<div class="text-subtitle1">
@@ -45,7 +45,7 @@ const toggle = (name: string) => {
 	line-height: 56px;
 	border-radius: 4px;
 	border-radius: 10px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	cursor: pointer;
 	&:hover {
 		border: 1px solid $blue;

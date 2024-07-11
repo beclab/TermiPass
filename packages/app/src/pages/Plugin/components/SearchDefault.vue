@@ -31,7 +31,7 @@ withDefaults(defineProps<Props>(), {});
 .search-default-container {
 	.search-default-preview {
 		::v-deep(pre) {
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			border-radius: 12px;
 		}
 		::v-deep(code:only-child) {

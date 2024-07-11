@@ -108,7 +108,7 @@
 
 					<div class="row items-center justify-between q-my-md">
 						<q-btn
-							class="bg-grey-11 text-color-sub-title text-body1 previous"
+							class="bg-grey-11 text-ink-2 text-body1 previous"
 							:label="t('buttons.previous')"
 							@click="onPrevious"
 						/>
@@ -135,7 +135,7 @@
 
 					<div class="row items-center justify-between q-my-md">
 						<q-btn
-							class="bg-grey-11 text-color-sub-title text-body1 previous"
+							class="bg-grey-11 text-ink-2 text-body1 previous"
 							:label="t('vault_t.discard')"
 							@click="onPrevious"
 						/>
@@ -652,7 +652,7 @@ export default {
 
 	.step2 {
 		width: 100%;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 10px 10px 4px 4px;
 		margin: 0;
 		padding-left: 0;

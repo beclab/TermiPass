@@ -1,5 +1,5 @@
 import { walletService } from '../wallet';
-import { AppPlatform } from './appPlatform';
+import { AppPlatform, getAppPlatform } from './appPlatform';
 import { useSSIStore } from '../stores/ssi';
 import { useCloudStore } from '../stores/cloud';
 import { QVueGlobals } from 'quasar';
@@ -29,6 +29,12 @@ export const appLoadPrepare = (_platform: AppPlatform, data: any) => {
 	cloudStore.setUrl('https://cloud-api.bttcdn.com');
 
 	// walletService.load();
+	const deviceStore = useDeviceStore();
+	if (getAppPlatform().isClient) {
+		deviceStore.init().then(() => {
+			deviceStore.updateTheme();
+		});
+	}
 
 	const quasar = data.quasar as QVueGlobals;
 

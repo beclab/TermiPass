@@ -7,7 +7,7 @@
 		}"
 		@click="toggle"
 	>
-		<div class="text-color-sub-title walletName">
+		<div class="text-ink-2 walletName">
 			{{ label }}
 		</div>
 		<div class="walletCheck row items-center justify-center">
@@ -50,7 +50,7 @@ const toggle = () => {
 	width: 100%;
 	height: 44px;
 	cursor: pointer;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 10px;
 	margin-bottom: 10px;
 

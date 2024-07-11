@@ -11,7 +11,7 @@
 				alt=""
 			/>
 		</div>
-		<div class="text-color-sub-title walletName">
+		<div class="text-ink-2 walletName">
 			{{ name }}
 		</div>
 	</div>

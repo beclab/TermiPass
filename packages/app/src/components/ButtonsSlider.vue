@@ -58,7 +58,7 @@ export default defineComponent({
 		margin-left: 2px;
 		margin-right: 2px;
 		min-width: calc(var(--item-width-percent) - 10px);
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		box-sizing: border-box;
 	}
 

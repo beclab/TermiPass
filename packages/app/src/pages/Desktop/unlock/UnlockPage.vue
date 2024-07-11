@@ -84,8 +84,7 @@ const loginByPassword = async (password: string) => {
 		margin-top: 32px;
 		border-radius: 12px;
 		padding: 20px;
-		background: $background;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 
 		&__desc {
 			margin-top: 12px;
@@ -102,7 +101,7 @@ const loginByPassword = async (password: string) => {
 		}
 
 		.item {
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			padding: 5rem;
 			margin: 0.25rem;
 			position: relative;

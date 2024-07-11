@@ -39,6 +39,6 @@ defineProps({
 	width: 100%;
 	padding: 0;
 	border-radius: 12px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 }
 </style>

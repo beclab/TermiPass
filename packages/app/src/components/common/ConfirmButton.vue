@@ -60,7 +60,7 @@ const props = defineProps({
 	textClasses: {
 		type: String,
 		required: false,
-		default: 'text-color-title'
+		default: 'text-grey-10'
 	},
 	btnIcon: {
 		type: String,

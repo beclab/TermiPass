@@ -110,7 +110,7 @@ const changeActive = (index: number) => {
 			.login-layout-data {
 				height: 64px;
 				text-align: center;
-				color: $title;
+				color: $ink-1;
 				position: absolute;
 				bottom: 68px;
 				width: 316px;

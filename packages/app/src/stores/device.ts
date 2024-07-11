@@ -5,21 +5,31 @@ import { getAppPlatform } from '../platform/appPlatform';
 import { DeviceInfo } from '@didvault/sdk/src/core';
 import { app } from 'src/globals';
 import { TermiPassDeviceInfo } from '@bytetrade/core';
+import { ThemeDefinedMode } from '@bytetrade/ui';
+import { ThemePlugin } from 'src/plugins/theme';
+import { Dark, Platform } from 'quasar';
 
 export type DeviceStoreState = {
 	networkOnLine: boolean;
+	theme: ThemeDefinedMode;
 };
 
 export const useDeviceStore = defineStore('device', {
 	state: () => {
 		return {
-			networkOnLine: navigator.onLine
+			networkOnLine: navigator.onLine,
+			theme: ThemeDefinedMode.LIGHT
 		} as DeviceStoreState;
 	},
 
 	getters: {},
 
 	actions: {
+		async init() {
+			this.theme = (await ThemePlugin.get()).theme;
+			console.log('this.theme');
+			console.log(this.theme);
+		},
 		async getTermiPassInfo() {
 			const userStore = useUserStore();
 
@@ -84,6 +94,26 @@ export const useDeviceStore = defineStore('device', {
 				oldValue.client_type == newValue.client_type &&
 				oldValue.firebase_token == newValue.firebase_token
 			);
+		},
+		setTheme(theme: ThemeDefinedMode) {
+			this.theme = theme;
+			ThemePlugin.set({
+				theme
+			});
+			this.updateTheme();
+		},
+
+		async updateTheme() {
+			if (this.theme == ThemeDefinedMode.AUTO) {
+				if (Platform.is.nativeMobile && Platform.is.android) {
+					const isDark = (await ThemePlugin.systemIsDark()).dark;
+					Dark.set(isDark);
+				} else {
+					Dark.set('auto');
+				}
+			} else {
+				Dark.set(this.theme == ThemeDefinedMode.DARK);
+			}
 		}
 	}
 });

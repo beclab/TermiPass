@@ -208,7 +208,7 @@ function changeInputType() {
 			width: calc(100% - 30px);
 			margin-top: -6px;
 			margin-left: 16px;
-			color: $title;
+			color: $ink-1;
 		}
 	}
 

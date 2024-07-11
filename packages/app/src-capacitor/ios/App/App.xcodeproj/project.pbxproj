@@ -14,6 +14,8 @@
 		17050C1A29EEDAE9001CCC17 /* AppNativeInfoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17050C1929EEDAE9001CCC17 /* AppNativeInfoPlugin.swift */; };
 		17050C1C29EF8C28001CCC17 /* AppNativeInfoPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17050C1B29EF8C28001CCC17 /* AppNativeInfoPlugin.m */; };
 		17050DE1299E5C17002DA5FF /* AutofillItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17050DE0299E5C17002DA5FF /* AutofillItemCell.swift */; };
+		170642782C3F85E800B04541 /* ThemePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170642772C3F85E800B04541 /* ThemePlugin.swift */; };
+		1706427A2C3F85F400B04541 /* ThemePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 170642792C3F85F400B04541 /* ThemePlugin.m */; };
 		171058752BD0F3E100ADFD5C /* splash@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058722BD0F3E100ADFD5C /* splash@2x.png */; };
 		171058762BD0F3E100ADFD5C /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058732BD0F3E100ADFD5C /* splash.png */; };
 		171058772BD0F3E100ADFD5C /* splash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058742BD0F3E100ADFD5C /* splash@3x.png */; };
@@ -179,6 +181,8 @@
 		17050C1929EEDAE9001CCC17 /* AppNativeInfoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNativeInfoPlugin.swift; sourceTree = "<group>"; };
 		17050C1B29EF8C28001CCC17 /* AppNativeInfoPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppNativeInfoPlugin.m; sourceTree = "<group>"; };
 		17050DE0299E5C17002DA5FF /* AutofillItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AutofillItemCell.swift; path = Autofill/UI/AutofillItemCell.swift; sourceTree = SOURCE_ROOT; };
+		170642772C3F85E800B04541 /* ThemePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemePlugin.swift; sourceTree = "<group>"; };
+		170642792C3F85F400B04541 /* ThemePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThemePlugin.m; sourceTree = "<group>"; };
 		170EE7042BD2623D0023C79A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		170EE7052BD263910023C79A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		171058722BD0F3E100ADFD5C /* splash@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash@2x.png"; sourceTree = "<group>"; };
@@ -341,6 +345,7 @@
 		17007866295E9D8300CE8118 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				170642762C3F85D100B04541 /* Theme */,
 				17858AD82C215A8800C7C013 /* GoogleAuthPlugin */,
 				17858AD12C2133A900C7C013 /* Dropbox */,
 				1750C77C2A9387290058FB41 /* VPN */,
@@ -396,6 +401,15 @@
 				1728096D29FA9D8B00F0755A /* AutofillItemEmptyCell.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		170642762C3F85D100B04541 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				170642772C3F85E800B04541 /* ThemePlugin.swift */,
+				170642792C3F85F400B04541 /* ThemePlugin.m */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		1728094429F916E800F0755A /* AutofilliOS */ = {
@@ -1081,8 +1095,10 @@
 				17F436D529670D8E00A0B89F /* TwitterLoginPlugin.swift in Sources */,
 				17334E922A8483DE00057588 /* DownloadFilePlugin.swift in Sources */,
 				17007865295E9C7300CE8118 /* EchoPlugin.m in Sources */,
+				1706427A2C3F85F400B04541 /* ThemePlugin.m in Sources */,
 				17858ADD2C215B3500C7C013 /* GoogleAuthPlugin.swift in Sources */,
 				17FE240129E946F0008A46C8 /* ExtensionWebviewPlugin.swift in Sources */,
+				170642782C3F85E800B04541 /* ThemePlugin.swift in Sources */,
 				17FE303B2A85010500137F37 /* ProxyInfoPlugin.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

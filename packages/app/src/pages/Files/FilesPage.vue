@@ -231,6 +231,8 @@ onUnmounted(() => {
 	top: 0;
 	display: flex;
 	flex-direction: column;
+	background-color: $background-1;
+	// border-left: solid 1px $separator;
 
 	header,
 	footer {
@@ -240,6 +242,7 @@ onUnmounted(() => {
 	main {
 		flex: 1 1 auto;
 		overflow-y: auto;
+		// border-left: solid 1px $separator;
 	}
 }
 </style>

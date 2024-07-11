@@ -63,7 +63,7 @@ defineProps({
 			padding: 20px;
 
 			&__title {
-				color: $title;
+				color: $ink-1;
 			}
 
 			&__desc {
@@ -80,7 +80,7 @@ defineProps({
 					width: calc(50% - 6px);
 				}
 				.cancel {
-					border: 1px solid $grey-2;
+					border: 1px solid $separator;
 				}
 			}
 		}

@@ -15,7 +15,7 @@
 							/>
 						</template>
 						<template v-slot:content>
-							<div class="q-ma-md text-body3 text-color-title">
+							<div class="q-ma-md text-body3 text-ink-1">
 								{{ t('autofill_service_desc') }}
 							</div>
 						</template>
@@ -32,7 +32,7 @@
 							/>
 						</template>
 						<template v-slot:content>
-							<div class="q-ma-md text-body3 text-color-title">
+							<div class="q-ma-md text-body3 text-ink-1">
 								{{ t('use_accessibility_desc') }}
 							</div>
 						</template>
@@ -49,7 +49,7 @@
 							/>
 						</template>
 						<template v-slot:content>
-							<div class="q-ma-md text-body3 text-color-title">
+							<div class="q-ma-md text-body3 text-ink-1">
 								{{ t('use_draw_over_desc') }}
 							</div>
 						</template>
@@ -65,7 +65,7 @@
 					>
 						<template v-slot:content>
 							<div class="q-pb-md">
-								<div class="q-ma-md text-body3 text-color-title">
+								<div class="q-ma-md text-body3 text-ink-1">
 									{{ t('autofill_instructions') }}<br /><br />
 									1. {{ t('go_to_the_ios_settings') }}<br />
 									2. {{ t('tap_passwords') }} <br />

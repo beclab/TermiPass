@@ -77,7 +77,6 @@
 .terminus-dialog {
 	width: 400px;
 	border-radius: 12px;
-	background-color: $background;
 	padding: 20px;
 
 	&__title {
@@ -87,13 +86,13 @@
 		line-height: map-get($map: $h5, $key: line-height);
 		letter-spacing: map-get($map: $h5, $key: letter-spacing);
 		text-align: center;
-		color: $title;
+		color: $ink-1;
 	}
 
 	&__desc {
 		margin-top: 12px;
 		text-align: center;
-		color: $sub-title;
+		color: $ink-2;
 	}
 
 	&__edit {
@@ -146,7 +145,7 @@
 }
 
 .home-module-title {
-	color: $title;
+	color: $ink-1;
 	font-size: map-get($map: $h6, $key: size);
 	font-weight: map-get($map: $h6, $key: weight);
 	line-height: map-get($map: $h6, $key: line-height);
@@ -163,31 +162,31 @@
 }
 
 .success-notify-class {
-	border: 1px solid $green  !important;
+	border: 1px solid $green !important;
 	border-radius: 8px !important;
 	background-image: linear-gradient(to right, #29cc5f1a, #29cc5f1a) !important;
 }
 
 .failed-notify-class {
-	border: 1px solid $red  !important;
+	border: 1px solid $red !important;
 	border-radius: 8px !important;
 	background-image: linear-gradient(to right, #e52e391a, #e52e391a) !important;
 }
 
 .warning-notify-class {
-	border: 1px solid $warning  !important;
+	border: 1px solid $warning !important;
 	border-radius: 8px !important;
 	background-image: linear-gradient(to right, #febe011a, #febe011a) !important;
 }
 
 .loading-notify-class {
-	border: 1px solid $grey-2  !important;
+	border: 1px solid $separator !important;
 	border-radius: 8px !important;
 	background-image: linear-gradient(to right, $grey-1, $grey-1) !important;
 }
 
 .progress-notify-class {
-	border: 1px solid $blue  !important;
+	border: 1px solid $blue !important;
 	border-radius: 8px !important;
 	background-image: linear-gradient(to right, #3377ff1a, #3377ff1a) !important;
 }

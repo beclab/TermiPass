@@ -6,7 +6,7 @@
 		<div v-show="showDappInfo" class="dapp-info fit column items-center">
 			<q-img :src="getRequireImage(dappLogo)" height="44px" width="44px" />
 			<div class="text-color-title text-subtitle2 dapp-url">{{ dappUrl }}</div>
-			<div class="text-color-sub-title text-subtitle1 dapp-connect-title">
+			<div class="text-ink-2 text-subtitle1 dapp-connect-title">
 				{{ action }}
 			</div>
 		</div>

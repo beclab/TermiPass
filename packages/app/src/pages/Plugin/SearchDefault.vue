@@ -56,7 +56,7 @@ function getGreetingTime() {
 <style lang="scss" scoped>
 .search {
 	width: 100%;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 20px;
 	padding: 20px;
 	margin-top: 20px;
@@ -75,7 +75,7 @@ function getGreetingTime() {
 .upload {
 	width: calc(50% - 6px);
 	height: 162px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 12px;
 	padding: 32px 0;
 	background: linear-gradient(
@@ -97,7 +97,7 @@ function getGreetingTime() {
 	.write {
 		width: 100%;
 		height: 112px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 12px;
 		padding: 18px 20px;
 		position: relative;
@@ -115,7 +115,7 @@ function getGreetingTime() {
 		height: 36px;
 		line-height: 34px;
 		text-align: center;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 20px;
 	}
 }

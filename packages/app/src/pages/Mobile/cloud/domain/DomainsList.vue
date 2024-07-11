@@ -120,17 +120,17 @@ async function onClick(domain: Domain) {
 .domain-item {
 	// height: 60px;
 	width: 100%;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 	border-radius: 8px;
 	padding: 12px 10px;
 
 	&__title {
-		color: $title;
+		color: $ink-1;
 	}
 
 	&__detail {
 		text-align: left;
-		color: $sub-title;
+		color: $ink-2;
 	}
 }
 .empty {

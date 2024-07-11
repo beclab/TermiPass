@@ -155,7 +155,6 @@ const mnemonicUpdate = (value: string) => {
 .input-mnemonic-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
 
 	.input-mnemonic-scroll {
 		width: 100%;

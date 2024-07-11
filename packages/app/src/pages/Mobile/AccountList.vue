@@ -38,7 +38,7 @@
 				</terminus-account-item>
 
 				<terminus-item
-					img-bg-classes="bg-grey-1"
+					img-bg-classes="bg-background-3"
 					style="margin-top: 12px"
 					icon-name="sym_r_person_add"
 					:img-b-g-size="40"

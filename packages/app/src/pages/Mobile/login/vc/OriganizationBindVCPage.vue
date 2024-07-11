@@ -100,7 +100,6 @@ async function request(request_type: TERMINUS_VC_TYPE) {
 .join-organization-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
 	position: relative;
 
 	.join-organization-vc-root {

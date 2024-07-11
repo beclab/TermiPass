@@ -27,7 +27,7 @@
 			<div class="text-color-title text-subtitle2 bind-name__text_name">
 				{{ terminusNameRef }}
 			</div>
-			<div class="bind-name__text_desc text-body3 text-color-sub-title">
+			<div class="bind-name__text_desc text-body3 text-ink-2">
 				{{ t('not_connected_terminus_log_in_now') }}
 			</div>
 			<TerminusEnterBtn

@@ -31,6 +31,7 @@ import { useMonitorStore } from './monitor';
 import { seafileAPI } from 'src/api/seafileAPI';
 import { useDataStore } from './data';
 import { unlockUserFirstBusiness } from 'src/utils/BindTerminusBusiness';
+// import { Dark } from 'quasar';
 
 type UserStorageSaveType =
 	| 'locale'
@@ -206,6 +207,9 @@ export const useUserStore = defineStore('user', {
 				this.users.fromRaw(res);
 				if (this.current_id) {
 					await app.load(this.current_id);
+					// Dark.set(
+					// 	app.settings.theme == 'auto' ? 'auto' : app.settings.theme == 'dark'
+					// );
 				}
 			}
 		},

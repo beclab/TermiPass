@@ -3,7 +3,7 @@
 		class="authenticator-card row items-center justify-between"
 		@click="onCardClick"
 	>
-		<div>
+		<div class="row items-center auth-code">
 			<span class="authenticator-card__code text-h5" v-if="errorMessageRef">{{
 				errorMessageRef
 			}}</span>
@@ -122,10 +122,14 @@ onUnmounted(() => {
 	padding: 18px 20px;
 	background: #1f1814;
 
+	.auth-code {
+		height: 28px;
+	}
+
 	&__code {
 		display: flex;
 		align-items: center;
-		color: $white;
+		color: $ink-1;
 	}
 
 	.hideCode {

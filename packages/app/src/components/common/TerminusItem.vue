@@ -3,15 +3,9 @@
 		dense
 		:clickable="clickable"
 		class="click-item-root row items-center"
+		:class="showBoard ? 'border-class' : ''"
 		:style="
-			'height:' +
-			itemHeight +
-			'px;' +
-			(showBoard ? 'border: 1px solid #e0e0e0;' : 'border: none') +
-			';' +
-			'border-radius: ' +
-			borderRadius +
-			'px;'
+			'height:' + itemHeight + 'px;' + 'border-radius: ' + borderRadius + 'px;'
 		"
 	>
 		<div
@@ -47,10 +41,7 @@
 					<slot name="title"></slot>
 				</div>
 
-				<div
-					class="detail text-body3 text-color-sub-title"
-					v-if="$slots.detail"
-				>
+				<div class="detail text-body3 text-ink-2" v-if="$slots.detail">
 					<slot name="detail"></slot>
 				</div>
 			</div>
@@ -79,7 +70,7 @@ const prop = defineProps({
 	titleClasses: {
 		type: String,
 		required: false,
-		default: 'text-color-title'
+		default: 'text-ink-1'
 	},
 
 	borderRadius: {
@@ -174,5 +165,8 @@ const imageWidth = () => {
 	.detail {
 		margin-top: 4px;
 	}
+}
+.border-class {
+	border: 1px solid $separator;
 }
 </style>

@@ -45,7 +45,7 @@ withDefaults(defineProps<Props>(), {});
 		padding: 2px;
 		width: 16px;
 		height: 16px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 	}
 	.img {
 		border-radius: 50%;

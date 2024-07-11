@@ -36,16 +36,16 @@
 		</q-icon>
 
 		<div v-if="viewMode === 'mosaic'" style="margin-top: 0.3rem">
-			<span class="name text-color-title">{{ name }}</span>
-			<div class="modified text-color-sub-title">
+			<span class="name text-ink-1">{{ name }}</span>
+			<div class="modified text-ink-3">
 				{{ formatFileModified(modified, 'YYYY-MM-DD') + ' · ' + humanSize() }}
 			</div>
 		</div>
 		<div v-else style="width: 100%" class="q-pl-md">
 			<div style="width: 100%" class="row items-center justify-between">
 				<div class="column justify-center" style="width: calc(100% - 32px)">
-					<div class="name text-color-title">{{ name }}</div>
-					<div class="modified text-color-sub-title" style="max-width: 100%">
+					<div class="name text-ink-1">{{ name }}</div>
+					<div class="modified text-ink-3" style="max-width: 100%">
 						{{ formatFileModified(modified) + ' · ' + humanSize() }}
 					</div>
 				</div>

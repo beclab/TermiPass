@@ -42,7 +42,8 @@ const props = defineProps({
 		required: true
 	},
 	readOnly: {
-		default: undefined,
+		type: Boolean,
+		default: false,
 		required: false
 	},
 	modified: {

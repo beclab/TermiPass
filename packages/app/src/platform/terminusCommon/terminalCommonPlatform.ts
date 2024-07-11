@@ -44,6 +44,8 @@ export class TerminusCommonPlatform extends SubAppPlatform {
 
 	isOnHomePage = false;
 
+	isClient = true;
+
 	getQuasar() {
 		return this.quasar;
 	}

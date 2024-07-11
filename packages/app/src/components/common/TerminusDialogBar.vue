@@ -56,7 +56,7 @@ const onCancel = () => {
 
 <style scoped lang="scss">
 .mobile-title {
-	color: $title;
+	color: $ink-1;
 	text-align: center;
 	margin: 20px 0;
 }

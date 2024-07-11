@@ -3,7 +3,7 @@
 		<div class="content">
 			<div class="row justify-center items-center">
 				<q-btn
-					class="bg-blue text-title text-subtitle1 confirm-btn"
+					class="bg-blue text-ink-1 text-subtitle1 confirm-btn"
 					flat
 					:label="btnTitle.length > 0 ? btnTitle : 'Confirm'"
 					@click="confirmAction()"

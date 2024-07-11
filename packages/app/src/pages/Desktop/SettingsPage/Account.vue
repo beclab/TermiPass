@@ -221,7 +221,7 @@ export default defineComponent({
 .wrap_account {
 	width: 100%;
 	height: 100%;
-	background: $white;
+	background: $background-1;
 	border-radius: 12px;
 }
 
@@ -249,11 +249,11 @@ export default defineComponent({
 			overflow: hidden;
 
 			.name {
-				color: $title;
+				color: $ink-1;
 			}
 
 			.did {
-				color: $sub-title;
+				color: $ink-2;
 				word-break: break-all;
 			}
 		}
@@ -295,7 +295,7 @@ export default defineComponent({
 				padding: 8px;
 				border-radius: 8px;
 				background: $yellow;
-				color: $title;
+				color: $grey-10;
 				cursor: pointer;
 
 				&:hover {

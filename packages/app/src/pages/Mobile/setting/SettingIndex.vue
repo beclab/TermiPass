@@ -44,10 +44,10 @@
 										:color="item.color"
 										track-color="grey-1"
 									/>
-									<div class="amount text-body2 text-color-title">
+									<div class="amount text-body2 text-ink-1">
 										{{ item.ratio }}%
 									</div>
-									<div class="name text-body3 text-color-sub-title">
+									<div class="name text-body3 text-ink-2">
 										{{ item.name?.toUpperCase() }}
 									</div>
 								</div>
@@ -63,7 +63,7 @@
 						v-for="(cell, index) in setting"
 						:key="index"
 						class="q-mt-xs"
-						img-bg-classes="bg-grey-1"
+						img-bg-classes="bg-background-3"
 						:icon-name="cell.icon"
 						:whole-picture-size="32"
 						:side-style="index == 0 ? 'width: 50%' : ''"
@@ -91,7 +91,7 @@
 					</terminus-item>
 
 					<terminus-item
-						img-bg-classes="bg-grey-1"
+						img-bg-classes="bg-background-3"
 						class="q-mt-xs"
 						icon-name="sym_r_ballot"
 						:whole-picture-size="32"
@@ -104,9 +104,7 @@
 						</template>
 						<template v-slot:side>
 							<div class="row items-center justify-end">
-								<div
-									class="app-version text-body2 text-color-sub-title q-pr-xs"
-								>
+								<div class="app-version text-body2 text-ink-2 q-pr-xs">
 									{{ appVersion }}
 								</div>
 								<q-icon name="sym_r_keyboard_arrow_right" />
@@ -169,6 +167,14 @@ const $q = useQuasar();
 const monitorStore = useMonitorStore();
 
 const settingsMenus = [...settingMenu];
+
+if ($q.platform.is.mobile) {
+	settingsMenus.push({
+		label: t('Display'),
+		icon: 'sym_r_arming_countdown',
+		path: '/setting/display'
+	});
+}
 
 if ($q.platform.is.nativeMobile) {
 	settingsMenus.splice(1, 0, {
@@ -239,7 +245,6 @@ configVersion();
 .setting {
 	height: 100%;
 	width: 100%;
-	background: $white;
 	position: relative;
 	z-index: 0;
 
@@ -275,7 +280,7 @@ configVersion();
 			padding-right: 20px;
 
 			&__name {
-				color: $sub-title;
+				color: $ink-2;
 				/* 133.333% */
 			}
 
@@ -291,7 +296,7 @@ configVersion();
 						height: 138px;
 						width: calc((100% - 24px) / 3);
 						border-radius: 16px;
-						border: 1px solid $grey-2;
+						border: 1px solid $separator;
 
 						.amount {
 							text-align: center;

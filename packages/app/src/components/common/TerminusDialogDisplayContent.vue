@@ -50,14 +50,14 @@ const onDialogCancel = () => {
 	.content-bg {
 		border-top-left-radius: 12px;
 		border-top-right-radius: 12px;
-		background-color: $white;
+		background-color: $background-1;
 		height: 100%;
 		padding-bottom: env(safe-area-inset-bottom);
 
 		.title-part {
 			width: 100%;
 			height: 64px;
-			color: $title;
+			color: $ink-1;
 		}
 
 		.content-part {

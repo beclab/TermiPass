@@ -10,7 +10,7 @@
 			class="terminus-account-root__img row items-center justify-center"
 			v-else
 		>
-			<q-icon name="sym_r_person" size="20px" color="text-color-title" />
+			<q-icon name="sym_r_person" size="20px" color="text-ink-1" />
 		</div>
 
 		<div class="terminus-account-root__right row items-center justify-between">
@@ -27,8 +27,8 @@
 						"
 						style="text-align: left"
 						:class="{
-							'text-title': user.name,
-							'text-grey-4': !user.name,
+							'text-ink-1': user.name,
+							'text-ink-2': !user.name,
 							'current-user': user.name && user.id == userStore.current_user?.id
 						}"
 					>
@@ -45,7 +45,7 @@
 				<div
 					class="text-body3 terminus-account-root__right__text__detail"
 					style="text-align: left"
-					:class="user.name ? 'text-sub-title' : 'text-grey'"
+					:class="user.name ? 'text-ink-2' : 'text-ink-3'"
 				>
 					{{ subInfo }}
 				</div>
@@ -101,13 +101,13 @@ onMounted(() => {
 	padding: 12px;
 	height: 64px;
 	border-radius: 8px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 
 	&__img {
 		width: 40px;
 		height: 40px;
 		border-radius: 20px;
-		background: $grey-1;
+		background: $background-3;
 	}
 
 	&__right {

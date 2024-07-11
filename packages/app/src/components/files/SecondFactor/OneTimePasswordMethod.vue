@@ -130,7 +130,7 @@ onMounted(() => {
 	box-shadow: 0px 2px 12px 0px rgba(0, 0, 0, 0.2),
 		inset 0px 0px 6px 0px rgba(255, 255, 255, 0.7);
 	opacity: 1;
-	color: $title;
+	color: $ink-1;
 	&:focus-visible {
 		border: none;
 		padding: 0 !important;

@@ -5,7 +5,8 @@
 				v-if="showCancel"
 				class="cancel-button"
 				btn-title="cancel"
-				bg-classes="bg-white"
+				bg-classes="bg-background-1"
+				textClasses="text-ink-2"
 				@onConfirm="mobileCancel()"
 			/>
 			<confirm-button
@@ -124,7 +125,7 @@ onBeforeMount(() => {
 .but-creat {
 	border-radius: 8px;
 	background: $yellow;
-	color: $title;
+	color: $grey-10;
 }
 .but-cancel {
 	border-radius: 8px;
@@ -135,7 +136,7 @@ onBeforeMount(() => {
 	margin: 20px;
 	.cancel-button {
 		width: 48%;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 	}
 }
 </style>

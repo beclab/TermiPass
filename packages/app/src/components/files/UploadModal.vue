@@ -235,7 +235,7 @@ export default defineComponent({
 		padding: 0 20px;
 
 		div {
-			color: $title;
+			color: $ink-1;
 			font-weight: 700;
 
 			.uploadStatus {

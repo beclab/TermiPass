@@ -26,7 +26,7 @@
 							class="text-body1 text-weight-bold q-pl-sm q-ml-xs q-mb-sm"
 							>{{ t('settings.autostart_settings') }}</q-item-label
 						>
-						<q-item-label class="text-grey-8">
+						<q-item-label class="text-ink-1">
 							<q-checkbox
 								v-model="settings.automatically"
 								color="green-14"
@@ -40,17 +40,90 @@
 					</q-item-section>
 				</q-item>
 
+				<q-item class="q-mt-md item-centent">
+					<q-item-section class="q-pa-md">
+						<div class="row items-center justify-between text-ink-1 text-h6">
+							{{ t('settings.themes.title') }}
+						</div>
+						<div
+							class="checkbox-content row items-center q-mt-md"
+							@click="updateTheme(ThemeDefinedMode.AUTO)"
+						>
+							<div
+								class="checkbox-common row items-center justify-center"
+								:class="
+									isThemeAuto ? 'checkbox-selected-yellow' : 'checkbox-unselect'
+								"
+							>
+								<q-icon
+									class="text-ink-on-brand"
+									size="12px"
+									v-if="isThemeAuto"
+									name="sym_r_check"
+								/>
+							</div>
+							<div class="text-body2 text-ink-2">Follow system theme</div>
+						</div>
+						<div class="q-mt-md">
+							After being selected, TermiPass will follow the device's system
+							settings to switch theme modes
+						</div>
+						<div class="q-mt-md row items-center justify-between theme-select">
+							<div
+								class="theme-item-common"
+								:class="isThemeLight ? 'theme-item-select' : ''"
+								@click="updateTheme(ThemeDefinedMode.LIGHT)"
+							>
+								<q-img
+									src="../../../assets/setting/theme-light.svg"
+									class="image"
+								/>
+								<div class="content row items-center q-pl-md">
+									<q-radio
+										dense
+										v-model="deviceStore.theme"
+										:val="ThemeDefinedMode.LIGHT"
+										label="Light"
+										color="yellow-default"
+										@update:model-value="updateTheme(ThemeDefinedMode.LIGHT)"
+									/>
+								</div>
+							</div>
+							<div
+								class="theme-item-common"
+								:class="isThemeDark ? 'theme-item-select' : ''"
+								@click="updateTheme(ThemeDefinedMode.DARK)"
+							>
+								<q-img
+									src="../../../assets/setting/theme-dark.svg"
+									class="image"
+								/>
+								<div class="content row items-center q-pl-md">
+									<q-radio
+										v-model="deviceStore.theme"
+										:val="ThemeDefinedMode.DARK"
+										label="Dark"
+										color="yellow-default"
+										dense
+										@update:model-value="updateTheme(ThemeDefinedMode.DARK)"
+									/>
+								</div>
+							</div>
+						</div>
+					</q-item-section>
+				</q-item>
+
 				<q-item id="setting_4" class="q-mb-lg setting_item">
 					<q-item-section>
 						<q-item-label
 							class="text-body1 text-weight-bold q-pl-sm q-ml-xs q-mb-sm"
 							>{{ t('account') }}</q-item-label
 						>
-						<q-item-label class="q-pl-sm q-ml-xs text-color-sub-title">
+						<q-item-label class="q-pl-sm q-ml-xs text-ink-2">
 							{{ t('settings.account_root_message') }}
 						</q-item-label>
 
-						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs">
+						<q-item-label class="text-ink-1 q-pl-sm q-ml-xs">
 							<div class="adminBtn q-mt-md" @click="toAccountCenter">
 								<q-icon
 									name="sym_r_account_circle"
@@ -69,17 +142,17 @@
 							class="text-body1 text-weight-bold q-pl-sm q-ml-xs q-mb-sm"
 							>{{ t('settings.safety') }}</q-item-label
 						>
-						<q-item-label class="text-color-sub-title q-pl-sm q-ml-xs">
+						<q-item-label class="text-ink-2 q-pl-sm q-ml-xs">
 							{{ t('change_local_password') }}
 						</q-item-label>
 
-						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs q-mb-md">
+						<q-item-label class="text-ink-1 q-pl-sm q-ml-xs q-mb-md">
 							<div class="adminBtn q-mt-sm" @click="changePassword">
 								{{ t('settings.changePassword') }}
 							</div>
 						</q-item-label>
 
-						<q-item-label class="text-grey-8">
+						<q-item-label class="text-ink-1">
 							<q-checkbox
 								v-model="settings.autoLock"
 								color="green-14"
@@ -91,7 +164,7 @@
 						</q-item-label>
 
 						<q-item-label
-							class="text-grey-8 q-pl-sm q-ml-xs row items-center justify-between lock-slider"
+							class="text-ink-1 q-pl-sm q-ml-xs row items-center justify-between lock-slider"
 							:class="!settings.autoLock ? 'hideSlider' : ''"
 						>
 							<span>10 {{ t('min') }}</span>
@@ -120,7 +193,7 @@
 						>
 							{{ t('transmission.title') }}
 						</q-item-label>
-						<q-item-label class="text-grey-8 q-mb-md">
+						<q-item-label class="text-ink-1 q-mb-md">
 							<q-checkbox
 								v-model="settings.transmissionrKeep"
 								color="green-14"
@@ -131,7 +204,7 @@
 							{{ t('computer_does_not_sleep_when_there_is_a_task') }}
 						</q-item-label>
 
-						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs">
+						<q-item-label class="text-ink-1 q-pl-sm q-ml-xs">
 							<div class="q-mb-sm text-grey-7">
 								{{ t('download_location') }}
 							</div>
@@ -156,7 +229,7 @@
 							class="text-body1 text-weight-bold q-pl-sm q-ml-xs q-mb-sm"
 							>{{ t('about') }}</q-item-label
 						>
-						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs">
+						<q-item-label class="text-ink-1 q-pl-sm q-ml-xs">
 							{{ t('current_version') }}: {{ settings.appVersion }}
 						</q-item-label>
 					</q-item-section>
@@ -167,7 +240,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, watch, onMounted } from 'vue';
+import {
+	defineComponent,
+	ref,
+	reactive,
+	watch,
+	onMounted,
+	computed
+} from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { app } from './../../../globals';
@@ -179,8 +259,10 @@ import { useQuasar } from 'quasar';
 import { getPlatform } from '@didvault/sdk/src/core';
 import { formatMinutesTime } from '../../../utils/utils';
 import { LayoutMenuIdetify } from 'src/utils/constants';
+import { ThemeDefinedMode } from '@bytetrade/ui';
 
 import DialogResetPassword from './DialogResetPassword.vue';
+import { useDeviceStore } from '../../../stores/device';
 
 export default defineComponent({
 	name: 'SettingsPage',
@@ -365,6 +447,24 @@ export default defineComponent({
 			}
 		};
 
+		const deviceStore = useDeviceStore();
+
+		const isThemeAuto = computed(function () {
+			return deviceStore.theme == ThemeDefinedMode.AUTO;
+		});
+
+		const isThemeDark = computed(function () {
+			return deviceStore.theme == ThemeDefinedMode.DARK;
+		});
+
+		const isThemeLight = computed(function () {
+			return deviceStore.theme == ThemeDefinedMode.LIGHT;
+		});
+
+		const updateTheme = (theme: ThemeDefinedMode) => {
+			deviceStore.setTheme(theme);
+		};
+
 		return {
 			settings,
 			languageOptions,
@@ -386,7 +486,13 @@ export default defineComponent({
 			changePassword,
 			transmissionrKeepUpdate,
 			formatMinutesTime,
-			t
+			t,
+			updateTheme,
+			isThemeAuto,
+			isThemeDark,
+			isThemeLight,
+			ThemeDefinedMode,
+			deviceStore
 		};
 	}
 });
@@ -396,7 +502,7 @@ export default defineComponent({
 .wrap-settings {
 	width: 100%;
 	height: 100%;
-	background: $white;
+	background: $background-1;
 	border-radius: 12px;
 }
 
@@ -407,7 +513,7 @@ export default defineComponent({
 		border: 1px solid $yellow;
 		background-color: $yellow-1;
 		display: inline-block;
-		color: $sub-title;
+		color: $ink-2;
 		padding: 6px 12px;
 		border-radius: 8px;
 		cursor: pointer;
@@ -420,13 +526,13 @@ export default defineComponent({
 	.viewBtn {
 		background: $yellow;
 		border-radius: 8px;
-		width: 76px;
+		// width: 76px;
 		height: 40px;
 		line-height: 40px;
 		text-align: center;
 		margin-left: 20px;
 		cursor: pointer;
-		color: $title;
+		color: $grey-10;
 		font-weight: 500;
 		padding: 0 16px;
 
@@ -445,6 +551,85 @@ export default defineComponent({
 
 	.hideSlider {
 		height: 0 !important;
+	}
+
+	.theme-select {
+		width: 440px;
+		height: 144px;
+		// background-color: red;
+
+		.theme-item-common {
+			height: 144px;
+			width: 210px;
+			border: 1px solid $separator;
+			border-radius: 12px;
+			overflow: hidden;
+			.image {
+				width: 100%;
+				height: 100px;
+			}
+			.content {
+				width: 100%;
+				height: 44px;
+			}
+		}
+
+		.theme-item-select {
+			border: 1px solid $yellow-default;
+		}
+	}
+
+	.item-centent {
+		border-radius: 12px;
+		width: 100%;
+		text-align: left;
+
+		.checkbox-content {
+			width: 100%;
+			height: 30px;
+			.checkbox-common {
+				width: 16px;
+				height: 16px;
+				margin-right: 10px;
+				border-radius: 4px;
+			}
+
+			.checkbox-unselect {
+				border: 1px solid $separator-2;
+			}
+
+			.checkbox-selected-yellow {
+				background: $yellow-default;
+			}
+			.checkbox-selected-green {
+				background: $positive;
+			}
+		}
+		.adminBtn {
+			border: 1px solid $yellow;
+			background-color: $yellow-1;
+			display: inline-block;
+			color: $ink-2;
+			padding: 6px 12px;
+			border-radius: 8px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: $yellow-3;
+			}
+		}
+
+		.lock-slider {
+			height: 60px;
+			transition: height 0.5s;
+			min-height: 0 !important;
+			padding-top: 0px !important;
+			padding-bottom: 0px !important;
+		}
+
+		.hideSlider {
+			height: 0 !important;
+		}
 	}
 }
 </style>

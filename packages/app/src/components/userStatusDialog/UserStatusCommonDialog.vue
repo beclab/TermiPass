@@ -80,11 +80,11 @@ const reactivateAction = () => {
 	}
 
 	.offline-mode {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		width: calc(50% - 10px);
 		height: 48px;
 		text-align: center;
-		color: $title;
+		color: $ink-1;
 		border-radius: 8px;
 	}
 
@@ -94,7 +94,7 @@ const reactivateAction = () => {
 		height: 48px;
 
 		text-align: center;
-		color: $title;
+		color: $ink-1;
 		border-radius: 8px;
 		background: $yellow-1;
 	}

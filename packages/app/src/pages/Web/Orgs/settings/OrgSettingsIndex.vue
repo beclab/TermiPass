@@ -145,16 +145,16 @@ export default defineComponent({
 	height: 100%;
 
 	.settingCard {
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 6px;
 		margin: 24px auto 0;
 		.header {
 			width: 100%;
 			height: 38px;
 			line-height: 38px;
-			color: $title;
+			color: $ink-1;
 			text-indent: 20px;
-			border-bottom: 1px solid $grey-2;
+			border-bottom: 1px solid $separator;
 			background-color: $tooltip-color;
 		}
 		.btn {
@@ -162,7 +162,7 @@ export default defineComponent({
 			height: 46px;
 			line-height: 46px;
 			text-align: center;
-			color: $title;
+			color: $ink-1;
 			background-color: $tooltip-color;
 			margin: 0 auto;
 			border-radius: 6px;

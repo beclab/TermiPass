@@ -1222,7 +1222,7 @@ export default defineComponent({
 		top: -16px;
 		width: 0px;
 		height: 32px;
-		border-left: 1px solid $grey-2;
+		border-left: 1px solid $separator;
 	}
 
 	&:hover {

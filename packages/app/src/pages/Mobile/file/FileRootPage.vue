@@ -10,11 +10,11 @@
 						<div class="home-module-title">
 							{{ t('files.drive') }}
 						</div>
-						<div class="module-content q-mt-md bg-color-white">
+						<div class="module-content q-mt-md bg-background-1">
 							<div v-for="(cell, index) in driveMenus" :key="index">
 								<terminus-item
 									:show-board="false"
-									img-bg-classes="bg-grey-1"
+									img-bg-classes="bg-background-3"
 									:image-path="cell.icon"
 									:whole-picture-size="32"
 									:icon-size="16"
@@ -29,7 +29,7 @@
 								</terminus-item>
 								<q-separator
 									inset
-									color="grey-2"
+									class="bg-separator"
 									v-if="index + 1 < driveMenus.length"
 								/>
 							</div>
@@ -38,11 +38,11 @@
 						<div class="home-module-title q-mt-lg">
 							{{ $t('files.sync') }}
 						</div>
-						<div class="module-content q-mt-md bg-color-white">
+						<div class="module-content q-mt-md bg-background-1">
 							<div v-for="(cell, index) in syncMenus" :key="index">
 								<terminus-item
 									:show-board="false"
-									img-bg-classes="bg-grey-1"
+									img-bg-classes="bg-background-3"
 									:icon-name="cell.icon"
 									:whole-picture-size="32"
 									@click="seahubAtion(cell.menu, cell.name)"
@@ -56,7 +56,7 @@
 								</terminus-item>
 								<q-separator
 									inset
-									color="grey-2"
+									class="bg-separator"
 									v-if="index + 1 < syncMenus.length"
 								/>
 							</div>
@@ -231,7 +231,7 @@ const syncMenus = ref([
 		padding-right: 20px;
 
 		.module-content {
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			border-radius: 20px;
 		}
 	}

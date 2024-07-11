@@ -87,7 +87,7 @@
 				</q-scroll-area>
 			</template>
 			<div
-				class="text-color-sub-title column items-center justify-center full-height"
+				class="text-ink-2 column items-center justify-center full-height"
 				v-else
 			>
 				<img src="../../../../assets/layout/nodata.svg" />
@@ -238,7 +238,7 @@ export default defineComponent({
 
 		.groups,
 		.members {
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			border-radius: 4px;
 			padding: 0px 6px;
 		}

@@ -68,6 +68,8 @@ export interface AppPlatform extends Platform, PlatformExtension {
 
 	isDesktop: boolean;
 
+	isClient: boolean;
+
 	getFirebaseToken(): Promise<string>;
 
 	getTailscaleId(): Promise<string>;

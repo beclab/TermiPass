@@ -123,7 +123,7 @@ onMounted(() => {
 
 		.item-web {
 			border-radius: 10px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 
 		.title {
@@ -145,7 +145,7 @@ onMounted(() => {
 			height: 48px;
 			border-radius: 8px;
 			line-height: 48px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			display: flex;
 			align-items: center;
 			justify-content: center;

@@ -66,5 +66,6 @@ watch(
 	text-align: center;
 	border-top: 1px solid $separator;
 	justify-content: center !important;
+	// border-left: solid 1px $separator;
 }
 </style>

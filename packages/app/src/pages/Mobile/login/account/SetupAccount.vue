@@ -80,7 +80,6 @@ const importDid = () => {
 <style scoped lang="scss">
 .setup-account-page {
 	width: 100%;
-	background-color: $background;
 
 	&__brand {
 		margin-top: 80px;

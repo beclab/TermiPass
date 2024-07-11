@@ -3,7 +3,7 @@
 	<div class="security-root">
 		<q-list class="q-mt-lg">
 			<q-item>
-				<terminus-item img-bg-classes="bg-grey-1" @click="changePwd">
+				<terminus-item @click="changePwd">
 					<template v-slot:title>
 						<div class="text-subtitle2 security-root__title">
 							{{ t('change_local_password') }}
@@ -16,7 +16,7 @@
 			</q-item>
 
 			<q-item v-if="!isBex">
-				<terminus-item img-bg-classes="bg-grey-1" :clickable="false">
+				<terminus-item :clickable="false">
 					<template v-slot:title>
 						<div class="text-subtitle2 security-root__title">
 							{{ t('use_biometrics') }}
@@ -56,7 +56,7 @@
 									class="row items-center justify-between q-ml-md q-mr-md"
 									style="height: 60px"
 								>
-									<div class="text-body3 text-color-title">
+									<div class="text-body3 ink-1">
 										{{ t('after') }}
 									</div>
 									<q-slider
@@ -68,7 +68,7 @@
 										color="yellow"
 										@change="changeAutoLockDelay"
 									/>
-									<div class="text-body3 text-color-title">
+									<div class="text-body3 ink-1">
 										{{ formatMinutesTime(lockTime) }}
 									</div>
 								</div>
@@ -79,7 +79,7 @@
 			</q-item>
 			<q-item class="q-py-none" v-if="lockStatus">
 				<q-item-section class="userinfo">
-					<q-item-label class="q-pt-md text-color-sub-title q-mb-sm">
+					<q-item-label class="q-pt-md text-ink-2 q-mb-sm">
 						{{ t('autolock.reminderTitle') }}
 					</q-item-label>
 					<q-item-label
@@ -88,7 +88,7 @@
 						:key="item"
 					>
 						<div
-							class="q-mb-sm text-grey-7 row justify-center"
+							class="q-mb-sm row justify-center"
 							style="width: 20px; padding-top: 4px"
 						>
 							<div
@@ -203,7 +203,7 @@ onMounted(() => {
 	overflow-y: scroll;
 
 	.security-root__title {
-		color: $title;
+		color: $ink-1;
 	}
 }
 </style>

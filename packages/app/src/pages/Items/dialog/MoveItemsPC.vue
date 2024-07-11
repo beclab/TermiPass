@@ -125,7 +125,7 @@ onMounted(() => {
 
 		.but-cancel-web {
 			border-radius: 8px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 		}
 	}
 }

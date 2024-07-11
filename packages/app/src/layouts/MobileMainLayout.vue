@@ -133,7 +133,7 @@ export default defineComponent({
 }
 
 .background-white {
-	background-color: $white;
+	background-color: $background-1;
 }
 
 // }

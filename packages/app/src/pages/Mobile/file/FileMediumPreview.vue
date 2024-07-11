@@ -123,7 +123,7 @@ audio {
 	.operation-part {
 		text-align: right;
 		color: $grey-4;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 4px;
 		text-align: center;
 	}

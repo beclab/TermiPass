@@ -6,7 +6,7 @@
 		ref="dialogRef"
 	>
 		<q-card class="q-dialog-plugin">
-			<q-bar class="bg-grey-11">
+			<q-bar class="bg-backgound-1">
 				<div class="text-subtitle2">
 					{{ t('check_password') }}
 				</div>
@@ -38,7 +38,9 @@
 						/>
 					</template>
 				</q-input>
-				<div class="login" @click="login">{{ t('unlock.title') }}</div>
+				<div class="login text-grey-10" @click="login">
+					{{ t('unlock.title') }}
+				</div>
 			</q-card-section>
 		</q-card>
 	</q-dialog>

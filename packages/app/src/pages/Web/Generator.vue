@@ -18,13 +18,13 @@
 			<div class="box">
 				<div class="box-toggle">
 					<q-btn
-						class="passphrase text-color-sub-title btn"
+						class="passphrase text-ink-2 btn"
 						:class="models === 'passphrase' ? 'text-ink-1 active' : ''"
 						:label="t('passphrase')"
 						@click="toggle('passphrase')"
 					/>
 					<q-btn
-						class="random text-color-sub-title btn"
+						class="random text-ink-2 btn"
 						:class="models === 'random' ? 'text-ink-1 active' : ''"
 						:label="t('random_string')"
 						@click="toggle('random')"

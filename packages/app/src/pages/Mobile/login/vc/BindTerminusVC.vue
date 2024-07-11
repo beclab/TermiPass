@@ -27,7 +27,7 @@
 				</div>
 
 				<div
-					class="bind-terminus-vc-root__btnbg bind-terminus-vc-root__org text-subtitle2 q-mt-md"
+					class="bind-terminus-vc-root__btnbg bind-terminus-vc-root__org text-ink-1 q-mt-md"
 				>
 					<q-btn
 						flat
@@ -35,12 +35,7 @@
 						no-caps
 						class="bind-terminus-vc-root__btnbg__btn row items-center justify-center"
 					>
-						<q-icon
-							name="sym_r_groups"
-							size="20px"
-							class="q-mr-sm"
-							color="grey-8"
-						/>
+						<q-icon name="sym_r_groups" size="20px" class="q-mr-sm" />
 						<div style="font-weight: 400">
 							{{ t('bind_organization_vc') }}
 						</div>
@@ -112,13 +107,13 @@ const enterVCIntroduce = (isPersonal: boolean) => {
 	&__personal {
 		border-radius: 8px;
 		background: $yellow;
-		color: $title;
+		color: $grey-10;
 	}
 
 	&__org {
 		border-radius: 8px;
-		border: 1px solid $grey-2;
-		color: $sub-title;
+		border: 1px solid $separator;
+		color: $ink-2;
 	}
 }
 </style>

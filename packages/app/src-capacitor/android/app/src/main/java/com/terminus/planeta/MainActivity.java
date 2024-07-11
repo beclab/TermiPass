@@ -21,6 +21,7 @@ import com.terminus.planeta.plugins.ProxyInfoPlugin;
 import com.terminus.planeta.plugins.ScanPhotoQRPlugin;
 import com.terminus.planeta.plugins.SeafilePlugin;
 import com.terminus.planeta.plugins.TailScalePlugin;
+import com.terminus.planeta.plugins.ThemePlugin;
 import com.terminus.planeta.plugins.TwitterLoginPlugin;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class MainActivity extends FileActivity {
         plugins.add(StatusBarPlugin.class);
         plugins.add(DropboxPlugin.class);
         plugins.add(CustomGooglePlugin.class);
+				plugins.add(ThemePlugin.class);
         registerPlugins(plugins);
         super.onCreate(savedInstanceState);
         NotificationChannelManager.loadNotificationChannel();

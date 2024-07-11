@@ -680,10 +680,10 @@ export default defineComponent({
 }
 
 .member-title {
-	color: $title;
+	color: $ink-1;
 }
 .member-section {
-	color: $sub-title;
+	color: $ink-2;
 }
 
 .q-field__control {

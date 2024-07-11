@@ -13,11 +13,13 @@ enum AppStatus {
     case unlocked
 }
 
-let configueVault = "configue_vault"
 
 let vaultRootStorageKey = "vault_root_storage"
 
 let userRootStorageKey = "user_root_storage"
+
+let configRootStorageKey = "config_root_storage"
+
 
 open class VaultStorage {
     
@@ -67,3 +69,37 @@ open class UserStorage {
     }
 }
 
+
+open class ConfigStorage {
+    
+    public static func setData(key: String, value: Any) {
+        TermiPassBaseStorage.setData(key: key, value: value, rootKey: configRootStorageKey)
+    }
+    
+    public static func getData(key: String) -> Any {
+        return TermiPassBaseStorage.getData(key: key, rootKey: configRootStorageKey)
+    }
+    
+    public static func getData<T>(key: String, defalt: T) -> T {
+        let data = TermiPassBaseStorage.getData(key: key, rootKey: configRootStorageKey)
+        
+        if data.self as? any Any.Type == T.self {
+            return data as! T
+        }
+        
+        return defalt
+    }
+    
+    public static func removeData(key: String) -> Void {
+        TermiPassBaseStorage.removeData(key: key, rootKey: configRootStorageKey)
+    }
+    
+    public static func clearData() -> Void {
+        TermiPassBaseStorage.clearData(rootKey: configRootStorageKey)
+    }
+    
+    static func getConfig() -> [String:Any] {
+        return TermiPassBaseStorage.getStorage(rootKey: configRootStorageKey)
+    }
+    
+}

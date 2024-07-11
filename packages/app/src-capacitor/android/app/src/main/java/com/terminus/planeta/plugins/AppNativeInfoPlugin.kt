@@ -1,11 +1,16 @@
 package com.terminus.planeta.plugins
 
+import android.graphics.Color
+import android.view.Window
+import androidx.appcompat.app.AppCompatDelegate
+import com.capacitorjs.plugins.statusbar.StatusBar
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.terminus.planeta.utils.Utils
+
 
 /**
  * <pre>

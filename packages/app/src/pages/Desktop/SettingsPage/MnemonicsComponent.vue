@@ -17,7 +17,7 @@
 							:input-style="{
 								textAlign: 'center'
 							}"
-							input-class="mnemonic-input text-title"
+							input-class="mnemonic-input text-ink-1"
 							text-align="center"
 						/>
 					</div>
@@ -86,7 +86,7 @@ const copyFunc = async () => {
 		.terminus-mnemonic {
 			.mnemonics-item {
 				border-radius: 8px;
-				border: 1px solid $grey-2;
+				border: 1px solid $separator;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
@@ -98,7 +98,7 @@ const copyFunc = async () => {
 		text-align: center;
 		margin-top: 10px;
 		border-radius: 4px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		padding: 2px 6px;
 		cursor: pointer;
 	}

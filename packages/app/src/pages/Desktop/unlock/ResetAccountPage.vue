@@ -49,9 +49,8 @@ const onReturn = () => {
 .rest-account-root {
 	width: 100%;
 	height: 100%;
-	background: $background;
 	padding: 12px;
-	border: 1px solid $grey-2;
+	border: 1px solid $separator;
 
 	&__img {
 		width: 32px;

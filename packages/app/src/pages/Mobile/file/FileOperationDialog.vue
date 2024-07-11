@@ -201,12 +201,12 @@ const onItemClick = async (action, data) => {
 
 	.title {
 		text-align: left;
-		color: $title;
+		color: $ink-1;
 	}
 
 	.detail {
 		text-align: left;
-		color: $sub-title;
+		color: $ink-3;
 		max-width: 100%;
 		width: 100%;
 

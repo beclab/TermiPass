@@ -4,7 +4,7 @@
 		v-if="show"
 		:style="{
 			boxShadow: 'none',
-			background: translate ? 'white' : 'translate'
+			background: translate ? '' : 'translate'
 		}"
 		:class="isDark ? 'bg-shadow-color' : ''"
 	>
@@ -35,7 +35,7 @@
 
 		<div
 			class="header-title text-body1 text-color-title"
-			:class="isDark ? 'text-white' : 'text-color-title'"
+			:class="isDark ? 'text-white' : 'text-ink-1'"
 		>
 			{{ title }}
 		</div>
@@ -49,7 +49,7 @@
 					v-if="rightSecondIcon"
 					:name="rightSecondIcon"
 					size="24px"
-					:color="isDark ? 'white' : 'sub-title'"
+					:color="isDark ? 'white' : 'text-ink-2'"
 				/>
 			</div>
 
@@ -61,7 +61,7 @@
 					v-if="rightIcon && showRightIcon"
 					:name="rightIcon"
 					size="24px"
-					:color="isDark ? 'white' : 'sub-title'"
+					color="ink-2"
 				/>
 			</div>
 			<div
@@ -151,6 +151,8 @@ const emit = defineEmits([
 	'onReturnAction'
 ]);
 const onReturn = () => {
+	console.log('1111');
+
 	if (props.hookBackAction) {
 		emit('onReturnAction');
 		return;

@@ -53,6 +53,8 @@ export class SubAppPlatform extends WebPlatform implements AppPlatform {
 
 	isDesktop = false;
 
+	isClient = false;
+
 	async getFirebaseToken() {
 		return '';
 	}

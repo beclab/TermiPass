@@ -83,10 +83,10 @@ function fileSort(sort: FilesSortType) {
 
 <style lang="scss" scoped>
 .sort-title {
-	color: $title;
+	color: $ink-1;
 }
 
 .sort-detail {
-	color: $sub-title;
+	color: $ink-2;
 }
 </style>

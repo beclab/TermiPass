@@ -40,18 +40,18 @@ defineProps({
 <style scoped lang="scss">
 .settings-module-root {
 	width: 100%;
-	border: 1px solid $grey-2;
-	background-color: white;
+	border: 1px solid $separator;
+	background-color: $background-1;
 	border-radius: 8px;
 
 	&__header {
 		height: 36px;
-		background-color: $grey-1;
+		background-color: $background-3;
 		border-top-right-radius: 8px;
 		border-top-left-radius: 8px;
 
 		&__title {
-			color: $title;
+			color: $ink-1;
 		}
 	}
 

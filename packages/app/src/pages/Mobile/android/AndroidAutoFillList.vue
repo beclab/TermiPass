@@ -3,7 +3,7 @@
 		<div
 			class="auto-fill-title row justify-between items-center q-px-md q-py-sm"
 		>
-			<div class="auto-fill-label text-grey-10">{{ t('vault') }}</div>
+			<div class="auto-fill-label text-ink-1">{{ t('vault') }}</div>
 			<div
 				class="auto-fill-add-background row justify-center items-center"
 				@click="onAddClicked"
@@ -384,7 +384,6 @@ function onAddClicked() {
 .auto-fill-root {
 	height: 100%;
 	width: 100%;
-	background: white;
 
 	.auto-fill-title {
 		height: 56px;
@@ -510,7 +509,7 @@ function onAddClicked() {
 					align-items: center;
 					justify-content: center;
 					background: $grey-2;
-					border: 1px solid $grey-2;
+					border: 1px solid $separator;
 				}
 			}
 

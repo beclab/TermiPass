@@ -76,7 +76,7 @@
 					<q-item
 						clickable
 						v-ripple
-						class="bg-grey-11 text-color-sub-title text-body1 but-cancel q-mx-xs q-px-md items-center justify-center"
+						class="bg-grey-11 text-ink-2 text-body1 but-cancel q-mx-xs q-px-md items-center justify-center"
 						@click="onCancelClick"
 					>
 						{{ t('vault_t.discard') }}
@@ -263,13 +263,13 @@ export default {
 
 	.exchange-style {
 		border-radius: 10px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		padding: 0 20px;
 	}
 
 	.exchange-input-style {
 		border-radius: 10px;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 10px;
 		padding-left: 20px;
 	}

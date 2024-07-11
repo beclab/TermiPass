@@ -41,7 +41,7 @@
 					<q-item
 						clickable
 						v-ripple
-						class="bg-grey-11 text-body1 text-color-sub-title q-mx-xs q-px-md items-center justify-center but-cancel-web"
+						class="bg-grey-11 text-body1 text-ink-2 q-mx-xs q-px-md items-center justify-center but-cancel-web"
 						@click="onDialogCancel"
 					>
 						{{ t('cancel') }}
@@ -85,7 +85,7 @@ async function onOKClick() {
 			height: 40px;
 			margin: 0 auto;
 			border-radius: 6px;
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;

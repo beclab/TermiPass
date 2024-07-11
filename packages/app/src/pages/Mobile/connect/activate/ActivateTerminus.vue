@@ -35,7 +35,7 @@
 							<TerminusAvatar :info="userStore.terminusInfo()" :size="40" />
 						</div>
 
-						<div class="text-h6 text-color-title q-mt-xs">
+						<div class="text-h6 text-ink-1 q-mt-xs">
 							{{ userStore.current_user?.local_name }}
 						</div>
 						<div
@@ -196,7 +196,7 @@ onBeforeUnmount(() => {
 
 		&__reminder {
 			text-align: center;
-			color: $sub-title;
+			color: $ink-2;
 
 			&__detail {
 				color: $blue;
@@ -206,7 +206,7 @@ onBeforeUnmount(() => {
 		}
 
 		&__user {
-			border: 1px solid $grey-2;
+			border: 1px solid $separator;
 			width: 100%;
 			border-radius: 12px;
 			padding-top: 20px;
@@ -221,7 +221,7 @@ onBeforeUnmount(() => {
 
 			&__info {
 				text-align: center;
-				color: $sub-title;
+				color: $ink-2;
 			}
 		}
 	}

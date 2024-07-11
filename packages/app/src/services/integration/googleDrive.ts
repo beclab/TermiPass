@@ -5,6 +5,8 @@ import {
 	GoogleIntegrationAccount,
 	OperateIntegrationAuth
 } from '../abstractions/integration/integrationService';
+import axios from 'axios';
+import qs from 'qs';
 
 export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationAccount> {
 	type = AccountType.Google;
@@ -16,6 +18,30 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 		});
 		await GoogleAuth.signOut();
 		const googleDriveSignInResponse = await GoogleAuth.signIn();
+
+		const api = axios.create({
+			baseURL: 'https://oauth2.googleapis.com'
+		});
+
+		const data = qs.stringify({
+			code: googleDriveSignInResponse.serverAuthCode,
+			client_id:
+				'343424174381-vrtlie7g85jcso7c98c4vavo17qoied7.apps.googleusercontent.com',
+			client_secret: '',
+			grant_type: 'authorization_code',
+			gidenv: 'ios',
+			gpsdk: 'gid-6.2.4',
+			audience:
+				'343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com',
+			emm_support: 1
+		});
+
+		const response: any = await api.post('/token', data, {
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+		});
+
+		console.log(response);
+
 		return {
 			name: googleDriveSignInResponse.email,
 			type: AccountType.Google,

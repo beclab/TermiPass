@@ -59,7 +59,7 @@ import MyExpand2 from './MyExpand2.vue';
 		line-height: 12px;
 	}
 	.detail-wrapper {
-		border-left: 1px solid $grey-2;
+		border-left: 1px solid $separator;
 		.ul-wrapper {
 			padding-inline-start: 20px;
 			list-style-type: disc;

@@ -2,10 +2,14 @@ package com.terminus.planeta.utils
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
+import android.util.Log
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.capacitorjs.plugins.statusbar.StatusBar
+import com.tencent.mmkv.MMKV
 import com.terminus.planeta.BuildConfig.APPLICATION_ID
 import com.terminus.planeta.MainActivity
 import org.json.JSONArray
@@ -91,12 +95,42 @@ object Constants {
         return HashMap()
     }
 
-    @JvmStatic
+
+	@JvmStatic
     fun registerStatusBar(activity: AppCompatActivity){
-        val statusBar = StatusBar(activity)
-        statusBar.setBackgroundColor(Color.WHITE)
-        statusBar.setStyle("LIGHT")
-        val window: Window = activity.window
-        window.navigationBarColor = Color.WHITE
-    }
+
+			val kv = MMKV.defaultMMKV()
+			val theme = kv.decodeInt("theme", 1)
+			var themeValue = "DEFAULT"
+			var color = Color.WHITE;
+
+			Log.i("registerStatusBar ===>", "theme: " + theme)
+
+			if (theme == 0) {
+				val nightMode = isDarkThemeEnabled(activity);
+				Log.i("registerStatusBar ===>1", "theme: " + nightMode)
+				if (nightMode) {
+					color = Color.BLACK;
+				}
+			} else if (theme == 1) {
+				themeValue = "LIGHT"
+				color = Color.WHITE;
+			} else if (theme == 2) {
+				themeValue = "DARK"
+				color = Color.parseColor("#1f1f1f");
+			}
+
+			val statusBar = StatusBar(activity)
+			statusBar.setBackgroundColor(color)
+			statusBar.setStyle(themeValue)
+			val window: Window = activity.window
+			window.navigationBarColor = color
+		}
+
+	@JvmStatic
+	fun isDarkThemeEnabled(context: Context): Boolean {
+		val nightModeFlags = context.resources.configuration.uiMode and
+			Configuration.UI_MODE_NIGHT_MASK
+		return nightModeFlags == Configuration.UI_MODE_NIGHT_YES
+	}
 }

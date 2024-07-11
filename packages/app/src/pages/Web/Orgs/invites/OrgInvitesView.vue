@@ -76,10 +76,7 @@
 		</div>
 	</div>
 
-	<div
-		class="inviteItemView text-color-sub-title row items-center justify-center"
-		v-else
-	>
+	<div class="inviteItemView text-ink-2 row items-center justify-center" v-else>
 		<img src="../../../../assets/layout/nodata.svg" />
 		<span class="q-mb-md text-ink-2" style="margin-top: 32px">
 			{{ t('no_invite_selected') }}
@@ -300,7 +297,7 @@ export default defineComponent({
 
 	.stretch {
 		width: 100%;
-		border: 1px solid $grey-2;
+		border: 1px solid $separator;
 		border-radius: 6px;
 		padding: 30px;
 		margin-top: 20px;
