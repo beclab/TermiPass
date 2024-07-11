@@ -70,7 +70,7 @@ const checkUserStatus = (status: any) => {
 	if (error.value != null || error.value != undefined) {
 		setTimeout(() => {
 			// fetchData();
-			let url = route.path;
+			let url = route.fullPath;
 			if (url.indexOf('Files') < 0) return;
 			fileStore.setBrowserUrl(url, DriveType.Drive, router);
 		}, 2000);
@@ -214,7 +214,7 @@ onBeforeRouteUpdate((_to, from, next) => {
 });
 
 onMounted(async () => {
-	let url = route.path;
+	let url = route.fullPath;
 	if (url.indexOf('Files') < 0) return;
 	//fetchData();
 

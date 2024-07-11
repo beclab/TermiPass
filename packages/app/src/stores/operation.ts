@@ -33,7 +33,8 @@ export interface CopyStoragesType {
 	from: string;
 	to: string;
 	name: string;
-	src_repo_id?: string;
+	src_drive_type?: DriveType;
+	dst_drive_type?: DriveType;
 	key?: string;
 }
 
@@ -144,6 +145,7 @@ export const useOperateinStore = defineStore('operation', {
 			e: any,
 			route: RouteLocationNormalizedLoaded,
 			action: OPERATE_ACTION,
+			driveType: DriveType,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		): Promise<void> {
 			e.preventDefault();
@@ -180,21 +182,21 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.COPY:
-					this.copyCatalogue();
+					this.copyCatalogue(driveType);
 					// callback(OPERATE_ACTION.COPY, null);
 					break;
 
 				case OPERATE_ACTION.CUT:
-					this.cutCatalogue();
+					this.cutCatalogue(driveType);
 					// callback(OPERATE_ACTION.CUT, null);
 					break;
 
 				case OPERATE_ACTION.PASTE:
-					this.pasteCatalogue(route.path, callback);
+					this.pasteCatalogue(route.path, driveType, callback);
 					break;
 
 				case OPERATE_ACTION.MOVE:
-					this.moveCatalogue(route.path, callback);
+					this.moveCatalogue(route.path, driveType, callback);
 					break;
 
 				case OPERATE_ACTION.RENAME:
@@ -245,9 +247,9 @@ export const useOperateinStore = defineStore('operation', {
 			}
 		},
 
-		async copyCatalogue() {
+		async copyCatalogue(driveType: DriveType) {
 			const operateinStore = useOperateinStore();
-			const dataAPI = dataAPIs();
+			const dataAPI = dataAPIs(driveType);
 			const copyStorages = await dataAPI.copy();
 
 			operateinStore.updateCopyFiles(copyStorages);
@@ -255,15 +257,16 @@ export const useOperateinStore = defineStore('operation', {
 
 		async pasteCatalogue(
 			path: string,
+			driveType: DriveType,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		) {
-			const dataAPI = dataAPIs();
-			await dataAPI.paste(path, callback);
+			const dataAPI = dataAPIs(driveType);
+			dataAPI.paste(path, callback);
 		},
 
-		async cutCatalogue() {
+		async cutCatalogue(driveType: DriveType) {
 			const operateinStore = useOperateinStore();
-			const dataAPI = dataAPIs();
+			const dataAPI = dataAPIs(driveType);
 			const copyStorages = await dataAPI.cut();
 
 			operateinStore.updateCopyFiles(copyStorages);
@@ -271,9 +274,10 @@ export const useOperateinStore = defineStore('operation', {
 
 		async moveCatalogue(
 			path: string,
+			driveType: DriveType,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		) {
-			const dataAPI = dataAPIs();
+			const dataAPI = dataAPIs(driveType);
 			await dataAPI.move(path, callback);
 		},
 

@@ -2,7 +2,6 @@ import { createURL, fetchURL, removePrefix } from '../utils';
 import { dataAPIs, DriveDataAPI } from '../index';
 import { useDataStore } from '../../stores/data';
 import { checkAppData, getAppDataPath } from '../../utils/file';
-import { useSeahubStore } from '../../stores/seahub';
 // import { seahubGetRepos } from './syncMenu';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
 
@@ -187,7 +186,6 @@ export async function post(url, content = '', overwrite = false, onupload) {
 
 function moveCopy(items, copy = false, overwrite = false, rename = false) {
 	const promises: any[] = [];
-	const seahubStore = useSeahubStore();
 
 	for (const item of items) {
 		const from = item.from;
@@ -201,31 +199,11 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 			terminusNode = node;
 		}
 
-		let src_type = '';
-		if (item.src_repo_id) {
-			src_type = 'sync';
-		} else {
-			if (checkAppData(item.from)) {
-				src_type = 'cache';
-			} else {
-				src_type = 'drive';
-			}
-		}
-
-		let dst_type = '';
-		if (seahubStore.repo_id) {
-			dst_type = 'sync';
-		} else {
-			if (checkAppData(item.to)) {
-				dst_type = 'cache';
-			} else {
-				dst_type = 'drive';
-			}
-		}
-
 		const url = `${from}?action=${
 			copy ? 'copy' : 'rename'
-		}&destination=${to}&override=${overwrite}&rename=${rename}&src_type=${src_type}&dst_type=${dst_type}`;
+		}&destination=${to}&override=${overwrite}&rename=${rename}&src_type=${
+			item.src_drive_type
+		}&dst_type=${item.dst_drive_type}`;
 
 		promises.push(pasteAction(url, terminusNode));
 	}

@@ -164,7 +164,6 @@ class Data extends Origin {
 
 	async copy(): Promise<CopyStoragesType[]> {
 		const filesStore = useFilesStore();
-		const seahubStore = useSeahubStore();
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of filesStore.selected) {
 			const el = filesStore.currentFileList[item];
@@ -176,7 +175,7 @@ class Data extends Origin {
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined
+				src_drive_type: DriveType.Drive
 			});
 		}
 
@@ -188,7 +187,6 @@ class Data extends Origin {
 	async cut(): Promise<CopyStoragesType[]> {
 		const filesStore = useFilesStore();
 
-		const seahubStore = useSeahubStore();
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of filesStore.selected) {
 			const el = filesStore.currentFileList[item];
@@ -200,7 +198,7 @@ class Data extends Origin {
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined,
+				src_drive_type: DriveType.Drive,
 				key: 'x'
 			});
 		}
@@ -227,7 +225,8 @@ class Data extends Origin {
 				from: element.from,
 				to: to,
 				name: element.name,
-				src_repo_id: element.src_repo_id || undefined
+				src_drive_type: element.src_drive_type,
+				dst_drive_type: DriveType.Drive
 			});
 			if (path + decodeURIComponent(element.name) === element.from) {
 				this.action(false, true, items, path, false, callback);
@@ -255,7 +254,6 @@ class Data extends Origin {
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
 		const filesStore = useFilesStore();
-		const seahubStore = useSeahubStore();
 		const items: CopyStoragesType[] = [];
 		for (const i of filesStore.selected) {
 			const element: any = filesStore.currentFileList[i];
@@ -269,7 +267,8 @@ class Data extends Origin {
 				from: from,
 				to: to,
 				name: element.name,
-				src_repo_id: seahubStore.repo_id
+				src_drive_type: element.src_drive_type,
+				dst_drive_type: DriveType.Drive
 			});
 		}
 		const overwrite = true;

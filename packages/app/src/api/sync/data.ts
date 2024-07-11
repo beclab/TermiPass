@@ -226,7 +226,7 @@ class Data extends Origin {
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined
+				src_drive_type: DriveType.Sync
 			});
 		}
 
@@ -239,6 +239,9 @@ class Data extends Origin {
 		const fileStore = useFilesStore();
 		const seahubStore = useSeahubStore();
 		const copyStorages: CopyStoragesType[] = [];
+		console.log('fileStore - currentFileList', fileStore.currentFileList);
+		console.log('fileStore - selected', fileStore.selected);
+
 		for (const item of fileStore.selected) {
 			const el = fileStore.currentFileList[item];
 			const pathFromStart =
@@ -255,7 +258,7 @@ class Data extends Origin {
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined,
+				src_drive_type: DriveType.Sync,
 				key: 'x'
 			});
 		}
@@ -270,6 +273,7 @@ class Data extends Origin {
 		const operateinStore = useOperateinStore();
 		const seahubStore = useSeahubStore();
 		const items: CopyStoragesType[] = [];
+		console.log('copyFilescopyFiles', operateinStore.copyFiles);
 
 		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
 			const element: any = operateinStore.copyFiles[i];
@@ -285,7 +289,8 @@ class Data extends Origin {
 				from: element.from,
 				to: to,
 				name: element.name,
-				src_repo_id: element.src_repo_id || undefined
+				src_drive_type: element.src_drive_type,
+				dst_drive_type: DriveType.Sync
 			});
 			if (path + decodeURIComponent(element.name) === element.from) {
 				this.action(false, true, items, path, false, callback);
@@ -340,7 +345,8 @@ class Data extends Origin {
 				from: from,
 				to: to,
 				name: element.name,
-				src_repo_id: seahubStore.repo_id
+				src_drive_type: element.src_drive_type,
+				dst_drive_type: DriveType.Sync
 			});
 		}
 		const overwrite = true;

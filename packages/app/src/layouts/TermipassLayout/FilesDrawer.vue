@@ -9,7 +9,7 @@
 		<BtScrollArea style="height: 100%; width: 100%">
 			<bt-menu
 				:items="menuStore.menu"
-				:modelValue="menuStore.activeMenu"
+				:modelValue="menuStore.activeMenu.label"
 				:sameActiveable="true"
 				@select="selectHandler"
 				style="width: 100%"
@@ -103,7 +103,6 @@ import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useDataStore } from '../../stores/data';
 import { syncStatusInfo, useMenuStore } from '../../stores/files-menu';
-import { useSeahubStore } from '../../stores/seahub';
 import { useOperateinStore } from './../../stores/operation';
 import PopupMenu from '../../components/files/popup/PopupMenu.vue';
 import { OPERATE_ACTION } from '../../utils/contact';
@@ -115,7 +114,6 @@ const Router = useRouter();
 const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
-const seahubStore = useSeahubStore();
 const operateinStore = useOperateinStore();
 const filesStore = useFilesStore();
 
@@ -127,6 +125,8 @@ onMounted(async () => {
 });
 
 const selectHandler = async (value) => {
+	console.log('valueitem', value.item);
+	menuStore.activeMenu.driveType = value.item.driveType;
 	const path = await filesStore.formatRepotoPath(value.item);
 
 	filesStore.setBrowserUrl(path, value.item.driveType, Router);

@@ -131,7 +131,7 @@ import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { users } from '../../../api';
 import { useDataStore } from '../../../stores/data';
-import { useMenuStore } from '../../../stores/files-menu';
+import { useMenuStore, ActiveMenuType } from '../../../stores/files-menu';
 import { MenuItem } from '../../../utils/contact';
 import { hideHeaderOpt } from './../../../utils/file';
 import { bytetrade } from '@bytetrade/core';
@@ -140,11 +140,13 @@ import PopupMenu from '../../../components/files/popup/PopupMenu.vue';
 import TerminusUserHeaderReminder from './../../../components/common/TerminusUserHeaderReminder.vue';
 import { useI18n } from 'vue-i18n';
 import { dataAPIs } from '../../../api';
+import { DriveType, useFilesStore } from '../../../stores/files';
 
 const Router = useRouter();
 const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
+const fifterMenu = useFilesStore();
 
 const fileTitle = ref();
 const hoverItemAvtive = ref();
@@ -185,33 +187,50 @@ onMounted(async () => {
 const checkMenuPath = (path: string) => {
 	const parts = path.split('/');
 
-	let currentPath = '';
+	let currentPath: ActiveMenuType = {
+		label: 'Home',
+		driveType: DriveType.Drive
+	};
 
-	if (
-		parts.findIndex((part: string) => ['Home', 'Seahub'].includes(part)) >= 0
+	if (parts.findIndex((part: string) => ['Home'].includes(part)) >= 0) {
+		currentPath = {
+			label:
+				parts[parts.findIndex((part: string) => ['Home'].includes(part)) + 1] ||
+				'Home',
+			driveType: DriveType.Drive
+		};
+	} else if (
+		parts.findIndex((part: string) => ['Seahub'].includes(part)) >= 0
 	) {
-		currentPath =
-			parts[
-				parts.findIndex((part: string) => ['Home', 'Seahub'].includes(part)) + 1
-			] || 'Home';
+		currentPath = {
+			label:
+				parts[parts.findIndex((part: string) => ['Home'].includes(part)) + 1] ||
+				'Home',
+			driveType: DriveType.Sync
+		};
 	} else if (
 		parts.findIndex((part: string) =>
 			['Application', 'AppData'].includes(part)
 		) >= 0
 	) {
-		currentPath =
-			parts[
-				parts.findIndex((part: string) =>
-					['Application', 'AppData'].includes(part)
-				) + 1
-			];
+		currentPath = {
+			label:
+				parts[
+					parts.findIndex((part: string) =>
+						['Application', 'AppData'].includes(part)
+					) + 1
+				],
+			driveType: DriveType.Cache
+		};
 	}
 
 	const defaultMenus: any = menuStore.menu[0].children;
 	if (
-		defaultMenus.find((tab: { label: string }) => tab.label === currentPath)
+		defaultMenus.find(
+			(tab: { label: string }) => tab.label === currentPath.label
+		)
 	) {
-		store.currentItem = currentPath;
+		store.currentItem = currentPath.label;
 		menuStore.activeMenu = currentPath;
 	}
 };

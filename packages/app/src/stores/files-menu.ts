@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { app } from '../globals';
 import { shareToUser } from '../api';
-import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
+import { MenuItem, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
 // import { dataAPI } from './../api';
 import { dataAPIs, SyncDataAPI, DriveDataAPI } from './../api';
@@ -39,6 +39,48 @@ export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
 
 let registerSyncStatusTask = false;
 
+export interface MenuItemType {
+	label: string;
+	key: string | number;
+	icon: string;
+	expationFlag?: boolean;
+	children?: MenuItemType[];
+}
+
+export interface userInfoType {
+	avatar_url: string;
+	contact_email: string;
+	name: string;
+	nickname: string;
+}
+
+export interface SharedItemsType {
+	is_admin: boolean;
+	permission: string;
+	share_type: string;
+	user_info: userInfoType;
+}
+
+export interface ActiveMenuType {
+	label: string;
+	driveType: DriveType;
+}
+
+export interface DataState {
+	menu: MenuItemType[];
+	showShareUser: boolean;
+	shareRepoInfo: any;
+	userList: any;
+	sharedItems: SharedItemsType[] | any;
+	syncReposLastStatusMap: object;
+	syncRepoIdsList: string[];
+	syncRepoIdsUpdating: boolean;
+	avtiveItem: any;
+	syncStatus: boolean;
+	canForward: boolean;
+	activeMenu: ActiveMenuType;
+}
+
 export const useMenuStore = defineStore('filesMenu', {
 	state: () => {
 		return {
@@ -49,7 +91,10 @@ export const useMenuStore = defineStore('filesMenu', {
 			syncRepoIdsList: [],
 			syncReposTimer: undefined,
 			canForward: false,
-			activeMenu: 'Home',
+			activeMenu: {
+				label: 'Home',
+				driveType: DriveType.Drive
+			},
 			menu: [
 				{
 					label: MenuItem.DRIVE,

@@ -3,15 +3,14 @@ import { Router } from 'vue-router';
 import { Origin } from '../api/origin';
 import { Data as DriveData } from '../api/drive/data';
 import { Data as SyncData } from '../api/sync/data';
-import { getParams } from './../utils/utils';
 
 export enum DriveType {
-	Drive,
-	Sync,
-	Data,
-	Cache,
-	GoogleDrive,
-	Dropbox
+	Drive = 'drive',
+	Sync = 'sync',
+	Data = 'data',
+	Cache = 'cache',
+	GoogleDrive = 'googleDrive',
+	Dropbox = 'dropbox'
 }
 
 export interface DriveSortingType {
@@ -169,16 +168,13 @@ export const useFilesStore = defineStore('files', {
 				this.previousStack = [];
 			}
 
-			console.log('pathpathpathpathpathpath', path.path);
+			const params = new URLSearchParams(path.param);
+			const query = Object.fromEntries(params);
 
 			router &&
 				router.push({
 					path: path.path,
-					query: {
-						id: getParams(path.param, 'id'),
-						type: getParams(path.param, 'type'),
-						p: getParams(path.param, 'p')
-					}
+					query
 				});
 
 			const requestUrl = await this.formatPathtoUrl(path);

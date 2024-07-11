@@ -19,6 +19,7 @@ import { PropType } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { OPERATE_ACTION } from '../../../utils/contact';
 import { useFilesStore, DriveType } from '../../../stores/files';
+import { useMenuStore } from '../../../stores/files-menu';
 
 const props = defineProps({
 	icon: String,
@@ -31,27 +32,33 @@ const route = useRoute();
 const router = useRouter();
 const operateinStore = useOperateinStore();
 const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 
 const emit = defineEmits(['onItemClick', 'hideMenu']);
 
-const handle = async (e: any, action: OPERATE_ACTION) => {
+const handle = (e: any, action: OPERATE_ACTION) => {
 	// if (props.repo) {
 	// 	handleRepoOperate(e, action);
 	// } else {
 	emit('hideMenu');
-	await operateinStore.handleFileOperate(
+	operateinStore.handleFileOperate(
 		e,
 		route,
 		action,
+		menuStore.activeMenu.driveType,
 		async (action: OPERATE_ACTION, data: any) => {
 			emit('onItemClick', action, data);
+			console.log('action', action);
+			console.log('data', data);
 
-			let url = route.path;
+			console.log('operateinStore', route);
+			let url = route.fullPath;
 			if (url.indexOf('Files') < 0) return;
-			filesStore.setBrowserUrl(url, DriveType.Drive, router);
+			console.log('handleFileOperate - path', url);
+			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType, router);
 
 			if (action == OPERATE_ACTION.PASTE) {
-				operateinStore.resetCopyFiles();
+				// operateinStore.resetCopyFiles();
 			} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
 				const repo_id = route.query.id as string;
 				const isElectron = $q.platform.is.electron;
