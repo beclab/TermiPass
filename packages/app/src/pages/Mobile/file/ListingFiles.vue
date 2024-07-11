@@ -330,7 +330,7 @@ export default defineComponent({
 				path = el.__vue__.url;
 
 				try {
-					items = (await store.fetchList(path)).items;
+					items = (await api.fetch(path)).items;
 				} catch (error) {
 					//this.$showError(error);
 				}

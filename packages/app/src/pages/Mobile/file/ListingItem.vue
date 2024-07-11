@@ -180,7 +180,7 @@ export default defineComponent({
 				return s && s.trim();
 			});
 			let path = splitVal[splitVal.length - 1];
-			let baseItems = (await store.fetchList(path)).items;
+			let baseItems = (await api.fetch(path)).items;
 			let action = (overwrite: any, rename: any) => {
 				if (checkSeahub(route.path)) {
 					const pathLen =

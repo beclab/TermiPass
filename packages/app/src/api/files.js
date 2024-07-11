@@ -1,20 +1,98 @@
 import { createURL, fetchURL, removePrefix } from './utils';
-import { dataAPIs, DriveDataAPI } from './index';
 import { useDataStore } from '../stores/data';
-import { checkSeahub, checkAppData, getAppDataPath } from '../utils/file';
+import { formatSeahub, formatSeahubRepos } from '../utils/seahub';
+import {
+	checkSeahub,
+	isAppData,
+	checkAppData,
+	getAppDataPath
+} from '../utils/file';
 import { useSeahubStore } from '../stores/seahub';
-// import { seahubGetRepos } from './syncMenu';
+import { formatAppDataNode } from '../utils/appdata';
+import { seahubGetRepos } from './sync';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
 
 import axios from 'axios';
 
-export async function resourceAction(
-	url: string,
-	method: string,
-	content?: any
-) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function fetch(url, loading, curItem) {
+	const dataStore = useDataStore();
+	const seahubStore = useSeahubStore();
+
+	url = decodeURIComponent(removePrefix(url));
+
+	let res = '';
+	let data;
+
+	try {
+		if (checkSeahub(url)) {
+			const currentItem = seahubStore.repo_name;
+			let pathLen = url.indexOf(currentItem) + currentItem.length;
+			const path = url.slice(pathLen);
+			if (seahubStore.repo_id) {
+				res = await fetchURL(
+					`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
+					{}
+				);
+			} else {
+				res = await seahubGetRepos(dataStore.activeMenu);
+				if (Array.isArray(res)) {
+					const [res1, res2] = res;
+					res.data = {
+						repos: [...res1.data, ...res2.data.repos]
+					};
+				}
+			}
+		} else if (checkAppData(url)) {
+			const { path, node } = getAppDataPath(url);
+			res = await fetchURL(`/api/resources/AppData${path}`, {}, true, node);
+		} else {
+			res = await fetchURL(`/api/resources${url}`, {});
+		}
+
+		data = await res.data;
+
+		if (checkSeahub(url)) {
+			if (seahubStore.repo_id) {
+				data = formatSeahub(url, JSON.parse(JSON.stringify(data)));
+			} else {
+				data = formatSeahubRepos(dataStore.activeMenu, data);
+			}
+		} else if (isAppData(url)) {
+			data = formatAppDataNode(url, JSON.parse(JSON.stringify(data)));
+		}
+
+		data.url = `/Files${url}`;
+
+		if (data.isDir) {
+			if (!data.url.endsWith('/')) data.url += '/';
+			data.items = data.items.map((item, index) => {
+				item.index = index;
+				item.url = `${data.url}${encodeURIComponent(item.name)}`;
+				if (item.isDir) {
+					item.url += '/';
+				}
+
+				return item;
+			});
+		}
+	} catch (error) {
+		if (loading) {
+			// notifyHide();
+		}
+		throw error;
+	}
+
+	if (loading) {
+		// notifyHide();
+	}
+
+	return data;
+}
+
+export async function resourceAction(url, method, content) {
 	url = removePrefix(url);
-	const opts: any = { method };
+	let opts = { method };
 
 	if (content) {
 		opts.headers = {
@@ -39,11 +117,10 @@ export async function resourceAction(
 	return res;
 }
 
-export async function pasteAction(fromUrl, terminusNode): Promise<any> {
-	const opts: any = {};
-	const dataAPI = dataAPIs();
+export async function pasteAction(fromUrl, method, terminusNode) {
+	let opts = { method };
 
-	let res: any;
+	let res = null;
 	if (checkAppData(fromUrl)) {
 		const { path, node } = getAppDataPath(fromUrl);
 
@@ -53,7 +130,7 @@ export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 				'X-Terminus-Node': node,
 				timeout: 600000
 			};
-			res = await dataAPI.commonAxios.patch(`/api/paste/AppData${path}`, opts);
+			res = await fetchURL(`/api/paste/AppData${path}`, opts);
 		}
 	} else {
 		if (terminusNode) {
@@ -63,7 +140,7 @@ export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 				timeout: 600000
 			};
 		}
-		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, opts);
+		res = await fetchURL(`/api/paste${fromUrl}`, opts);
 	}
 
 	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {
@@ -96,7 +173,7 @@ export function download(format, ...files) {
 	} else {
 		let arg = '';
 
-		for (const file of files) {
+		for (let file of files) {
 			arg += removePrefix(file) + ',';
 		}
 
@@ -136,14 +213,14 @@ export async function post(url, content = '', overwrite = false, onupload) {
 	url = removePrefix(url);
 	let bufferContent;
 	if (
-		new Blob([content], { type: 'text/plain' }) instanceof Blob &&
+		content instanceof Blob &&
 		!['http:', 'https:'].includes(window.location.protocol)
 	) {
 		bufferContent = await new Response(content).arrayBuffer();
 	}
 
 	return new Promise((resolve, reject) => {
-		const request = new XMLHttpRequest();
+		let request = new XMLHttpRequest();
 
 		if (checkAppData(url)) {
 			const { path, node } = getAppDataPath(url);
@@ -186,10 +263,10 @@ export async function post(url, content = '', overwrite = false, onupload) {
 }
 
 function moveCopy(items, copy = false, overwrite = false, rename = false) {
-	const promises: any[] = [];
+	let promises = [];
 	const seahubStore = useSeahubStore();
 
-	for (const item of items) {
+	for (let item of items) {
 		const from = item.from;
 
 		let to = encodeURIComponent(item.to);
@@ -227,7 +304,7 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 			copy ? 'copy' : 'rename'
 		}&destination=${to}&override=${overwrite}&rename=${rename}&src_type=${src_type}&dst_type=${dst_type}`;
 
-		promises.push(pasteAction(url, terminusNode));
+		promises.push(pasteAction(url, 'PATCH', terminusNode));
 	}
 
 	return Promise.all(promises);
@@ -249,12 +326,60 @@ export function copy(items, overwrite = false, rename = false) {
 }
 
 export async function checksum(url, algo) {
-	const data: any = await resourceAction(`${url}?checksum=${algo}`, 'GET');
+	const data = await resourceAction(`${url}?checksum=${algo}`, 'GET');
 	return (await data.json()).checksums[algo];
 }
 
+export function getDownloadURL(file, inline, download) {
+	const params = {
+		...(inline && { inline: 'true' })
+	};
+	const seahubStore = useSeahubStore();
+	const store = useDataStore();
+	const currentItemLength = store.currentItem.length;
+	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
+	const hasSeahub = file.path.slice(startIndex);
+
+	if (checkSeahub(file.path)) {
+		if (['audio', 'video'].includes(file.type) && !download) {
+			return file.url;
+		} else {
+			return `${store.baseURL()}/seahub/lib/${
+				seahubStore.repo_id
+			}/file${hasSeahub}?dl=1`;
+		}
+	} else {
+		const url = createURL('api/raw' + file.path, params);
+		return url;
+	}
+}
+
+export function getPreviewURL(file, size) {
+	const store = useDataStore();
+	const params = {
+		inline: 'true',
+		key: Date.parse(file.modified)
+	};
+	const seahubStore = useSeahubStore();
+
+	let seflSize = '1080';
+	if (size === 'thumb') {
+		seflSize = '48';
+	}
+	const currentItemLength = store.currentItem.length;
+	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
+	const hasSeahub = file.path.slice(startIndex);
+
+	if (checkSeahub(file.path)) {
+		return `${store.baseURL()}/seahub/thumbnail/${
+			seahubStore.repo_id
+		}/${seflSize}${hasSeahub}`;
+	} else {
+		return createURL('api/preview/' + size + file.path, params);
+	}
+}
+
 export const formatFileContent = async (file) => {
-	console.log('drive formatFileContent start', file);
 	const store = useDataStore();
 	const seahubStore = useSeahubStore();
 	if (
@@ -289,7 +414,6 @@ export const formatFileContent = async (file) => {
 			}
 		}
 	}
-	console.log('formatFileContent end', file);
 	return file;
 };
 
@@ -298,7 +422,7 @@ export function getSubtitlesURL(file) {
 		inline: 'true'
 	};
 
-	const subtitles: string[] = [];
+	const subtitles = [];
 	for (const sub of file.subtitles) {
 		subtitles.push(createURL('api/raw' + sub, params));
 	}
@@ -318,28 +442,89 @@ export async function getContentUrlByPath(filePath) {
 	if (!filePath) {
 		return;
 	}
-	return '';
-	// const store = useDataStore();
-	// return await store.api.getFileDownloadLink(store.repo.repo_id, filePath);
+	const store = useDataStore();
+	return await store.api.getFileDownloadLink(store.repo.repo_id, filePath);
+}
+
+const RETRY_TIMER = 3;
+const SIZE = 8 * 1024 * 1024;
+
+export async function uploadPost(
+	url,
+	content = '',
+	overwrite = false,
+	onupload,
+	timer = RETRY_TIMER
+) {
+	const newurl = removePrefix(decodeURIComponent(url));
+
+	let fileInfo = null;
+	let appNode = null;
+
+	if (checkAppData(newurl)) {
+		const { path, node } = getAppDataPath(newurl);
+		appNode = node;
+		if (node) {
+			fileInfo = await getUploadInfo(path, `/appdata`, content);
+		} else {
+			return false;
+		}
+	} else {
+		fileInfo = await getUploadInfo(newurl, '/data', content);
+	}
+
+	const fileChunkList = await createFileChunk(fileInfo, content);
+
+	const exportProgress = (e) => {
+		if (typeof onupload === 'function') {
+			onupload(e);
+		}
+	};
+
+	return new Promise(async (resolve, reject) => {
+		for (let i = 0; i < fileChunkList.length; i++) {
+			const chunkFile = fileChunkList[i];
+			try {
+				const res = await uploadChunks(
+					fileInfo,
+					chunkFile,
+					i,
+					exportProgress,
+					appNode
+				);
+				if (res.message === 'File uploaded successfully') {
+					resolve();
+				}
+			} catch (error) {
+				if (timer === 1) {
+					exportProgress({
+						loaded: -1,
+						total: fileInfo.file_size,
+						lengthComputable: true
+					});
+				}
+				if (timer <= 0) {
+					reject();
+					return;
+				}
+
+				await errorRetry(url, content, overwrite, onupload, timer);
+				return;
+			}
+		}
+		resolve();
+	});
 }
 
 export async function errorRetry(
 	url,
-	content: File,
+	content = '',
 	overwrite = false,
 	onupload,
 	timer
 ) {
 	timer = timer - 1;
-	const dataAPI = dataAPIs();
-
-	await (dataAPI as DriveDataAPI).fetchUploader(
-		url,
-		content,
-		overwrite,
-		onupload,
-		timer
-	);
+	await uploadPost(url, content, overwrite, onupload, timer);
 }
 
 export async function uploadChunks(
@@ -351,50 +536,54 @@ export async function uploadChunks(
 ) {
 	const store = useDataStore();
 	const baseURL = store.baseURL();
-	const dataAPI = dataAPIs();
 
-	const formData = new FormData();
+	return new Promise(async (resolve, reject) => {
+		let request = new XMLHttpRequest();
+		let params = new FormData();
+		const offset = fileInfo.offset + SIZE * i;
 
-	const offset = fileInfo.offset + dataAPI.SIZE * i;
-	formData.append('file', chunkFile.file);
-	formData.append('upload_offset', offset);
+		params.append('file', chunkFile.file);
+		params.append('upload_offset', offset);
+		request.open('PATCH', `${baseURL}/upload/${fileInfo.id}`, true);
+		if (node) {
+			request.setRequestHeader('X-Terminus-Node', node);
+		}
 
-	const headers = {};
-	if (node) {
-		headers['X-Terminus-Node'] = node;
-	}
-
-	try {
-		const response = await dataAPI.commonAxios.patch(
-			`${baseURL}/upload/${fileInfo.id}`,
-			formData,
-			{
-				...headers,
-				onUploadProgress: (progressEvent) => {
-					const event = {
-						loaded: progressEvent.loaded,
-						total: progressEvent.total,
-						lengthComputable: progressEvent.lengthComputable
-					};
-					if (progressEvent.lengthComputable) {
-						event.loaded += offset;
-						event.total = fileInfo.file_size;
-						exportProgress(event);
-					}
-				}
+		request.timeout = 600000;
+		request.onload = () => {
+			if (request.status === 200) {
+				resolve(JSON.parse(request.responseText));
+			} else if (request.status === 409) {
+				reject(request.status);
+			} else {
+				reject(request.responseText);
 			}
-		);
+		};
 
-		console.log(response.data);
-	} catch (error) {
-		console.error(error);
-	}
+		request.upload.onprogress = function (e) {
+			const event = {
+				loaded: e.loaded,
+				total: e.total,
+				lengthComputable: e.lengthComputable
+			};
+
+			if (event.lengthComputable) {
+				event.loaded += offset;
+				event.total = fileInfo.file_size;
+				exportProgress(event);
+			}
+		};
+
+		request.onerror = () => {
+			reject(new Error('001 Connection aborted'));
+		};
+
+		request.send(params);
+	});
 }
 
-export async function createFileChunk(fileInfo: { offset: any }, file: any) {
-	const dataAPI = dataAPIs();
-	const size = dataAPI.SIZE;
-	const fileChunkList: { file: string }[] = [];
+export async function createFileChunk(fileInfo, file, size = SIZE) {
+	const fileChunkList = [];
 	let cur = fileInfo.offset;
 	while (cur < file.size) {
 		fileChunkList.push({ file: file.slice(cur, cur + size) });
@@ -404,15 +593,15 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 	return fileChunkList;
 }
 
-export async function getUploadInfo(url: string, prefix: string, content: any) {
+export async function getUploadInfo(url, prefix, content = '') {
 	const store = useDataStore();
 	const baseURL = store.baseURL();
 	const appendUrl = splitUrl(url, content);
-	const params = new FormData();
+	let params = new FormData();
 	params.append('storage_path', `${prefix}${appendUrl.storage_path}`);
 	params.append('file_relative_path', appendUrl.file_relative_path);
 	params.append('file_type', content.type);
-	params.append('file_size', String(content.size));
+	params.append('file_size', content.size);
 
 	const res = await axios.post(baseURL + '/upload', params);
 	return res;
