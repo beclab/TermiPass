@@ -127,8 +127,8 @@ import { scrollBarStyle } from '../../utils/contact';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { dataAPIs } from '../../api';
-import { OriginType } from '../../api/common/encoding';
 import { checkSeahub } from '../../utils/file';
+import { DriveType } from '../../stores/files';
 
 export default defineComponent({
 	name: 'UploadModal',
@@ -166,9 +166,9 @@ export default defineComponent({
 		const forWord = async (item: any) => {
 			let dataAPI: any;
 			if (checkSeahub(item.path)) {
-				dataAPI = dataAPIs(OriginType.SYNC);
+				dataAPI = dataAPIs(DriveType.Sync);
 			} else {
-				dataAPI = dataAPIs(OriginType.DRIVE);
+				dataAPI = dataAPIs(DriveType.Drive);
 			}
 
 			dataAPI.openPreview(item, Router);

@@ -1,14 +1,18 @@
 import { getFileType } from '../../utils/file';
-import { useSeahubStore } from 'src/stores/seahub';
-import { DriveResType, DriveItemType, OriginType } from './encoding';
+import { FileItem, DriveType, FileResType } from './../../stores/files';
+import { getParams } from './../../utils/utils';
+import { getextension } from '../../utils/utils';
 
 export function formatSeahub(url: string, data: { dirent_list: any }) {
 	const selUrl = url.split('/')[url.split('/').length - 2];
 	const dirent_lists = data.dirent_list;
 	const hasDirLen = dirent_lists.filter((item) => item.type === 'dir').length;
 	const hasFileLen = dirent_lists.filter((item) => item.type === 'file').length;
-
-	const seahubDir: DriveResType = {
+	const repo_name = decodeURIComponent(window.location.href.split('/')[5]);
+	const repo_id = getParams(window.location.href, 'id');
+	const type = getParams(window.location.href, 'type');
+	const p = getParams(window.location.href, 'p');
+	const seahubDir: FileResType = {
 		path: url,
 		name: selUrl,
 		size: 0,
@@ -24,19 +28,20 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 			by: 'modified',
 			asc: true
 		},
-		fileSize: 0,
 		numTotalFiles: 0,
 		items: [],
-		origin: OriginType.SYNC
+		driveType: DriveType.Sync
 	};
 
-	dirent_lists.forEach((el) => {
-		const seahubStore = useSeahubStore();
+	dirent_lists.forEach((el, index) => {
 		const extension = getextension(el.name);
 		const fileTypeName = el.type === 'dir' ? 'folder' : getFileType(el.name);
+		const itemPath = `/Files/Seahub/${repo_name}${
+			el.path ? `${el.path}` : ''
+		}/?id=${repo_id}&type=${type}&p=${p}`;
 
-		const obj: DriveItemType = {
-			path: `${url}${el.name}/`,
+		const obj: FileItem = {
+			path: itemPath,
 			name: el.name,
 			size: el.size || 0,
 			extension: extension,
@@ -55,82 +60,13 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 			numFiles: el.numFiles,
 			numTotalFiles: el.numTotalFiles,
 			encoded_thumbnail_src: el.encoded_thumbnail_src || undefined,
-			origin: OriginType.SYNC,
-			repo_id: seahubStore.repo_id,
-			repo_name: seahubStore.repo_name
+			driveType: DriveType.Sync,
+			param: '',
+			url: '',
+			index
 		};
 		seahubDir.items.push(obj);
 	});
 
 	return seahubDir;
 }
-
-export function formatDrive(data) {
-	data.origin = OriginType.DRIVE;
-	data.items &&
-		data.items.map((el) => {
-			const extension = getextension(el.name);
-
-			el.origin = OriginType.DRIVE;
-			el.extension = extension;
-		});
-
-	return data;
-}
-
-export function formatAppDataNode(url, data) {
-	const nodeDir: DriveResType = {
-		path: url,
-		name: 'AppData',
-		size: 0,
-		extension: '',
-		modified: '',
-		mode: 0,
-		isDir: true,
-		isSymlink: false,
-		type: '',
-		numDirs: 0,
-		numFiles: 0,
-		sorting: {
-			by: 'modified',
-			asc: true
-		},
-		fileSize: 0,
-		numTotalFiles: 0,
-		items: [],
-		origin: OriginType.CACHE
-	};
-
-	if (data.code == 200) {
-		nodeDir.numDirs = data.data.length;
-
-		data.data.forEach((el) => {
-			const extension = getextension(el.name);
-
-			const item: DriveItemType = {
-				path: url,
-				name: el.metadata.name,
-				size: 4096,
-				extension: extension,
-				modified: String(0),
-				mode: 0,
-				isDir: true,
-				isSymlink: false,
-				type: '',
-				sorting: {
-					by: 'size',
-					asc: false
-				},
-				origin: OriginType.CACHE
-			};
-
-			nodeDir.items.push(item);
-		});
-	}
-
-	return nodeDir;
-}
-
-export const getextension = (name: string) => {
-	return name.indexOf('.') > -1 ? name.substring(name.lastIndexOf('.')) : '';
-};

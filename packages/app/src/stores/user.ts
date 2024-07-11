@@ -28,7 +28,7 @@ import {
 import { refresh_token, SSOTokenRaw } from '../utils/account';
 import { NetworkUpdateMode, busEmit } from 'src/utils/bus';
 import { useMonitorStore } from './monitor';
-import { seafileAPI } from 'src/api/seafileAPI';
+import { seafileAPI } from 'src/api/sync/seafileAPI';
 import { useDataStore } from './data';
 import { unlockUserFirstBusiness } from 'src/utils/BindTerminusBusiness';
 

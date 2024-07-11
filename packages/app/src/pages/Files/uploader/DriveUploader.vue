@@ -23,7 +23,7 @@ import { checkConflict, createCopiedFile } from '../../../utils/upload';
 import { detectType } from '../../../utils/utils';
 import url from '../../../utils/url';
 import { useFilesUploadStore } from '../../../stores/files-upload';
-import { OriginType } from '../../../api/common/encoding';
+import { DriveType } from '../../../stores/files';
 
 const store = useDataStore();
 const route = useRoute();
@@ -88,7 +88,7 @@ async function handleFiles(files, base, overwrite = false) {
 
 		await (function () {
 			return new Promise(async function (res) {
-				await upload.upload(item, OriginType.DRIVE);
+				await upload.upload(item, DriveType.Drive);
 				res(true);
 			});
 		})();

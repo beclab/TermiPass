@@ -121,20 +121,6 @@
 							webkitdirectory
 							multiple
 						/>
-
-						<div :class="{ active: store.multiple }" id="multiple-selection">
-							<p>{{ t('files.multipleSelectionEnabled') }}</p>
-							<div
-								@click="store.setMultiple(false)"
-								tabindex="0"
-								role="button"
-								:title="t('files.clear')"
-								:aria-label="t('files.clear')"
-								class="action"
-							>
-								<i class="material-icons">clear</i>
-							</div>
-						</div>
 					</div>
 				</template>
 			</terminus-scroll-area>

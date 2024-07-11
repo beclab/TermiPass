@@ -6,7 +6,11 @@
 	>
 		<div
 			class="empty column items-center justify-center full-height"
-			v-if="store.req.numDirs + store.req.numFiles == 0"
+			v-if="
+				filesStore.currentDirItems.length +
+					filesStore.currentFileItems.length ==
+				0
+			"
 		>
 			<img src="../../../assets/images/empty.png" alt="empty" />
 			<span class="text-body2 text-ink-1">{{ $t('files.lonely') }}</span>
@@ -79,7 +83,7 @@
 
 				<div class="common-div" style="padding: 0 34px 40px">
 					<ListingItem
-						v-for="item in dirs"
+						v-for="item in filesStore.currentDirItems"
 						:key="base64(item.name)"
 						:item="item"
 						v-bind:viewMode="store.user.viewMode"
@@ -90,7 +94,7 @@
 					</ListingItem>
 
 					<ListingItem
-						v-for="item in files"
+						v-for="item in filesStore.currentFileItems"
 						:key="base64(item.name)"
 						:item="item"
 						v-bind:viewMode="store.user.viewMode"
@@ -99,19 +103,6 @@
 						@resetOpacity="resetOpacity"
 					>
 					</ListingItem>
-				</div>
-				<div :class="{ active: store.multiple }" id="multiple-selection">
-					<p>{{ $t('files.multipleSelectionEnabled') }}</p>
-					<div
-						@click="store.setMultiple(false)"
-						tabindex="0"
-						role="button"
-						:title="$t('files.clear')"
-						:aria-label="$t('files.clear')"
-						class="action"
-					>
-						<i class="material-icons">clear</i>
-					</div>
 				</div>
 			</BtScrollArea>
 		</div>
@@ -157,6 +148,8 @@ import { useOperateinStore } from './../../../stores/operation';
 
 import IndexUploader from './../uploader/IndexUploader.vue';
 
+import { useFilesStore } from './../../../stores/files';
+
 const store = useDataStore();
 const route = useRoute();
 const operateinStore = useOperateinStore();
@@ -175,8 +168,10 @@ let showLimit = 50;
 const repoId = ref();
 const fileUploaderPath = ref();
 
+const filesStore = useFilesStore();
+
 watch(
-	() => store.req,
+	() => filesStore.currentFileList,
 	(newVal) => {
 		showLimit = 50;
 
@@ -184,6 +179,9 @@ watch(
 			setItemWeight();
 			fillWindow(true);
 		});
+	},
+	{
+		deep: true
 	}
 );
 
@@ -234,30 +232,6 @@ const ascOrdered = computed(function () {
 	return store.activeSort.asc;
 });
 
-const items = computed(function () {
-	const dirs: any = [];
-	const files: any = [];
-
-	store.req.items &&
-		store.req.items.forEach((item: any) => {
-			if (item.isDir) {
-				dirs.push(item);
-			} else {
-				files.push(item);
-			}
-		});
-
-	return { dirs, files };
-});
-
-const dirs = computed(function () {
-	return items.value.dirs;
-});
-
-const files = computed(function () {
-	return items.value.files;
-});
-
 const nameIcon = computed(function () {
 	if (nameSorted.value && ascOrdered.value) {
 		return 'arrow_upward';
@@ -284,22 +258,6 @@ const typeIcon = computed(function () {
 		return 'arrow_upward';
 	}
 	return 'arrow_downward';
-});
-
-const headerButtons = computed(function () {
-	return {
-		upload: store.user?.perm?.create,
-		download: store.user?.perm?.download,
-		delete: store.selectedCount > 0 && store.user?.perm?.delete,
-		rename: store.selectedCount === 1 && store.user?.perm?.rename,
-		share: store.selectedCount === 1 && store.user?.perm?.share,
-		move: store.selectedCount > 0 && store.user?.perm?.rename,
-		copy: store.selectedCount > 0 && store.user?.perm?.create
-	};
-});
-
-const isMobile = computed(function () {
-	return width.value <= 736;
 });
 
 onMounted(() => {
@@ -347,12 +305,12 @@ const keyEvent = (event: any) => {
 	// Esc!
 	if (event.keyCode === 27) {
 		// Reset files selection.
-		store.resetSelected();
+		filesStore.resetSelected();
 	}
 
 	// Del!
 	if (event.keyCode === 46) {
-		if (!store.user.perm.delete || store.selectedCount == 0) return;
+		if (!store.user.perm.delete || filesStore.selectedCount == 0) return;
 
 		// Show delete prompt.
 		store.showHover('delete');
@@ -360,7 +318,7 @@ const keyEvent = (event: any) => {
 
 	// F2!
 	if (event.keyCode === 113) {
-		if (!store.user.perm.rename || store.selectedCount !== 1) return;
+		if (!store.user.perm.rename || filesStore.selectedCount !== 1) return;
 
 		// Show rename prompt.
 		store.showHover('rename');
@@ -389,14 +347,14 @@ const keyEvent = (event: any) => {
 			break;
 		case 'a':
 			event.preventDefault();
-			for (let file of items.value.files) {
-				if (store.selected.indexOf(file.index) === -1) {
-					store.addSelected(file.index);
+			for (let file of filesStore.currentFileItems) {
+				if (filesStore.selected.indexOf(file.index) === -1) {
+					filesStore.addSelected(file.index);
 				}
 			}
-			for (let dir of items.value.dirs) {
-				if (store.selected.indexOf(dir.index) === -1) {
-					store.addSelected(dir.index);
+			for (let dir of filesStore.currentDirItems) {
+				if (filesStore.selected.indexOf(dir.index) === -1) {
+					filesStore.addSelected(dir.index);
 				}
 			}
 			break;
@@ -417,7 +375,8 @@ const optionAction = (event: any, type: OPERATE_ACTION) => {
 };
 
 const scrollEvent = throttle(() => {
-	const totalItems = store.req.numDirs + store.req.numFiles;
+	const totalItems =
+		filesStore.currentDirItems.length + filesStore.currentFileItems.length;
 
 	// All items are displayed
 	if (showLimit >= totalItems) return;
@@ -568,7 +527,8 @@ const setItemWeight = () => {
 	// Listing element is not displayed
 	if (listing.value == null) return;
 
-	let itemQuantity = store.req.numDirs + store.req.numFiles;
+	let itemQuantity =
+		filesStore.currentDirItems.length + filesStore.currentFileItems.length;
 	if (itemQuantity > showLimit) itemQuantity = showLimit;
 
 	// How much every listing item affects the window height
@@ -576,7 +536,8 @@ const setItemWeight = () => {
 };
 
 const fillWindow = (fit = false) => {
-	const totalItems = store.req.numDirs + store.req.numFiles;
+	const totalItems =
+		filesStore.currentDirItems.length + filesStore.currentFileItems.length;
 
 	// More items are displayed than the total
 	if (showLimit >= totalItems && !fit) return;
@@ -596,6 +557,7 @@ const fillWindow = (fit = false) => {
 };
 
 const rightClick = (e: any, item?: any) => {
+	console.log('rightClickrightClick', item);
 	if (!disabledClick(route.path)) {
 		return false;
 	}
@@ -620,13 +582,13 @@ const rightClick = (e: any, item?: any) => {
 	menuList.value = item;
 	menuVisible.value = true;
 	stopScrollMove(e);
-	if (store.selectedCount === 0) {
-		item && store.addSelected(item.index);
+	if (filesStore.selected.length === 0) {
+		item && filesStore.addSelected(item.index);
 		return;
 	}
-	if (store.selected.indexOf(item.index) === -1) {
-		store.resetSelected();
-		store.addSelected(item.index);
+	if (item && filesStore.selected.indexOf(item.index) === -1) {
+		filesStore.resetSelected();
+		filesStore.addSelected(item.index);
 	}
 };
 
@@ -635,7 +597,7 @@ const leftClick = (e: any) => {
 		menuVisible.value = false;
 		startScrollMove(e);
 	}
-	store.resetSelected();
+	filesStore.resetSelected();
 };
 
 const changeVisible = (e: any) => {

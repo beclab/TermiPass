@@ -58,19 +58,20 @@
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { common as api } from '../../../api';
 import { format, useQuasar } from 'quasar';
 import { useI18n } from 'vue-i18n';
 import { ScreenOrientation } from '@capacitor/screen-orientation';
 import { getNativeAppPlatform } from '../../../platform/capacitor/capacitorPlatform';
 import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.vue';
 import { StatusBar } from '@capacitor/status-bar';
+import { useFilesStore } from '../../../stores/files';
 
 const { humanStorageSize } = format;
 const store = useDataStore();
 const autoPlay = ref(false);
 const fullSize = ref(false);
 const $q = useQuasar();
+const filesStore = useFilesStore();
 
 const { t } = useI18n();
 
@@ -78,9 +79,9 @@ const size = ref(humanStorageSize(store.req.size ?? 0));
 
 const raw = computed(function () {
 	if (store.req.type === 'image' && !fullSize.value) {
-		return api.getPreviewURL(store.req, 'big');
+		return filesStore.getPreviewURL(store.req, 'big');
 	}
-	return api.getDownloadURL(store.req, true);
+	return filesStore.getDownloadURL(store.req, true);
 });
 
 onMounted(() => {

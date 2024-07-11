@@ -7,7 +7,8 @@
 		@dragstart="dragStart"
 		@dragover="dragOver"
 		@drop="drop"
-		@click.stop="itemClick"
+		@click.stop="click"
+		@dblclick.stop="open"
 		:data-dir="item.isDir"
 		:data-type="item.type"
 		:aria-label="item.name"
@@ -19,7 +20,7 @@
 			:path="item.path"
 			:modified="item.modified"
 			:is-dir="item.isDir"
-			:origin="item.origin"
+			:driveType="item.driveType"
 		/>
 
 		<div v-if="viewMode === 'mosaic'" style="margin-top: 0.5rem">
@@ -52,31 +53,28 @@ import {
 	defineEmits
 } from 'vue';
 import { useDataStore } from '../../stores/data';
-import { useFilesStore, FileItem } from '../../stores/files';
 import { useOperateinStore } from '../../stores/operation';
-import { format } from 'quasar';
+import { format, useQuasar } from 'quasar';
 import moment from 'moment';
 import { files as api, seahub } from '../../api';
 import { useRouter, useRoute } from 'vue-router';
-//import url from './../../utils/url';
-//import { checkSeahub } from '../../utils/file';
 import TerminusFileIcon from '../common/TerminusFileIcon.vue';
 import { useMenuStore } from '../../stores/files-menu';
 import { notifyWarning } from '../../utils/notifyRedefinedUtil';
 
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
-
-// import { DriveItemType } from './../../api/common/encoding';
+import { useFilesStore, FileItem } from '../../stores/files';
+import FilePreViewDialog from '../../pages/Files/preview/FilePreViewDialog.vue';
 
 const props = defineProps({
 	item: {
-		type: FileItem,
-		require: true
+		type: Object as PropType<FileItem>,
+		required: true
 	},
 	viewMode: {
 		type: String,
-		require: true
+		required: true
 	}
 });
 
@@ -84,6 +82,7 @@ const emits = defineEmits(['resetOpacity', 'closeMenu']);
 
 const { humanStorageSize } = format;
 
+const $q = useQuasar();
 const filesStore = useFilesStore();
 const store = useDataStore();
 const router = useRouter();
@@ -133,7 +132,7 @@ const singleClick = computed(function () {
 });
 
 const isSelected = computed(function () {
-	return store.selected.indexOf(props.item.index) !== -1;
+	return filesStore.selected.indexOf(props.item.index) !== -1;
 });
 
 const isDraggable = computed(function () {
@@ -143,8 +142,8 @@ const isDraggable = computed(function () {
 const canDrop = computed(function () {
 	if (!props.item.isDir) return false;
 
-	for (let i of store.selected) {
-		if (store.req.items[i].url === props.item.url) {
+	for (let i of filesStore.selected) {
+		if (filesStore.currentFileList[i].url === props.item.url) {
 			return false;
 		}
 	}
@@ -180,14 +179,14 @@ const humanTime = () => {
 };
 
 const dragStart = () => {
-	if (store.selectedCount === 0) {
-		store.addSelected(props.item.index);
+	if (filesStore.selectedCount === 0) {
+		filesStore.addSelected(props.item.index);
 		return;
 	}
 
 	if (!isSelected.value) {
-		store.resetSelected();
-		store.addSelected(props.item.index);
+		filesStore.resetSelected();
+		filesStore.addSelected(props.item.index);
 	}
 };
 
@@ -208,8 +207,12 @@ const dragOver = (event: any) => {
 
 const drop = async (event: any) => {
 	let canMove = true;
-	for (const item of store.selected) {
-		if (operateinStore.disableMenuItem.includes(store.req.items[item].name)) {
+	for (const item of filesStore.selected) {
+		if (
+			operateinStore.disableMenuItem.includes(
+				filesStore.currentFileList[item].name
+			)
+		) {
 			canMove = false;
 			notifyWarning(t('files.the_files_contains_unmovable_items'));
 			break;
@@ -222,7 +225,7 @@ const drop = async (event: any) => {
 	if (!canDrop.value) return;
 	event.preventDefault();
 
-	if (store.selectedCount === 0) return;
+	if (filesStore.selectedCount === 0) return;
 
 	operateinStore.handleFileOperate(
 		event,
@@ -235,80 +238,68 @@ const drop = async (event: any) => {
 	);
 };
 
-const itemClick = (event: any) => {
-	emits('closeMenu');
-	if (singleClick.value && !store.multiple) open();
-	else click(event);
-};
-
 const click = (event: any) => {
-	if (!singleClick.value && store.selectedCount !== 0) event.preventDefault();
+	emits('closeMenu');
+	if (filesStore.selectedCount !== 0) event.preventDefault();
 
-	setTimeout(() => {
-		touches.value = 0;
-	}, 300);
-
-	touches.value++;
-	if (touches.value > 1) {
-		open();
-	}
-
-	if (store.selected.indexOf(props.item.index) !== -1) {
-		store.removeSelected(props.item.index);
+	if (filesStore.selected.indexOf(props.item.index) !== -1) {
+		filesStore.removeSelected(props.item.index);
 		return;
 	}
 
-	if (event.shiftKey && store.selected.length > 0) {
+	if (event.shiftKey && filesStore.selected.length > 0) {
 		let fi = 0;
 		let la = 0;
 
-		if (props.item.index > store.selected[0]) {
-			fi = store.selected[0] + 1;
+		if (props.item.index > filesStore.selected[0]) {
+			fi = filesStore.selected[0] + 1;
 			la = props.item.index;
 		} else {
 			fi = props.item.index;
-			la = store.selected[0] - 1;
+			la = filesStore.selected[0] - 1;
 		}
 
 		for (; fi <= la; fi++) {
-			if (store.selected.indexOf(fi) == -1) {
-				store.addSelected(fi);
+			if (filesStore.selected.indexOf(fi) == -1) {
+				filesStore.addSelected(fi);
 			}
 		}
 
 		return;
 	}
 
-	if (
-		!singleClick.value &&
-		!event.ctrlKey &&
-		!event.metaKey &&
-		!store.multiple
-	) {
-		store.resetSelected();
+	if (!singleClick.value && !event.ctrlKey && !event.metaKey) {
+		filesStore.resetSelected();
 	}
 
-	store.addSelected(props.item.index);
+	filesStore.addSelected(props.item.index);
 };
 
 const open = () => {
-	if (props.item.isDir) {
-		return router.push({
-			path: props.item.url,
-			query: {
-				id: route.query.id,
-				type: route.query.type
-			}
+	emits('closeMenu');
+	filesStore.addSelected(props.item.index);
+
+	const splitUrl = props.item.path.split('?');
+
+	if (!props.item.isDir) {
+		if (store.preview.isShow) {
+			return;
+		}
+		$q.dialog({
+			component: FilePreViewDialog
 		});
 	}
-	store.openFile(props.item, router);
 
-	filesStore.setFilePath({
-		path: props.item.url,
-		isDir: props.item.isDir,
-		driveType: props.item.driveType,
-		param: ''
-	});
+	filesStore.setFilePath(
+		{
+			path: splitUrl[0],
+			isDir: props.item.isDir,
+			driveType: props.item.driveType,
+			param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+		},
+		false,
+		router
+	);
 };
 </script>
 

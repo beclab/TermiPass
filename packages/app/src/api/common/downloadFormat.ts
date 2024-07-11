@@ -1,5 +1,5 @@
 import { INewDownloadFile } from '../../platform/electron/interface';
-import { useDataStore } from '../../stores/data';
+import { useFilesStore } from '../../stores/files';
 
 export const downloadFile = async (fileUrl: any, filename = '') => {
 	const targetUrl = fileUrl.url;
@@ -80,17 +80,17 @@ export const downloadFile = async (fileUrl: any, filename = '') => {
 };
 
 export const downloadElectron = async (data: { url: string }) => {
-	const dataStore = useDataStore();
+	const filesStore = useFilesStore();
 	const savePath = await window.electron.api.download.getDownloadPath();
 	console.log(savePath);
 
 	const formData: INewDownloadFile = {
 		url: data.url,
-		fileName: dataStore.req.items[dataStore.selected[0]].isDir
-			? dataStore.req.items[dataStore.selected[0]].name + '.zip'
-			: dataStore.req.items[dataStore.selected[0]].name,
+		fileName: filesStore.currentFileList[filesStore.selected[0]].isDir
+			? filesStore.currentFileList[filesStore.selected[0]].name + '.zip'
+			: filesStore.currentFileList[filesStore.selected[0]].name,
 		path: savePath,
-		totalBytes: dataStore.req.items[dataStore.selected[0]].size
+		totalBytes: filesStore.currentFileList[filesStore.selected[0]].size
 	};
 	console.log(formData);
 

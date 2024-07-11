@@ -1,11 +1,11 @@
-import {
-	OriginType,
-	DriveResType,
-	CopyStoragesType,
-	DriveItemType
-} from './common/encoding';
+import { FileItem, FileResType } from './../stores/files';
+import { CopyStoragesType } from 'src/stores/operation';
+
 import { OPERATE_ACTION } from '../utils/contact';
 import { Router } from 'vue-router';
+
+import { DriveMenuType } from './drive/type';
+import { SyncRepoMineType } from './sync/type';
 
 export abstract class Origin {
 	/**
@@ -21,12 +21,14 @@ export abstract class Origin {
 	/**
 	 * This function retrieves the data from all files in the specified directory.
 	 */
-	abstract fetch(url: string): Promise<DriveResType>;
+	abstract fetch(url: string): Promise<FileResType>;
 
 	/**
 	 * Retrieves this menu from the Sync
 	 */
-	abstract fetchSyncRepo(menu: string): Promise<any>;
+	abstract fetchMenuRepo(
+		menu?: string
+	): Promise<DriveMenuType[] | SyncRepoMineType[]>;
 
 	/**
 	 * Retrieves this menu from the Sync
@@ -36,12 +38,12 @@ export abstract class Origin {
 	/**
 	 * This function handles the copying of files or directories in an event
 	 */
-	abstract copy(): Promise<{ items: CopyStoragesType[]; from: OriginType }>;
+	abstract copy(): Promise<CopyStoragesType[]>;
 
 	/**
 	 * Cut
 	 */
-	abstract cut(): Promise<{ items: CopyStoragesType[]; from: OriginType }>;
+	abstract cut(): Promise<CopyStoragesType[]>;
 
 	/**
 	 * Paste
@@ -89,7 +91,7 @@ export abstract class Origin {
 	/**
 	 * Open preview when upload modal
 	 */
-	abstract openPreview(item: any, Router?: Router): void;
+	abstract openPreview(item: any, Router?: Router): Promise<FileResType>;
 
 	/**
 	 * get url for preview page
@@ -108,12 +110,17 @@ export abstract class Origin {
 	/**
 	 * Format File Content for 'audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'
 	 */
-	abstract formatFileContent(file: DriveItemType): Promise<DriveItemType>;
+	abstract formatFileContent(file: FileItem): Promise<FileItem>;
 
 	/**
-	 * open file
+	 * format Repo to Path
 	 */
-	abstract openFile(file: DriveItemType, Router?: Router): Promise<void>;
+	abstract formatRepotoPath(item: any): Promise<string>;
+
+	/**
+	 * format path to url
+	 */
+	abstract formatPathtoUrl(item: any): Promise<string>;
 
 	/**
 	 * Upload fetch

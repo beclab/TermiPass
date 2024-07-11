@@ -60,9 +60,9 @@ const fetchData = async () => {
 	}
 
 	store.setReload(false);
-	store.setMultiple(false);
+	// store.setMultiple(false);
 	store.setLoading(true);
-	store.resetSelected();
+	// store.resetSelected();
 	store.closeHovers();
 	error.value = null;
 	let url = route.path;

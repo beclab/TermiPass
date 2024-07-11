@@ -4,13 +4,10 @@ import { shareToUser } from '../api';
 import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
 // import { dataAPI } from './../api';
-import { dataAPIs, SyncDataAPI } from './../api';
+import { dataAPIs, SyncDataAPI, DriveDataAPI } from './../api';
 
-import {
-	SyncRepoMineType,
-	SyncRepoSharedType,
-	OriginType
-} from '../api/common/encoding';
+import { DriveType } from './files';
+import { SyncRepoMineType } from './../api/sync/type';
 import { IFilesSyncStatus } from 'src/platform/electron/interface';
 
 export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
@@ -58,55 +55,13 @@ export const useMenuStore = defineStore('filesMenu', {
 					label: MenuItem.DRIVE,
 					key: MenuItem.DRIVE,
 					icon: '',
-					children: [
-						{
-							label: MenuItem.HOME,
-							key: MenuItem.HOME,
-							icon: 'sym_r_other_houses'
-						},
-						{
-							label: MenuItem.DOCUMENTS,
-							key: MenuItem.DOCUMENTS,
-							icon: 'sym_r_news'
-						},
-						{
-							label: MenuItem.PICTURES,
-							key: MenuItem.PICTURES,
-							icon: 'sym_r_art_track'
-						},
-						{
-							label: MenuItem.MOVIES,
-							key: MenuItem.MOVIES,
-							icon: 'sym_r_smart_display'
-						},
-						{
-							label: MenuItem.DOWNLOADS,
-							key: MenuItem.DOWNLOADS,
-							icon: 'sym_r_browser_updated'
-						}
-					]
+					children: []
 				},
 				{
 					label: MenuItem.SYNC,
 					key: MenuItem.SYNC,
 					icon: '',
 					children: []
-					// children: [
-					// {
-					// 	label: MenuItem.MYLIBRARIES,
-					// 	key: 'MyLibraries',
-					// 	icon: 'sym_r_library_books',
-					// 	expationFlag: true,
-					// 	children: []
-					// },
-					// {
-					// 	label: MenuItem.SHAREDWITH,
-					// 	key: 'SharedLibraries',
-					// 	icon: 'sym_r_folder_copy',
-					// 	expationFlag: false,
-					// 	children: []
-					// }
-					// ]
 				},
 				{
 					label: MenuItem.APPLICATION,
@@ -134,10 +89,6 @@ export const useMenuStore = defineStore('filesMenu', {
 	},
 
 	getters: {
-		// path: '/Files/Seahub/' + item.label + '/',
-		currentItemDefaultPath(): string {
-			return '/Files/Seahub/' + this.avtiveItem.label + '/';
-		},
 		reposHasSync(): boolean {
 			return Object.values(this.syncReposLastStatusMap).find(
 				(e) =>
@@ -149,6 +100,10 @@ export const useMenuStore = defineStore('filesMenu', {
 	},
 
 	actions: {
+		getMenuBrowserUrl(value) {
+			console.log('getMenuBrowserUrl', value);
+		},
+
 		getMenu() {
 			return this.menu;
 		},
@@ -341,109 +296,26 @@ export const useMenuStore = defineStore('filesMenu', {
 		//	fetch sync menu data MYLIBRARIES/SHAREDWITH
 		async getSyncMenu() {
 			const menuStore = useMenuStore();
-			const menu = JSON.parse(JSON.stringify(menuStore.getMenu()));
-			const dataAPI = dataAPIs();
-			const [res2, res3]: any = await dataAPI.fetchSyncRepo(
-				MenuItem.SHAREDWITH
-			);
-			const shareChildren: SyncRepoSharedType[] = [];
-			for (let i = 0; i < res2.length; i++) {
-				const el = res2[i];
-				const hsaShareRepo = shareChildren.find(
-					(item) => item.id === el.repo_id
-				);
-				if (hsaShareRepo) {
-					continue;
-				}
+			const driveDataAPI = new DriveDataAPI();
+			const syncDataAPI = new SyncDataAPI();
 
-				shareChildren.push({
-					label: el.repo_name,
-					key: el.repo_id,
-					icon: 'sym_r_folder_shared',
-					id: el.repo_id,
-					defaultHide: true,
-					...el
-				});
-			}
+			this.menu[0].children = await driveDataAPI.fetchMenuRepo();
+			const syncMenus: SyncRepoMineType[] = await syncDataAPI.fetchMenuRepo();
+			this.menu[1].children = syncMenus;
 
-			const sharedme: SyncRepoSharedType[] = [];
-			for (let i = 0; i < res3.length; i++) {
-				const el = res3[i];
-				sharedme.push({
-					label: el.repo_name,
-					key: el.repo_id,
-					name: el.repo_name,
-					icon: 'sym_r_folder_supervised',
-					id: el.repo_id,
-					defaultHide: true,
-					...el
-				});
-			}
-
-			const res1: any = await dataAPI.fetchSyncRepo(MenuItem.MYLIBRARIES);
-			const mineChildren: SyncRepoMineType[] = [];
-			for (let i = 0; i < res1.length; i++) {
-				const el = res1[i];
-
-				const hasShareWith = shareChildren.find(
-					(item) => item.repo_id === el.repo_id
-				);
-				const hasShareMe = sharedme.find((item) => item.repo_id === el.repo_id);
-				const hasShare = hasShareWith || hasShareMe;
-
-				mineChildren.push({
-					label: el.repo_name,
-					key: el.repo_id,
-					icon: 'sym_r_folder',
-					id: el.repo_id,
-					name: el.repo_name,
-					shard_user_hide_flag: hasShare ? false : true,
-					share_type: hasShare ? hasShare.share_type : undefined,
-					user_email: hasShare ? hasShare.user_email : undefined,
-					defaultHide: true,
-					...el
-				});
-			}
-
-			const myLibraries = {
-				label: MenuItem.MYLIBRARIES,
-				key: 'MyLibraries',
-				icon: '',
-				expationFlag: true,
-				muted: true,
-				disableClickable: true
-			};
-			const shardWith = {
-				label: MenuItem.SHAREDWITH,
-				key: 'SharedLibraries',
-				icon: '',
-				expationFlag: false,
-				muted: true,
-				disableClickable: true
-			};
-
-			for (let index = 0; index < menu.length; index++) {
-				const el = menu[index];
-				if (el.label === MenuItem.SYNC) {
-					let shardArr: any = [];
-					if (shareChildren.length > 0 || sharedme.length > 0) {
-						shardArr = [shardWith, ...shareChildren, ...sharedme];
-					}
-					el.children = [myLibraries, ...mineChildren, ...shardArr];
+			const syncIds: string[] = [];
+			for (let i = 0; i < syncMenus.length; i++) {
+				const selfMenu: SyncRepoMineType = syncMenus[i];
+				if (selfMenu.type === 'mine') {
+					syncIds.push(selfMenu.id);
 				}
 			}
-
-			menuStore.menu = menu;
-
-			const syncIds = mineChildren
-				.map((e) => e.id)
-				.concat(shareChildren.map((e) => e.id));
 
 			menuStore.addSyncUpdateRepos(syncIds);
 		},
 
 		async fetchShareInfo(repo_id: string) {
-			const dataAPI = dataAPIs(OriginType.SYNC);
+			const dataAPI = dataAPIs(DriveType.Sync);
 			const res: any = await (dataAPI as SyncDataAPI).fetchShareInfo(repo_id);
 			return res;
 		}

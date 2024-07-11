@@ -4,7 +4,8 @@ import { dataAPIs, DriveDataAPI } from '../api';
 // import { files as api } from '../api';
 import throttle from 'lodash.throttle';
 import { useDataStore } from './data';
-import { OriginType } from '../api/common/encoding';
+import { DriveType } from './files';
+
 const { humanStorageSize } = format;
 
 const UPLOADS_LIMIT = 5;
@@ -142,7 +143,7 @@ export const useFilesUploadStore = defineStore('upload', {
 			delete this.uploads[id];
 		},
 
-		async upload(item: any, type: OriginType) {
+		async upload(item: any, type: DriveType) {
 			const uploadsCount = Object.keys(this.uploads).length;
 			const isQueueEmpty = this.queue.length == 0;
 			const isUploadsEmpty = uploadsCount == 0;
@@ -154,12 +155,12 @@ export const useFilesUploadStore = defineStore('upload', {
 			}
 			this.addJob(item);
 
-			if (type === OriginType.DRIVE) {
+			if (type === DriveType.Drive) {
 				this.processUploads();
 			}
 		},
 
-		async finishUpload(item: any, type?: OriginType) {
+		async finishUpload(item: any, type?: DriveType) {
 			const store = useDataStore();
 			// if (!from) {
 			// 	store.setReload(true);
@@ -176,14 +177,14 @@ export const useFilesUploadStore = defineStore('upload', {
 			}
 
 			await this.removeJob(item.id);
-			if (type !== OriginType.SYNC) {
+			if (type !== DriveType.Sync) {
 				await this.processUploads();
 			}
 			store.setReload(true);
 		},
 
 		async processUploads() {
-			const dataAPI = dataAPIs(OriginType.DRIVE);
+			const dataAPI = dataAPIs(DriveType.Drive);
 			const uploadsCount = Object.keys(this.uploads).length;
 
 			const isBellowLimit = uploadsCount < UPLOADS_LIMIT;
@@ -276,7 +277,7 @@ export const useFilesUploadStore = defineStore('upload', {
 							this.uploads[curFile.id] = curFile;
 
 							if (file.progress() * 100 >= 100) {
-								this.finishUpload(curFile, OriginType.SYNC);
+								this.finishUpload(curFile, DriveType.Sync);
 							}
 						},
 						100,

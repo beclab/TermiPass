@@ -5,6 +5,9 @@ import { useSeahubStore } from '../../stores/seahub';
 import { useDataStore } from '../../stores/data';
 import { axiosInstanceProxy } from '../../platform/httpProxy';
 
+import { MenuItem } from './../../utils/contact';
+import { SyncRepoItemType, SyncRepoSharedItemType } from './type';
+
 export async function instanceAxios(config) {
 	const store = useDataStore();
 	const baseURL = store.baseURL();
@@ -201,3 +204,36 @@ export const createThumbnail = async (path) => {
 	);
 	return res;
 };
+
+export async function fetchRepo(
+	menu: MenuItem
+): Promise<SyncRepoItemType[] | SyncRepoSharedItemType[][] | undefined> {
+	if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
+		return undefined;
+	}
+	const dataAPI = dataAPIs();
+
+	if (menu == MenuItem.MYLIBRARIES) {
+		const res: any = await dataAPI.commonAxios.get(
+			'/seahub/api/v2.1/repos/?type=mine',
+			{}
+		);
+
+		const repos: SyncRepoItemType[] = res.repos;
+		return repos;
+	} else {
+		const res2: any = await dataAPI.commonAxios.get(
+			'/seahub/api/v2.1/shared-repos/',
+			{}
+		);
+		const res3: any = await dataAPI.commonAxios.get(
+			'/seahub/api/v2.1/repos/?type=shared',
+			{}
+		);
+
+		const repos2: SyncRepoSharedItemType[] = res2;
+		const repos3: SyncRepoSharedItemType[] = res3.repos;
+
+		return [repos2, repos3];
+	}
+}

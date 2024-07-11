@@ -1,25 +1,25 @@
 import { Origin } from './../origin';
-import { removePrefix } from '../utils';
-import {
-	OriginType,
-	DriveResType,
-	CopyStoragesType,
-	DriveItemType
-} from '../common/encoding';
-import { formatSeahub } from '../common/filesFormat';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
 import { files, seahub } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
-import { checkConflict } from '../../utils/upload';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
+import { ShareInfoResType, SyncRepoSharedType, SyncRepoMineType } from './type';
+
+import { formatSeahub } from './filesFormat';
+import { getParams } from './../../utils/utils';
+import { useFilesStore } from './../../stores/files';
+import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
+
 import {
-	SyncRepoItemType,
-	SyncRepoSharedItemType,
-	ShareInfoResType
-} from './../common/encoding';
+	FileItem,
+	FileResType,
+	DriveType,
+	FilePath
+} from './../../stores/files';
+import { fetchRepo } from './sync';
 
 import { CommonFetch } from '../fetch';
 
@@ -31,19 +31,24 @@ class Data extends Origin {
 		this.commonAxios = CommonFetch;
 	}
 
-	async fetch(url: string): Promise<DriveResType> {
-		url = decodeURIComponent(removePrefix(url));
-		const res: DriveResType = await this.fetchSync(url);
+	async fetch(url: string): Promise<FileResType> {
+		console.log('sync fetch', url);
+
+		url = decodeURIComponent(url);
+		const res: FileResType = await this.fetchSync(url);
 		res.url = `/Files${url}`;
 		if (res.isDir) {
 			if (!res.url.endsWith('/')) res.url += '/';
 			res.items = res.items.map((item, index) => {
 				item.index = index;
-				item.url = `${res.url}${encodeURIComponent(item.name)}`;
-				if (item.isDir) {
-					item.url += '/';
-				}
-
+				item.url =
+					url.split('p=/')[0] +
+					'p=/' +
+					encodeURIComponent(item.name) +
+					url.split('p=/')[1];
+				// if (item.isDir) {
+				// 	item.url += '/';
+				// }
 				return item;
 			});
 		}
@@ -51,17 +56,10 @@ class Data extends Origin {
 		return res;
 	}
 
-	async fetchSync(url: string): Promise<DriveResType> {
-		const seahubStore = useSeahubStore();
-		const currentItem = seahubStore.repo_name;
-		const pathLen = url.indexOf(currentItem) + currentItem.length;
-		const path = url.slice(pathLen);
-		const res = await this.commonAxios.get(
-			`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
-			{}
-		);
+	async fetchSync(url: string): Promise<FileResType> {
+		const res = await this.commonAxios.get(url, {});
 
-		const data: DriveResType = await formatSeahub(
+		const data: FileResType = formatSeahub(
 			url,
 			JSON.parse(JSON.stringify(res))
 		);
@@ -71,36 +69,95 @@ class Data extends Origin {
 		return data;
 	}
 
-	async fetchSyncRepo(
-		menu: string
-	): Promise<SyncRepoItemType[] | SyncRepoSharedItemType[][] | undefined> {
-		if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
-			return undefined;
+	async fetchMenuRepo(): Promise<SyncRepoMineType[]> {
+		const [res2, res3]: any = await fetchRepo(MenuItem.SHAREDWITH);
+		const shareChildren: SyncRepoSharedType[] = [];
+		for (let i = 0; i < res2.length; i++) {
+			const el = res2[i];
+			const hsaShareRepo = shareChildren.find((item) => item.id === el.repo_id);
+			if (hsaShareRepo) {
+				continue;
+			}
+
+			shareChildren.push({
+				label: el.repo_name,
+				key: el.repo_id,
+				icon: 'sym_r_folder_shared',
+				id: el.repo_id,
+				defaultHide: true,
+				driveType: DriveType.Sync,
+				...el
+			});
 		}
 
-		if (menu == MenuItem.MYLIBRARIES) {
-			const res: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/repos/?type=mine',
-				{}
-			);
-
-			const repos: SyncRepoItemType[] = res.repos;
-			return repos;
-		} else {
-			const res2: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/shared-repos/',
-				{}
-			);
-			const res3: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/repos/?type=shared',
-				{}
-			);
-
-			const repos2: SyncRepoSharedItemType[] = res2;
-			const repos3: SyncRepoSharedItemType[] = res3.repos;
-
-			return [repos2, repos3];
+		const sharedme: SyncRepoSharedType[] = [];
+		for (let i = 0; i < res3.length; i++) {
+			const el = res3[i];
+			sharedme.push({
+				label: el.repo_name,
+				key: el.repo_id,
+				name: el.repo_name,
+				icon: 'sym_r_folder_supervised',
+				id: el.repo_id,
+				defaultHide: true,
+				driveType: DriveType.Sync,
+				...el
+			});
 		}
+
+		const res1: any = await fetchRepo(MenuItem.MYLIBRARIES);
+		const mineChildren: SyncRepoMineType[] = [];
+		for (let i = 0; i < res1.length; i++) {
+			const el = res1[i];
+
+			const hasShareWith = shareChildren.find(
+				(item) => item.repo_id === el.repo_id
+			);
+			const hasShareMe = sharedme.find((item) => item.repo_id === el.repo_id);
+			const hasShare = hasShareWith || hasShareMe;
+
+			mineChildren.push({
+				label: el.repo_name,
+				key: el.repo_id,
+				icon: 'sym_r_folder',
+				id: el.repo_id,
+				name: el.repo_name,
+				shard_user_hide_flag: hasShare ? false : true,
+				share_type: hasShare ? hasShare.share_type : undefined,
+				user_email: hasShare ? hasShare.user_email : undefined,
+				defaultHide: true,
+				driveType: DriveType.Sync,
+				...el
+			});
+		}
+
+		const myLibraries = {
+			label: MenuItem.MYLIBRARIES,
+			key: 'MyLibraries',
+			icon: '',
+			expationFlag: true,
+			muted: true,
+			disableClickable: true,
+			driveType: DriveType.Sync
+		};
+		const shardWith = {
+			label: MenuItem.SHAREDWITH,
+			key: 'SharedLibraries',
+			icon: '',
+			expationFlag: false,
+			muted: true,
+			disableClickable: true,
+			driveType: DriveType.Sync
+		};
+
+		let shardArr: any = [];
+		if (shareChildren.length > 0 || sharedme.length > 0) {
+			shardArr = [shardWith, ...shareChildren, ...sharedme];
+		}
+
+		const syncMenu = [myLibraries, ...mineChildren, ...shardArr];
+
+		return syncMenu;
 	}
 
 	async fetchShareInfo(repo_id: string): Promise<ShareInfoResType> {
@@ -114,22 +171,23 @@ class Data extends Origin {
 	async download(path: string): Promise<{ url: string; headers: any }> {
 		console.log('sync download', path);
 
-		const dataStore = useDataStore();
+		// const dataStore = useDataStore();
+		const fileStore = useFilesStore();
 		if (
-			dataStore.selectedCount === 1 &&
-			!dataStore.req.items[dataStore.selected[0]].isDir
+			fileStore.selectedCount === 1 &&
+			!fileStore.currentFileList[fileStore.selected[0]].isDir
 		) {
 			const url = await seahub.downloaFile(
-				dataStore.req.items[dataStore.selected[0]].path
+				fileStore.currentFileList[fileStore.selected[0]].path
 			);
 			return { url: url, headers: {} };
 		}
 
 		const filesDownload: any[] = [];
 
-		if (dataStore.selectedCount > 0) {
-			for (const i of dataStore.selected) {
-				filesDownload.push(dataStore.req.items[i].url);
+		if (fileStore.selectedCount > 0) {
+			for (const i of fileStore.selected) {
+				filesDownload.push(fileStore.currentFileList[i].url);
 			}
 		} else {
 			filesDownload.push(path);
@@ -138,7 +196,6 @@ class Data extends Origin {
 		const { url, node } = files.download('zip', ...filesDownload);
 
 		const headers = {
-			...dataStore.req.headers,
 			'Content-Type': 'application/octet-stream'
 		};
 		if (node) {
@@ -148,13 +205,13 @@ class Data extends Origin {
 		return { url, headers };
 	}
 
-	async copy(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
+	async copy(): Promise<CopyStoragesType[]> {
 		console.log('into copy');
-		const dataStore = useDataStore();
+		const fileStore = useFilesStore();
 		const seahubStore = useSeahubStore();
 		const copyStorages: CopyStoragesType[] = [];
-		for (const item of dataStore.selected) {
-			const el = dataStore.req.items[item];
+		for (const item of fileStore.selected) {
+			const el = fileStore.currentFileList[item];
 			const pathFromStart =
 				decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
 				seahubStore.repo_name.length;
@@ -175,18 +232,15 @@ class Data extends Origin {
 
 		console.log('sync-copyStorages', copyStorages);
 
-		return {
-			items: copyStorages,
-			from: OriginType.SYNC
-		};
+		return copyStorages;
 	}
 
-	async cut(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
-		const dataStore = useDataStore();
+	async cut(): Promise<CopyStoragesType[]> {
+		const fileStore = useFilesStore();
 		const seahubStore = useSeahubStore();
 		const copyStorages: CopyStoragesType[] = [];
-		for (const item of dataStore.selected) {
-			const el = dataStore.req.items[item];
+		for (const item of fileStore.selected) {
+			const el = fileStore.currentFileList[item];
 			const pathFromStart =
 				decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
 				seahubStore.repo_name.length;
@@ -206,22 +260,19 @@ class Data extends Origin {
 			});
 		}
 
-		return {
-			items: copyStorages,
-			from: OriginType.SYNC
-		};
+		return copyStorages;
 	}
 
 	async paste(
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
+		const operateinStore = useOperateinStore();
 		const seahubStore = useSeahubStore();
 		const items: CopyStoragesType[] = [];
 
-		for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
-			const element: any = dataStore.copyFiles.items[i];
+		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
+			const element: any = operateinStore.copyFiles[i];
 			const pathFromStart =
 				decodeURIComponent(path).indexOf(seahubStore.repo_name) +
 				seahubStore.repo_name.length;
@@ -242,20 +293,18 @@ class Data extends Origin {
 				return;
 			}
 		}
-		const dstItems = (await dataStore.fetchList(path))!.items;
-		const conflict = checkConflict(items, dstItems);
 		let overwrite = false;
-		let rename = true;
+		const rename = true;
 		let isMove = false;
 
 		console.log('sync-dataStorecopyFiles-items', items);
 
-		if (dataStore.copyFiles.items[0].key === 'x') {
+		if (
+			operateinStore.copyFiles[0] &&
+			operateinStore.copyFiles[0].key === 'x'
+		) {
 			overwrite = true;
 			isMove = true;
-		}
-		if (conflict) {
-			rename = true;
 		}
 		this.action(overwrite, rename, items, path, isMove, callback);
 	}
@@ -264,11 +313,12 @@ class Data extends Origin {
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
+		// const dataStore = useDataStore();
+		const filesStore = useFilesStore();
 		const seahubStore = useSeahubStore();
 		const items: CopyStoragesType[] = [];
-		for (const i of dataStore.selected) {
-			const element: any = dataStore.req.items[i];
+		for (const i of filesStore.selected) {
+			const element: any = filesStore.currentFileList[i];
 			const fromStart =
 				decodeURIComponent(element.url).indexOf(seahubStore.repo_name) +
 				seahubStore.repo_name.length;
@@ -305,7 +355,7 @@ class Data extends Origin {
 		isMove: boolean | undefined,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
+		// const dataStore = useDataStore();
 		const dest = path;
 
 		notifyWaitingShow('Pasting, Please wait...');
@@ -316,7 +366,7 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.MOVE, dest);
 					notifyHide();
-					dataStore.setReload(true);
+					// dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -327,7 +377,7 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.PASTE, dest);
 					notifyHide();
-					dataStore.setReload(true);
+					// dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -352,9 +402,9 @@ class Data extends Origin {
 	}
 
 	openLocalFolder(): string | undefined {
-		const dataStore = useDataStore();
+		const filesStore = useFilesStore();
 		const seahubStore = useSeahubStore();
-		const item = dataStore.req.items[dataStore.selected[0]];
+		const item = filesStore.currentFileList[filesStore.selected[0]];
 		if (!item.isDir) {
 			return undefined;
 		}
@@ -365,34 +415,29 @@ class Data extends Origin {
 		return path;
 	}
 
-	async openPreview(item: any): Promise<void> {
-		console.log('into sync');
-
-		console.log('item start', item);
-		const dataStore = useDataStore();
+	async openPreview(item: any): Promise<FileResType> {
+		console.log('openPreview', item);
 		item.url = item.path;
-		// item.path = item.path.slice(6) + item.name + '/';
 		item = await this.formatFileContent(item);
-		console.log('item end', item);
 
-		dataStore.updateRequest(item);
+		console.log('openPreview sync', item);
+		item.driveType = DriveType.Sync;
+
+		return item;
+		// dataStore.updateRequest(item);
 	}
 
 	getPreviewURL(file: any, thumb: string): string {
 		const dataStore = useDataStore();
-		const startIndex =
-			file.path.indexOf(file.repo_name) + file.repo_name?.length;
-
-		const hasSeahub = file.path.slice(startIndex);
-
+		const repo_id = getParams(file.path, 'id');
 		let seflSize = '1080';
 		if (thumb === 'thumb') {
 			seflSize = '48';
 		}
 
-		return `${dataStore.baseURL()}/seahub/thumbnail/${
-			file.repo_id
-		}/${seflSize}${hasSeahub}`;
+		return `${dataStore.baseURL()}/seahub/thumbnail/${repo_id}/${seflSize}/${
+			file.name
+		}`;
 	}
 
 	getDownloadURL(file: any, _inline: boolean, download?: boolean): string {
@@ -409,7 +454,7 @@ class Data extends Origin {
 		}
 	}
 
-	async formatFileContent(file: DriveItemType): Promise<DriveItemType> {
+	async formatFileContent(file: FileItem): Promise<FileItem> {
 		const store = useDataStore();
 		const seahubStore = useSeahubStore();
 
@@ -439,10 +484,22 @@ class Data extends Origin {
 		return file;
 	}
 
-	async openFile(file: DriveItemType): Promise<void> {
-		const store = useDataStore();
-		const item = await this.formatFileContent(file);
-		store.updateRequest(item);
+	async formatRepotoPath(item: any): Promise<string> {
+		return `/Files/Seahub/${item.label}/?id=${item.id}&type=${
+			item.type || 'mine'
+		}&p=${item.permission ? item.permission.trim() : 'rw'}`;
+	}
+
+	async formatPathtoUrl(item: FilePath): Promise<string> {
+		const repo_id = getParams(item.param, 'id');
+		const pathList = item.path.split('/');
+		let path = '';
+		for (let i = 4; i < pathList.length; i++) {
+			const p = pathList[i];
+			path += `/${p}`;
+		}
+
+		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${path}&with_thumbnail=true`;
 	}
 }
 

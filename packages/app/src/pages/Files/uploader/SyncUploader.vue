@@ -13,12 +13,12 @@ import MD5 from 'MD5';
 // import { watch } from 'vue';
 import { useRoute } from 'vue-router';
 import Resumablejs from '@seafile/resumablejs';
-import { seafileAPI } from '../../../api/seafileAPI';
+import { seafileAPI } from '../../../api/sync/seafileAPI';
 import { seahub } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import { useSeahubStore } from '../../../stores/seahub';
 import { useFilesUploadStore } from '../../../stores/files-upload';
-import { OriginType } from '../../../api/common/encoding';
+import { DriveType } from '../../../stores/files';
 import { detectType } from '../../../utils/utils';
 
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
@@ -232,7 +232,7 @@ const JoinDownloadProcess = async (files: any) => {
 
 		await (function () {
 			return new Promise(async function (res) {
-				await upload.upload(item, OriginType.SYNC);
+				await upload.upload(item, DriveType.Sync);
 				res(true);
 			});
 		})();

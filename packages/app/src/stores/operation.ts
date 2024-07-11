@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { Platform } from 'quasar';
 import { OPERATE_ACTION } from './../utils/contact';
-import { EventType, ContextType } from './../api/common/encoding';
+// import { EventType, ContextType } from './../api/common/encoding';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
@@ -12,10 +12,35 @@ import { MenuItem } from '../utils/contact';
 // import { operationAPI } from './../api';
 
 import { dataAPIs } from './../api';
+import { DriveType } from './files';
+
+export interface EventType {
+	type?: DriveType;
+	isSelected: boolean; //	true: Right click on a certain item; false: Right click on a blank area on the files
+	hasCopied: boolean;
+	showRename: boolean;
+	isHomePage: boolean;
+}
+export interface ContextType {
+	name: string;
+	icon: string;
+	type?: string;
+	action: OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER;
+	condition: (event: EventType) => boolean;
+}
+
+export interface CopyStoragesType {
+	from: string;
+	to: string;
+	name: string;
+	src_repo_id?: string;
+	key?: string;
+}
 
 export type DataState = {
 	contextmenu: ContextType[];
 	disableMenuItem: string[];
+	copyFiles: CopyStoragesType[];
 };
 
 export const useOperateinStore = defineStore('operation', {
@@ -27,7 +52,7 @@ export const useOperateinStore = defineStore('operation', {
 					icon: 'sym_r_folder_open',
 					type: 'seahub',
 					action: OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER,
-					condition: (event: EventType) => event.type === 'sync'
+					condition: (event: EventType) => event.type === DriveType.Sync
 				},
 				{
 					name: 'Download',
@@ -107,19 +132,20 @@ export const useOperateinStore = defineStore('operation', {
 				MenuItem.CACHE,
 				MenuItem.CODE,
 				MenuItem.MUSIC
-			]
+			],
+			copyFiles: []
 		} as DataState;
 	},
 
 	getters: {},
 
 	actions: {
-		handleFileOperate(
+		async handleFileOperate(
 			e: any,
 			route: RouteLocationNormalizedLoaded,
 			action: OPERATE_ACTION,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
-		) {
+		): Promise<void> {
 			e.preventDefault();
 			e.stopPropagation();
 
@@ -155,12 +181,12 @@ export const useOperateinStore = defineStore('operation', {
 
 				case OPERATE_ACTION.COPY:
 					this.copyCatalogue();
-					callback(OPERATE_ACTION.COPY, null);
+					// callback(OPERATE_ACTION.COPY, null);
 					break;
 
 				case OPERATE_ACTION.CUT:
 					this.cutCatalogue();
-					callback(OPERATE_ACTION.CUT, null);
+					// callback(OPERATE_ACTION.CUT, null);
 					break;
 
 				case OPERATE_ACTION.PASTE:
@@ -205,6 +231,7 @@ export const useOperateinStore = defineStore('operation', {
 
 		async download(path: string) {
 			const dataAPI = dataAPIs();
+			console.log('downloaddownload', path);
 			const { url, headers } = await dataAPI.download(path);
 
 			const isElectron = Platform.is.electron;
@@ -219,11 +246,11 @@ export const useOperateinStore = defineStore('operation', {
 		},
 
 		async copyCatalogue() {
-			const dataStore = useDataStore();
+			const operateinStore = useOperateinStore();
 			const dataAPI = dataAPIs();
 			const copyStorages = await dataAPI.copy();
 
-			dataStore.updateCopyFiles(copyStorages);
+			operateinStore.updateCopyFiles(copyStorages);
 		},
 
 		async pasteCatalogue(
@@ -235,11 +262,11 @@ export const useOperateinStore = defineStore('operation', {
 		},
 
 		async cutCatalogue() {
-			const dataStore = useDataStore();
+			const operateinStore = useOperateinStore();
 			const dataAPI = dataAPIs();
 			const copyStorages = await dataAPI.cut();
 
-			dataStore.updateCopyFiles(copyStorages);
+			operateinStore.updateCopyFiles(copyStorages);
 		},
 
 		async moveCatalogue(
@@ -263,6 +290,14 @@ export const useOperateinStore = defineStore('operation', {
 		openLocalFolder() {
 			const dataAPI = dataAPIs();
 			dataAPI.openLocalFolder();
+		},
+
+		updateCopyFiles(copyStorages: CopyStoragesType[]) {
+			this.copyFiles = copyStorages;
+		},
+
+		resetCopyFiles() {
+			this.copyFiles = [];
 		}
 	}
 });

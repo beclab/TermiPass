@@ -1,15 +1,11 @@
 import { defineStore } from 'pinia';
-import { Router } from 'vue-router';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
 import { MenuItem, FilesSortType } from '../utils/contact';
 import { dataAPIs } from './../api';
 
-import {
-	OriginType,
-	CopyStoragesType,
-	DriveItemType
-} from './../api/common/encoding';
+// import { CopyStoragesType } from './operation';
+// import { FileItem } from './files';
 
 export type DataState = {
 	user: any;
@@ -19,8 +15,7 @@ export type DataState = {
 	progress: number;
 	loading: boolean;
 	reload: boolean;
-	selected: any;
-	multiple: boolean;
+	// selected: any;
 	show: any;
 	showShell: boolean;
 	showConfirm: any;
@@ -28,10 +23,10 @@ export type DataState = {
 	showUploadModal: boolean;
 	isUploadProgressDialogShow: boolean;
 	hideSyncUploadModal: boolean;
-	copyFiles: {
-		items: any;
-		from: OriginType;
-	};
+	// copyFiles: {
+	// 	items: any;
+	// 	from: DriveType;
+	// };
 
 	//mobile add
 	activeMenu: MenuItem;
@@ -62,8 +57,7 @@ export const useDataStore = defineStore('data', {
 			progress: 0,
 			loading: false,
 			reload: false,
-			selected: [],
-			multiple: false,
+			// selected: [],
 			show: null,
 			showShell: false,
 			showConfirm: null,
@@ -71,10 +65,10 @@ export const useDataStore = defineStore('data', {
 			showUploadModal: false,
 			isUploadProgressDialogShow: false,
 			hideSyncUploadModal: false,
-			copyFiles: {
-				items: [],
-				from: OriginType.DRIVE
-			},
+			// copyFiles: {
+			// 	items: [],
+			// 	from: DriveType.Drive
+			// },
 			activeMenu: MenuItem.HOME,
 			activeSort: {
 				by: FilesSortType.Modified,
@@ -93,23 +87,9 @@ export const useDataStore = defineStore('data', {
 	getters: {
 		isLogged(state) {
 			return state.user !== null;
-		},
-
-		selectedCount: (state) => state.selected.length,
-		currentItemDefaultPath(): string {
-			if (this.currentItem == 'Data') {
-				return '/Files/Application';
-			}
-			if (this.currentItem == 'Cache') {
-				return '/Files/AppData';
-			}
-			return (
-				'/Files/Home/' +
-				(this.currentItem && this.currentItem != 'Home'
-					? this.currentItem + '/'
-					: '')
-			);
 		}
+
+		// selectedCount: (state) => state.selected.length
 	},
 
 	actions: {
@@ -214,23 +194,19 @@ export const useDataStore = defineStore('data', {
 			this.jwt = value;
 		},
 
-		setMultiple(value: any) {
-			this.multiple = value;
-		},
+		// addSelected(value: any) {
+		// 	this.selected.push(value);
+		// },
 
-		addSelected(value: any) {
-			this.selected.push(value);
-		},
+		// removeSelected(value: any) {
+		// 	const i = this.selected.indexOf(value);
+		// 	if (i === -1) return;
+		// 	this.selected.splice(i, 1);
+		// },
 
-		removeSelected(value: any) {
-			const i = this.selected.indexOf(value);
-			if (i === -1) return;
-			this.selected.splice(i, 1);
-		},
-
-		resetSelected() {
-			this.selected = [];
-		},
+		// resetSelected() {
+		// 	this.selected = [];
+		// },
 
 		updateUser(value: any) {
 			if (typeof value !== 'object') return;
@@ -261,19 +237,19 @@ export const useDataStore = defineStore('data', {
 			this.showUploadModal = show;
 		},
 
-		updateCopyFiles(copyStorages: {
-			items: CopyStoragesType[];
-			from: OriginType;
-		}) {
-			this.copyFiles = copyStorages;
-		},
+		// updateCopyFiles(copyStorages: {
+		// 	items: CopyStoragesType[];
+		// 	from: DriveType;
+		// }) {
+		// 	this.copyFiles = copyStorages;
+		// },
 
-		resetCopyFiles() {
-			this.copyFiles = {
-				items: [],
-				from: OriginType.DRIVE
-			};
-		},
+		// resetCopyFiles() {
+		// 	this.copyFiles = {
+		// 		items: [],
+		// 		from: DriveType.Drive
+		// 	};
+		// },
 
 		baseURL() {
 			const user = useUserStore();
@@ -303,11 +279,6 @@ export const useDataStore = defineStore('data', {
 				asc
 			};
 			this.req.items = this.sortList(this.req.items);
-		},
-
-		async openFile(item: DriveItemType, router: Router) {
-			const dataAPI = dataAPIs();
-			await dataAPI.openFile(item, router);
 		}
 	}
 });
