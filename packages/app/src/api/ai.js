@@ -33,7 +33,7 @@ instance.interceptors.request.use(
 			config.url = host + config.url;
 			config.headers['X-Authorization'] = auth_token;
 		} else {
-			const userOption: any = getParamsOfUser();
+			const userOption = getParamsOfUser();
 			config.headers['X-Authorization'] = userOption.current_user.access_token;
 			const base_url = userOption.url;
 			config.url = base_url + config.url;
@@ -86,7 +86,7 @@ export const getMessageById = (app_id, mode, conversation_id) => {
 // let userStore = undefined;
 
 export async function getMessage2(params, app_id, mode, callbacks) {
-	const userOption: any = getParamsOfUser();
+	const userOption = getParamsOfUser();
 	host = userOption.url;
 
 	fetchEventSource(

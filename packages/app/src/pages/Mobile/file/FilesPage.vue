@@ -76,7 +76,7 @@ const fetchData = async () => {
 	}
 
 	try {
-		const res = await store.fetchList(url);
+		const res = await api.fetch(url);
 		store.updateRequest(res);
 		if (res.type != 'video') {
 			store.req.items = store.sortList(store.req.items);

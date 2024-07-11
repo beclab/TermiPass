@@ -10,7 +10,6 @@
 			flat
 			padding="0px"
 			@click="confirmAction()"
-			@keydown.enter="confirmAction()"
 			:disable="btnStatus === ConfirmButtonStatus.disable"
 			no-caps
 			class="row items-center justify-center"
