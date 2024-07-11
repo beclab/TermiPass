@@ -13,7 +13,7 @@ import VaultBaseFramework
 public class ProxyInfoPlugin: CAPPlugin {
  
     @objc func getServerInfo(_ call: CAPPluginCall) {
-        let value = call.getString("value") ?? ""
+//        let value = call.getString("value") ?? ""
         
         guard let serverUrl = bridge?.config.serverURL else {
             call.reject("bridge config serverUrl empty")

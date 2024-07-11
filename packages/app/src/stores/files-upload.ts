@@ -1,10 +1,8 @@
 import { format } from 'quasar';
 import { defineStore } from 'pinia';
-import { dataAPIs, DriveDataAPI } from '../api';
-// import { files as api } from '../api';
+import { files as api } from '../api';
 import throttle from 'lodash.throttle';
 import { useDataStore } from './data';
-import { OriginType } from '../api/common/encoding';
 const { humanStorageSize } = format;
 
 const UPLOADS_LIMIT = 5;
@@ -64,16 +62,13 @@ export const useFilesUploadStore = defineStore('upload', {
 				? 100
 				: Math.floor((sum / totalSize) * 100);
 		},
-
 		filesInUploadCount(): any {
 			const total = Object.keys(this.uploads).length + this.queue.length;
 			return total;
 		},
-
 		filesInUpload(): any {
 			for (const index in this.uploads) {
 				const upload = this.uploads[index];
-
 				const id = upload.id;
 				const type = upload.type;
 				const name = upload.file.name;
@@ -111,7 +106,6 @@ export const useFilesUploadStore = defineStore('upload', {
 					}
 				};
 			}
-
 			return promote(this.uploadQueue);
 		}
 	},
@@ -120,29 +114,24 @@ export const useFilesUploadStore = defineStore('upload', {
 		setProgress({ id, loaded }: { id: any; loaded: any }) {
 			this.progress[id] = loaded;
 		},
-
 		reset() {
 			this.sizes = [];
 			this.progress = [];
 		},
-
 		addJob(item: any) {
 			this.queue.push(item);
 			this.sizes[this.id] = item.file.size;
 			this.id++;
 		},
-
 		moveJob() {
 			const item = this.queue[0];
 			this.queue.shift();
 			this.uploads[item.id] = item;
 		},
-
 		removeJob(id: any) {
 			delete this.uploads[id];
 		},
-
-		async upload(item: any, type: OriginType) {
+		async upload(item: any) {
 			const uploadsCount = Object.keys(this.uploads).length;
 			const isQueueEmpty = this.queue.length == 0;
 			const isUploadsEmpty = uploadsCount == 0;
@@ -153,17 +142,13 @@ export const useFilesUploadStore = defineStore('upload', {
 				this.uploadQueue.unshift(item);
 			}
 			this.addJob(item);
-
-			if (type === OriginType.DRIVE) {
-				this.processUploads();
-			}
+			this.processUploads();
 		},
-
-		async finishUpload(item: any, type?: OriginType) {
+		async finishUpload(item: any, from?: string) {
 			const store = useDataStore();
-			// if (!from) {
-			// 	store.setReload(true);
-			// }
+			if (!from) {
+				store.setReload(true);
+			}
 			this.setProgress({ id: item.id, loaded: item.file.size });
 			for (let i = 0; i < this.uploadQueue.length; i++) {
 				const el = this.uploadQueue[i];
@@ -176,14 +161,11 @@ export const useFilesUploadStore = defineStore('upload', {
 			}
 
 			await this.removeJob(item.id);
-			if (type !== OriginType.SYNC) {
+			if (!from) {
 				await this.processUploads();
 			}
-			store.setReload(true);
 		},
-
 		async processUploads() {
-			const dataAPI = dataAPIs(OriginType.DRIVE);
 			const uploadsCount = Object.keys(this.uploads).length;
 
 			const isBellowLimit = uploadsCount < UPLOADS_LIMIT;
@@ -203,12 +185,7 @@ export const useFilesUploadStore = defineStore('upload', {
 				this.moveJob();
 
 				if (item.file.isDir) {
-					await (dataAPI as DriveDataAPI).fetchUploader(
-						item.path,
-						'',
-						false,
-						0
-					);
+					await api.uploadPost(item.path).catch(/*Vue.prototype.$showError*/);
 					this.finishUpload(item);
 				} else {
 					const onUpload = throttle(
@@ -226,8 +203,8 @@ export const useFilesUploadStore = defineStore('upload', {
 						{ leading: true, trailing: false }
 					);
 
-					await (dataAPI as DriveDataAPI)
-						.fetchUploader(item.path, item.file, item.overwrite, 0, onUpload)
+					await api
+						.uploadPost(item.path, item.file, item.overwrite, onUpload)
 						.then(() => {
 							this.finishUpload(item);
 						})
@@ -247,43 +224,6 @@ export const useFilesUploadStore = defineStore('upload', {
 				if (item.id === el.id) {
 					el.status = 1;
 					break;
-				}
-			}
-		},
-
-		async processSyncUploads(uploadFileList: any) {
-			for (let i = 0; i < uploadFileList.length; i++) {
-				const file = uploadFileList[i];
-				const curFile = this.uploadQueue.find(
-					(fil) => fil.file.name === file.fileName
-				);
-
-				if (curFile) {
-					const queueHasFile = this.queue.find(
-						(item) => item.file.name === curFile.file.name
-					);
-					if (queueHasFile) {
-						this.moveJob();
-					}
-
-					const onUpload = throttle(
-						() => {
-							this.setProgress({
-								id: curFile.id,
-								loaded: Math.round(curFile.file.size * file.progress())
-							});
-
-							this.uploads[curFile.id] = curFile;
-
-							if (file.progress() * 100 >= 100) {
-								this.finishUpload(curFile, OriginType.SYNC);
-							}
-						},
-						100,
-						{ leading: true, trailing: false }
-					);
-
-					onUpload();
 				}
 			}
 		}

@@ -22,7 +22,7 @@ import {
 	BIND_STATUS
 } from '../../utils/terminusBindUtils';
 import { AppPlatform } from '../appPlatform';
-import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+import { BarcodeScanner } from '@bytetrade/barcode-scanner';
 import { Device } from '@capacitor/device';
 import { appleDeviceNames } from '../apple-device-names';
 import { Clipboard } from '@capacitor/clipboard';

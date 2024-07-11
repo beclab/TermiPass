@@ -148,7 +148,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useQuasar } from 'quasar';
-import { shareToUser } from '../../../api';
+import { shareToUser, sync } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import { useMenuStore } from '../../../stores/files-menu';
 
@@ -185,8 +185,7 @@ const submit = async () => {
 	try {
 		await shareToUser.setSharedItems(userModel.value, primaryModel.value);
 		await menuStore.listSharedItems();
-		menuStore.getSyncMenu();
-
+		sync.getSyncMenu();
 		userModel.value = null;
 	} catch (error) {
 		console.error('error', error);
@@ -197,7 +196,7 @@ const updateItem = async (name: string, permission: string) => {
 	try {
 		await shareToUser.updateItem(name, permission);
 		await menuStore.listSharedItems();
-		menuStore.getSyncMenu();
+		sync.getSyncMenu();
 	} catch (error) {
 		console.error('error', error);
 	}
@@ -207,7 +206,7 @@ const deleteShareItem = async (name: string) => {
 	try {
 		await shareToUser.deleteItem(name);
 		await menuStore.listSharedItems();
-		menuStore.getSyncMenu();
+		sync.getSyncMenu();
 	} catch (error) {
 		console.error('error', error);
 	}
