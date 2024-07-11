@@ -56,7 +56,7 @@ module.exports = configure(function (ctx) {
 		],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: ['material-icons', 'bootstrap-icons'],
+		extras: ['material-icons', 'bootstrap-icons', 'roboto-font'],
 
 		vendor: {
 			remove: ['moment', '@bytetrade/ui', 'video.js']
@@ -658,12 +658,19 @@ module.exports = configure(function (ctx) {
 				},
 				'/seahub': {
 					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
-					changeOrigin: true
+					changeOrigin: true,
+					secure: false,
+					pathRewrite: {
+						'^/seafhttp': ''
+					}
 				},
 				'/seafhttp': {
-					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com/seafhttp`,
 					changeOrigin: true,
-					secure: false
+					secure: false,
+					pathRewrite: {
+						'^/seafhttp': ''
+					}
 				},
 				'/settingsApi': {
 					target: `https://settings.${process.env.SERVER_PROXY_NNME}.myterminus.com`,

@@ -76,6 +76,9 @@ if (baseURL.endsWith('/')) {
 }
 
 const onConfirm = async () => {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	if (btnStatusRef.value != ConfirmButtonStatus.normal) {
 		return;
 	}

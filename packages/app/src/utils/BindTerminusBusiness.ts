@@ -350,7 +350,7 @@ export async function loginTerminus(
 	user.session_id = token.session_id;
 	user.passed_fa2 = false;
 
-	if (token.fa2) {
+	if (token.fa2 || needTwoFactor) {
 		const itemList = getVaultsByType(VaultType.TerminusTotp);
 		let totpFiledRef;
 		if (itemList.length > 0) {

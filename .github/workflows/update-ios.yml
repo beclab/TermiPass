@@ -19,7 +19,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v1
               with:
-                node-version: '16.18'
+                node-version: '18.16'
 
             - name: get latest tag
               uses: "WyriHaximus/github-action-get-previous-tag@v1"

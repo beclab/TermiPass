@@ -203,12 +203,12 @@ export const useMenuStore = defineStore('menu', {
 						label: VaultMenuItem.LOCKSCREEN,
 						key: VaultMenuItem.LOCKSCREEN,
 						icon: 'sym_r_lock'
+					},
+					{
+						label: VaultMenuItem.SETTINGS,
+						key: VaultMenuItem.SETTINGS,
+						icon: 'sym_r_settings'
 					}
-					// {
-					// 	label: VaultMenuItem.SETTINGS,
-					// 	key: VaultMenuItem.SETTINGS,
-					// 	icon: 'sym_r_settings'
-					// }
 				]
 			},
 			hideBackground: false,

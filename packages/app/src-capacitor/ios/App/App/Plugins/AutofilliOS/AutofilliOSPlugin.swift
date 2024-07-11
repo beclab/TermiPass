@@ -10,7 +10,19 @@ import VaultBaseFramework
 import AuthenticationServices
 
 @objc(AutofilliOSPlugin)
-public class AutofilliOSPlugin: CAPPlugin {
+public class AutofilliOSPlugin: CAPPlugin , CAPBridgedPlugin {
+    
+    public let identifier = "AutofilliOSPlugin"
+    
+    public let jsName = "AutofilliOS"
+    
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "getAutofillList", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clearAutofillList", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "replaceAllIdentities", returnType: CAPPluginReturnPromise)
+    ]
+    
+    
     @objc func getAutofillList(_ call: CAPPluginCall) {
         let autolist = AutoFillStorage.getAllAutoFill()
         call.resolve(["list":autolist]);

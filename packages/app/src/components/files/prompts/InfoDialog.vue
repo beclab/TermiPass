@@ -191,6 +191,9 @@ const onCancel = () => {
 			.title-module {
 				margin-top: 20px;
 				margin-bottom: 20px;
+				.title {
+					text-align: left;
+				}
 				.detail {
 					text-align: left;
 					color: $sub-title;

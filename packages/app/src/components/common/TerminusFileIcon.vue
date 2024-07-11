@@ -27,8 +27,7 @@
 import { getFileType } from '../../utils/file';
 import { computed } from 'vue';
 import { enableThumbs } from '../../utils/constants';
-import { common as api } from '../../api';
-import { useSeahubStore } from '../../stores/seahub';
+import { files as api } from '../../api';
 
 const props = defineProps({
 	name: {
@@ -61,8 +60,6 @@ const props = defineProps({
 		required: false
 	}
 });
-
-const seahubStore = useSeahubStore();
 
 const folderIcon = (name: any) => {
 	let src = '/img/folder-';
@@ -105,9 +102,7 @@ const isThumbsEnabled = computed(function () {
 const thumbnailUrl = computed(function () {
 	const file = {
 		path: props.path,
-		modified: props.modified,
-		repo_id: seahubStore.repo_id,
-		repo_name: seahubStore.repo_name
+		modified: props.modified
 	};
 
 	return api.getPreviewURL(file, 'thumb');
