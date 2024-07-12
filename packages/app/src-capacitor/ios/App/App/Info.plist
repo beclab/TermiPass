@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.4</string>
+	<string>1.2.9</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -54,7 +54,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>20</string>
+	<string>26</string>
 	<key>FacebookAppID</key>
 	<string>549140590110570</string>
 	<key>FacebookClientToken</key>
@@ -65,6 +65,8 @@
 	<true/>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>fbapi</string>

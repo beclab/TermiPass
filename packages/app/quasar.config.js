@@ -56,7 +56,7 @@ module.exports = configure(function (ctx) {
 		],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: ['material-icons', 'bootstrap-icons'],
+		extras: ['material-icons', 'bootstrap-icons', 'roboto-font'],
 
 		vendor: {
 			remove: ['moment', '@bytetrade/ui', 'video.js']

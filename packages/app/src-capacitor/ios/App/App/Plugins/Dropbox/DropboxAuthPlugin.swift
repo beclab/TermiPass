@@ -11,7 +11,17 @@ import SwiftyDropbox
 
 
 @objc(DropboxAuthPlugin)
-public class DropboxAuthPlugin: CAPPlugin {
+public class DropboxAuthPlugin: CAPPlugin, CAPBridgedPlugin {
+    
+    public let identifier = "DropboxAuthPlugin"
+    
+    public let jsName = "DropboxAuthPlugin"
+    
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise)
+    ]
+    
     var signInCall: CAPPluginCall!
     
     public override func load() {

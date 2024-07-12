@@ -10,7 +10,6 @@
 	</BtLoading>
 	<template v-else>
 		<div class="preview">
-			{{ raw }}
 			<ExtendedImage
 				v-if="store.req.type == 'image'"
 				:src="raw"

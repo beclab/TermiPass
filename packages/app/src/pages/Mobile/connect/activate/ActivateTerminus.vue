@@ -101,7 +101,10 @@ if (!disableLeave) {
 	}
 }
 
-function goToScanPage() {
+async function goToScanPage() {
+	if (!(await userStore.unlockFirst())) {
+		return;
+	}
 	if (userStore.current_user?.access_token) {
 		userStore.current_user.access_token = '';
 	}

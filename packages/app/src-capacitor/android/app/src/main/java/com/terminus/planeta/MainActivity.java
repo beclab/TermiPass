@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import com.capacitorjs.plugins.filesystem.FilesystemPlugin;
 import com.capacitorjs.plugins.statusbar.StatusBarPlugin;
+import com.getcapacitor.community.barcodescanner.BarcodeScanner;
 import com.terminus.planeta.file.notification.NotificationChannelManager;
 import com.terminus.planeta.plugins.AndroidUniversalPlugin;
 import com.terminus.planeta.plugins.AppNativeInfoPlugin;
@@ -12,7 +13,6 @@ import com.terminus.planeta.plugins.AccessibilityPlugin;
 import com.capacitorjs.plugins.device.DevicePlugin;
 import com.codetrixstudio.capacitor.GoogleAuth.GoogleAuth;
 import com.getcapacitor.Plugin;
-import com.getcapacitor.community.barcodescanner.BarcodeScanner;
 import com.getcapacitor.community.facebooklogin.FacebookLogin;
 import com.terminus.planeta.plugins.CustomGooglePlugin;
 import com.terminus.planeta.plugins.DropboxPlugin;

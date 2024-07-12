@@ -10,7 +10,19 @@ import Capacitor
 import VaultBaseFramework
 
 @objc(StorageUseriOSPlugin)
-public class StorageUseriOSPlugin: CAPPlugin {
+public class StorageUseriOSPlugin: CAPPlugin, CAPBridgedPlugin {
+    
+    public let identifier = "StorageUseriOSPlugin"
+    public let jsName = "StorageUseriOS"
+    
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "set", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "get", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "delete", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "clear", returnType: CAPPluginReturnPromise)
+        
+    ]
+    
     @objc func set(_ call: CAPPluginCall) {
         let key = call.getString("key") ?? ""
         let value = call.getAny("value") ?? {}
