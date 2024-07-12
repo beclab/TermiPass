@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { Router } from 'vue-router';
 import { Origin } from '../api/origin';
 import { Data as DriveData } from '../api/drive/data';
 import { Data as SyncData } from '../api/sync/data';
@@ -138,7 +137,7 @@ export const useFilesStore = defineStore('files', {
 		selectedCount: (state) => state.selected.length
 	},
 	actions: {
-		async setFilePath(path: FilePath, isBack = false, router?: Router) {
+		async setFilePath(path: FilePath, isBack = false) {
 			console.log('setFilePath', path);
 			if (!path.isDir) {
 				// We need to invoke the preview dialog here, rather than modifying the route.
@@ -171,11 +170,10 @@ export const useFilesStore = defineStore('files', {
 			const params = new URLSearchParams(path.param);
 			const query = Object.fromEntries(params);
 
-			router &&
-				router.push({
-					path: path.path,
-					query
-				});
+			this.router.push({
+				path: path.path,
+				query
+			});
 
 			const requestUrl = await this.formatPathtoUrl(path);
 
@@ -200,11 +198,7 @@ export const useFilesStore = defineStore('files', {
 				});
 		},
 
-		setBrowserUrl(
-			url: string,
-			driveType: DriveType = DriveType.Drive,
-			router: Router
-		) {
+		setBrowserUrl(url: string, driveType: DriveType = DriveType.Drive) {
 			console.log('setBrowserUrlsetBrowserUrl', url);
 			const splitUrl = url.split('?');
 			console.log('splitUrl', splitUrl);
@@ -219,7 +213,7 @@ export const useFilesStore = defineStore('files', {
 				isDir: true,
 				driveType: driveType
 			});
-			this.setFilePath(path, false, router);
+			this.setFilePath(path, false);
 			// }
 		},
 

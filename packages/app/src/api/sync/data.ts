@@ -11,6 +11,8 @@ import { ShareInfoResType, SyncRepoSharedType, SyncRepoMineType } from './type';
 import { formatSeahub } from './filesFormat';
 import { getParams } from './../../utils/utils';
 import { useFilesStore } from './../../stores/files';
+import { useMenuStore } from './../../stores/files-menu';
+
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
 import {
@@ -206,22 +208,24 @@ class Data extends Origin {
 	}
 
 	async copy(): Promise<CopyStoragesType[]> {
-		console.log('into copy');
 		const fileStore = useFilesStore();
-		const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of fileStore.selected) {
 			const el = fileStore.currentFileList[item];
 			const pathFromStart =
-				decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
-			const pathFromEnd = decodeURIComponent(el.url).indexOf(el.name) - 1;
+				decodeURIComponent(el.path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+
+			const pathFromEnd = decodeURIComponent(el.path).indexOf('?');
+			const repo_id = getParams(el.path, 'id');
+
 			const from =
 				'/' +
-				seahubStore.repo_id +
-				'/' +
-				decodeURIComponent(el.url).slice(pathFromStart, pathFromEnd) +
+				repo_id +
+				decodeURIComponent(el.path).slice(pathFromStart, pathFromEnd) +
 				el.name;
+
 			copyStorages.push({
 				from: from,
 				to: '',
@@ -237,22 +241,22 @@ class Data extends Origin {
 
 	async cut(): Promise<CopyStoragesType[]> {
 		const fileStore = useFilesStore();
-		const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const copyStorages: CopyStoragesType[] = [];
-		console.log('fileStore - currentFileList', fileStore.currentFileList);
-		console.log('fileStore - selected', fileStore.selected);
 
 		for (const item of fileStore.selected) {
 			const el = fileStore.currentFileList[item];
 			const pathFromStart =
-				decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
-			const pathFromEnd = decodeURIComponent(el.url).indexOf(el.name) - 1;
+				decodeURIComponent(el.path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+
+			const pathFromEnd = decodeURIComponent(el.path).indexOf('?');
+			const repo_id = getParams(el.path, 'id');
+
 			const from =
 				'/' +
-				seahubStore.repo_id +
-				'/' +
-				decodeURIComponent(el.url).slice(pathFromStart, pathFromEnd) +
+				repo_id +
+				decodeURIComponent(el.path).slice(pathFromStart, pathFromEnd) +
 				el.name;
 			copyStorages.push({
 				from: from,
@@ -271,38 +275,37 @@ class Data extends Origin {
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
 		const operateinStore = useOperateinStore();
-		const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const items: CopyStoragesType[] = [];
-		console.log('copyFilescopyFiles', operateinStore.copyFiles);
-
 		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
-			const element: any = operateinStore.copyFiles[i];
+			const el: any = operateinStore.copyFiles[i];
+
+			const repo_id = getParams(path, 'id');
 			const pathFromStart =
-				decodeURIComponent(path).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
+				decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+			const pathFromEnd = decodeURIComponent(path).indexOf('?');
+
 			const to =
 				'/' +
-				(seahubStore.repo_id || '') +
-				decodeURIComponent(path).slice(pathFromStart) +
-				decodeURIComponent(element.name);
+				repo_id +
+				decodeURIComponent(path).slice(pathFromStart, pathFromEnd) +
+				el.name;
 			items.push({
-				from: element.from,
+				from: el.from,
 				to: to,
-				name: element.name,
-				src_drive_type: element.src_drive_type,
+				name: el.name,
+				src_drive_type: el.src_drive_type,
 				dst_drive_type: DriveType.Sync
 			});
-			if (path + decodeURIComponent(element.name) === element.from) {
+			if (path + decodeURIComponent(el.name) === el.from) {
 				this.action(false, true, items, path, false, callback);
-				// dataStore.resetCopyFiles();
 				return;
 			}
 		}
 		let overwrite = false;
 		const rename = true;
 		let isMove = false;
-
-		console.log('sync-dataStorecopyFiles-items', items);
 
 		if (
 			operateinStore.copyFiles[0] &&
@@ -318,34 +321,43 @@ class Data extends Origin {
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
+		console.log('move path', path);
 		// const dataStore = useDataStore();
 		const filesStore = useFilesStore();
-		const seahubStore = useSeahubStore();
+		// const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const items: CopyStoragesType[] = [];
 		for (const i of filesStore.selected) {
-			const element: any = filesStore.currentFileList[i];
-			const fromStart =
-				decodeURIComponent(element.url).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
-			const formEnd = decodeURIComponent(element.url).indexOf(element.name);
+			const el: any = filesStore.currentFileList[i];
+
+			const pathFromStart =
+				decodeURIComponent(el.path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+
+			const pathFromEnd = decodeURIComponent(el.path).indexOf('?');
+			const repo_id = getParams(el.path, 'id');
+
 			const from =
 				'/' +
-				seahubStore.repo_id +
-				decodeURIComponent(element.url).slice(fromStart, formEnd) +
-				element.name;
+				repo_id +
+				decodeURIComponent(el.path).slice(pathFromStart, pathFromEnd) +
+				el.name;
+
 			const toStart =
-				decodeURIComponent(path).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
+				decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+			const toEnd = decodeURIComponent(path).indexOf('?');
 			const to =
 				'/' +
-				seahubStore.repo_id +
-				decodeURIComponent(path).slice(toStart) +
-				element.name;
+				repo_id +
+				decodeURIComponent(path).slice(toStart, toEnd) +
+				el.name;
+
 			items.push({
 				from: from,
 				to: to,
-				name: element.name,
-				src_drive_type: element.src_drive_type,
+				name: el.name,
+				src_drive_type: el.driveType,
 				dst_drive_type: DriveType.Sync
 			});
 		}
@@ -361,7 +373,6 @@ class Data extends Origin {
 		isMove: boolean | undefined,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		// const dataStore = useDataStore();
 		const dest = path;
 
 		notifyWaitingShow('Pasting, Please wait...');
@@ -372,7 +383,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.MOVE, dest);
 					notifyHide();
-					// dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -383,7 +393,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.PASTE, dest);
 					notifyHide();
-					// dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();

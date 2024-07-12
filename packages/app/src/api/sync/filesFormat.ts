@@ -33,12 +33,15 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 		driveType: DriveType.Sync
 	};
 
+	console.log('dirent_lists', dirent_lists);
+
 	dirent_lists.forEach((el, index) => {
 		const extension = getextension(el.name);
 		const fileTypeName = el.type === 'dir' ? 'folder' : getFileType(el.name);
-		const itemPath = `/Files/Seahub/${repo_name}${
-			el.path ? `${el.path}` : ''
-		}/?id=${repo_id}&type=${type}&p=${p}`;
+		const itemPath = `/Files/Seahub/${repo_name}${el.parent_dir.replace(
+			/\/$/,
+			''
+		)}${el.path || ''}/?id=${repo_id}&type=${type}&p=${p}`;
 
 		const obj: FileItem = {
 			path: itemPath,
@@ -51,7 +54,7 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 			isSymlink: false,
 			type: fileTypeName,
 
-			parentPath: url,
+			parentPath: el.parent_dir,
 			sorting: {
 				by: 'size',
 				asc: false
@@ -67,6 +70,8 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 		};
 		seahubDir.items.push(obj);
 	});
+
+	console.log('seahubDirseahubDir', seahubDir);
 
 	return seahubDir;
 }

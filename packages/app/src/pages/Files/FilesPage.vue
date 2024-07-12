@@ -20,7 +20,6 @@
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useQuasar } from 'quasar';
-import { seahub } from '../../api';
 import { useDataStore } from '../../stores/data';
 import { useFilesStore } from '../../stores/files';
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
@@ -42,6 +41,7 @@ import Errors from './Errors.vue';
 import UploadModal from '../../components/files/UploadModal.vue';
 
 import { DriveType } from './../../stores/files';
+import { common } from './../../api';
 
 const store = useDataStore();
 const route = useRoute();
@@ -72,7 +72,7 @@ const checkUserStatus = (status: any) => {
 			// fetchData();
 			let url = route.fullPath;
 			if (url.indexOf('Files') < 0) return;
-			fileStore.setBrowserUrl(url, DriveType.Drive, router);
+			fileStore.setBrowserUrl(url, DriveType.Drive);
 		}, 2000);
 	}
 	return true;
@@ -216,9 +216,9 @@ onBeforeRouteUpdate((_to, from, next) => {
 onMounted(async () => {
 	let url = route.fullPath;
 	if (url.indexOf('Files') < 0) return;
-	//fetchData();
 
-	fileStore.setBrowserUrl(url, DriveType.Drive, router);
+	const driveType = await common.formatUrltoDriveType(url);
+	fileStore.setBrowserUrl(url, driveType);
 
 	window.addEventListener('keydown', keyEvent);
 });

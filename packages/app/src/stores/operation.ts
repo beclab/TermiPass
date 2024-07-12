@@ -5,6 +5,8 @@ import { OPERATE_ACTION } from './../utils/contact';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
+// import { useFilesStore } from './../stores/files';
+// import { useMenuStore } from './../stores/files-menu';
 
 import { useDataStore } from './data';
 import { MenuItem } from '../utils/contact';
@@ -192,11 +194,11 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.PASTE:
-					this.pasteCatalogue(route.path, driveType, callback);
+					this.pasteCatalogue(route.fullPath, driveType, callback);
 					break;
 
 				case OPERATE_ACTION.MOVE:
-					this.moveCatalogue(route.path, driveType, callback);
+					this.moveCatalogue(route, driveType, callback);
 					break;
 
 				case OPERATE_ACTION.RENAME:
@@ -273,12 +275,21 @@ export const useOperateinStore = defineStore('operation', {
 		},
 
 		async moveCatalogue(
-			path: string,
+			route: RouteLocationNormalizedLoaded,
 			driveType: DriveType,
 			callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 		) {
+			console.log('moveCataloguemoveCatalogue', route.path);
 			const dataAPI = dataAPIs(driveType);
-			await dataAPI.move(path, callback);
+			await dataAPI.move(route.path, callback);
+
+			// const filesStore = useFilesStore();
+			// const menuStore = useMenuStore();
+
+			// console.log('routeroute', route);
+
+			// const url = route.fullPath;
+			// filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
 		},
 
 		uploadFiles() {

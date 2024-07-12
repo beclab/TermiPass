@@ -52,13 +52,12 @@ const handle = (e: any, action: OPERATE_ACTION) => {
 			console.log('data', data);
 
 			console.log('operateinStore', route);
-			let url = route.fullPath;
-			if (url.indexOf('Files') < 0) return;
+			const url = route.fullPath;
 			console.log('handleFileOperate - path', url);
-			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType, router);
+			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
 
 			if (action == OPERATE_ACTION.PASTE) {
-				// operateinStore.resetCopyFiles();
+				operateinStore.resetCopyFiles();
 			} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
 				const repo_id = route.query.id as string;
 				const isElectron = $q.platform.is.electron;

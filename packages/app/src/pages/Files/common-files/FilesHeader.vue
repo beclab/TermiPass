@@ -231,7 +231,7 @@ const checkMenuPath = (path: string) => {
 		)
 	) {
 		store.currentItem = currentPath.label;
-		menuStore.activeMenu = currentPath;
+		// menuStore.activeMenu = currentPath;
 	}
 };
 

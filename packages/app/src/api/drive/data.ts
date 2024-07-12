@@ -230,7 +230,6 @@ class Data extends Origin {
 			});
 			if (path + decodeURIComponent(element.name) === element.from) {
 				this.action(false, true, items, path, false, callback);
-				// dataStore.resetCopyFiles();
 				return;
 			}
 		}
@@ -257,8 +256,9 @@ class Data extends Origin {
 		const items: CopyStoragesType[] = [];
 		for (const i of filesStore.selected) {
 			const element: any = filesStore.currentFileList[i];
+
 			let from = decodeURIComponent(element.url).slice(6);
-			let to = decodeURIComponent(path + element.name).slice(6);
+			let to = decodeURIComponent(path + '/' + element.name).slice(6);
 			if (checkAppData(element.url)) {
 				from = decodeURIComponent(element.url);
 				to = decodeURIComponent(path + element.name);
@@ -267,7 +267,7 @@ class Data extends Origin {
 				from: from,
 				to: to,
 				name: element.name,
-				src_drive_type: element.src_drive_type,
+				src_drive_type: element.driveType,
 				dst_drive_type: DriveType.Drive
 			});
 		}

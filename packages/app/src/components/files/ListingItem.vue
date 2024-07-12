@@ -103,8 +103,8 @@ watch(
 	() => store.show,
 	(newVal) => {
 		if (newVal === 'rename') {
-			store.addSelected(store.selected[0]);
-			selectIndex.value = store.selected[0];
+			filesStore.addSelected(filesStore.selected[0]);
+			selectIndex.value = filesStore.selected[0];
 			nextTick(() => {
 				renameRef.value.focus();
 				renameRef.value.select();
@@ -227,14 +227,20 @@ const drop = async (event: any) => {
 
 	if (filesStore.selectedCount === 0) return;
 
+	console.log('drop - item', props.item);
+
 	operateinStore.handleFileOperate(
 		event,
 		{
 			...route,
-			path: props.item.url
+			path: props.item.path
 		},
 		OPERATE_ACTION.MOVE,
-		async () => {}
+		props.item.driveType,
+		async (action: OPERATE_ACTION, data: any) => {
+			const url = route.fullPath;
+			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
+		}
 	);
 };
 
@@ -279,7 +285,13 @@ const open = () => {
 	emits('closeMenu');
 	filesStore.addSelected(props.item.index);
 
+	console.log('openopen', filesStore.currentFileList);
+	console.log('openopen', props.item);
+	console.log('openopen', props.item.path);
+
 	const splitUrl = props.item.path.split('?');
+
+	console.log('splitUrlsplitUrl', splitUrl);
 
 	if (!props.item.isDir) {
 		if (store.preview.isShow) {
@@ -297,8 +309,7 @@ const open = () => {
 			driveType: props.item.driveType,
 			param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 		},
-		false,
-		router
+		false
 	);
 };
 </script>

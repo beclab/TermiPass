@@ -6,6 +6,7 @@
 		class="myDrawer"
 		:dark="$q.dark.isActive"
 	>
+		{{ menuStore.activeMenu.label }}
 		<BtScrollArea style="height: 100%; width: 100%">
 			<bt-menu
 				:items="menuStore.menu"
@@ -107,7 +108,7 @@ import { useOperateinStore } from './../../stores/operation';
 import PopupMenu from '../../components/files/popup/PopupMenu.vue';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
-import { useFilesStore } from './../../stores/files';
+import { useFilesStore, DriveType } from './../../stores/files';
 
 const $q = useQuasar();
 const Router = useRouter();
@@ -125,11 +126,13 @@ onMounted(async () => {
 });
 
 const selectHandler = async (value) => {
-	console.log('valueitem', value.item);
-	menuStore.activeMenu.driveType = value.item.driveType;
+	menuStore.activeMenu = {
+		driveType: value.item.driveType,
+		label: value.item.label
+	};
 	const path = await filesStore.formatRepotoPath(value.item);
 
-	filesStore.setBrowserUrl(path, value.item.driveType, Router);
+	filesStore.setBrowserUrl(path, value.item.driveType);
 };
 
 const handleNewLib = (e: any) => {
@@ -137,6 +140,7 @@ const handleNewLib = (e: any) => {
 		e,
 		Route,
 		OPERATE_ACTION.CREATE_REPO,
+		DriveType.Sync,
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		async (_action: OPERATE_ACTION, _data: any) => {
 			//Do nothing

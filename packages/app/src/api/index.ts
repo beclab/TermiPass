@@ -5,6 +5,7 @@ import * as users from './users';
 import * as settings from './settings';
 import * as shareToUser from './shareToUser';
 import * as ai from './ai';
+import * as common from './common/common';
 import search from './search';
 import commands from './commands';
 
@@ -42,6 +43,7 @@ export {
 	search,
 	shareToUser,
 	ai,
+	common,
 	dataAPIs,
 	DriveDataAPI,
 	SyncDataAPI
