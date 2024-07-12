@@ -1,10 +1,10 @@
 package com.terminus.planeta.plugins
 
-import android.graphics.Color
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.util.Log
-import android.view.Window
-import androidx.appcompat.app.AppCompatDelegate
-import com.capacitorjs.plugins.statusbar.StatusBar
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
@@ -19,34 +19,57 @@ import com.terminus.planeta.utils.RunnablePocket
 @CapacitorPlugin(name = "ThemePlugin")
 class ThemePlugin : Plugin() {
 
-	@PluginMethod
-	fun get(call: PluginCall) {
-		val kv = MMKV.defaultMMKV()
-		val theme = kv.decodeInt("theme", 2)
-		Log.i("ThemePlugin ====>", "get: " + theme)
-		val jsObject = JSObject().apply {
-			this.put("theme",theme)
-		}
-		call.resolve(jsObject)
-	}
+    private var themeChangeReceiver: BroadcastReceiver? = null
 
-	@PluginMethod
-	fun set(call: PluginCall) {
-		var theme = call.getInt("theme",1)
-		val kv = MMKV.defaultMMKV()
-		if (theme != null)
+    override fun load() {
+        super.load()
+        themeChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (intent.action == Intent.ACTION_CONFIGURATION_CHANGED) {
+                    registerStatusBar(bridge.activity);
+                }
+            }
+        }
+        val filter = IntentFilter(Intent.ACTION_CONFIGURATION_CHANGED)
+        bridge.activity.registerReceiver(themeChangeReceiver, filter)
+    }
+
+    override fun handleOnDestroy() {
+        super.handleOnDestroy()
+        if (themeChangeReceiver != null){
+            bridge.activity.unregisterReceiver(themeChangeReceiver)
+        }
+    }
+
+    @PluginMethod
+    fun get(call: PluginCall) {
+        val kv = MMKV.defaultMMKV()
+        val theme = kv.decodeInt("theme", 1)
+        Log.i("ThemePlugin ====>", "get: $theme")
+        val jsObject = JSObject().apply {
+            this.put("theme", theme)
+        }
+        call.resolve(jsObject)
+    }
+
+    @PluginMethod
+    fun set(call: PluginCall) {
+        val theme = call.getInt("theme", 1)
+        val kv = MMKV.defaultMMKV()
+        if (theme != null){
 			kv.encode("theme", theme);
-		RunnablePocket.post( {
+		}
+        RunnablePocket.post {
 			registerStatusBar(getBridge().activity);
-		})
+		}
 	}
 
-	@PluginMethod
-	fun systemIsDark(call: PluginCall) {
-		val isDark = isDarkThemeEnabled(getBridge().activity);
-		val jsObject = JSObject().apply {
-			this.put("dark",isDark)
-		}
-		call.resolve(jsObject)
-	}
+    @PluginMethod
+    fun systemIsDark(call: PluginCall) {
+        val isDark = isDarkThemeEnabled(getBridge().activity);
+        val jsObject = JSObject().apply {
+            this.put("dark", isDark)
+        }
+        call.resolve(jsObject)
+    }
 }

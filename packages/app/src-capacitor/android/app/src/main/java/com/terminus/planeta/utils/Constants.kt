@@ -102,7 +102,7 @@ object Constants {
 			val kv = MMKV.defaultMMKV()
 			val theme = kv.decodeInt("theme", 1)
 			var themeValue = "DEFAULT"
-			var color = Color.WHITE;
+			var color = Color.WHITE
 
 			Log.i("registerStatusBar ===>", "theme: " + theme)
 
@@ -110,14 +110,14 @@ object Constants {
 				val nightMode = isDarkThemeEnabled(activity);
 				Log.i("registerStatusBar ===>1", "theme: " + nightMode)
 				if (nightMode) {
-					color = Color.BLACK;
+					color = Color.parseColor("#1f1f1f")
 				}
 			} else if (theme == 1) {
 				themeValue = "LIGHT"
-				color = Color.WHITE;
+				color = Color.WHITE
 			} else if (theme == 2) {
 				themeValue = "DARK"
-				color = Color.parseColor("#1f1f1f");
+				color = Color.parseColor("#1f1f1f")
 			}
 
 			val statusBar = StatusBar(activity)

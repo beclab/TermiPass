@@ -7,7 +7,7 @@ import { app } from 'src/globals';
 import { TermiPassDeviceInfo } from '@bytetrade/core';
 import { ThemeDefinedMode } from '@bytetrade/ui';
 import { ThemePlugin } from 'src/plugins/theme';
-import { Dark, Platform } from 'quasar';
+import { Dark } from 'quasar';
 
 export type DeviceStoreState = {
 	networkOnLine: boolean;
@@ -105,12 +105,7 @@ export const useDeviceStore = defineStore('device', {
 
 		async updateTheme() {
 			if (this.theme == ThemeDefinedMode.AUTO) {
-				if (Platform.is.nativeMobile && Platform.is.android) {
-					const isDark = (await ThemePlugin.systemIsDark()).dark;
-					Dark.set(isDark);
-				} else {
-					Dark.set('auto');
-				}
+				Dark.set('auto');
 			} else {
 				Dark.set(this.theme == ThemeDefinedMode.DARK);
 			}
