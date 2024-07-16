@@ -282,14 +282,6 @@ export const useOperateinStore = defineStore('operation', {
 			console.log('moveCataloguemoveCatalogue', route.path);
 			const dataAPI = dataAPIs(driveType);
 			await dataAPI.move(route.path, callback);
-
-			// const filesStore = useFilesStore();
-			// const menuStore = useMenuStore();
-
-			// console.log('routeroute', route);
-
-			// const url = route.fullPath;
-			// filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
 		},
 
 		uploadFiles() {

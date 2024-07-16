@@ -7,16 +7,16 @@
 				titAlign="text-left"
 				@close="onCancel"
 			/>
-
 			<div
 				class="dialog-desc"
 				:style="{ textAlign: isMobile ? 'center' : 'left' }"
 			>
+				111
 				{{
-					store.selectedCount <= 1
+					filesStore.selectedCount <= 1
 						? t('prompts.deleteMessageSingle')
 						: t('prompts.deleteMessageMultiple', {
-								count: store.selectedCount
+								count: filesStore.selectedCount
 						  })
 				}}
 			</div>
@@ -34,11 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useDataStore } from '../../../stores/data';
-import { files as api, seahub } from '../../../api';
 import { useRoute } from 'vue-router';
-import { checkSeahub } from '../../../utils/file';
-import { useSeahubStore } from '../../../stores/seahub';
 import { useI18n } from 'vue-i18n';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 import { ref } from 'vue';
@@ -50,11 +46,15 @@ import {
 	notifyHide
 } from '../../../utils/notifyRedefinedUtil';
 
+import { useDataStore } from '../../../stores/data';
+import { useFilesStore } from '../../../stores/files';
+import { dataAPIs } from '../../../api';
+import { useMenuStore } from '../../../stores/files-menu';
+
 const store = useDataStore();
-const seahubStore = useSeahubStore();
-const repo = useSeahubStore();
+const filesStore = useFilesStore();
 const { t } = useI18n();
-const { dialogRef, onDialogCancel } = useDialogPluginComponent();
+const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
 
 const $q = useQuasar();
 const route = useRoute();
@@ -62,104 +62,34 @@ const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 
 const show = ref(true);
 const loading = ref(false);
+const menuStore = useMenuStore();
+
 const submit = async () => {
 	loading.value = true;
-	if (
-		checkSeahub(route.path) ||
-		(!store.req.isDir && checkSeahub(store.req.path))
-	) {
-		notifyWaitingShow('Deleting, Please wait...');
-		if (!repo.repo_id) {
-			const id = store.req.items[store.selected[0]].id;
-			const path = `seahub/api/v2.1/repos/${id}/`;
-			await seahub.deleteRepo(path);
-			loading.value = false;
-			store.setReload(true);
-			notifyHide();
-			return;
-		}
-
-		const dirents = [];
-
-		let parent_dir = '';
-		if (!store.req.isDir && checkSeahub(store.req.path)) {
-			const pathLen =
-				store.req.path.indexOf(store.currentItem) + store.currentItem.length;
-			parent_dir = store.req.path.slice(pathLen);
-			const nameLen = parent_dir.indexOf(store.req.name);
-			dirents.push(store.req.name);
-			parent_dir = parent_dir.substring(0, nameLen);
-		} else if (checkSeahub(route.path)) {
-			const dec = decodeURI(route.path);
-			const pathLen = dec.indexOf(store.currentItem) + store.currentItem.length;
-			parent_dir = dec.slice(pathLen);
-			for (let index of store.selected) {
-				dirents.push(store.req.items[index].name);
-			}
-		}
-
-		const parmas = {
-			dirents: dirents,
-			parent_dir: parent_dir,
-			repo_id: seahubStore.repo_id
-		};
-
-		try {
-			await seahub.batchDeleteItem(parmas);
-			loading.value = false;
-			notifyHide();
-		} catch (error) {
-			notifyHide();
-			loading.value = false;
-		}
-
-		if (!store.req.isDir) {
-			store.showConfirm();
-			store.closeHovers();
-		}
-
-		store.setReload(true);
-		return false;
-	}
+	notifyWaitingShow('Deleting, Please wait...');
 
 	try {
-		if (!store.isListing(route)) {
-			notifyWaitingShow('Deleting, Please wait...');
+		const selectFiles = filesStore.currentFileList.filter((obj) =>
+			filesStore.selected.includes(obj.index)
+		);
 
-			if (!store.req.isDir) {
-				await api.remove(store.req.url);
-			} else {
-				await api.remove(route.path);
-			}
-			notifyHide();
-			store.showConfirm();
-			store.closeHovers();
-			return;
-		}
+		const dataAPI = dataAPIs();
+		await dataAPI.deleteItem(selectFiles);
 
-		store.closeHovers();
-		let promises = [];
-		notifyWaitingShow('Deleting, Please wait...');
-
-		if (store.selectedCount === 0 && !store.req.isDir) {
-			await promises.push(api.remove(store.req.url));
-		} else {
-			for (let index of store.selected) {
-				promises.push(api.remove(store.req.items[index].url));
-			}
-		}
-		await Promise.all(promises);
+		const url = route.fullPath;
+		onDialogOK();
+		loading.value = false;
+		filesStore.selected = [];
+		filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
 		notifyHide();
-		store.setReload(true);
-	} catch (e) {
+	} catch (error) {
 		notifyHide();
-		if (store.isListing(route)) store.setReload(true);
+		loading.value = false;
 	}
 };
 
 const onCancel = () => {
 	store.closeHovers();
-	store.selected = [];
 	onDialogCancel();
 };
 </script>

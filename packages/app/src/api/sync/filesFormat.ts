@@ -33,7 +33,7 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 		driveType: DriveType.Sync
 	};
 
-	console.log('dirent_lists', dirent_lists);
+	// console.log('dirent_lists', dirent_lists);
 
 	dirent_lists.forEach((el, index) => {
 		const extension = getextension(el.name);
@@ -71,7 +71,7 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 		seahubDir.items.push(obj);
 	});
 
-	console.log('seahubDirseahubDir', seahubDir);
+	// console.log('seahubDirseahubDir', seahubDir);
 
 	return seahubDir;
 }

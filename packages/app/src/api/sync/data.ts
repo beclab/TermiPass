@@ -516,6 +516,29 @@ class Data extends Origin {
 
 		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${path}&with_thumbnail=true`;
 	}
+
+	async deleteItem(items: FileItem[]): Promise<void> {
+		const menuStore = useMenuStore();
+		const dirents: string[] = [];
+
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			dirents.push(item.name);
+		}
+
+		const parmas = {
+			dirents: dirents,
+			parent_dir: items[0].parentPath,
+			repo_id: menuStore.activeMenu.id
+		};
+
+		await seahub.batchDeleteItem(parmas);
+	}
+
+	async renameItem(items: FileItem, newName: string): Promise<void> {
+		console.log('FileItemFileItem', items, newName);
+		// const filesStore = useFilesStore();
+	}
 }
 
 export { Data };

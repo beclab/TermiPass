@@ -25,6 +25,8 @@ import { seahub } from '../../../api';
 import { popupMenu, OPERATE_ACTION } from '../../../utils/contact';
 import { useDataStore } from '../../../stores/data';
 import { useMenuStore } from '../../../stores/files-menu';
+import { useFilesStore, DriveType } from '../../../stores/files';
+
 import { useOperateinStore } from './../../../stores/operation';
 import ReName from './ReName.vue';
 import DeleteRepo from './DeleteRepo.vue';
@@ -33,6 +35,7 @@ import { BtDialog } from '@bytetrade/ui';
 
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { log } from 'console';
 
 const props = defineProps({
 	item: {
@@ -51,8 +54,13 @@ const props = defineProps({
 	}
 });
 
+console.log('propspropsprops', props.item);
+console.log('propspropsprops - form', props.from);
+console.log('propspropsprops - isSide', props.isSide);
+
 const $q = useQuasar();
 const dataStore = useDataStore();
+const filesStore = useFilesStore();
 const route = useRoute();
 
 const emits = defineEmits(['showPopupProxy']);
@@ -74,7 +82,9 @@ const menuList = ref<any[]>([]);
 const isElectron = ref($q.platform.is.electron);
 
 const onBeforeShow = async () => {
-	if (props.item && props.item.repo_id) {
+	console.log('propspropsprops', props.item);
+
+	if (props.item && props.item.driveType === DriveType.Sync) {
 		if (props.isSide && isElectron.value) {
 			await sideElectronMenu();
 		} else {
@@ -91,11 +101,11 @@ const onBeforeShowDrive = () => {
 	menuList.value = popupMenu.filter((e) => {
 		return (
 			(e.name === 'Rename' &&
-				dataStore.selected &&
-				dataStore.selected.length > 0) ||
+				filesStore.selected &&
+				filesStore.selected.length > 0) ||
 			(e.name === 'Delete' &&
-				dataStore.selected &&
-				dataStore.selected.length > 0) ||
+				filesStore.selected &&
+				filesStore.selected.length > 0) ||
 			e.name === 'Attributes'
 		);
 	});
@@ -172,7 +182,6 @@ const checkShardUser = () => {
 };
 
 const handleEvent = async (action: OPERATE_ACTION, e: any) => {
-	console.log('handleEventhandleEvent', action);
 	const path = '/';
 	switch (action) {
 		case OPERATE_ACTION.SHARE_WITH:
@@ -186,8 +195,8 @@ const handleEvent = async (action: OPERATE_ACTION, e: any) => {
 			}
 			break;
 		case OPERATE_ACTION.SYNCHRONIZE_TO_LOCAL:
-			dataStore.resetSelected();
-			dataStore.addSelected(props.item);
+			filesStore.resetSelected();
+			filesStore.addSelected(props.item);
 			dataStore.showHover('sync-select-save-path');
 			break;
 		case OPERATE_ACTION.UNSYNCHRONIZE:
@@ -237,6 +246,7 @@ const showRename = (e: any) => {
 			e,
 			route,
 			OPERATE_ACTION.RENAME,
+			DriveType.Drive,
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			async (_action: OPERATE_ACTION, _data: any) => {
 				//Do nothing
@@ -247,19 +257,22 @@ const showRename = (e: any) => {
 };
 
 const deleteRepo = async (e: any) => {
+	const jsonItem = JSON.parse(JSON.stringify(props.item));
+
 	if (props.from === 'sync') {
 		try {
-			const res = await menuStore.fetchShareInfo(props.item?.repo_id);
+			const res = await menuStore.fetchShareInfo(jsonItem.repo_id);
+
 			const shared_user_emails_length = res.shared_user_emails.length || 0;
 
 			$q.dialog({
 				component: DeleteRepo,
 				componentProps: {
-					item: props.item,
+					item: jsonItem,
 					shared_length: shared_user_emails_length
 				}
 			}).onOk(async () => {
-				const path = `seahub/api/v2.1/repos/${props.item?.repo_id}/`;
+				const path = `seahub/api/v2.1/repos/${jsonItem.repo_id}/`;
 				await seahub.deleteRepo(path);
 				menuStore.getSyncMenu();
 			});
@@ -271,6 +284,7 @@ const deleteRepo = async (e: any) => {
 			e,
 			route,
 			OPERATE_ACTION.DELETE,
+			DriveType.Drive,
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			async (_action: OPERATE_ACTION, _data: any) => {
 				dataStore.closeHovers();
@@ -298,6 +312,7 @@ const syncRepoInfo = (e) => {
 			e,
 			route,
 			OPERATE_ACTION.ATTRIBUTES,
+			DriveType.Drive,
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			async (_action: OPERATE_ACTION, _data: any) => {
 				dataStore.closeHovers();

@@ -123,6 +123,16 @@ export abstract class Origin {
 	abstract formatPathtoUrl(item: any): Promise<string>;
 
 	/**
+	 * Handle Delete Item
+	 */
+	abstract deleteItem(item: FileItem[]): Promise<void>;
+
+	/**
+	 * Handle Rename Item
+	 */
+	abstract renameItem(item: FileItem, newName: string): Promise<void>;
+
+	/**
 	 * Upload fetch
 	 */
 	// abstract fetchUploader(

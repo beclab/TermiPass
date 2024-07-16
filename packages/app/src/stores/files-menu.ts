@@ -63,6 +63,7 @@ export interface SharedItemsType {
 
 export interface ActiveMenuType {
 	label: string;
+	id: string;
 	driveType: DriveType;
 }
 
@@ -93,6 +94,7 @@ export const useMenuStore = defineStore('filesMenu', {
 			canForward: false,
 			activeMenu: {
 				label: 'Home',
+				id: 'Home',
 				driveType: DriveType.Drive
 			},
 			menu: [

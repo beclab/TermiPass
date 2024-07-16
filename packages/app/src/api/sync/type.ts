@@ -107,3 +107,9 @@ export interface DirentListType {
 	starred: boolean;
 	type: string;
 }
+
+export interface DeleteItemType {
+	dirents: string[];
+	parent_dir: string;
+	repo_id: string;
+}

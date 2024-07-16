@@ -459,6 +459,26 @@ class Data extends Origin {
 	async formatPathtoUrl(item: FilePath): Promise<string> {
 		return item.path;
 	}
+
+	async deleteItem(items: FileItem[]): Promise<void> {
+		console.log('FileItemFileItem', items);
+		// const filesStore = useFilesStore();
+
+		const promises: any = [];
+
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			promises.push(files.remove(item.path));
+		}
+
+		await Promise.all(promises);
+	}
+
+	async renameItem(items: FileItem, newName: string): Promise<void> {
+		console.log('FileItemFileItem', items, newName);
+
+		// await files.rename(oldLink, newName);
+	}
 }
 
 export { Data };

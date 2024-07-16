@@ -6,11 +6,11 @@
 		class="myDrawer"
 		:dark="$q.dark.isActive"
 	>
-		{{ menuStore.activeMenu.label }}
+		{{ menuStore.activeMenu.label }}/ {{ menuStore.activeMenu.id }}
 		<BtScrollArea style="height: 100%; width: 100%">
 			<bt-menu
 				:items="menuStore.menu"
-				:modelValue="menuStore.activeMenu.label"
+				:modelValue="menuStore.activeMenu.id"
 				:sameActiveable="true"
 				@select="selectHandler"
 				style="width: 100%"
@@ -128,7 +128,8 @@ onMounted(async () => {
 const selectHandler = async (value) => {
 	menuStore.activeMenu = {
 		driveType: value.item.driveType,
-		label: value.item.label
+		label: value.item.label,
+		id: value.item.key
 	};
 	const path = await filesStore.formatRepotoPath(value.item);
 

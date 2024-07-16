@@ -42,10 +42,12 @@ import { useDataStore } from '../../../stores/data';
 import { checkSeahub } from '../../../utils/file';
 import { useI18n } from 'vue-i18n';
 import { useSeahubStore } from '../../../stores/seahub';
+import { useFilesStore } from '../../../stores/files';
 import {
 	notifyHide,
 	notifyWaitingShow
 } from '../../../utils/notifyRedefinedUtil';
+import { dataAPIs } from '../../../api';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -54,6 +56,7 @@ const name = ref();
 const store = useDataStore();
 const Router = useRouter();
 const repo = useSeahubStore();
+const fileStore = useFilesStore();
 const { t } = useI18n();
 const show = ref(true);
 const loading = ref(false);
@@ -61,107 +64,106 @@ const loading = ref(false);
 const { dialogRef, onDialogCancel } = useDialogPluginComponent();
 
 onMounted(() => {
+	console.log('fileStorecurrentFileList', fileStore.currentFileList);
 	name.value = oldName();
 });
 
 const oldName = () => {
 	if (!store.isListing) {
-		return store.req.name;
+		return fileStore.currentFileList[0];
 	}
-
-	if (store.req && store.req.items) {
-		return store.req.items[store.selected[0]].name;
-	} else {
-		return store.req.name;
-	}
+	return fileStore.currentFileList[fileStore.selected[0]].name;
 };
 
 // let notif: any = null;
 
 const submit = async () => {
-	let oldLink = '';
-	let newLink = '';
-	let isPreview = false;
+	const dataAPI = dataAPIs();
 
-	let isDir = false;
+	await dataAPI.renameItem(fileStore.currentFileList[0], name.value);
 
-	if (name.value.length == 0) {
-		return;
-	}
+	// let oldLink = '';
+	// let newLink = '';
+	// let isPreview = false;
 
-	if (!store.isListing) {
-		oldLink = store.req.url;
-	} else {
-		if (store.req && store.req.items) {
-			oldLink = store.req.items[store.selected[0]].url;
-			isDir = store.req.items[store.selected[0]].isDir;
-		} else {
-			oldLink = store.req.url;
-			isPreview = true;
-		}
-	}
+	// let isDir = false;
 
-	newLink = url.removeLastDir(oldLink) + '/' + encodeURIComponent(name.value);
+	// if (name.value.length == 0) {
+	// 	return;
+	// }
 
-	// notif && notif();
-	notifyHide();
-	notifyWaitingShow('Renaming...');
-	loading.value = true;
+	// if (!store.isListing) {
+	// 	oldLink = store.req.url;
+	// } else {
+	// 	if (fileStore.currentFileList) {
+	// 		oldLink = fileStore.currentFileList[fileStore.selected[0]].url;
+	// 		isDir = fileStore.currentFileList[fileStore.selected[0]].isDir;
+	// 	} else {
+	// 		oldLink = store.req.url;
+	// 		isPreview = true;
+	// 	}
+	// }
 
-	if (checkSeahub(newLink)) {
-		if (!repo.repo_id) {
-			const id = store.req.items[store.selected[0]].id;
-			const url = `seahub/api2/repos/${id}/?op=rename`;
-			const data = {
-				repo_name: name.value
-			};
-			await seahub.reRepoName(url, data);
-			store.setReload(true);
-			notifyHide();
-			return false;
-		}
+	// newLink = url.removeLastDir(oldLink) + '/' + encodeURIComponent(name.value);
 
-		const pathLen =
-			oldLink.indexOf(store.currentItem) + store.currentItem.length;
+	// // notif && notif();
+	// notifyHide();
+	// notifyWaitingShow('Renaming...');
+	// loading.value = true;
 
-		const p = oldLink.slice(pathLen);
+	// if (checkSeahub(newLink)) {
+	// 	if (!repo.repo_id) {
+	// 		const id = fileStore.currentFileList[fileStore.selected[0]].id;
+	// 		const url = `seahub/api2/repos/${id}/?op=rename`;
+	// 		const data = {
+	// 			repo_name: name.value
+	// 		};
+	// 		await seahub.reRepoName(url, data);
+	// 		store.setReload(true);
+	// 		notifyHide();
+	// 		return false;
+	// 	}
 
-		const parmas = {
-			operation: 'rename',
-			newname: name.value
-		};
+	// 	const pathLen =
+	// 		oldLink.indexOf(store.currentItem) + store.currentItem.length;
 
-		const url = 'api/v2.1/repos';
-		await seahub.fileOperate(p, url, parmas, isDir ? 'dir' : 'file');
-		store.setReload(true);
-		notifyHide();
-		loading.value = false;
-		return false;
-	}
+	// 	const p = oldLink.slice(pathLen);
 
-	try {
-		await api.rename(oldLink, newLink);
-		if (!store.isListing || isPreview) {
-			Router.push({ path: newLink });
-			return;
-		}
-		store.setReload(true);
-		notifyHide();
-		loading.value = false;
-	} catch (e) {
-		store.showError();
-		notifyHide();
-		loading.value = false;
-	}
-	notifyHide();
-	loading.value = false;
+	// 	const parmas = {
+	// 		operation: 'rename',
+	// 		newname: name.value
+	// 	};
 
-	store.closeHovers();
+	// 	const url = 'api/v2.1/repos';
+	// 	await seahub.fileOperate(p, url, parmas, isDir ? 'dir' : 'file');
+	// 	store.setReload(true);
+	// 	notifyHide();
+	// 	loading.value = false;
+	// 	return false;
+	// }
+
+	// try {
+	// 	await api.rename(oldLink, newLink);
+	// 	if (!store.isListing || isPreview) {
+	// 		Router.push({ path: newLink });
+	// 		return;
+	// 	}
+	// 	store.setReload(true);
+	// 	notifyHide();
+	// 	loading.value = false;
+	// } catch (e) {
+	// 	store.showError();
+	// 	notifyHide();
+	// 	loading.value = false;
+	// }
+	// notifyHide();
+	// loading.value = false;
+
+	// store.closeHovers();
 };
 
 const onCancel = () => {
 	onDialogCancel();
-	store.selected = [];
 	store.closeHovers();
 };
 </script>

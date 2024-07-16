@@ -93,6 +93,7 @@
 						<PopupMenu
 							:item="hoverItemAvtive"
 							:isSide="false"
+							:from="watchFrom"
 							@showPopupProxy="showPopupProxy"
 						/>
 					</q-btn>
@@ -127,9 +128,9 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { users } from '../../../api';
+import { users, common } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import { useMenuStore, ActiveMenuType } from '../../../stores/files-menu';
 import { MenuItem } from '../../../utils/contact';
@@ -146,7 +147,7 @@ const Router = useRouter();
 const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
-const fifterMenu = useFilesStore();
+const filesMenu = useFilesStore();
 
 const fileTitle = ref();
 const hoverItemAvtive = ref();
@@ -158,6 +159,7 @@ const viewMode = ref((store.user && store.user.viewMode) || 'list');
 
 const backFlag = ref(true);
 const goFlag = ref(true);
+const watchFrom = ref();
 
 const { t } = useI18n();
 
@@ -171,6 +173,18 @@ watch(
 			return;
 		}
 		viewMode.value = newVaule;
+	}
+);
+
+watch(
+	() => Route.path,
+	async (newVal) => {
+		const type = await common.formatUrltoDriveType(newVal);
+		if (type === DriveType.Sync) {
+			watchFrom.value = 'sync';
+		} else {
+			watchFrom.value = '';
+		}
 	}
 );
 
@@ -373,7 +387,7 @@ const openPopupMenu = () => {
 	}
 
 	hoverItemAvtive.value = menuStore.menu[1].children?.find(
-		(item) => item.label === store.currentItem
+		(item) => item.label === menuStore.activeMenu.label
 	);
 };
 </script>
