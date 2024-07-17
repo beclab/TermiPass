@@ -1,6 +1,7 @@
 <template>
 	<div class="video-preview-root">
-		<div v-if="store.req.type == 'image'" class="image-container">
+		{{ raw }}111
+		<div v-if="filesStore.previewItem.type == 'image'" class="image-container">
 			<ExtendedImage :src="raw" class="img-part" />
 			<div class="row items-center justify-center q-mt-lg">
 				<div
@@ -17,7 +18,7 @@
 		</div>
 
 		<div
-			v-else-if="store.req.type == 'audio'"
+			v-else-if="filesStore.previewItem.type == 'audio'"
 			class="audio-container column justify-between items-center"
 		>
 			<div class="audio-info column items-center justify-center">
@@ -27,7 +28,7 @@
 					height="96"
 				/>
 				<div class="audio-name text-body3 q-mt-md text-color-title">
-					{{ store.req.name }}
+					{{ filesStore.previewItem.name }}
 				</div>
 			</div>
 			<div
@@ -43,19 +44,24 @@
 				></audio>
 			</div>
 		</div>
-		<div v-else-if="store.req.type == 'video'" class="video-container">
+		<div
+			v-else-if="filesStore.previewItem.type == 'video'"
+			class="video-container"
+		>
 			<!-- <vue3-video-player
 				@play="autoPlay = true"
 				:src="raw"
 				style="width: 100%"
 			/> -->
-			<terminus-video-player :raw="store.req.path" :req="store.req" />
+			<terminus-video-player
+				:raw="filesStore.previewItem.path"
+				:req="filesStore.previewItem"
+			/>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { format, useQuasar } from 'quasar';
@@ -67,7 +73,6 @@ import { StatusBar } from '@capacitor/status-bar';
 import { useFilesStore } from '../../../stores/files';
 
 const { humanStorageSize } = format;
-const store = useDataStore();
 const autoPlay = ref(false);
 const fullSize = ref(false);
 const $q = useQuasar();
@@ -75,24 +80,24 @@ const filesStore = useFilesStore();
 
 const { t } = useI18n();
 
-const size = ref(humanStorageSize(store.req.size ?? 0));
+const size = ref(humanStorageSize(filesStore.previewItem.size ?? 0));
 
 const raw = computed(function () {
-	if (store.req.type === 'image' && !fullSize.value) {
-		return filesStore.getPreviewURL(store.req, 'big');
+	if (filesStore.previewItem.type === 'image' && !fullSize.value) {
+		return filesStore.getPreviewURL(filesStore.previewItem, 'big');
 	}
-	return filesStore.getDownloadURL(store.req, true);
+	return filesStore.getDownloadURL(filesStore.previewItem, true);
 });
 
 onMounted(() => {
-	if ($q.platform.is.nativeMobile && store.req.type == 'video') {
+	if ($q.platform.is.nativeMobile && filesStore.previewItem.type == 'video') {
 		ScreenOrientation.unlock();
 		StatusBar.hide();
 	}
 });
 
 onUnmounted(() => {
-	if ($q.platform.is.nativeMobile && store.req.type == 'video') {
+	if ($q.platform.is.nativeMobile && filesStore.previewItem.type == 'video') {
 		// ScreenOrientation.unlock();
 		getNativeAppPlatform().resetOrientationLockType();
 		StatusBar.show();

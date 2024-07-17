@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { Origin } from '../api/origin';
 import { Data as DriveData } from '../api/drive/data';
 import { Data as SyncData } from '../api/sync/data';
+import { FilesSortType } from '../utils/contact';
 
 export enum DriveType {
 	Drive = 'drive',
@@ -90,6 +91,10 @@ export type FileState = {
 	cached: Record<string, FileItem[]>;
 	selected: number[];
 	previewItem: any;
+	activeSort: {
+		by: FilesSortType;
+		asc: boolean;
+	};
 };
 
 const driveData = new DriveData();
@@ -122,7 +127,11 @@ export const useFilesStore = defineStore('files', {
 			currentFileList: [],
 			cached: {},
 			selected: [],
-			previewItem: {}
+			previewItem: {},
+			activeSort: {
+				by: FilesSortType.Modified,
+				asc: true
+			}
 		} as FileState;
 	},
 	getters: {
@@ -217,6 +226,43 @@ export const useFilesStore = defineStore('files', {
 			});
 			this.setFilePath(path, false);
 			// }
+		},
+
+		updateActiveSort(type: FilesSortType, asc: boolean) {
+			this.activeSort = {
+				by: type,
+				asc
+			};
+			this.currentFileList = this.sortList(this.currentFileList);
+		},
+
+		sortList(list: any) {
+			if (list) {
+				const list1 = list.sort((a, b) => {
+					if (this.activeSort.by == FilesSortType.TYPE) {
+						return this.activeSort.asc
+							? a.type.localeCompare(b.type)
+							: -a.type.localeCompare(b.type);
+					} else if (this.activeSort.by == FilesSortType.NAME) {
+						return this.activeSort.asc
+							? a.name.localeCompare(b.name)
+							: -a.name.localeCompare(b.name);
+					} else if (this.activeSort.by == FilesSortType.SIZE) {
+						return this.activeSort.asc ? a.size - b.size : b.size - a.size;
+					} else {
+						if (typeof a.modified == 'string') {
+							return this.activeSort.asc
+								? a.modified.localeCompare(b.modified)
+								: -a.modified.localeCompare(b.modified);
+						} else {
+							return this.activeSort.asc
+								? a.modified - b.modified
+								: b.modified - a.modified;
+						}
+					}
+				});
+				return list1;
+			}
 		},
 
 		back() {

@@ -90,8 +90,6 @@ onBeforeRouteUpdate((_to, from, next) => {
 
 onMounted(async () => {
 	let url = route.fullPath;
-	if (url.indexOf('Files') < 0) return;
-
 	menuStore.activeMenu = await formatUrltoActiveMenu(url);
 	const driveType = await common.formatUrltoDriveType(url);
 

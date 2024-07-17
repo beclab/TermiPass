@@ -122,7 +122,6 @@ import { useRouter } from 'vue-router';
 import { format, useQuasar } from 'quasar';
 import { computed } from 'vue';
 
-import { common as api, seahub } from '../../../api';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
 import { checkSeahub } from '../../../utils/file';

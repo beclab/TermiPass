@@ -203,27 +203,27 @@ watch(
 
 const nameSorted = computed(function () {
 	// return store.req.sorting.by === 'name';
-	return store.activeSort.by === 1;
+	return filesStore.activeSort.by === 1;
 });
 
 const sizeSorted = computed(function () {
 	// return store.req.sorting.by === 'size';
-	return store.activeSort.by === 2;
+	return filesStore.activeSort.by === 2;
 });
 
 const typeSorted = computed(function () {
 	// return store.req.sorting.by === 'type';
-	return store.activeSort.by === 3;
+	return filesStore.activeSort.by === 3;
 });
 
 const modifiedSorted = computed(function () {
 	// return store.req.sorting.by === 'modified';
-	return store.activeSort.by === 4;
+	return filesStore.activeSort.by === 4;
 });
 
 const ascOrdered = computed(function () {
 	// return store.req.sorting.asc;
-	return store.activeSort.asc;
+	return filesStore.activeSort.asc;
 });
 
 const nameIcon = computed(function () {
@@ -490,7 +490,7 @@ const sort = async (by: string) => {
 		}
 	}
 
-	store.updateActiveSort(selfBy, asc);
+	filesStore.updateActiveSort(selfBy, asc);
 
 	// try {
 	// 	await users.update(

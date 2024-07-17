@@ -217,8 +217,11 @@ class Data extends Origin {
 
 		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
 			const element: any = operateinStore.copyFiles[i];
-			let to =
-				decodeURIComponent(path).slice(6) + decodeURIComponent(element.name);
+			const lastPathIndex =
+				path.indexOf('?') > -1
+					? decodeURIComponent(path).slice(6, path.indexOf('?'))
+					: decodeURIComponent(path).slice(6);
+			let to = lastPathIndex + decodeURIComponent(element.name);
 
 			if (checkAppData(path)) {
 				to = decodeURIComponent(path) + decodeURIComponent(element.name);
@@ -235,6 +238,7 @@ class Data extends Origin {
 				return;
 			}
 		}
+
 		let overwrite = false;
 		const rename = true;
 		let isMove = false;

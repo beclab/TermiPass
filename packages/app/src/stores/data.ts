@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
-import { MenuItem, FilesSortType } from '../utils/contact';
+import { MenuItem } from '../utils/contact';
 import { dataAPIs } from './../api';
 
 // import { CopyStoragesType } from './operation';
@@ -29,10 +29,6 @@ export type DataState = {
 	//mobile add
 	activeMenu: MenuItem;
 	// activeSort: FilesSortType;
-	activeSort: {
-		by: FilesSortType;
-		asc: boolean;
-	};
 
 	preview: {
 		isEditEnable: boolean;
@@ -66,10 +62,6 @@ export const useDataStore = defineStore('data', {
 			// 	from: DriveType.Drive
 			// },
 			activeMenu: MenuItem.HOME,
-			activeSort: {
-				by: FilesSortType.Modified,
-				asc: true
-			},
 			preview: {
 				isEditEnable: false,
 				isEditing: false,
@@ -113,35 +105,6 @@ export const useDataStore = defineStore('data', {
 					route.name === 'Seahub') &&
 				this.req.isDir
 			);
-		},
-
-		sortList(list: any) {
-			if (list) {
-				const list1 = list.sort((a, b) => {
-					if (this.activeSort.by == FilesSortType.TYPE) {
-						return this.activeSort.asc
-							? a.type.localeCompare(b.type)
-							: -a.type.localeCompare(b.type);
-					} else if (this.activeSort.by == FilesSortType.NAME) {
-						return this.activeSort.asc
-							? a.name.localeCompare(b.name)
-							: -a.name.localeCompare(b.name);
-					} else if (this.activeSort.by == FilesSortType.SIZE) {
-						return this.activeSort.asc ? a.size - b.size : b.size - a.size;
-					} else {
-						if (typeof a.modified == 'string') {
-							return this.activeSort.asc
-								? a.modified.localeCompare(b.modified)
-								: -a.modified.localeCompare(b.modified);
-						} else {
-							return this.activeSort.asc
-								? a.modified - b.modified
-								: b.modified - a.modified;
-						}
-					}
-				});
-				return list1;
-			}
 		},
 
 		closeHovers() {
@@ -267,14 +230,6 @@ export const useDataStore = defineStore('data', {
 
 		updateActiveMenu(activeMenu: MenuItem) {
 			this.activeMenu = activeMenu;
-		},
-
-		updateActiveSort(type: FilesSortType, asc: boolean) {
-			this.activeSort = {
-				by: type,
-				asc
-			};
-			this.req.items = this.sortList(this.req.items);
 		}
 	}
 });
