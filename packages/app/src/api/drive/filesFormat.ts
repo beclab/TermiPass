@@ -9,6 +9,7 @@ export function formatDrive(data) {
 			el.path = `/Files${el.path}`;
 			el.driveType = DriveType.Drive;
 			el.extension = extension;
+			el.modified = new Date(el.modified).getTime();
 		});
 
 	return data;
@@ -20,7 +21,7 @@ export function formatAppDataNode(url, data) {
 		name: 'AppData',
 		size: 0,
 		extension: '',
-		modified: '',
+		modified: 0,
 		mode: 0,
 		isDir: true,
 		isSymlink: false,
@@ -48,7 +49,7 @@ export function formatAppDataNode(url, data) {
 				name: el.metadata.name,
 				size: 4096,
 				extension: extension,
-				modified: String(0),
+				modified: 0,
 				mode: 0,
 				isDir: true,
 				isSymlink: false,

@@ -149,6 +149,7 @@ import { useOperateinStore } from './../../../stores/operation';
 import IndexUploader from './../uploader/IndexUploader.vue';
 
 import { useFilesStore } from './../../../stores/files';
+import { useMenuStore } from './../../../stores/files-menu';
 
 const store = useDataStore();
 const route = useRoute();
@@ -169,6 +170,7 @@ const repoId = ref();
 const fileUploaderPath = ref();
 
 const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 
 watch(
 	() => filesStore.currentFileList,
@@ -191,19 +193,11 @@ watch(
 		menuVisible.value = false;
 		repoId.value = route.query.id;
 
-		const currentItem = store.currentItem;
+		const currentItem = menuStore.activeMenu.label;
 
 		fileUploaderPath.value =
 			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
 			'/';
-
-		if (route.query.id) {
-			store.hideSyncUploadModal = false;
-		} else {
-			if (store.isUploadProgressDialogShow) {
-				store.hideSyncUploadModal = true;
-			}
-		}
 	}
 );
 

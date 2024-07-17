@@ -35,11 +35,11 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import { useRouter } from 'vue-router';
-import { files as api, seahub } from '../../../api';
-import url from '../../../utils/url';
+import { useRouter, useRoute } from 'vue-router';
+// import { files as api, seahub } from '../../../api';
+// import url from '../../../utils/url';
 import { useDataStore } from '../../../stores/data';
-import { checkSeahub } from '../../../utils/file';
+// import { checkSeahub } from '../../../utils/file';
 import { useI18n } from 'vue-i18n';
 import { useSeahubStore } from '../../../stores/seahub';
 import { useFilesStore } from '../../../stores/files';
@@ -48,31 +48,34 @@ import {
 	notifyWaitingShow
 } from '../../../utils/notifyRedefinedUtil';
 import { dataAPIs } from '../../../api';
+import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
 const name = ref();
 const store = useDataStore();
-const Router = useRouter();
+const router = useRouter();
+const route = useRoute();
 const repo = useSeahubStore();
-const fileStore = useFilesStore();
+const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 const { t } = useI18n();
 const show = ref(true);
 const loading = ref(false);
 
-const { dialogRef, onDialogCancel } = useDialogPluginComponent();
+const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
 
 onMounted(() => {
-	console.log('fileStorecurrentFileList', fileStore.currentFileList);
+	console.log('fileStorecurrentFileList', filesStore.currentFileList);
 	name.value = oldName();
 });
 
 const oldName = () => {
 	if (!store.isListing) {
-		return fileStore.currentFileList[0];
+		return filesStore.currentFileList[0];
 	}
-	return fileStore.currentFileList[fileStore.selected[0]].name;
+	return filesStore.currentFileList[filesStore.selected[0]].name;
 };
 
 // let notif: any = null;
@@ -80,7 +83,24 @@ const oldName = () => {
 const submit = async () => {
 	const dataAPI = dataAPIs();
 
-	await dataAPI.renameItem(fileStore.currentFileList[0], name.value);
+	notifyWaitingShow('Renaming...');
+	loading.value = true;
+
+	try {
+		await dataAPI.renameItem(
+			filesStore.currentFileList[filesStore.selected[0]],
+			name.value
+		);
+
+		onDialogOK();
+		loading.value = false;
+		filesStore.resetSelected();
+		filesStore.setBrowserUrl(route.fullPath, menuStore.activeMenu.driveType);
+		notifyHide();
+	} catch (error) {
+		loading.value = false;
+		notifyHide();
+	}
 
 	// let oldLink = '';
 	// let newLink = '';
@@ -95,9 +115,9 @@ const submit = async () => {
 	// if (!store.isListing) {
 	// 	oldLink = store.req.url;
 	// } else {
-	// 	if (fileStore.currentFileList) {
-	// 		oldLink = fileStore.currentFileList[fileStore.selected[0]].url;
-	// 		isDir = fileStore.currentFileList[fileStore.selected[0]].isDir;
+	// 	if (filesStore.currentFileList) {
+	// 		oldLink = filesStore.currentFileList[filesStore.selected[0]].url;
+	// 		isDir = filesStore.currentFileList[filesStore.selected[0]].isDir;
 	// 	} else {
 	// 		oldLink = store.req.url;
 	// 		isPreview = true;
@@ -113,7 +133,7 @@ const submit = async () => {
 
 	// if (checkSeahub(newLink)) {
 	// 	if (!repo.repo_id) {
-	// 		const id = fileStore.currentFileList[fileStore.selected[0]].id;
+	// 		const id = filesStore.currentFileList[filesStore.selected[0]].id;
 	// 		const url = `seahub/api2/repos/${id}/?op=rename`;
 	// 		const data = {
 	// 			repo_name: name.value
@@ -145,7 +165,7 @@ const submit = async () => {
 	// try {
 	// 	await api.rename(oldLink, newLink);
 	// 	if (!store.isListing || isPreview) {
-	// 		Router.push({ path: newLink });
+	// 		r.push({ path: newLink });
 	// 		return;
 	// 	}
 	// 	store.setReload(true);

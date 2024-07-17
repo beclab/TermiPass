@@ -34,7 +34,7 @@ export class FileResType {
 	isDir: boolean;
 	isSymlink: boolean;
 	mode: number;
-	modified: string;
+	modified: number;
 	name: string;
 	numDirs: number;
 	numFiles: number;
@@ -57,7 +57,7 @@ export class FileItem {
 	isDir: boolean;
 	isSymlink: boolean;
 	mode: number;
-	modified: string;
+	modified: number;
 	name: string;
 	path: string;
 	size: number;
@@ -139,6 +139,7 @@ export const useFilesStore = defineStore('files', {
 	actions: {
 		async setFilePath(path: FilePath, isBack = false) {
 			console.log('setFilePath', path);
+			// this.selected = [];
 			if (!path.isDir) {
 				// We need to invoke the preview dialog here, rather than modifying the route.
 
@@ -178,6 +179,7 @@ export const useFilesStore = defineStore('files', {
 			const requestUrl = await this.formatPathtoUrl(path);
 
 			console.log('driveType', path.driveType);
+			console.log('requestUrl', requestUrl);
 
 			getAPI(path.driveType)
 				.fetch(requestUrl)
@@ -265,10 +267,16 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		async openPreviewDialog(path) {
-			if (this.selected.length === 1) {
+			console.log('openPreviewDialog', path);
+			console.log('selected', this.selected);
+			console.log('selected', this.selectedCount);
+
+			if (this.selectedCount === 1) {
 				const item = this.currentFileList.find(
 					(item) => item.index === this.selected[0]
 				);
+
+				console.log('itemitem', item);
 				await getAPI(path.driveType)
 					.openPreview(item)
 					.then((res) => {

@@ -334,7 +334,7 @@ export const detectType = (mimetype: string) => {
 // Determine if two object arrays contain the same value
 export function containsSameValue<T>(
 	arr1: T[],
-	arr2: T[],
+	arr2: string[],
 	key: string
 ): boolean {
 	return arr1

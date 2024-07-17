@@ -10,6 +10,8 @@ import { formatDrive } from './filesFormat';
 import { checkAppData } from '../../utils/file';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
+import { checkSameName } from './../../utils/file';
+import url from '../../utils/url';
 import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
@@ -33,10 +35,10 @@ class Data extends Origin {
 	}
 
 	async fetch(url: string): Promise<FileResType> {
-		console.log('drive fetch', url);
 		url = decodeURIComponent(removePrefix(url));
 		const res = await this.fetchDrive(url);
 
+		console.log('fetch-res', res);
 		res.url = `/Files${url}`;
 
 		if (res.isDir) {
@@ -399,6 +401,7 @@ class Data extends Origin {
 
 	async openPreview(item: any): Promise<FileResType> {
 		const res = await this.fetch(item.path);
+		console.log('openPreviewopenPreview', res);
 		res.driveType = DriveType.Drive;
 		return res;
 	}
@@ -474,10 +477,22 @@ class Data extends Origin {
 		await Promise.all(promises);
 	}
 
-	async renameItem(items: FileItem, newName: string): Promise<void> {
-		console.log('FileItemFileItem', items, newName);
+	async renameItem(item: FileItem, newName: string): Promise<void> {
+		const oldLink = decodeURIComponent(item.path);
+		const newLink =
+			url.removeLastDir(oldLink) + '/' + encodeURIComponent(newName);
 
-		// await files.rename(oldLink, newName);
+		await files.rename(oldLink, newLink);
+	}
+
+	async createDir(dirName: string, path: string): Promise<void> {
+		const filesStore = useFilesStore();
+		const newName = await checkSameName(dirName, filesStore.currentFileList);
+
+		let url = path + '/' + encodeURIComponent(newName) + '/';
+		url = url.replace('//', '/');
+
+		await files.resourceAction(url, 'post');
 	}
 }
 

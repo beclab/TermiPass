@@ -17,7 +17,6 @@ import { DriveType } from './../stores/files';
 
 function dataAPIs(origin?: DriveType): SyncDataAPI | DriveDataAPI {
 	const query = getParams(window.location.href, 'id');
-	console.log('dataAPIs', origin, '--', DriveType.Sync);
 	if (origin === DriveType.Sync) {
 		return new SyncDataAPI();
 	} else if (origin === DriveType.Drive) {

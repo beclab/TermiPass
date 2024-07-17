@@ -5,8 +5,8 @@ import { OPERATE_ACTION } from './../utils/contact';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
 import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
-// import { useFilesStore } from './../stores/files';
-// import { useMenuStore } from './../stores/files-menu';
+import { useMenuStore } from './../stores/files-menu';
+import { DriveType, useFilesStore } from './files';
 
 import { useDataStore } from './data';
 import { MenuItem } from '../utils/contact';
@@ -14,7 +14,6 @@ import { MenuItem } from '../utils/contact';
 // import { operationAPI } from './../api';
 
 import { dataAPIs } from './../api';
-import { DriveType } from './files';
 
 export interface EventType {
 	type?: DriveType;
@@ -154,6 +153,8 @@ export const useOperateinStore = defineStore('operation', {
 			e.stopPropagation();
 
 			const dataStore = useDataStore();
+			const filesStore = useFilesStore();
+			const menuStore = useMenuStore();
 
 			console.log('handleFileOperate ===>');
 			console.log('CREATE_FOLDER => action', action);
@@ -210,7 +211,10 @@ export const useOperateinStore = defineStore('operation', {
 					break;
 
 				case OPERATE_ACTION.REFRESH:
-					dataStore.setReload(true);
+					filesStore.setBrowserUrl(
+						route.fullPath,
+						menuStore.activeMenu.driveType
+					);
 					break;
 
 				case OPERATE_ACTION.SHARE:

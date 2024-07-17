@@ -39,8 +39,8 @@ const props = defineProps({
 		required: true
 	},
 	modified: {
-		type: String,
-		default: '',
+		type: Number,
+		default: 0,
 		required: false
 	},
 	path: {

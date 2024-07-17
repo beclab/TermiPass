@@ -54,10 +54,6 @@ const props = defineProps({
 	}
 });
 
-console.log('propspropsprops', props.item);
-console.log('propspropsprops - form', props.from);
-console.log('propspropsprops - isSide', props.isSide);
-
 const $q = useQuasar();
 const dataStore = useDataStore();
 const filesStore = useFilesStore();
@@ -234,11 +230,13 @@ const handleEvent = async (action: OPERATE_ACTION, e: any) => {
 };
 
 const showRename = (e: any) => {
+	const jsonItem = JSON.parse(JSON.stringify(props.item));
+
 	if (props.from === 'sync') {
 		$q.dialog({
 			component: ReName,
 			componentProps: {
-				item: props.item
+				item: jsonItem
 			}
 		});
 	} else {
@@ -294,12 +292,13 @@ const deleteRepo = async (e: any) => {
 };
 
 const syncRepoInfo = (e) => {
+	const jsonItem = JSON.parse(JSON.stringify(props.item));
 	if (props.from === 'sync') {
 		try {
 			$q.dialog({
 				component: SyncInfo,
 				componentProps: {
-					item: props.item
+					item: jsonItem
 				}
 			}).onOk(async () => {
 				console.log('ok');

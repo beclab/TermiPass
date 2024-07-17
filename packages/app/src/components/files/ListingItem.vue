@@ -156,10 +156,7 @@ const humanSize = () => {
 		return t('files.invalid_link');
 	}
 
-	if (
-		(props.item.type == 'folder' || !props.item.type) &&
-		props.item.fileSize
-	) {
+	if ((props.item.type == 'folder' || !props.item.type) && props.item.size) {
 		return '-';
 		// return humanStorageSize(props.item.fileSize) === '4.0KB'
 		// 	? '0KB'
@@ -175,6 +172,7 @@ const humanTime = () => {
 	if (store.user.dateFormat) {
 		return moment(props.item.modified).format('L LT');
 	}
+
 	return moment(props.item.modified).fromNow();
 };
 
@@ -281,17 +279,11 @@ const click = (event: any) => {
 	filesStore.addSelected(props.item.index);
 };
 
-const open = () => {
+const open = async () => {
 	emits('closeMenu');
 	filesStore.addSelected(props.item.index);
 
-	console.log('openopen', filesStore.currentFileList);
-	console.log('openopen', props.item);
-	console.log('openopen', props.item.path);
-
 	const splitUrl = props.item.path.split('?');
-
-	console.log('splitUrlsplitUrl', splitUrl);
 
 	if (!props.item.isDir) {
 		if (store.preview.isShow) {
@@ -302,7 +294,7 @@ const open = () => {
 		});
 	}
 
-	filesStore.setFilePath(
+	await filesStore.setFilePath(
 		{
 			path: splitUrl[0],
 			isDir: props.item.isDir,
@@ -311,6 +303,8 @@ const open = () => {
 		},
 		false
 	);
+
+	filesStore.resetSelected();
 };
 </script>
 

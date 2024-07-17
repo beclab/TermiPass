@@ -48,12 +48,8 @@ const handle = (e: any, action: OPERATE_ACTION) => {
 		menuStore.activeMenu.driveType,
 		async (action: OPERATE_ACTION, data: any) => {
 			emit('onItemClick', action, data);
-			console.log('action', action);
-			console.log('data', data);
 
-			console.log('operateinStore', route);
 			const url = route.fullPath;
-			console.log('handleFileOperate - path', url);
 			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
 
 			if (action == OPERATE_ACTION.PASTE) {

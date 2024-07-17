@@ -3,8 +3,8 @@ import { defineStore } from 'pinia';
 import { dataAPIs, DriveDataAPI } from '../api';
 // import { files as api } from '../api';
 import throttle from 'lodash.throttle';
-import { useDataStore } from './data';
-import { DriveType } from './files';
+import { DriveType, useFilesStore } from './files';
+import { useMenuStore } from './files-menu';
 
 const { humanStorageSize } = format;
 
@@ -150,6 +150,11 @@ export const useFilesUploadStore = defineStore('upload', {
 			if (isQueueEmpty && isUploadsEmpty) {
 				window.addEventListener('beforeunload', beforeUnload);
 			}
+
+			if (this.uploadQueue.find((fil) => fil.file.name === item.file.name)) {
+				return false;
+			}
+
 			if (!item.file.isDir) {
 				this.uploadQueue.unshift(item);
 			}
@@ -161,10 +166,8 @@ export const useFilesUploadStore = defineStore('upload', {
 		},
 
 		async finishUpload(item: any, type?: DriveType) {
-			const store = useDataStore();
-			// if (!from) {
-			// 	store.setReload(true);
-			// }
+			const filesStore = useFilesStore();
+			const menuStore = useMenuStore();
 			this.setProgress({ id: item.id, loaded: item.file.size });
 			for (let i = 0; i < this.uploadQueue.length; i++) {
 				const el = this.uploadQueue[i];
@@ -180,7 +183,11 @@ export const useFilesUploadStore = defineStore('upload', {
 			if (type !== DriveType.Sync) {
 				await this.processUploads();
 			}
-			store.setReload(true);
+
+			filesStore.setBrowserUrl(
+				window.location.href.slice(window.location.origin.length),
+				menuStore.activeMenu.driveType
+			);
 		},
 
 		async processUploads() {
@@ -255,17 +262,23 @@ export const useFilesUploadStore = defineStore('upload', {
 		async processSyncUploads(uploadFileList: any) {
 			for (let i = 0; i < uploadFileList.length; i++) {
 				const file = uploadFileList[i];
+
 				const curFile = this.uploadQueue.find(
-					(fil) => fil.file.name === file.fileName
+					(fil) => fil.file.name === file.file.name
 				);
 
 				if (curFile) {
-					const queueHasFile = this.queue.find(
-						(item) => item.file.name === curFile.file.name
-					);
-					if (queueHasFile) {
-						this.moveJob();
+					const newQueue: any[] = [];
+					for (let i = 0; i < this.queue.length; i++) {
+						const el = this.queue[i];
+						const hasQueue = this.uploadQueue.find(
+							(item) => item.file.name === el.file.name
+						);
+						if (!hasQueue) {
+							newQueue.push(el);
+						}
 					}
+					this.queue = newQueue;
 
 					const onUpload = throttle(
 						() => {

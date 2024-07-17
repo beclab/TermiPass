@@ -179,6 +179,8 @@ onMounted(() => {
 
 	const newVal = filesStore.previewItem;
 
+	console.log('newValnewVal', newVal);
+
 	if (newVal.type == undefined) {
 		return null;
 	}
@@ -318,7 +320,9 @@ watch(
 );
 
 const downloadUrl = computed(function () {
-	return api.getDownloadURL(filesStore.previewItem, false, true);
+	const dataAPI = dataAPIs();
+
+	return dataAPI.getDownloadURL(filesStore.previewItem, false, true);
 });
 
 const download = async () => {

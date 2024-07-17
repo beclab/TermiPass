@@ -79,7 +79,7 @@ const submit = async () => {
 		const url = route.fullPath;
 		onDialogOK();
 		loading.value = false;
-		filesStore.selected = [];
+		filesStore.resetSelected();
 		filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
 		notifyHide();
 	} catch (error) {

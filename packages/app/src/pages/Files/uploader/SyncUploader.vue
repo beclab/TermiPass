@@ -16,7 +16,7 @@ import Resumablejs from '@seafile/resumablejs';
 import { seafileAPI } from '../../../api/sync/seafileAPI';
 import { seahub } from '../../../api';
 import { useDataStore } from '../../../stores/data';
-import { useSeahubStore } from '../../../stores/seahub';
+import { useMenuStore } from '../../../stores/files-menu';
 import { useFilesUploadStore } from '../../../stores/files-upload';
 import { DriveType } from '../../../stores/files';
 import { detectType } from '../../../utils/utils';
@@ -48,7 +48,7 @@ const emits = defineEmits(['onFileUploadSuccess']);
 const route = useRoute();
 const dataStore = useDataStore();
 const upload = useFilesUploadStore();
-const seahubStore = useSeahubStore();
+const menuStore = useMenuStore();
 
 const retryFileList = ref<any[]>([]);
 const uploadFileList = ref<any[]>([]);
@@ -60,7 +60,6 @@ const allFilesUploaded = ref(false);
 const uploadInput = ref(null);
 const notifiedFolders = ref<any[]>([]);
 
-window.onbeforeunload = onbeforeunload;
 const isUploadLinkLoaded = ref(false);
 
 let resumable: any = null;
@@ -104,21 +103,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	window.onbeforeunload = null;
 	if (props.dragAndDrop === true) {
 		resumable.disableDropOnDocument();
 	}
 });
-
-onbeforeunload = () => {
-	if (
-		window.uploader &&
-		window.uploader.isUploadProgressDialogShow &&
-		window.uploader.totalProgress !== 100
-	) {
-		return '';
-	}
-};
 
 const bindEventHandler = () => {
 	resumable.on('chunkingComplete', onChunkingComplete.bind(this));
@@ -224,8 +212,8 @@ const JoinDownloadProcess = async (files: any) => {
 			id,
 			path: path,
 			file,
-			repo_name: seahubStore.repo_name,
-			repo_id: seahubStore.repo_id,
+			repo_name: menuStore.activeMenu.label,
+			repo_id: menuStore.activeMenu.id,
 			overwrite: false,
 			...(!file.isDir && { type: detectType(file.type) })
 		};
@@ -262,7 +250,6 @@ const resumableUpload = (resumableFile) => {
 
 const filesAddedComplete = (resumable, files) => {
 	if (files.length === 0) {
-		dataStore.isUploadProgressDialogShow = true;
 		totalProgress.value = 100;
 	}
 };
@@ -271,7 +258,6 @@ const setUploadFileList = () => {
 	let uploadFileListTemp = resumable.files;
 
 	uploadFileList.value = uploadFileListTemp;
-	dataStore.isUploadProgressDialogShow = true;
 };
 
 // const onFileProgress = (resumableFile) => {
@@ -483,7 +469,6 @@ const onCloseUploadDialog = () => {
 	resumable.files = [];
 	// reset upload link loaded
 	isUploadLinkLoaded.value = false;
-	dataStore.isUploadProgressDialogShow = false;
 	uploadFileList.value = [];
 };
 </script>

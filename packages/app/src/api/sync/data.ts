@@ -535,9 +535,29 @@ class Data extends Origin {
 		await seahub.batchDeleteItem(parmas);
 	}
 
-	async renameItem(items: FileItem, newName: string): Promise<void> {
-		console.log('FileItemFileItem', items, newName);
-		// const filesStore = useFilesStore();
+	async renameItem(item: FileItem, newName: string): Promise<void> {
+		const p = item.parentPath + item.name;
+		const parmas = {
+			operation: 'rename',
+			newname: newName
+		};
+		const url = 'api/v2.1/repos';
+		await seahub.fileOperate(p, url, parmas, item.isDir ? 'dir' : 'file');
+	}
+
+	async createDir(dirName: string, path: string): Promise<void> {
+		const menuStore = useMenuStore();
+
+		const pathlen =
+			decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +
+			menuStore.activeMenu.label.length;
+		const p = `${decodeURIComponent(path).slice(pathlen)}${dirName}`;
+
+		const parmas = {
+			operation: 'mkdir'
+		};
+		const url = 'api2/repos';
+		await seahub.fileOperate(p, url, parmas, 'dir');
 	}
 }
 

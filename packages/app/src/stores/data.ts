@@ -21,8 +21,6 @@ export type DataState = {
 	showConfirm: any;
 	currentItem: string;
 	showUploadModal: boolean;
-	isUploadProgressDialogShow: boolean;
-	hideSyncUploadModal: boolean;
 	// copyFiles: {
 	// 	items: any;
 	// 	from: DriveType;
@@ -63,8 +61,6 @@ export const useDataStore = defineStore('data', {
 			showConfirm: null,
 			currentItem: 'Home',
 			showUploadModal: false,
-			isUploadProgressDialogShow: false,
-			hideSyncUploadModal: false,
 			// copyFiles: {
 			// 	items: [],
 			// 	from: DriveType.Drive

@@ -23,17 +23,8 @@ import { useQuasar } from 'quasar';
 import { useDataStore } from '../../stores/data';
 import { useFilesStore } from '../../stores/files';
 import { useRoute, useRouter, onBeforeRouteUpdate } from 'vue-router';
-import { useSeahubStore } from '../../stores/seahub';
 import { UserStatusActive } from '../../utils/checkTerminusState';
-// import { checkSeahub } from '../../utils/file';
-// import {
-// 	InOfflineMode,
-// 	InOfflineModeCode
-// } from '../../utils/checkTerminusState';
-
 import { useTermipassStore } from '../../stores/termipass';
-// import { MenuItem } from '../../utils/contact';
-// import FilePreViewDialog from './preview/FilePreViewDialog.vue';
 import FilesHeader from './common-files/FilesHeader.vue';
 import FilesFooter from './common-files/FilesFooter.vue';
 import ListingFiles from './common-files/ListingFiles.vue';
@@ -41,17 +32,18 @@ import Errors from './Errors.vue';
 import UploadModal from '../../components/files/UploadModal.vue';
 
 import { DriveType } from './../../stores/files';
+import { useMenuStore } from './../../stores/files-menu';
 import { common } from './../../api';
+import { formatUrltoActiveMenu } from './../../api/common/common';
 
 const store = useDataStore();
 const route = useRoute();
 const router = useRouter();
 const error = ref<any>(null);
 const $q = useQuasar();
-const routepath = ref(route.path);
 const termipassStore = useTermipassStore();
-const seahubStore = useSeahubStore();
 const fileStore = useFilesStore();
+const menuStore = useMenuStore();
 
 // import dataAPI from './../../api/data';
 
@@ -78,81 +70,6 @@ const checkUserStatus = (status: any) => {
 	return true;
 };
 
-// const fetchData = async (loading = true) => {
-// 	if (!checkUserStatus(termipassStore.totalStatus?.isError)) {
-// 		return false;
-// 	}
-
-// 	if (route.path !== routepath.value) {
-// 		routepath.value = route.path;
-// 		const isPre = route.query.type === 'preview';
-// 		if (loading && !isPre) {
-// 			store.req.items = null;
-// 		}
-// 	}
-
-// 	store.setReload(false);
-// 	store.setLoading(true);
-// 	store.resetSelected();
-// 	store.closeHovers();
-
-// 	error.value = null;
-// 	let url = decodeURIComponent(route.path);
-// 	if (url === '') url = '/';
-// 	if (url[0] !== '/') url = '/' + url;
-// 	const currentItem = store.currentItem;
-
-// 	if (checkSeahub(url) && route.query.id !== seahubStore.repo_id) {
-// 		let pathname = decodeURIComponent(window.location.pathname).split('/');
-// 		let hasRepoIndex = pathname.findIndex((item) => item === currentItem);
-// 		if (!pathname[hasRepoIndex + 1]) {
-// 			await seahub.getRepoId(route.query.id);
-// 		}
-// 	}
-
-// 	try {
-// 		// const res = await api.fetch(url, loading, currentItem);
-// 		const res: any = await store.fetchList(url);
-
-// 		if (!checkFetchData(url)) {
-// 			return false;
-// 		}
-
-// 		if (res.type == 'video') {
-// 			store.updateRequest(res);
-// 		} else {
-// 			store.updateRequest(res);
-// 			document.title = `${res.name} - TermiPass`;
-// 		}
-// 	} catch (e: any) {
-// 		if (e.message == InOfflineMode) {
-// 			if (!e.status) {
-// 				e.status = InOfflineModeCode;
-// 			}
-// 		}
-// 		error.value = e;
-// 	} finally {
-// 		store.setLoading(false);
-// 	}
-// };
-
-// const checkFetchData = (url: string): boolean => {
-// 	const currentItem = store.currentItem;
-// 	const pathSplit = url.split('/');
-
-// 	if (
-// 		pathSplit[3] === currentItem ||
-// 		pathSplit[3] === '' ||
-// 		(pathSplit[3] !== '' && currentItem === MenuItem.HOME) ||
-// 		(pathSplit[2] === 'Application' && currentItem === MenuItem.DATA) ||
-// 		(pathSplit[2] === 'AppData' && currentItem === MenuItem.CACHE)
-// 	) {
-// 		return true;
-// 	} else {
-// 		return false;
-// 	}
-// };
-
 const keyEvent = (event: any) => {
 	if (event.keyCode === 112) {
 		event.preventDefault();
@@ -160,49 +77,7 @@ const keyEvent = (event: any) => {
 	}
 };
 
-// watch(
-// 	() => store.req,
-// 	(newVal) => {
-// 		if (!newVal.isDir) {
-// 			isPreview.value = true;
-// 			if (store.preview.isShow) {
-// 				return;
-// 			}
-// 			$q.dialog({
-// 				component: FilePreViewDialog
-// 			});
-// 		}
-// 	}
-// );
-
 const isPreview = ref(false);
-
-watch(
-	() => route.path,
-	(newVal) => {
-		// if (!isPreview.value && newVal.indexOf('Files/') > -1) {
-		// 	fetchData();
-		// }
-	}
-);
-
-// watch(
-// 	() => store.preview.isShow,
-// 	(newVal) => {
-// 		if (!newVal) {
-// 			fetchData(false);
-// 		}
-// 	}
-// );
-
-// watch(
-// 	() => store.reload,
-// 	(value) => {
-// 		if (value === true) {
-// 			fetchData(false);
-// 		}
-// 	}
-// );
 
 onBeforeRouteUpdate((_to, from, next) => {
 	if (from.query.type === 'preview') {
@@ -217,7 +92,9 @@ onMounted(async () => {
 	let url = route.fullPath;
 	if (url.indexOf('Files') < 0) return;
 
+	menuStore.activeMenu = await formatUrltoActiveMenu(url);
 	const driveType = await common.formatUrltoDriveType(url);
+
 	fileStore.setBrowserUrl(url, driveType);
 
 	window.addEventListener('keydown', keyEvent);

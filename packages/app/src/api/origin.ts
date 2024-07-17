@@ -133,6 +133,11 @@ export abstract class Origin {
 	abstract renameItem(item: FileItem, newName: string): Promise<void>;
 
 	/**
+	 * Handle Create New Dir
+	 */
+	abstract createDir(dirName: string, path: string): Promise<void>;
+
+	/**
 	 * Upload fetch
 	 */
 	// abstract fetchUploader(

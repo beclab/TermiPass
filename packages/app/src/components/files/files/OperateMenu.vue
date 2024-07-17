@@ -22,7 +22,7 @@ import { useRoute, useRouter } from 'vue-router';
 // import { useDataStore } from '../../../stores/data';
 import { useQuasar } from 'quasar';
 import { useMenuStore } from '../../../stores/files-menu';
-import { SYNC_STATE, OPERATE_ACTION } from '../../../utils/contact';
+import { SYNC_STATE } from '../../../utils/contact';
 import { containsSameValue } from '../../../utils/utils';
 import { useOperateinStore } from './../../../stores/operation';
 import FileOperationItem from './FileOperationItem.vue';
@@ -133,10 +133,6 @@ const filterItem = (item: any) => {
 	const hasSelected = filesStore.currentFileList.filter((_, index) => {
 		return filesStore.selected.includes(index);
 	});
-
-	console.log('hasSelected', hasSelected);
-
-	console.log('operateinStore.disableMenuItem', operateinStore.disableMenuItem);
 
 	const hasSameValue = containsSameValue(
 		hasSelected,

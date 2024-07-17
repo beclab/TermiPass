@@ -89,6 +89,8 @@ const props = defineProps({
 	}
 });
 
+console.log('propsitem', props.item);
+
 const { dialogRef, onDialogCancel } = useDialogPluginComponent();
 
 const $q = useQuasar();
@@ -98,7 +100,7 @@ const show = ref(true);
 const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 
 const humanSize = computed(function () {
-	return humanStorageSize(props.item?.size);
+	return props.item?.size ? humanStorageSize(props.item?.size) : '-';
 });
 
 const humanNumber = computed(function () {
@@ -118,7 +120,7 @@ const name = computed(function () {
 });
 
 const modified = computed(function () {
-	return formatFileModified(props.item?.last_modified);
+	return formatFileModified(new Date(props.item?.last_modified).getTime());
 });
 
 const fileType = computed(function () {

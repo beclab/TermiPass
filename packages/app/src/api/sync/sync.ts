@@ -7,6 +7,7 @@ import { axiosInstanceProxy } from '../../platform/httpProxy';
 
 import { MenuItem } from './../../utils/contact';
 import { SyncRepoItemType, SyncRepoSharedItemType } from './type';
+import { useMenuStore } from 'src/stores/files-menu';
 
 export async function instanceAxios(config) {
 	const store = useDataStore();
@@ -82,10 +83,15 @@ export async function createLibrary(name) {
 	return res;
 }
 
-export async function fileOperate(path, url, parmas, floder) {
-	const seahubStore = useSeahubStore();
+export async function fileOperate(
+	path: string,
+	url: string,
+	parmas: { operation: string; newname?: string },
+	floder: string
+) {
+	const menuStore = useMenuStore();
 	const res = await instanceAxios({
-		url: `seahub/${url}/${seahubStore.repo_id}/${floder}/?p=${path}`,
+		url: `seahub/${url}/${menuStore.activeMenu.id}/${floder}/?p=${path}`,
 		method: 'post',
 		data: getFormData(parmas),
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
