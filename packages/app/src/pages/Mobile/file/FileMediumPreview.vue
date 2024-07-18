@@ -49,7 +49,7 @@
 				:src="raw"
 				style="width: 100%"
 			/> -->
-			<terminus-video-player :raw="raw" />
+			<terminus-video-player :raw="store.req.path" :req="store.req" />
 		</div>
 	</div>
 </template>

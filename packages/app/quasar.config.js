@@ -658,19 +658,12 @@ module.exports = configure(function (ctx) {
 				},
 				'/seahub': {
 					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
-					changeOrigin: true,
-					secure: false,
-					pathRewrite: {
-						'^/seafhttp': ''
-					}
+					changeOrigin: true
 				},
 				'/seafhttp': {
-					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com/seafhttp`,
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
 					changeOrigin: true,
-					secure: false,
-					pathRewrite: {
-						'^/seafhttp': ''
-					}
+					secure: false
 				},
 				'/settingsApi': {
 					target: `https://settings.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
@@ -678,6 +671,12 @@ module.exports = configure(function (ctx) {
 					pathRewrite: {
 						'^/settingsApi': ''
 					}
+				},
+
+				'/videos': {
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
+					changeOrigin: true,
+					secure: false
 				}
 			}
 		},
