@@ -38,7 +38,7 @@ export type UploadState = {
 	timer: boolean;
 };
 
-export const useFilesUploadStore = defineStore('upload', {
+export const useUploadStore = defineStore('upload', {
 	state: () => {
 		return {
 			id: 0,
@@ -58,6 +58,7 @@ export const useFilesUploadStore = defineStore('upload', {
 
 			const totalSize = this.sizes.reduce((a: any, b: any) => a + b, 0);
 			const sum = this.progress.reduce((acc: any, val: any) => acc + val);
+
 			return Math.floor((sum / totalSize) * 100) > 100
 				? 100
 				: Math.floor((sum / totalSize) * 100);
@@ -150,12 +151,11 @@ export const useFilesUploadStore = defineStore('upload', {
 				store.setReload(true);
 			}
 			this.setProgress({ id: item.id, loaded: item.file.size });
+
 			for (let i = 0; i < this.uploadQueue.length; i++) {
 				const el = this.uploadQueue[i];
 				if (item.id === el.id) {
 					el.status = 0;
-					el.progressSize = el.size;
-					el.progressFormat = el.sizeFormat;
 					break;
 				}
 			}
@@ -185,26 +185,21 @@ export const useFilesUploadStore = defineStore('upload', {
 				this.moveJob();
 
 				if (item.file.isDir) {
-					await api.uploadPost(item.path).catch(/*Vue.prototype.$showError*/);
+					await api.post(item.path).catch(/*Vue.prototype.$showError*/);
 					this.finishUpload(item);
 				} else {
 					const onUpload = throttle(
-						(event: any) => {
+						(event: any) =>
 							this.setProgress({
 								id: item.id,
 								loaded: event.loaded
-							});
-
-							if (event.loaded >= event.total) {
-								this.finishUpload(item);
-							}
-						},
+							}),
 						100,
 						{ leading: true, trailing: false }
 					);
 
 					await api
-						.uploadPost(item.path, item.file, item.overwrite, onUpload)
+						.post(item.path, item.file, item.overwrite, onUpload)
 						.then(() => {
 							this.finishUpload(item);
 						})

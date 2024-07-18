@@ -5,6 +5,7 @@
 		:width="240"
 		class="myDrawer"
 		:dark="$q.dark.isActive"
+		:class="isFiles ? 'files-border' : ''"
 	>
 		<BtScrollArea style="height: 100%; width: 100%">
 			<bt-menu
@@ -104,7 +105,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { useDataStore } from '../../stores/data';
 import { syncStatusInfo, useMenuStore } from '../../stores/files-menu';
 import { useSeahubStore } from '../../stores/seahub';
-import { useOperateinStore } from './../../stores/operation';
+import { sync } from '../../api';
+import { handleFileOperate } from '../../components/files/files/OperateAction';
 import PopupMenu from '../../components/files/popup/PopupMenu.vue';
 import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
@@ -115,13 +117,14 @@ const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
 const seahubStore = useSeahubStore();
-const operateinStore = useOperateinStore();
+
+const isFiles = process.env.PLATFORM == 'FILES';
 
 const { t } = useI18n();
 
 onMounted(async () => {
-	await menuStore.getSyncMenu();
 	menuStore.fifterMenu();
+	await sync.getSyncMenu();
 });
 
 const selectHandler = (value) => {
@@ -164,7 +167,7 @@ const changeItemMenu = async (
 };
 
 const handleNewLib = (e: any) => {
-	operateinStore.handleFileOperate(
+	handleFileOperate(
 		e,
 		Route,
 		OPERATE_ACTION.CREATE_REPO,
@@ -194,10 +197,15 @@ const getSyncStatus = (repo_id: string) => {
 .myDrawer {
 	overflow: hidden;
 	padding-top: 6px;
+	border-right: 1px solid $separator;
 	// border-right: 1px solid red;
 	// .title-active {
 	// 	color: $ink-1;
 	// }
+}
+
+.files-border {
+	border-right: 1px solid $separator;
 }
 
 .sync-icon {

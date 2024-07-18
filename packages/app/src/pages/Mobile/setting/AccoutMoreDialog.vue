@@ -88,7 +88,7 @@ const deleteAction = () => {
 };
 
 const deleteAccount = async () => {
-	if (await userStore.unlockFirst()) {
+	if (!(await userStore.unlockFirst())) {
 		return;
 	}
 	userStore.userUpdating = true;
