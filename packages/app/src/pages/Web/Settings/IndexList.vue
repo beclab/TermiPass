@@ -32,7 +32,8 @@ import { useRouter } from 'vue-router';
 import { SETTING_MENU } from '../../../utils/constants';
 import { useI18n } from 'vue-i18n';
 
-const settingMenu = ['account', 'security', 'display', 'tools', 'rebinding'];
+// const settingMenu = ['account', 'security', 'display', 'tools', 'rebinding'];
+const settingMenu = ['security'];
 
 export default defineComponent({
 	name: 'SettingsIndex',
