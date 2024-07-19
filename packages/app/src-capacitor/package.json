@@ -23,5 +23,5 @@
     "@capgo/capacitor-native-biometric": "^6.0.1",
     "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4"
   },
-  "versionCode": "20"
+  "versionCode": "21"
 }
