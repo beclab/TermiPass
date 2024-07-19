@@ -5,7 +5,7 @@ on:
 
     push:
         branches:
-            - "build/release"
+            - "release/clients"
         tags:
           - 'v*'
 
@@ -26,7 +26,7 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v1
               with:
-                node-version: '16.13'
+                node-version: '18.16'
 #                node-version: '20.1'
 
             - name: Login to GitHub Container Registry
