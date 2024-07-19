@@ -18,9 +18,7 @@
 		171058762BD0F3E100ADFD5C /* splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058732BD0F3E100ADFD5C /* splash.png */; };
 		171058772BD0F3E100ADFD5C /* splash@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 171058742BD0F3E100ADFD5C /* splash@3x.png */; };
 		171F160029B1CD61002C94C5 /* StorageUseriOSPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 171F15FF29B1CD61002C94C5 /* StorageUseriOSPlugin.swift */; };
-		171F160229B1CDA3002C94C5 /* StorageUseriOSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 171F160129B1CDA3002C94C5 /* StorageUseriOSPlugin.m */; };
 		1728094629F9171500F0755A /* AutofilliOSPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728094529F9171500F0755A /* AutofilliOSPlugin.swift */; };
-		1728094829F917F200F0755A /* AutofilliOSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1728094729F917F200F0755A /* AutofilliOSPlugin.m */; };
 		1728096729FA44D700F0755A /* UnlockController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728096529FA44D700F0755A /* UnlockController.swift */; };
 		1728096829FA44D700F0755A /* UnlockSuccessController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1728096629FA44D700F0755A /* UnlockSuccessController.swift */; };
 		1728096A29FA4D9500F0755A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 504EC30E1FED79650016851F /* Assets.xcassets */; };
@@ -54,23 +52,20 @@
 		175A381229AC9B0C000147E6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 175A381129AC9B0C000147E6 /* GoogleService-Info.plist */; };
 		1768B6F72A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1768B6F62A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift */; };
 		1768B6F92A39E83F00B7CE20 /* HookHttpRequestHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1768B6F82A39E83F00B7CE20 /* HookHttpRequestHandler.swift */; };
-		1768B6FB2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 1768B6FA2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m */; };
 		176D42CF2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176D42CE2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift */; };
 		17812C842A8CCB1C00DBFD54 /* SeafShareFileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17812C802A8CCB1C00DBFD54 /* SeafShareFileViewController.m */; };
 		17812C852A8CCB1C00DBFD54 /* SeafShareDirViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17812C822A8CCB1C00DBFD54 /* SeafShareDirViewController.m */; };
 		17812C892A8CCC0900DBFD54 /* VaultBaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; };
 		17812C8A2A8CCC0900DBFD54 /* VaultBaseFramework.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		17858AD32C2133D700C7C013 /* DropboxAuthPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17858AD22C2133D700C7C013 /* DropboxAuthPlugin.m */; };
 		17858AD52C21342400C7C013 /* DropboxAuthPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17858AD42C21342400C7C013 /* DropboxAuthPlugin.swift */; };
 		17858AD72C21354D00C7C013 /* DropboxOauthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17858AD62C21354D00C7C013 /* DropboxOauthManager.swift */; };
-		17858ADC2C215B3500C7C013 /* GoogleAuthPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17858AD92C215B3500C7C013 /* GoogleAuthPlugin.m */; };
 		17858ADD2C215B3500C7C013 /* GoogleAuthPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17858ADB2C215B3500C7C013 /* GoogleAuthPlugin.swift */; };
 		1795A8032AB8839A0066335E /* LocalVpnSDK.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1795A8012AB883900066335E /* LocalVpnSDK.xcframework */; };
-		179A7B5D2AA6FA0000676225 /* TailScalePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 179A7B5C2AA6FA0000676225 /* TailScalePlugin.m */; };
 		179A7B5F2AA6FA5900676225 /* TailScalePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179A7B5E2AA6FA5900676225 /* TailScalePlugin.swift */; };
 		179A7B9B2AA6FE5000676225 /* NetworkExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 179A7B4E2AA6F89D00676225 /* NetworkExtension.framework */; };
 		179A7B9E2AA6FE5000676225 /* PacketTunnelProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179A7B9D2AA6FE5000676225 /* PacketTunnelProvider.swift */; };
 		179A7BFF2AA733B900676225 /* TermiPassVPN.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 179A7B9A2AA6FE5000676225 /* TermiPassVPN.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		17C50AF92C4513B200A2859B /* TermipassRootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C50AF82C4513B200A2859B /* TermipassRootController.swift */; };
 		17CF84CF2A83671100A89F88 /* TermiPassShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17CF84CE2A83671100A89F88 /* TermiPassShareViewController.m */; };
 		17CF84D22A83671100A89F88 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17CF84D02A83671100A89F88 /* MainInterface.storyboard */; };
 		17CF84DC2A836ABC00A89F88 /* TermiPassNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17CF84DB2A836ABC00A89F88 /* TermiPassNavigationController.m */; };
@@ -79,10 +74,8 @@
 		17D58DC329938FB500730594 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17D58DC129938FB500730594 /* MainInterface.storyboard */; };
 		17D58DC829938FB500730594 /* autofill.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 17D58DBC29938FB500730594 /* autofill.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		17D58DD42993C07300730594 /* AutoFillResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DD32993C07300730594 /* AutoFillResponse.m */; };
-		17D58DD92993C4D900730594 /* AppSettingsPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DD82993C4D900730594 /* AppSettingsPlugin.m */; };
 		17D58DDB2993C51500730594 /* AppSettingsPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DDA2993C51500730594 /* AppSettingsPlugin.swift */; };
 		17D58DE22993E43500730594 /* AutofillListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DE12993E43500730594 /* AutofillListController.swift */; };
-		17D58DE72994CF3E00730594 /* StorageiOSPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DE62994CF3E00730594 /* StorageiOSPlugin.m */; };
 		17D58DE92994CF8C00730594 /* StorageiOSPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D58DE82994CF8C00730594 /* StorageiOSPlugin.swift */; };
 		17DBC421299D0FFB001ACC9C /* VaultBaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; };
 		17DBC427299D1372001ACC9C /* VaultBaseFramework.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */; };
@@ -90,7 +83,6 @@
 		17F3DE24299E01A500694AFD /* AppOrWebIdentifyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3DE23299E01A500694AFD /* AppOrWebIdentifyModel.swift */; };
 		17F436D529670D8E00A0B89F /* TwitterLoginPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F436D429670D8E00A0B89F /* TwitterLoginPlugin.swift */; };
 		17F436D729670EFB00A0B89F /* TwitterOauthLoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F436D629670EFB00A0B89F /* TwitterOauthLoginController.swift */; };
-		17F436D92967D55700A0B89F /* TwitterLoginPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17F436D82967D55700A0B89F /* TwitterLoginPlugin.m */; };
 		17FE23FF29E94695008A46C8 /* ExtensionWebviewPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FE23FE29E94695008A46C8 /* ExtensionWebviewPlugin.m */; };
 		17FE240129E946F0008A46C8 /* ExtensionWebviewPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FE240029E946F0008A46C8 /* ExtensionWebviewPlugin.swift */; };
 		17FE30392A8500E200137F37 /* ProxyInfoPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FE30382A8500E200137F37 /* ProxyInfoPlugin.swift */; };
@@ -185,9 +177,7 @@
 		171058732BD0F3E100ADFD5C /* splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = splash.png; sourceTree = "<group>"; };
 		171058742BD0F3E100ADFD5C /* splash@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "splash@3x.png"; sourceTree = "<group>"; };
 		171F15FF29B1CD61002C94C5 /* StorageUseriOSPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageUseriOSPlugin.swift; sourceTree = "<group>"; };
-		171F160129B1CDA3002C94C5 /* StorageUseriOSPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StorageUseriOSPlugin.m; sourceTree = "<group>"; };
 		1728094529F9171500F0755A /* AutofilliOSPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutofilliOSPlugin.swift; sourceTree = "<group>"; };
-		1728094729F917F200F0755A /* AutofilliOSPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AutofilliOSPlugin.m; sourceTree = "<group>"; };
 		1728096529FA44D700F0755A /* UnlockController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnlockController.swift; path = Autofill/UI/UnlockController.swift; sourceTree = SOURCE_ROOT; };
 		1728096629FA44D700F0755A /* UnlockSuccessController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UnlockSuccessController.swift; path = Autofill/UI/UnlockSuccessController.swift; sourceTree = SOURCE_ROOT; };
 		1728096D29FA9D8B00F0755A /* AutofillItemEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AutofillItemEmptyCell.swift; path = Autofill/UI/AutofillItemEmptyCell.swift; sourceTree = SOURCE_ROOT; };
@@ -219,7 +209,6 @@
 		176440C52ABC440800CE264E /* TermiPassAction.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TermiPassAction.entitlements; sourceTree = "<group>"; };
 		1768B6F62A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookCapacitorHttpPlugin.swift; sourceTree = "<group>"; };
 		1768B6F82A39E83F00B7CE20 /* HookHttpRequestHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HookHttpRequestHandler.swift; sourceTree = "<group>"; };
-		1768B6FA2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HookCapacitorHttpPlugin.m; sourceTree = "<group>"; };
 		176D42CD2B0EFADA00CC1DD3 /* TermipassShare-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TermipassShare-Bridging-Header.h"; sourceTree = "<group>"; };
 		176D42CE2B0EFADB00CC1DD3 /* TermiPassShareRootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermiPassShareRootController.swift; sourceTree = "<group>"; };
 		17812C802A8CCB1C00DBFD54 /* SeafShareFileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SeafShareFileViewController.m; sourceTree = "<group>"; };
@@ -228,20 +217,18 @@
 		17812C832A8CCB1C00DBFD54 /* SeafShareFileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SeafShareFileViewController.h; sourceTree = "<group>"; };
 		1782957A2B158D4700C7D94C /* TermipassShare.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = TermipassShare.entitlements; sourceTree = "<group>"; };
 		1783AFF72AA873700086B2F1 /* SDKHeaderMock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDKHeaderMock.h; sourceTree = "<group>"; };
-		17858AD22C2133D700C7C013 /* DropboxAuthPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DropboxAuthPlugin.m; sourceTree = "<group>"; };
 		17858AD42C21342400C7C013 /* DropboxAuthPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxAuthPlugin.swift; sourceTree = "<group>"; };
 		17858AD62C21354D00C7C013 /* DropboxOauthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropboxOauthManager.swift; sourceTree = "<group>"; };
-		17858AD92C215B3500C7C013 /* GoogleAuthPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GoogleAuthPlugin.m; sourceTree = "<group>"; };
 		17858ADB2C215B3500C7C013 /* GoogleAuthPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleAuthPlugin.swift; sourceTree = "<group>"; };
 		1795A8012AB883900066335E /* LocalVpnSDK.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = LocalVpnSDK.xcframework; sourceTree = "<group>"; };
 		179A7B4E2AA6F89D00676225 /* NetworkExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NetworkExtension.framework; path = System/Library/Frameworks/NetworkExtension.framework; sourceTree = SDKROOT; };
-		179A7B5C2AA6FA0000676225 /* TailScalePlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TailScalePlugin.m; sourceTree = "<group>"; };
 		179A7B5E2AA6FA5900676225 /* TailScalePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TailScalePlugin.swift; sourceTree = "<group>"; };
 		179A7B9A2AA6FE5000676225 /* TermiPassVPN.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermiPassVPN.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		179A7B9D2AA6FE5000676225 /* PacketTunnelProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PacketTunnelProvider.swift; sourceTree = "<group>"; };
 		179A7B9F2AA6FE5000676225 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		179A7BA02AA6FE5000676225 /* TermiPassVPN.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TermiPassVPN.entitlements; sourceTree = "<group>"; };
 		179A7BBA2AA701C900676225 /* TermiPassVPN-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TermiPassVPN-Bridging-Header.h"; sourceTree = "<group>"; };
+		17C50AF82C4513B200A2859B /* TermipassRootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermipassRootController.swift; sourceTree = "<group>"; };
 		17CF84CB2A83671000A89F88 /* TermipassShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TermipassShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		17CF84CD2A83671100A89F88 /* TermiPassShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TermiPassShareViewController.h; sourceTree = "<group>"; };
 		17CF84CE2A83671100A89F88 /* TermiPassShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TermiPassShareViewController.m; sourceTree = "<group>"; };
@@ -258,17 +245,14 @@
 		17D58DD12993C07200730594 /* autofill-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "autofill-Bridging-Header.h"; sourceTree = "<group>"; };
 		17D58DD22993C07300730594 /* AutoFillResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AutoFillResponse.h; path = Autofill/AutoFillResponse.h; sourceTree = SOURCE_ROOT; };
 		17D58DD32993C07300730594 /* AutoFillResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AutoFillResponse.m; path = Autofill/AutoFillResponse.m; sourceTree = SOURCE_ROOT; };
-		17D58DD82993C4D900730594 /* AppSettingsPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppSettingsPlugin.m; sourceTree = "<group>"; };
 		17D58DDA2993C51500730594 /* AppSettingsPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettingsPlugin.swift; sourceTree = "<group>"; };
 		17D58DE12993E43500730594 /* AutofillListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AutofillListController.swift; path = autofill/UI/AutofillListController.swift; sourceTree = SOURCE_ROOT; };
-		17D58DE62994CF3E00730594 /* StorageiOSPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StorageiOSPlugin.m; sourceTree = "<group>"; };
 		17D58DE82994CF8C00730594 /* StorageiOSPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageiOSPlugin.swift; sourceTree = "<group>"; };
 		17DBC420299D0FFB001ACC9C /* VaultBaseFramework.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = VaultBaseFramework.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		17F3DE23299E01A500694AFD /* AppOrWebIdentifyModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppOrWebIdentifyModel.swift; path = Autofill/Model/AppOrWebIdentifyModel.swift; sourceTree = SOURCE_ROOT; };
 		17F436D229669EFB00A0B89F /* App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		17F436D429670D8E00A0B89F /* TwitterLoginPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterLoginPlugin.swift; sourceTree = "<group>"; };
 		17F436D629670EFB00A0B89F /* TwitterOauthLoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterOauthLoginController.swift; sourceTree = "<group>"; };
-		17F436D82967D55700A0B89F /* TwitterLoginPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TwitterLoginPlugin.m; sourceTree = "<group>"; };
 		17FE23FE29E94695008A46C8 /* ExtensionWebviewPlugin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExtensionWebviewPlugin.m; sourceTree = "<group>"; };
 		17FE240029E946F0008A46C8 /* ExtensionWebviewPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionWebviewPlugin.swift; sourceTree = "<group>"; };
 		17FE30382A8500E200137F37 /* ProxyInfoPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyInfoPlugin.swift; sourceTree = "<group>"; };
@@ -402,7 +386,6 @@
 			isa = PBXGroup;
 			children = (
 				1728094529F9171500F0755A /* AutofilliOSPlugin.swift */,
-				1728094729F917F200F0755A /* AutofilliOSPlugin.m */,
 			);
 			path = AutofilliOS;
 			sourceTree = "<group>";
@@ -467,7 +450,6 @@
 		1750C77C2A9387290058FB41 /* VPN */ = {
 			isa = PBXGroup;
 			children = (
-				179A7B5C2AA6FA0000676225 /* TailScalePlugin.m */,
 				179A7B5E2AA6FA5900676225 /* TailScalePlugin.swift */,
 			);
 			path = VPN;
@@ -499,7 +481,6 @@
 			children = (
 				1768B6F62A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift */,
 				1768B6F82A39E83F00B7CE20 /* HookHttpRequestHandler.swift */,
-				1768B6FA2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m */,
 			);
 			path = HookCapacitorHttp;
 			sourceTree = "<group>";
@@ -507,7 +488,6 @@
 		17858AD12C2133A900C7C013 /* Dropbox */ = {
 			isa = PBXGroup;
 			children = (
-				17858AD22C2133D700C7C013 /* DropboxAuthPlugin.m */,
 				17858AD42C21342400C7C013 /* DropboxAuthPlugin.swift */,
 				17858AD62C21354D00C7C013 /* DropboxOauthManager.swift */,
 			);
@@ -517,7 +497,6 @@
 		17858AD82C215A8800C7C013 /* GoogleAuthPlugin */ = {
 			isa = PBXGroup;
 			children = (
-				17858AD92C215B3500C7C013 /* GoogleAuthPlugin.m */,
 				17858ADB2C215B3500C7C013 /* GoogleAuthPlugin.swift */,
 			);
 			path = GoogleAuthPlugin;
@@ -577,7 +556,6 @@
 		17D58DD72993C48400730594 /* AppSettings */ = {
 			isa = PBXGroup;
 			children = (
-				17D58DD82993C4D900730594 /* AppSettingsPlugin.m */,
 				17D58DDA2993C51500730594 /* AppSettingsPlugin.swift */,
 			);
 			path = AppSettings;
@@ -586,9 +564,7 @@
 		17D58DE52994CF1500730594 /* StorageiOS */ = {
 			isa = PBXGroup;
 			children = (
-				17D58DE62994CF3E00730594 /* StorageiOSPlugin.m */,
 				17D58DE82994CF8C00730594 /* StorageiOSPlugin.swift */,
-				171F160129B1CDA3002C94C5 /* StorageUseriOSPlugin.m */,
 				171F15FF29B1CD61002C94C5 /* StorageUseriOSPlugin.swift */,
 			);
 			path = StorageiOS;
@@ -607,7 +583,6 @@
 			children = (
 				17F436D429670D8E00A0B89F /* TwitterLoginPlugin.swift */,
 				17F436D629670EFB00A0B89F /* TwitterOauthLoginController.swift */,
-				17F436D82967D55700A0B89F /* TwitterLoginPlugin.m */,
 			);
 			path = TwitterLogin;
 			sourceTree = "<group>";
@@ -691,6 +666,7 @@
 				50B271D01FEDC1A000F3C39B /* public */,
 				17007863295E9C7200CE8118 /* App-Bridging-Header.h */,
 				170EE7042BD2623D0023C79A /* PrivacyInfo.xcprivacy */,
+				17C50AF82C4513B200A2859B /* TermipassRootController.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1049,34 +1025,26 @@
 				174981CC2BDF576A007AB366 /* TermiPassVpnConfig.swift in Sources */,
 				174981CD2BDF576A007AB366 /* TermiPassVpnManager.swift in Sources */,
 				174981CE2BDF576A007AB366 /* TermiPassVPNTemporaryKey.swift in Sources */,
-				17858ADC2C215B3500C7C013 /* GoogleAuthPlugin.m in Sources */,
 				174981CF2BDF576A007AB366 /* TermiPassVPNUserDefaults.swift in Sources */,
-				171F160229B1CDA3002C94C5 /* StorageUseriOSPlugin.m in Sources */,
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				17334E902A8483D000057588 /* DownloadFilePlugin.m in Sources */,
 				17050C1C29EF8C28001CCC17 /* AppNativeInfoPlugin.m in Sources */,
 				17FE23FF29E94695008A46C8 /* ExtensionWebviewPlugin.m in Sources */,
 				17007862295E9C4400CE8118 /* EchoPlugin.swift in Sources */,
 				1768B6F72A39E7F100B7CE20 /* HookCapacitorHttpPlugin.swift in Sources */,
-				179A7B5D2AA6FA0000676225 /* TailScalePlugin.m in Sources */,
 				179A7B5F2AA6FA5900676225 /* TailScalePlugin.swift in Sources */,
-				17F436D92967D55700A0B89F /* TwitterLoginPlugin.m in Sources */,
-				17858AD32C2133D700C7C013 /* DropboxAuthPlugin.m in Sources */,
 				17858AD72C21354D00C7C013 /* DropboxOauthManager.swift in Sources */,
 				1768B6F92A39E83F00B7CE20 /* HookHttpRequestHandler.swift in Sources */,
 				1700786A295E9DFE00CE8118 /* ScanPhotoQRPlugin.swift in Sources */,
 				171F160029B1CD61002C94C5 /* StorageUseriOSPlugin.swift in Sources */,
-				17D58DD92993C4D900730594 /* AppSettingsPlugin.m in Sources */,
-				17D58DE72994CF3E00730594 /* StorageiOSPlugin.m in Sources */,
 				1700786C295EA42900CE8118 /* ScanPhotoQRPlugin.m in Sources */,
+				17C50AF92C4513B200A2859B /* TermipassRootController.swift in Sources */,
 				1728094629F9171500F0755A /* AutofilliOSPlugin.swift in Sources */,
 				17858AD52C21342400C7C013 /* DropboxAuthPlugin.swift in Sources */,
 				17050C1A29EEDAE9001CCC17 /* AppNativeInfoPlugin.swift in Sources */,
 				17D58DE92994CF8C00730594 /* StorageiOSPlugin.swift in Sources */,
 				17F436D729670EFB00A0B89F /* TwitterOauthLoginController.swift in Sources */,
 				17D58DDB2993C51500730594 /* AppSettingsPlugin.swift in Sources */,
-				1768B6FB2A39E9C800B7CE20 /* HookCapacitorHttpPlugin.m in Sources */,
-				1728094829F917F200F0755A /* AutofilliOSPlugin.m in Sources */,
 				17FE30392A8500E200137F37 /* ProxyInfoPlugin.swift in Sources */,
 				17F436D529670D8E00A0B89F /* TwitterLoginPlugin.swift in Sources */,
 				17334E922A8483DE00057588 /* DownloadFilePlugin.swift in Sources */,

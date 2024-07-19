@@ -9,7 +9,15 @@ import Capacitor
 import VaultBaseFramework
 
 @objc(AppSettingsPlugin)
-public class AppSettingsPlugin: CAPPlugin {
+public class AppSettingsPlugin: CAPPlugin, CAPBridgedPlugin {
+    
+    public let identifier = "AppSettingsPlugin"
+    public let jsName = "AppSettingsPlugin"
+    
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "showAllowCrossSiteTracking", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "jumpToAppSettings", returnType: CAPPluginReturnNone)
+    ]
     
     private static let key: String = "AllowCrossSiteTrackingHadShow"
     

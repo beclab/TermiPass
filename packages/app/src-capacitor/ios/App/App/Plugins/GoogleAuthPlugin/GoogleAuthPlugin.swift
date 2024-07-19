@@ -7,7 +7,19 @@ import GoogleSignIn
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
  */
 @objc(GoogleAuthPlugin)
-public class GoogleAuthPlugin: CAPPlugin {
+public class GoogleAuthPlugin: CAPPlugin, CAPBridgedPlugin {
+    
+    public let identifier = "GoogleAuthPlugin"
+    
+    public let jsName = "GoogleAuthPlugin"
+    
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "refresh", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise)        
+    ]
+    
     var signInCall: CAPPluginCall!
     var googleSignIn: GIDSignIn!;
     var googleSignInConfiguration: GIDConfiguration!;

@@ -8,10 +8,15 @@
 import Capacitor
 import VaultBaseFramework
 @objc(TwitterLoginPlugin)
-public class TwitterLoginPlugin: CAPPlugin {
+public class TwitterLoginPlugin: CAPPlugin, CAPBridgedPlugin {
     
-//    private var call:CAPPluginCall?
+    public let identifier = "TwitterLoginPlugin"
+    public let jsName = "TwitterLogin"
     
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "login", returnType: CAPPluginReturnPromise)
+    ]
+
     @objc func login(_ call: CAPPluginCall) {
         let oauthUrl = call.getString("oauthUrl") ?? ""
         DispatchQueue.main.async {
