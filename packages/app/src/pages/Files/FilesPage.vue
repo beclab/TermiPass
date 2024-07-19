@@ -25,6 +25,7 @@ import {
 	InOfflineModeCode
 } from '../../utils/checkTerminusState';
 import FilePreViewDialog from './preview/FilePreViewDialog.vue';
+import FilePreVideoDialog from './preview/FilePreVideoDialog.vue';
 import { useQuasar } from 'quasar';
 import { useTermipassStore } from '../../stores/termipass';
 import { MenuItem } from '../../utils/contact';
@@ -159,9 +160,15 @@ export default defineComponent({
 					if (store.preview.isShow) {
 						return;
 					}
-					$q.dialog({
-						component: FilePreViewDialog
-					});
+					if (store.req.type === 'video') {
+						$q.dialog({
+							component: FilePreVideoDialog
+						});
+					} else {
+						$q.dialog({
+							component: FilePreViewDialog
+						});
+					}
 				}
 			}
 		);

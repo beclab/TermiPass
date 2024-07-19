@@ -10,7 +10,6 @@
 	</BtLoading>
 	<template v-else>
 		<div class="preview">
-			{{ raw }}
 			<ExtendedImage
 				v-if="store.req.type == 'image'"
 				:src="raw"
@@ -37,15 +36,12 @@
 					@play="autoPlay = true"
 				></audio>
 			</div>
-			<!-- <vue3-video-player
-				v-else-if="store.req.type == 'video'"
-				@play="autoPlay = true"
-				:src="raw"
-			/> -->
+
 			<terminus-video-player
 				v-else-if="store.req.type == 'video'"
-				:raw="store.req.path"
 				:req="store.req"
+				id="videoPlayer"
+				:src="`/videos/play?PlayPath=${store.req.path}`"
 			/>
 
 			<object
@@ -111,7 +107,7 @@ export default defineComponent({
 });
 </script>
 
-<style language="scss" scoped>
+<style lang="scss" scoped>
 .audio-container {
 	width: 100%;
 	height: 100%;

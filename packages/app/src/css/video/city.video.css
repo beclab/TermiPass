@@ -1,0 +1,203 @@
+.vjs-theme-city {
+	--vjs-theme-city--primary: #ffffff;
+	--vjs-theme-city--secondary: #fff;
+}
+
+.vjs-theme-city .vjs-control-bar {
+	height: 70px;
+	padding-top: 20px;
+	background: none;
+	background-image: linear-gradient(to top, #000, rgba(0, 0, 0, 0));
+}
+
+.vjs-theme-city .vjs-button > .vjs-icon-placeholder::before {
+	line-height: 50px;
+}
+
+/* progress */
+.vjs-theme-city .vjs-play-progress::before {
+	display: none;
+}
+
+.vjs-theme-city .vjs-progress-control {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	width: calc(100% - 24px);
+	height: 20px;
+	margin: 0 12px;
+}
+
+.vjs-theme-city .vjs-load-progress div {
+	background: rgba(255, 255, 255, 0.4);
+}
+
+.vjs-theme-city .vjs-progress-control .vjs-progress-holder {
+	position: absolute;
+	top: 20px;
+	right: 0;
+	left: 0;
+	width: 100%;
+	margin: 0;
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.vjs-theme-city .vjs-play-progress {
+	background-color: var(--vjs-theme-city--primary);
+}
+
+/* current time */
+.vjs-theme-city .vjs-current-time {
+	display: inline-block;
+	position: absolute;
+	top: -10px;
+	left: 0;
+	font-size: 12px;
+	color: var(--vjs-theme-city--primary);
+}
+
+/* duration */
+.vjs-theme-city .vjs-duration {
+	display: inline-block;
+	position: absolute;
+	top: -10px;
+	right: 0;
+	font-size: 12px;
+	color: var(--vjs-theme-city--primary);
+}
+
+/* remaining time */
+.vjs-theme-city .vjs-remaining-time {
+	display: none;
+}
+
+/* Play Button */
+.vjs-theme-city .vjs-play-control {
+	font-size: 1em;
+	z-index: 1;
+	margin-left: 12px;
+}
+
+.vjs-theme-city .vjs-play-control .vjs-icon-placeholder::before {
+	height: 1.3em;
+	width: 1.3em;
+	margin-top: 0.6em;
+	border-radius: 1em;
+	border: 2px solid var(--vjs-theme-city--secondary);
+	top: 2px;
+	left: 9px;
+	line-height: 1.1;
+}
+
+/* fullscreen */
+.vjs-theme-city .vjs-fullscreen-control {
+	position: absolute;
+	top: 10px;
+	right: 0.8rem;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(icons/fullscreen.svg);
+}
+
+.vjs-theme-city .vjs-fullscreen-control .vjs-icon-placeholder::before {
+	display: none;
+}
+
+/* volume */
+.vjs-theme-city .vjs-volume-panel {
+	width: 10em;
+}
+
+.vjs-theme-city .vjs-volume-level {
+	background-color: var(--vjs-theme-city--primary);
+}
+
+.vjs-theme-city .vjs-volume-panel {
+	top: 0px;
+	right: 0px;
+	font-size: 1.2em;
+}
+
+.vjs-theme-city .vjs-volume-control {
+	margin-top: 8px;
+}
+
+/* rate */
+.vjs-theme-city .vjs-playback-rate {
+	height: 50px;
+	position: absolute;
+	bottom: 0px;
+	right: 3.8rem;
+}
+
+.vjs-theme-city .vjs-playback-rate-value {
+	line-height: 50px;
+}
+
+.vjs-theme-city .vjs-playback-rate .vjs-playback-rate {
+	top: 0;
+}
+
+.vjs-theme-city .vjs-playback-rate .vjs-menu {
+	width: 12em;
+	bottom: 1em;
+	left: -4em;
+	height: auto;
+}
+
+.vjs-theme-city .vjs-menu-content {
+	border-radius: 4px;
+}
+
+.vjs-theme-city .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+	max-height: 25em;
+	background: #1f1f1f;
+	overflow: hidden;
+	border-radius: 8px;
+	padding: 0.8em;
+}
+
+.vjs-theme-city .vjs-menu-content .vjs-menu-item.vjs-selected {
+	border-radius: 4px;
+	background: rgba(255, 255, 255, 0.1);
+	color: #ffffff;
+	background-repeat: no-repeat;
+	background-position: 90% center;
+	background-image: url(icons/check_rate.svg);
+}
+
+.vjs-theme-city .vjs-menu-content .vjs-menu-item {
+	padding: 0.8em;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.vjs-theme-city .vjs-menu li.vjs-menu-item:hover {
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+/* Fast Forward Button  */
+.vjs-theme-city .vjs-fast-forward-button {
+	width: 50px;
+	font-size: 24px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(icons/forward_10.svg);
+}
+
+/* Fast Forward Button  */
+.vjs-theme-city .vjs-fast-replay-button {
+	width: 50px;
+	font-size: 24px;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url(icons/replay_10.svg);
+	cursor: pointer;
+}
+
+.vjs-theme-city .vjs-control .vjs-control-text {
+	background: red;
+}

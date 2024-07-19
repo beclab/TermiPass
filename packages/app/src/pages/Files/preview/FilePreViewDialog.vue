@@ -112,6 +112,7 @@ import Action from '../../../components/files/header/Action.vue';
 
 import { useDataStore } from '../../../stores/data';
 import FilePreview from '../common-files/FilePreview.vue';
+import FileVideoPreview from '../common-files/FileVideoPreview.vue';
 import FileEditor from '../common-files/FileEditor.vue';
 import FileUnavailable from '../common-files/FileUnavailable.vue';
 
@@ -194,9 +195,12 @@ onMounted(() => {
 		if (newVal.name) {
 			title.value = newVal.name as string;
 		}
+
+		if (newVal.type == 'video') {
+			return (currentView.value = FileVideoPreview);
+		}
 		if (
 			newVal.type == 'image' ||
-			newVal.type == 'video' ||
 			newVal.type == 'audio' ||
 			newVal.type == 'pdf'
 		) {
