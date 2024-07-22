@@ -8,7 +8,7 @@
 	>
 		<div id="video-previewer">
 			<div class="header row items-center justify-between">
-				<div class="title text-ink-on-brand text-h5">{{ title }}22</div>
+				<div class="title text-ink-on-brand text-h5">{{ title }}</div>
 				<div>
 					<q-btn
 						dense

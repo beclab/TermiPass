@@ -14,7 +14,8 @@ import videojs from 'video.js';
 import Player from 'video.js/dist/types/player';
 import 'video.js/dist/video-js.css';
 import './../../css/video/city.video.css';
-// import '@videojs/themes/city/index.css';
+import SettingsPlugin from '../video_plugins/SettingsPlugin';
+import QualityPlugin from '../video_plugins/QualityPlugin';
 
 const overrideNative = ref(false);
 const props = defineProps({
@@ -119,10 +120,8 @@ function options() {
 
 		sources: [
 			{
-				src: './TermiV2.mp4',
-				// src: props.src,
-				type: 'video/mp4'
-				// type: 'application/vnd.apple.mpegurl'
+				src: props.src,
+				type: 'application/vnd.apple.mpegurl'
 			}
 		]
 	};
@@ -131,23 +130,29 @@ function options() {
 onMounted(() => {
 	try {
 		player = videojs(props.id, options(), () => {
-			videojs.log('播放器已经准备好了!');
+			videojs.log('player ready!');
 			player.pause();
 			player.on('canplaythrough', function (event: any) {
 				emit('videoCanplaythrough', event.target.player.cache_?.duration);
 			});
 			player.on('play', function () {
-				videojs.log('视频准备播放');
+				videojs.log('player start');
 				emit('videoPlay');
 			});
 			player.on('playing', function () {
-				videojs.log('视频已开始播放');
+				videojs.log('playing');
 				emit('videoPlaying');
 			});
 			player.on('pause', function (event: any) {
 				emit('videoPause', event.target.player.cache_?.currentTime);
 			});
 		});
+
+		videojs.registerPlugin('settingsPlugin', SettingsPlugin);
+		videojs.registerPlugin('qualityPlugin', QualityPlugin);
+
+		player.settingsPlugin();
+		player.qualityPlugin();
 	} catch (error) {
 		console.log('catch', error);
 	}
@@ -160,7 +165,7 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped>
+<style lang="scss">
 .videoPlayer {
 	width: 100%;
 	height: 100%;
@@ -168,53 +173,3 @@ onBeforeUnmount(() => {
 	overflow: hidden;
 }
 </style>
-
-<!-- <template>
-	<video
-		id="videoPlayer"
-		preload="auto"
-		data-setup="{}"
-		class="video-js"
-		style="width: 100%; height: 100%"
-	/>
-</template>
-
-<script setup lang="ts">
-import { onMounted, onBeforeUnmount, PropType } from 'vue';
-import videojs from 'video.js';
-import Player from 'video.js/dist/types/player';
-import 'video.js/dist/video-js.css';
-
-const props = defineProps({
-	id: { type: String, default: 'vd' },
-	src: { type: String, default: '' },
-	poster: { type: String, default: '' }
-});
-
-let player: Player;
-
-const videoOptions = {
-	autoplay: true,
-	controls: true,
-	sources: [
-		{
-			// src: props.raw,
-			src: props.src,
-			// type: 'video/mp4'
-			type: 'application/vnd.apple.mpegurl'
-		}
-	]
-};
-
-onMounted(() => {
-	player = videojs('videoPlayer', videoOptions, () => {});
-});
-
-onBeforeUnmount(() => {
-	if (player) {
-		player.dispose();
-	}
-});
-</script>
-
-<style scoped lang="scss"></style> -->

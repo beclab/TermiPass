@@ -66,13 +66,6 @@ module.exports = configure(function (ctx) {
 		build: {
 			vueRouterMode: 'history', // available values: 'hash', 'history'
 
-			postcss: {
-				plugins: [
-					require('postcss-preset-env')()
-					// 其他 postcss 插件
-				]
-			},
-
 			env: {
 				PL_SERVER_URL: process.env.PL_SERVER_URL,
 				PLATFORM: process.env.PLATFORM,
