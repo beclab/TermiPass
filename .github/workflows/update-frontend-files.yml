@@ -33,7 +33,7 @@ jobs:
               uses: "WyriHaximus/github-action-get-previous-tag@v1"
               id: get-latest-tag
               with:
-                fallback: nginx_test # latest
+                fallback: nginx_os_test # latest
             - name: Setup Node
               uses: actions/setup-node@v1
               with:
