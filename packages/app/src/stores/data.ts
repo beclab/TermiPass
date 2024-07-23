@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { useUserStore } from './user';
 import { baseURL as fileBaseURL } from '../utils/constants';
-import { MenuItem, FilesSortType } from '../utils/contact';
+import { MenuItem } from '../utils/contact';
+import { dataAPIs } from './../api';
 
-export type CopyFromMode = 'Sync' | 'Drive' | '';
+// import { CopyStoragesType } from './operation';
+// import { FileItem } from './files';
 
 export type DataState = {
 	user: any;
@@ -13,26 +15,20 @@ export type DataState = {
 	progress: number;
 	loading: boolean;
 	reload: boolean;
-	selected: any;
-	multiple: boolean;
+	// selected: any;
 	show: any;
 	showShell: boolean;
 	showConfirm: any;
 	currentItem: string;
 	showUploadModal: boolean;
-	hideUploadModal: boolean;
-	isUploadProgressDialogShow: boolean;
-	hideSyncUploadModal: boolean;
-	copyFiles: any;
-	copyFrom: CopyFromMode;
+	// copyFiles: {
+	// 	items: any;
+	// 	from: DriveType;
+	// };
 
 	//mobile add
 	activeMenu: MenuItem;
 	// activeSort: FilesSortType;
-	activeSort: {
-		by: FilesSortType;
-		asc: boolean;
-	};
 
 	preview: {
 		isEditEnable: boolean;
@@ -55,22 +51,17 @@ export const useDataStore = defineStore('data', {
 			progress: 0,
 			loading: false,
 			reload: false,
-			selected: [],
-			multiple: false,
+			// selected: [],
 			show: null,
 			showShell: false,
 			showConfirm: null,
 			currentItem: 'Home',
 			showUploadModal: false,
-			hideUploadModal: false,
-			isUploadProgressDialogShow: false,
-			hideSyncUploadModal: false,
-			copyFiles: [],
+			// copyFiles: {
+			// 	items: [],
+			// 	from: DriveType.Drive
+			// },
 			activeMenu: MenuItem.HOME,
-			activeSort: {
-				by: FilesSortType.Modified,
-				asc: true
-			},
 			preview: {
 				isEditEnable: false,
 				isEditing: false,
@@ -84,26 +75,18 @@ export const useDataStore = defineStore('data', {
 	getters: {
 		isLogged(state) {
 			return state.user !== null;
-		},
-
-		selectedCount: (state) => state.selected.length,
-		currentItemDefaultPath(): string {
-			if (this.currentItem == 'Data') {
-				return '/Files/Application';
-			}
-			if (this.currentItem == 'Cache') {
-				return '/Files/AppData';
-			}
-			return (
-				'/Files/Home/' +
-				(this.currentItem && this.currentItem != 'Home'
-					? this.currentItem + '/'
-					: '')
-			);
 		}
+
+		// selectedCount: (state) => state.selected.length
 	},
 
 	actions: {
+		async fetchList(url: string) {
+			const dataAPI = dataAPIs();
+			console.log('dataAPI', dataAPI);
+			return dataAPI.fetch(url);
+		},
+
 		isFiles(route: any) {
 			return (
 				!this.loading &&
@@ -122,35 +105,6 @@ export const useDataStore = defineStore('data', {
 					route.name === 'Seahub') &&
 				this.req.isDir
 			);
-		},
-
-		sortList(list: any) {
-			if (list) {
-				const list1 = list.sort((a, b) => {
-					if (this.activeSort.by == FilesSortType.TYPE) {
-						return this.activeSort.asc
-							? a.type.localeCompare(b.type)
-							: -a.type.localeCompare(b.type);
-					} else if (this.activeSort.by == FilesSortType.NAME) {
-						return this.activeSort.asc
-							? a.name.localeCompare(b.name)
-							: -a.name.localeCompare(b.name);
-					} else if (this.activeSort.by == FilesSortType.SIZE) {
-						return this.activeSort.asc ? a.size - b.size : b.size - a.size;
-					} else {
-						if (typeof a.modified == 'string') {
-							return this.activeSort.asc
-								? a.modified.localeCompare(b.modified)
-								: -a.modified.localeCompare(b.modified);
-						} else {
-							return this.activeSort.asc
-								? a.modified - b.modified
-								: b.modified - a.modified;
-						}
-					}
-				});
-				return list1;
-			}
 		},
 
 		closeHovers() {
@@ -199,23 +153,19 @@ export const useDataStore = defineStore('data', {
 			this.jwt = value;
 		},
 
-		setMultiple(value: any) {
-			this.multiple = value;
-		},
+		// addSelected(value: any) {
+		// 	this.selected.push(value);
+		// },
 
-		addSelected(value: any) {
-			this.selected.push(value);
-		},
+		// removeSelected(value: any) {
+		// 	const i = this.selected.indexOf(value);
+		// 	if (i === -1) return;
+		// 	this.selected.splice(i, 1);
+		// },
 
-		removeSelected(value: any) {
-			const i = this.selected.indexOf(value);
-			if (i === -1) return;
-			this.selected.splice(i, 1);
-		},
-
-		resetSelected() {
-			this.selected = [];
-		},
+		// resetSelected() {
+		// 	this.selected = [];
+		// },
 
 		updateUser(value: any) {
 			if (typeof value !== 'object') return;
@@ -246,15 +196,19 @@ export const useDataStore = defineStore('data', {
 			this.showUploadModal = show;
 		},
 
-		updateCopyFiles(item: any, copyFrom: CopyFromMode) {
-			this.copyFiles = item;
-			this.copyFrom = copyFrom;
-		},
+		// updateCopyFiles(copyStorages: {
+		// 	items: CopyStoragesType[];
+		// 	from: DriveType;
+		// }) {
+		// 	this.copyFiles = copyStorages;
+		// },
 
-		resetCopyFiles() {
-			this.copyFiles = [];
-			this.copyFrom = '';
-		},
+		// resetCopyFiles() {
+		// 	this.copyFiles = {
+		// 		items: [],
+		// 		from: DriveType.Drive
+		// 	};
+		// },
 
 		baseURL() {
 			const user = useUserStore();
@@ -276,14 +230,6 @@ export const useDataStore = defineStore('data', {
 
 		updateActiveMenu(activeMenu: MenuItem) {
 			this.activeMenu = activeMenu;
-		},
-
-		updateActiveSort(type: FilesSortType, asc: boolean) {
-			this.activeSort = {
-				by: type,
-				asc
-			};
-			this.req.items = this.sortList(this.req.items);
 		}
 	}
 });

@@ -1,8 +1,13 @@
 import { defineStore } from 'pinia';
 import { app } from '../globals';
 import { shareToUser } from '../api';
-import { MenuItem, DataState, SYNC_STATE } from '../utils/contact';
+import { MenuItem, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
+// import { dataAPI } from './../api';
+import { dataAPIs, SyncDataAPI, DriveDataAPI } from './../api';
+
+import { DriveType } from './files';
+import { SyncRepoMineType } from './../api/sync/type';
 import { IFilesSyncStatus } from 'src/platform/electron/interface';
 
 export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
@@ -34,6 +39,49 @@ export const syncStatusInfo: Record<number, { icon: string; color: string }> = {
 
 let registerSyncStatusTask = false;
 
+export interface MenuItemType {
+	label: string;
+	key: string | number;
+	icon: string;
+	expationFlag?: boolean;
+	children?: MenuItemType[];
+}
+
+export interface userInfoType {
+	avatar_url: string;
+	contact_email: string;
+	name: string;
+	nickname: string;
+}
+
+export interface SharedItemsType {
+	is_admin: boolean;
+	permission: string;
+	share_type: string;
+	user_info: userInfoType;
+}
+
+export interface ActiveMenuType {
+	label: string;
+	id: string;
+	driveType: DriveType;
+}
+
+export interface DataState {
+	menu: MenuItemType[];
+	showShareUser: boolean;
+	shareRepoInfo: any;
+	userList: any;
+	sharedItems: SharedItemsType[] | any;
+	syncReposLastStatusMap: object;
+	syncRepoIdsList: string[];
+	syncRepoIdsUpdating: boolean;
+	avtiveItem: any;
+	syncStatus: boolean;
+	canForward: boolean;
+	activeMenu: ActiveMenuType;
+}
+
 export const useMenuStore = defineStore('filesMenu', {
 	state: () => {
 		return {
@@ -44,61 +92,23 @@ export const useMenuStore = defineStore('filesMenu', {
 			syncRepoIdsList: [],
 			syncReposTimer: undefined,
 			canForward: false,
-			activeMenu: 'Home',
+			activeMenu: {
+				label: 'Home',
+				id: 'Home',
+				driveType: DriveType.Drive
+			},
 			menu: [
 				{
 					label: MenuItem.DRIVE,
 					key: MenuItem.DRIVE,
 					icon: '',
-					children: [
-						{
-							label: MenuItem.HOME,
-							key: MenuItem.HOME,
-							icon: 'sym_r_other_houses'
-						},
-						{
-							label: MenuItem.DOCUMENTS,
-							key: MenuItem.DOCUMENTS,
-							icon: 'sym_r_news'
-						},
-						{
-							label: MenuItem.PICTURES,
-							key: MenuItem.PICTURES,
-							icon: 'sym_r_art_track'
-						},
-						{
-							label: MenuItem.MOVIES,
-							key: MenuItem.MOVIES,
-							icon: 'sym_r_smart_display'
-						},
-						{
-							label: MenuItem.DOWNLOADS,
-							key: MenuItem.DOWNLOADS,
-							icon: 'sym_r_browser_updated'
-						}
-					]
+					children: []
 				},
 				{
 					label: MenuItem.SYNC,
 					key: MenuItem.SYNC,
 					icon: '',
 					children: []
-					// children: [
-					// {
-					// 	label: MenuItem.MYLIBRARIES,
-					// 	key: 'MyLibraries',
-					// 	icon: 'sym_r_library_books',
-					// 	expationFlag: true,
-					// 	children: []
-					// },
-					// {
-					// 	label: MenuItem.SHAREDWITH,
-					// 	key: 'SharedLibraries',
-					// 	icon: 'sym_r_folder_copy',
-					// 	expationFlag: false,
-					// 	children: []
-					// }
-					// ]
 				},
 				{
 					label: MenuItem.APPLICATION,
@@ -121,24 +131,11 @@ export const useMenuStore = defineStore('filesMenu', {
 			userList: [],
 			sharedItems: [],
 			avtiveItem: null,
-			syncStatus: false,
-			disableMenuItem: [
-				MenuItem.HOME,
-				MenuItem.DOCUMENTS,
-				MenuItem.PICTURES,
-				MenuItem.MOVIES,
-				MenuItem.DOWNLOADS,
-				MenuItem.DATA,
-				MenuItem.CACHE
-			]
+			syncStatus: false
 		} as DataState;
 	},
 
 	getters: {
-		// path: '/Files/Seahub/' + item.label + '/',
-		currentItemDefaultPath(): string {
-			return '/Files/Seahub/' + this.avtiveItem.label + '/';
-		},
 		reposHasSync(): boolean {
 			return Object.values(this.syncReposLastStatusMap).find(
 				(e) =>
@@ -150,6 +147,10 @@ export const useMenuStore = defineStore('filesMenu', {
 	},
 
 	actions: {
+		getMenuBrowserUrl(value) {
+			console.log('getMenuBrowserUrl', value);
+		},
+
 		getMenu() {
 			return this.menu;
 		},
@@ -337,6 +338,33 @@ export const useMenuStore = defineStore('filesMenu', {
 				? this.syncReposLastStatusMap[repo_id].status
 				: 0;
 			return status > SYNC_STATE.DISABLE && status != SYNC_STATE.UNKNOWN;
+		},
+
+		//	fetch sync menu data MYLIBRARIES/SHAREDWITH
+		async getSyncMenu() {
+			const menuStore = useMenuStore();
+			const driveDataAPI = new DriveDataAPI();
+			const syncDataAPI = new SyncDataAPI();
+
+			this.menu[0].children = await driveDataAPI.fetchMenuRepo();
+			const syncMenus: SyncRepoMineType[] = await syncDataAPI.fetchMenuRepo();
+			this.menu[1].children = syncMenus;
+
+			const syncIds: string[] = [];
+			for (let i = 0; i < syncMenus.length; i++) {
+				const selfMenu: SyncRepoMineType = syncMenus[i];
+				if (selfMenu.type === 'mine') {
+					syncIds.push(selfMenu.id);
+				}
+			}
+
+			menuStore.addSyncUpdateRepos(syncIds);
+		},
+
+		async fetchShareInfo(repo_id: string) {
+			const dataAPI = dataAPIs(DriveType.Sync);
+			const res: any = await (dataAPI as SyncDataAPI).fetchShareInfo(repo_id);
+			return res;
 		}
 	}
 });

@@ -1,5 +1,5 @@
-import { useDataStore } from '../stores/data';
-import { axiosInstanceProxy } from '../platform/httpProxy';
+import { useDataStore } from '../../stores/data';
+import { axiosInstanceProxy } from '../../platform/httpProxy';
 export interface InitOptionsInterface {
 	server: string | undefined;
 }

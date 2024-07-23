@@ -35,9 +35,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import { createLibrary } from '../../../api/seahub';
-import { sync } from '../../../api';
+import { createLibrary } from '../../../api/sync/sync';
 import { useDataStore } from '../../../stores/data';
+import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -46,6 +46,8 @@ import { useI18n } from 'vue-i18n';
 const { dialogRef } = useDialogPluginComponent();
 
 const store = useDataStore();
+const menuStore = useMenuStore();
+
 const name = ref<string>('');
 const show = ref(true);
 const loading = ref(false);
@@ -62,7 +64,7 @@ const submit = async () => {
 		loading.value = false;
 	}
 
-	sync.getSyncMenu();
+	menuStore.getSyncMenu();
 	store.setReload(true);
 	store.closeHovers();
 };

@@ -1,7 +1,13 @@
-import { fetchURL } from './utils';
-import { useSeahubStore } from '../stores/seahub';
-import { useDataStore } from '../stores/data';
-import { axiosInstanceProxy } from '../platform/httpProxy';
+import { fetchURL } from '../utils';
+// import { dataAPI } from './index';
+import { dataAPIs } from '..';
+import { useSeahubStore } from '../../stores/seahub';
+import { useDataStore } from '../../stores/data';
+import { axiosInstanceProxy } from '../../platform/httpProxy';
+
+import { MenuItem } from './../../utils/contact';
+import { SyncRepoItemType, SyncRepoSharedItemType } from './type';
+import { useMenuStore } from 'src/stores/files-menu';
 
 export async function instanceAxios(config) {
 	const store = useDataStore();
@@ -50,9 +56,15 @@ export const getFormData = (object) =>
 export async function getRepoId(id) {
 	const seahubStore = useSeahubStore();
 
-	const res2 = await fetchURL(`seahub/api/v2.1/repos/${id}/`, {});
+	const dataAPI = dataAPIs();
+	const res2 = await dataAPI.commonAxios.get(
+		`seahub/api/v2.1/repos/${id}/`,
+		{}
+	);
 
-	seahubStore.setRepoId({ id: res2.data.repo_id, name: res2.data.repo_name });
+	console.log('getRepoIdgetRepoId', res2);
+
+	seahubStore.setRepoId({ id: res2.repo_id, name: res2.repo_name });
 	// return res2.data;
 }
 
@@ -71,10 +83,15 @@ export async function createLibrary(name) {
 	return res;
 }
 
-export async function fileOperate(path, url, parmas, floder) {
-	const seahubStore = useSeahubStore();
+export async function fileOperate(
+	path: string,
+	url: string,
+	parmas: { operation: string; newname?: string },
+	floder: string
+) {
+	const menuStore = useMenuStore();
 	const res = await instanceAxios({
-		url: `seahub/${url}/${seahubStore.repo_id}/${floder}/?p=${path}`,
+		url: `seahub/${url}/${menuStore.activeMenu.id}/${floder}/?p=${path}`,
 		method: 'post',
 		data: getFormData(parmas),
 		headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -86,7 +103,8 @@ export async function fileOperate(path, url, parmas, floder) {
 export async function updateFile(item, content, isNative = false) {
 	const store = useDataStore();
 	const seahubStore = useSeahubStore();
-	let pathLen = item.url.indexOf(store.currentItem) + store.currentItem.length;
+	const pathLen =
+		item.url.indexOf(store.currentItem) + store.currentItem.length;
 	const parent_dir = item.url.slice(pathLen);
 	const res = await fetchURL(
 		`seahub/api2/repos/${seahubStore.repo_id}/update-link/?p=/`,
@@ -99,7 +117,7 @@ export async function updateFile(item, content, isNative = false) {
 		files_content: content
 	};
 
-	let paramsT = {};
+	const paramsT = {};
 	if (isNative) {
 		paramsT['reallyContentType'] = 'multipart/form-data';
 	}
@@ -150,18 +168,6 @@ export async function batchMoveItem(data) {
 	return res;
 }
 
-export async function updateRepoName(repo_id, data) {
-	const seahubStore = useSeahubStore();
-	const res = await instanceAxios({
-		url: `seahub/api2/repos/${seahubStore.repo_id}/?op=rename`,
-		method: 'post',
-		data: data,
-		headers: { 'Content-Type': 'application/json' }
-	});
-
-	return res;
-}
-
 export async function reRepoName(url, data) {
 	const res = await instanceAxios({
 		url: url,
@@ -194,37 +200,6 @@ export async function batchCopyItem(data) {
 	return res;
 }
 
-export const formatFileContent = async (file) => {
-	const store = useDataStore();
-	const seahubStore = useSeahubStore();
-
-	if (
-		!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
-			file.type
-		)
-	) {
-		return file;
-	}
-
-	file.checkSeahub = true;
-	const currentItemLength = store.currentItem.length;
-	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-	const hasSeahub = file.path.slice(startIndex);
-
-	const res = await fetchURL(
-		`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
-		{}
-	);
-
-	if (['audio', 'video', 'pdf'].includes(file.type)) {
-		file.url = store.baseURL() + res.data.raw_path; //res.data.raw_path
-	} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
-		file.content = res.data.file_content;
-	}
-
-	return file;
-};
-
 export const createThumbnail = async (path) => {
 	const seahubStore = useSeahubStore();
 	const res = await fetchURL(
@@ -235,3 +210,36 @@ export const createThumbnail = async (path) => {
 	);
 	return res;
 };
+
+export async function fetchRepo(
+	menu: MenuItem
+): Promise<SyncRepoItemType[] | SyncRepoSharedItemType[][] | undefined> {
+	if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
+		return undefined;
+	}
+	const dataAPI = dataAPIs();
+
+	if (menu == MenuItem.MYLIBRARIES) {
+		const res: any = await dataAPI.commonAxios.get(
+			'/seahub/api/v2.1/repos/?type=mine',
+			{}
+		);
+
+		const repos: SyncRepoItemType[] = res.repos;
+		return repos;
+	} else {
+		const res2: any = await dataAPI.commonAxios.get(
+			'/seahub/api/v2.1/shared-repos/',
+			{}
+		);
+		const res3: any = await dataAPI.commonAxios.get(
+			'/seahub/api/v2.1/repos/?type=shared',
+			{}
+		);
+
+		const repos2: SyncRepoSharedItemType[] = res2;
+		const repos3: SyncRepoSharedItemType[] = res3.repos;
+
+		return [repos2, repos3];
+	}
+}

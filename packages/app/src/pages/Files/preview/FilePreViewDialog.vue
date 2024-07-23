@@ -19,7 +19,7 @@
 					>
 						{{ title }}
 					</title>
-					<template #info v-if="store.req.type === 'image'">
+					<template #info v-if="filesStore.previewItem.type === 'image'">
 						<div
 							class="q-px-md q-py-xs view-another-image text-overline cursor-pointer q-mr-sm"
 							@click="store.preview.fullSize = !store.preview.fullSize"
@@ -111,7 +111,9 @@ import HeaderBar from '../../../components/files/header/HeaderBar.vue';
 import Action from '../../../components/files/header/Action.vue';
 
 import { useDataStore } from '../../../stores/data';
-import FilePreview from '../common-files/FilePreview.vue';
+import { useFilesStore } from '../../../stores/files';
+
+import FilePreview from './FilePreview.vue';
 import FileEditor from '../common-files/FileEditor.vue';
 import FileUnavailable from '../common-files/FileUnavailable.vue';
 
@@ -120,11 +122,11 @@ import { useRouter } from 'vue-router';
 import { format, useQuasar } from 'quasar';
 import { computed } from 'vue';
 
-import { files as api, seahub } from '../../../api';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
 import { checkSeahub } from '../../../utils/file';
 import { nextTick } from 'process';
+import { dataAPIs } from '../../../api';
 
 const dialog = ref(false);
 
@@ -133,14 +135,15 @@ const maximizedToggle = ref(true);
 const { humanStorageSize } = format;
 
 const store = useDataStore();
+const filesStore = useFilesStore();
 
-const title = ref(store.req.name);
+const title = ref(filesStore.previewItem.name);
 
 const isDark = ref(false);
 
 const $router = useRouter();
 
-const size = ref(humanStorageSize(store.req.size ?? 0));
+const size = ref(humanStorageSize(filesStore.previewItem.size ?? 0));
 
 const currentView = ref();
 const reloadFinished = ref(true);
@@ -152,7 +155,7 @@ const hasPrevious = computed(function () {
 		return false;
 	}
 	const items = store.oldReq.items.filter((e) => !e.isDir);
-	const index = items.findIndex((e) => e.name == store.req.name);
+	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 
 	return index > 0;
 });
@@ -162,7 +165,7 @@ const hasNext = computed(function () {
 		return false;
 	}
 	const items = store.oldReq.items.filter((e) => !e.isDir);
-	const index = items.findIndex((e) => e.name == store.req.name);
+	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 	return index < items.length - 1;
 });
 
@@ -173,7 +176,9 @@ onBeforeMount(() => {
 onMounted(() => {
 	isDark.value = false;
 
-	const newVal = store.req;
+	const newVal = filesStore.previewItem;
+
+	console.log('newValnewVal', newVal);
 
 	if (newVal.type == undefined) {
 		return null;
@@ -226,9 +231,10 @@ const deleteFile = () => {
 };
 
 const prev = async () => {
+	const dataAPI = dataAPIs();
 	const items = store.oldReq.items.filter((e) => !e.isDir);
 
-	const index = items.findIndex((e) => e.name == store.req.name);
+	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 	if (index < 1) {
 		return;
 	}
@@ -240,16 +246,17 @@ const prev = async () => {
 		preItem.type == 'pdf'
 	) {
 		if (checkSeahub(preItem.path) && preItem.isDir === false) {
-			preItem = await seahub.formatFileContent(preItem);
+			preItem = await dataAPI.formatFileContent(preItem);
 		}
 	}
 
-	store.req = preItem;
+	filesStore.previewItem = preItem;
 };
 
 const next = async () => {
+	const dataAPI = dataAPIs();
 	const items = store.oldReq.items.filter((e) => !e.isDir);
-	const index = items.findIndex((e) => e.name == store.req.name);
+	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 	if (index + 1 > items.length) {
 		return;
 	}
@@ -260,19 +267,19 @@ const next = async () => {
 		nextItem.type == 'pdf'
 	) {
 		if (checkSeahub(nextItem.path) && nextItem.isDir === false) {
-			nextItem = await seahub.formatFileContent(nextItem);
+			nextItem = await dataAPI.formatFileContent(nextItem);
 		}
 	}
-	store.req = nextItem;
+	filesStore.previewItem = nextItem;
 };
 
 watch(
-	() => store.req,
+	() => filesStore.previewItem,
 	async (newVal) => {
 		if (newVal.type == undefined) {
 			return null;
 		}
-		title.value = store.req.name;
+		title.value = filesStore.previewItem.name;
 		currentView.value = undefined;
 		reloadFinished.value = false;
 
@@ -312,7 +319,9 @@ watch(
 );
 
 const downloadUrl = computed(function () {
-	return api.getDownloadURL(store.req, false, true);
+	const dataAPI = dataAPIs();
+
+	return dataAPI.getDownloadURL(filesStore.previewItem, false, true);
 });
 
 const download = async () => {
@@ -326,16 +335,16 @@ const download = async () => {
 		const savePath = await window.electron.api.download.getDownloadPath();
 		const formData: INewDownloadFile = {
 			url: data,
-			fileName: store.req.name,
+			fileName: filesStore.previewItem.name,
 			path: savePath,
-			totalBytes: store.req.size
+			totalBytes: filesStore.previewItem.size
 		};
 		await window.electron.api.download.newDownloadFile(formData);
 	}
 };
 
 const close = () => {
-	if (!checkSeahub(store.req.path)) {
+	if (!checkSeahub(filesStore.previewItem.path)) {
 		$router.back();
 		store.resetRequest();
 	} else {
