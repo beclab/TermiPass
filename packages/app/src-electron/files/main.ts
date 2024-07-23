@@ -22,7 +22,8 @@ const listenerEvent = async (updateTray: UpdateTrayImg) => {
 		(_event, data: IFilesLoginAccountInterface) =>
 			filesMainHandleCallBack('loginAccount', {
 				url: data.url,
-				username: data.username
+				username: data.username,
+				authToken: data.authToken
 			})
 	);
 
