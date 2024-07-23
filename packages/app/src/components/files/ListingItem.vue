@@ -65,6 +65,7 @@ import { OPERATE_ACTION } from '../../utils/contact';
 import { useI18n } from 'vue-i18n';
 import { useFilesStore, FileItem } from '../../stores/files';
 import FilePreViewDialog from '../../pages/Files/preview/FilePreViewDialog.vue';
+import FilePreVideoDialog from '../../pages/Files/preview/FilePreVideoDialog.vue';
 
 const props = defineProps({
 	item: {
@@ -287,9 +288,16 @@ const open = async () => {
 		if (store.preview.isShow) {
 			return;
 		}
-		$q.dialog({
-			component: FilePreViewDialog
-		});
+
+		if (props.item.type === 'video') {
+			$q.dialog({
+				component: FilePreVideoDialog
+			});
+		} else {
+			$q.dialog({
+				component: FilePreViewDialog
+			});
+		}
 	}
 
 	await filesStore.setFilePath(

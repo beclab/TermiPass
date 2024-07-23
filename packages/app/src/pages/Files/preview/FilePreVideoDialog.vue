@@ -22,53 +22,29 @@
 				</div>
 			</div>
 			<div class="content bg-background-2">
-				<BtLoading
-					:show="true"
-					v-if="store.loading"
-					textColor="#4999ff"
-					color="#4999ff"
-					text=""
-					backgroundColor="rgba(0, 0, 0, 0)"
-				>
-				</BtLoading>
-				<template v-else>
-					<file-video-preview />
-				</template>
+				<file-video-preview />
 			</div>
 		</div>
 	</q-dialog>
 </template>
 
 <script setup lang="ts">
-import HeaderBar from '../../../components/files/header/HeaderBar.vue';
-import Action from '../../../components/files/header/Action.vue';
-
 import { useDataStore } from '../../../stores/data';
+import { useFilesStore } from '../../../stores/files';
 import FileVideoPreview from '../common-files/FileVideoPreview.vue';
 
 import { onMounted, onUnmounted, ref, onBeforeMount } from 'vue';
-import { useRouter } from 'vue-router';
-import { format, useQuasar } from 'quasar';
-
-import { checkSeahub } from '../../../utils/file';
 
 const dialog = ref(false);
 
 const maximizedToggle = ref(true);
 
-const { humanStorageSize } = format;
-
 const store = useDataStore();
+const filesStore = useFilesStore();
 
-const title = ref(store.req.name);
+const title = ref(filesStore.previewItem.name);
 
 const isDark = ref(false);
-
-const $router = useRouter();
-
-const size = ref(humanStorageSize(store.req.size ?? 0));
-
-const $q = useQuasar();
 
 onBeforeMount(() => {
 	store.preview.isShow = true;
@@ -79,12 +55,6 @@ onMounted(() => {
 });
 
 const close = () => {
-	if (!checkSeahub(store.req.path)) {
-		$router.back();
-		store.resetRequest();
-	} else {
-		store.resetRequest();
-	}
 	dialog.value = false;
 };
 
@@ -92,16 +62,6 @@ onUnmounted(() => {
 	store.preview.fullSize = false;
 	store.preview.isShow = false;
 });
-
-const showOperation = () => {
-	if (store.preview.isEditEnable) {
-		if (!store.preview.isEditing) {
-			store.preview.isEditing = true;
-		} else {
-			store.preview.isSaving = true;
-		}
-	}
-};
 </script>
 
 <style scoped lang="scss">
