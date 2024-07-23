@@ -2,7 +2,6 @@ import { FileItem, FileResType } from './../stores/files';
 import { CopyStoragesType } from 'src/stores/operation';
 
 import { OPERATE_ACTION } from '../utils/contact';
-import { Router } from 'vue-router';
 
 import { DriveMenuType } from './drive/type';
 import { SyncRepoMineType } from './sync/type';
@@ -91,7 +90,7 @@ export abstract class Origin {
 	/**
 	 * Open preview when upload modal
 	 */
-	abstract openPreview(item: any, Router?: Router): Promise<FileResType>;
+	abstract openPreview(item: any): Promise<FileResType>;
 
 	/**
 	 * get url for preview page

@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import { createLibrary } from '../../../api/sync/sync';
+import { createLibrary } from './../../../api/sync/sync';
 import { useDataStore } from '../../../stores/data';
 import { useMenuStore } from '../../../stores/files-menu';
 

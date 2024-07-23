@@ -117,13 +117,11 @@ import FileEditor from '../common-files/FileEditor.vue';
 import FileUnavailable from '../common-files/FileUnavailable.vue';
 
 import { onMounted, onUnmounted, ref, onBeforeMount } from 'vue';
-import { useRouter } from 'vue-router';
 import { format, useQuasar } from 'quasar';
 import { computed } from 'vue';
 
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { watch } from 'vue';
-import { checkSeahub } from '../../../utils/file';
 import { nextTick } from 'process';
 import { dataAPIs } from '../../../api';
 
@@ -140,8 +138,6 @@ const title = ref(filesStore.previewItem.name);
 
 const isDark = ref(false);
 
-const $router = useRouter();
-
 const size = ref(humanStorageSize(filesStore.previewItem.size ?? 0));
 
 const currentView = ref();
@@ -150,20 +146,21 @@ const reloadFinished = ref(true);
 const $q = useQuasar();
 
 const hasPrevious = computed(function () {
-	if (!store.oldReq || !store.oldReq.items || store.oldReq.items.length <= 1) {
+	if (filesStore.currentFileList.length <= 1) {
 		return false;
 	}
-	const items = store.oldReq.items.filter((e) => !e.isDir);
+	const items = filesStore.currentFileList.filter((e) => e.type === 'image');
 	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 
 	return index > 0;
 });
 
 const hasNext = computed(function () {
-	if (!store.oldReq || !store.oldReq.items || store.oldReq.items.length <= 1) {
+	if (filesStore.currentFileList.length <= 1) {
 		return false;
 	}
-	const items = store.oldReq.items.filter((e) => !e.isDir);
+
+	const items = filesStore.currentFileList.filter((e) => e.type === 'image');
 	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 	return index < items.length - 1;
 });
@@ -176,9 +173,6 @@ onMounted(() => {
 	isDark.value = false;
 
 	const newVal = filesStore.previewItem;
-
-	console.log('newValnewVal', newVal);
-
 	if (newVal.type == undefined) {
 		return null;
 	}
@@ -230,46 +224,41 @@ const deleteFile = () => {
 };
 
 const prev = async () => {
-	const dataAPI = dataAPIs();
-	const items = store.oldReq.items.filter((e) => !e.isDir);
-
+	const items = filesStore.currentFileList.filter((e) => e.type === 'image');
 	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 	if (index < 1) {
 		return;
 	}
 
 	let preItem = items[index - 1];
-	if (
-		preItem.type == 'audio' ||
-		preItem.type == 'video' ||
-		preItem.type == 'pdf'
-	) {
-		if (checkSeahub(preItem.path) && preItem.isDir === false) {
-			preItem = await dataAPI.formatFileContent(preItem);
-		}
-	}
-
 	filesStore.previewItem = preItem;
+	await open(preItem);
 };
 
 const next = async () => {
-	const dataAPI = dataAPIs();
-	const items = store.oldReq.items.filter((e) => !e.isDir);
+	const items = filesStore.currentFileList.filter((e) => e.type === 'image');
 	const index = items.findIndex((e) => e.name == filesStore.previewItem.name);
 	if (index + 1 > items.length) {
 		return;
 	}
 	let nextItem = items[index + 1];
-	if (
-		nextItem.type == 'audio' ||
-		nextItem.type == 'video' ||
-		nextItem.type == 'pdf'
-	) {
-		if (checkSeahub(nextItem.path) && nextItem.isDir === false) {
-			nextItem = await dataAPI.formatFileContent(nextItem);
-		}
-	}
 	filesStore.previewItem = nextItem;
+	await open(nextItem);
+};
+
+const open = async (item) => {
+	filesStore.resetSelected();
+	filesStore.addSelected(item.index);
+
+	const splitUrl = item.path.split('?');
+	const path = {
+		path: splitUrl[0],
+		isDir: item.isDir,
+		driveType: item.driveType,
+		param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+	};
+
+	await filesStore.openPreviewDialog(path);
 };
 
 watch(
@@ -343,12 +332,6 @@ const download = async () => {
 };
 
 const close = () => {
-	if (!checkSeahub(filesStore.previewItem.path)) {
-		$router.back();
-		store.resetRequest();
-	} else {
-		store.resetRequest();
-	}
 	dialog.value = false;
 };
 
