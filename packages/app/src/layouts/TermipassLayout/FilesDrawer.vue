@@ -98,7 +98,7 @@
 	</q-drawer>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useQuasar } from 'quasar';
 import { onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';

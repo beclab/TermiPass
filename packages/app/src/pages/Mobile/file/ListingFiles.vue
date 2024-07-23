@@ -39,12 +39,12 @@
 				>
 					<div class="row items-center" @click="updateSort">
 						<q-icon
-							:name="filesSortTypeInfo[store.activeSort.by].icon"
+							:name="filesSortTypeInfo[filesStore.activeSort.by].icon"
 							size="20px"
 							color="grey-8"
 						/>
 						<div class="q-mx-xs text-grey-8">
-							{{ filesSortTypeInfo[store.activeSort.by].name }}
+							{{ filesSortTypeInfo[filesStore.activeSort.by].name }}
 						</div>
 						<div>
 							<q-icon name="sym_r_expand_more" size="20px" color="grey-8" />

@@ -75,3 +75,61 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 
 	return seahubDir;
 }
+
+export function formatSeahubRepos(name, datas) {
+	const dirent_lists = datas;
+	const hasDirLen = dirent_lists.length;
+	const hasFileLen = 0;
+
+	const seahubDir: FileResType = {
+		path: '',
+		name,
+		size: 0,
+		extension: '',
+		modified: 0,
+		mode: 0,
+		isDir: true,
+		isSymlink: false,
+		type: '',
+		numDirs: hasDirLen,
+		numFiles: hasFileLen,
+		sorting: {
+			by: 'modified',
+			asc: true
+		},
+		numTotalFiles: 0,
+		items: [],
+		driveType: DriveType.Sync
+	};
+
+	dirent_lists.forEach((el, index) => {
+		const itemPath = `/Files/Seahub/${el.repo_name}${el.path || ''}/?id=${
+			el.repo_id
+		}&type=${el.type}&p=${el.permission}`;
+
+		const obj: FileItem = {
+			path: itemPath,
+			name: el.repo_name,
+			size: el.size || 0,
+			extension: '',
+			modified: Date.parse(el.last_modified) || 0,
+			mode: 0,
+			isDir: true,
+			isSymlink: false,
+			type: el.type,
+			sorting: {
+				by: 'size',
+				asc: false
+			},
+			numDirs: el.numDirs,
+			numFiles: el.numFiles,
+			numTotalFiles: el.numTotalFiles,
+			index,
+			url: '',
+			driveType: DriveType.Sync,
+			param: ''
+		};
+		seahubDir.items.push(obj);
+	});
+	return seahubDir;
+}

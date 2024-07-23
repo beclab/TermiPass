@@ -96,12 +96,14 @@ import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
 import { useMenuStore } from '../../../stores/files-menu';
 import { DriveType, useFilesStore } from '../../../stores/files';
-import { DriveDataAPI } from './../../../api';
+import { DriveDataAPI, seahub } from './../../../api';
+import { formatSeahubRepos } from './../../../api/sync/filesFormat';
 
 const { t } = useI18n();
 
 const dataStore = useDataStore();
 const menuStore = useMenuStore();
+const fileStore = useFilesStore();
 
 const Router = useRouter();
 const Route = useRoute();
@@ -150,7 +152,7 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 	// 	return;
 	// }
 
-	dataStore.updateActiveMenu(menu);
+	// dataStore.updateActiveMenu(menu);
 
 	const query = {
 		name: name ? name : menu,
@@ -190,6 +192,7 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 				path: '/Files/Seahub/',
 				query
 			});
+			openSyncFolder(menu);
 			break;
 
 		default:
@@ -213,9 +216,24 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 };
 
 const openDriveFolder = (menu: string) => {
-	const fileStore = useFilesStore();
 	let url = `/Files/Home/${menu}/`;
 	fileStore.setBrowserUrl(url, DriveType.Drive);
+};
+
+const openSyncFolder = async (menu: string) => {
+	fileStore.currentFileList = [];
+	if (menu === MenuItem.MYLIBRARIES) {
+		const res = await seahub.fetchMineRepo();
+		console.log('resres', res);
+		fileStore.currentFileList = await formatSeahubRepos(menu, res).items;
+	} else if (menu === MenuItem.SHAREDWITH) {
+		const res2 = await seahub.fetchtosharedRepo();
+		const res3 = await seahub.fetchsharedRepo();
+		fileStore.currentFileList = await formatSeahubRepos(menu, [
+			...res2,
+			...res3
+		]).items;
+	}
 };
 
 const syncMenus = ref([

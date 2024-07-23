@@ -12,8 +12,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDataStore } from '../../../stores/data';
-import { common as api } from '../../../api';
 import Pdfh5 from 'pdfh5';
 import { onMounted, ref } from 'vue';
 import { axiosInstanceProxy } from '../../../platform/httpProxy';
@@ -21,7 +19,6 @@ import { axiosInstanceProxy } from '../../../platform/httpProxy';
 import { useFilesStore } from '../../../stores/files';
 import { dataAPIs } from './../../../api';
 
-const store = useDataStore();
 const filesStore = useFilesStore();
 
 const loading = ref(false);

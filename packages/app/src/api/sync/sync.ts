@@ -217,29 +217,45 @@ export async function fetchRepo(
 	if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
 		return undefined;
 	}
-	const dataAPI = dataAPIs();
 
 	if (menu == MenuItem.MYLIBRARIES) {
-		const res: any = await dataAPI.commonAxios.get(
-			'/seahub/api/v2.1/repos/?type=mine',
-			{}
-		);
-
-		const repos: SyncRepoItemType[] = res.repos;
-		return repos;
+		return fetchMineRepo();
 	} else {
-		const res2: any = await dataAPI.commonAxios.get(
-			'/seahub/api/v2.1/shared-repos/',
-			{}
-		);
-		const res3: any = await dataAPI.commonAxios.get(
-			'/seahub/api/v2.1/repos/?type=shared',
-			{}
-		);
-
-		const repos2: SyncRepoSharedItemType[] = res2;
-		const repos3: SyncRepoSharedItemType[] = res3.repos;
-
+		const repos2 = await fetchtosharedRepo();
+		const repos3 = await fetchsharedRepo();
 		return [repos2, repos3];
 	}
+}
+
+export async function fetchMineRepo(): Promise<SyncRepoItemType[]> {
+	const dataAPI = dataAPIs();
+	const res: any = await dataAPI.commonAxios.get(
+		'/seahub/api/v2.1/repos/?type=mine',
+		{}
+	);
+
+	const repos: SyncRepoItemType[] = res.repos;
+	return repos;
+}
+
+export async function fetchtosharedRepo(): Promise<SyncRepoSharedItemType[]> {
+	const dataAPI = dataAPIs();
+	const res2: any = await dataAPI.commonAxios.get(
+		'/seahub/api/v2.1/shared-repos/',
+		{}
+	);
+	const repos2: SyncRepoSharedItemType[] = res2;
+
+	return repos2;
+}
+
+export async function fetchsharedRepo(): Promise<SyncRepoSharedItemType[]> {
+	const dataAPI = dataAPIs();
+	const res3: any = await dataAPI.commonAxios.get(
+		'/seahub/api/v2.1/repos/?type=shared',
+		{}
+	);
+	const repos3: SyncRepoSharedItemType[] = res3.repos;
+
+	return repos3;
 }
