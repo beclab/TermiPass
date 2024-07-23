@@ -9,7 +9,7 @@
 		<q-card>
 			<div id="previewer" class="bg-background-3">
 				<header-bar>
-					<title
+					<div
 						class="q-ml-md text-ink-1"
 						:style="
 							$q.platform.is.electron && $q.platform.is.mac
@@ -18,7 +18,7 @@
 						"
 					>
 						{{ title }}
-					</title>
+					</div>
 					<template #info v-if="filesStore.previewItem.type === 'image'">
 						<div
 							class="q-px-md q-py-xs view-another-image text-overline cursor-pointer q-mr-sm"
@@ -112,8 +112,7 @@ import Action from '../../../components/files/header/Action.vue';
 
 import { useDataStore } from '../../../stores/data';
 import { useFilesStore } from '../../../stores/files';
-
-import FilePreview from './FilePreview.vue';
+import FilePreview from './../common-files/FilePreview.vue';
 import FileEditor from '../common-files/FileEditor.vue';
 import FileUnavailable from '../common-files/FileUnavailable.vue';
 
@@ -199,9 +198,9 @@ onMounted(() => {
 		if (newVal.name) {
 			title.value = newVal.name as string;
 		}
+
 		if (
 			newVal.type == 'image' ||
-			newVal.type == 'video' ||
 			newVal.type == 'audio' ||
 			newVal.type == 'pdf'
 		) {
