@@ -9,7 +9,7 @@ include ':capacitor-community-fcm'
 project(':capacitor-community-fcm').projectDir = new File('../node_modules/@capacitor-community/fcm/android')
 
 include ':bytetrade-barcode-scanner'
-project(':bytetrade-barcode-scanner').projectDir = new File('../../node_modules/@bytetrade/barcode-scanner/android')
+project(':bytetrade-barcode-scanner').projectDir = new File('../node_modules/@bytetrade/barcode-scanner/android')
 
 include ':capacitor-app'
 project(':capacitor-app').projectDir = new File('../node_modules/@capacitor/app/android')

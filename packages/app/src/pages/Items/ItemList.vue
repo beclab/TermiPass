@@ -573,13 +573,16 @@ export default defineComponent({
 					});
 				} else {
 					meunStore.isEdit = true;
-					addItem(
+					const item = await addItem(
 						'',
 						selectedTemplate.icon,
 						selectedTemplate.fields,
 						[],
 						vault
 					);
+					if (item) {
+						context.emit('toolabClick', item.id);
+					}
 				}
 			});
 		}

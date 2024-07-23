@@ -3,7 +3,7 @@ import * as varint from 'varint';
 import { base58btc } from 'multiformats/bases/base58';
 import { base64url } from 'multiformats/bases/base64';
 import { walletService } from '../wallet';
-import bip39 from 'bip39';
+import * as bip39 from 'bip39';
 
 // multicodec code for Ed25519 keys
 const ED25519_CODEC_ID = varint.encode(parseInt('0xed', 16));
