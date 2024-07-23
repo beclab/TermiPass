@@ -38,7 +38,7 @@ end
 
 def commonPods #通用pods集
   pod 'CryptoSwift', '~> 1.6.0'
-  pod 'HandyJSON', '~> 5.0.2'
+  pod 'HandyJSON', :git => 'https://github.com/Miles-Matheson/HandyJSON.git'
   pod 'SwiftyRSA'
   pod 'GMOpenSSL', '~> 2.2.9'
   pod 'DZNEmptyDataSet'

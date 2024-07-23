@@ -10,7 +10,7 @@
 		:cancel="false"
 		:detailText="t('unlock.vault_unlock_introduce')"
 		logo="login/vault_unlock.svg"
-		:biometry-auto-unlock="false"
+		:biometry-auto-unlock="true"
 		class="bg-white"
 	/>
 </template>
