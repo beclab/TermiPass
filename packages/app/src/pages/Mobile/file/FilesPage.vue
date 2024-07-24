@@ -1,7 +1,7 @@
 <template>
 	<div class="files-list-root">
 		<terminus-title-bar
-			:title="title"
+			:title="filesStore.getCurrentRepo"
 			:is-dark="isDark"
 			:right-icon="rightIcon"
 			:hook-back-action="true"
@@ -33,8 +33,9 @@ import ListingFiles from './ListingFiles.vue';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
 import DirOperationDialog from './DirOperationDialog.vue';
 import { useQuasar } from 'quasar';
-// import { useMenuStore } from '../../../stores/files-menu';
+import { useMenuStore } from '../../../stores/files-menu';
 import { useFilesStore } from '../../../stores/files';
+
 // import { common, seahub } from './../../../api';
 // import { MenuItem } from '../../../utils/contact';
 // import { formatSeahubRepos } from './../../../api/sync/filesFormat';
@@ -44,6 +45,7 @@ import { useFilesStore } from '../../../stores/files';
 
 const store = useDataStore();
 const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 const error = ref<any>(null);
 const route = useRoute();
 const router = useRouter();

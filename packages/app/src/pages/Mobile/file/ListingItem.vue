@@ -231,7 +231,7 @@ const open = async () => {
 	console.log('propspropsprops', props.item);
 	filesStore.addSelected(props.item.index);
 
-	const splitUrl = props.item.path.split('?');
+	// const splitUrl = props.item.path.split('?');
 
 	if (!props.item.isDir) {
 		if (store.preview.isShow) {

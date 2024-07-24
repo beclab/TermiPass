@@ -152,6 +152,13 @@ export const useFilesStore = defineStore('files', {
 
 		hasBackPath(state): boolean {
 			return state.backStack && state.backStack.length > 0 ? true : false;
+		},
+
+		getCurrentRepo(state): string {
+			const currentPath =
+				state.backStack &&
+				state.backStack[state.backStack.length - 1].path.split('/');
+			return currentPath.length < 1 ? '' : currentPath[currentPath.length - 2];
 		}
 	},
 	actions: {
