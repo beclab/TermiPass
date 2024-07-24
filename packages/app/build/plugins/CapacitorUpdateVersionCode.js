@@ -6,7 +6,10 @@ module.exports = class CapacitorUpdateVersionCode {
 	apply(compiler) {
 		compiler.hooks.environment.tap('CapacitorUpdateVersionCode', () => {
 			try {
+				execSync('git fetch --tags origin');
 				const tagsOutput = execSync('git tag').toString();
+				console.log('tagsOutput===>');
+				console.log(tagsOutput);
 				const numberOfTags = tagsOutput.trim().split('\n').length;
 				if (numberOfTags < 10) {
 					return;
@@ -15,12 +18,16 @@ module.exports = class CapacitorUpdateVersionCode {
 					process.cwd(),
 					'src-capacitor/package.json'
 				);
+
+				console.log('capacitorPackageJsonUrl ===>', capacitorPackageJsonUrl);
 				const capacitorPackageJson = fs.readFileSync(
 					capacitorPackageJsonUrl,
 					'utf-8'
 				);
 				const capacitorPackage = JSON.parse(capacitorPackageJson);
 				capacitorPackage.versionCode = `${numberOfTags}`;
+				console.log('capacitorPackage ===>', capacitorPackage);
+
 				fs.writeFileSync(
 					capacitorPackageJsonUrl,
 					JSON.stringify(capacitorPackage, null, 2)

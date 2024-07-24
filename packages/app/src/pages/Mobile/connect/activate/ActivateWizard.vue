@@ -145,7 +145,7 @@ async function authRequestTerminusInfo() {
 		user.auth_url + 'bfl/info/v1/terminus-info',
 		{
 			params: {
-				t: new Date().getMilliseconds()
+				t: new Date().getTime()
 			}
 		}
 	);

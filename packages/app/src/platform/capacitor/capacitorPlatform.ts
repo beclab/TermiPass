@@ -63,6 +63,7 @@ import {
 	registerNativeScanQRProtocols,
 	NativeScanQRProtocol
 } from './scanQRProtocols';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 declare let cordova: any;
 declare let plugins: any;
@@ -137,6 +138,7 @@ export class CapacitorPlatform
 	async appMounted() {
 		super.appMounted();
 		this.resetOrientationLockType();
+		GoogleAuth.initialize();
 
 		const userStore = useUserStore();
 
