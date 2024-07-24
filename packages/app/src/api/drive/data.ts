@@ -413,7 +413,7 @@ class Data extends Origin {
 	getPreviewURL(file: any, thumb: string): string {
 		const params = {
 			inline: 'true',
-			key: Date.parse(file.modified)
+			key: file.modified
 		};
 
 		return createURL('api/preview/' + thumb + file.path, params);

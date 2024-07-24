@@ -289,6 +289,7 @@ const click = (event: any) => {
 const open = async () => {
 	emits('closeMenu');
 	filesStore.addSelected(props.item.index);
+	const splitUrl = props.item.path.split('?');
 
 	if (!props.item.isDir) {
 		if (store.preview.isShow) {
@@ -306,7 +307,15 @@ const open = async () => {
 		}
 	}
 
-	filesStore.setBrowserUrl(props.item.path, props.item.driveType);
+	await filesStore.setFilePath(
+		{
+			path: splitUrl[0],
+			isDir: props.item.isDir,
+			driveType: props.item.driveType,
+			param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+		},
+		false
+	);
 
 	filesStore.resetSelected();
 };

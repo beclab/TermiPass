@@ -1,6 +1,5 @@
 <template>
 	<div class="video-preview-root">
-		{{ raw }}
 		<div v-if="filesStore.previewItem.type == 'image'" class="image-container">
 			<ExtendedImage :src="raw" class="img-part" />
 			<div class="row items-center justify-center q-mt-lg">
