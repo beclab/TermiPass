@@ -35,14 +35,14 @@
 						@on-item-click="onItemClick"
 					/>
 					<file-operation-item
-						v-if="driveType === DriveType.Sync"
+						v-if="isSyncAndRepo"
 						icon="sym_r_add_notes"
 						:label="t('files.new_library')"
 						:action="OPERATE_ACTION.CREATE_REPO"
 						@on-item-click="onItemClick"
 					/>
 					<file-operation-item
-						v-if="driveType !== DriveType.Sync"
+						v-if="!isSyncAndRepo"
 						icon="sym_r_format_list_bulleted_add"
 						:label="t('prompts.newDir')"
 						:action="OPERATE_ACTION.CREATE_FOLDER"
@@ -83,14 +83,17 @@ const modifiedRef = ref();
 const typeRef = ref();
 const isDir = ref(true);
 const driveType = ref();
+const isSyncAndRepo = ref(false);
 const { t } = useI18n();
 const operateinStore = useOperateinStore();
 
 const onShow = async () => {
 	nameRef.value = route.query.name;
 	modifiedRef.value = formatFileModified(Number(route.query.modified));
+	const id = route.query.id;
 
 	driveType.value = await formatUrltoDriveType(route.fullPath);
+	isSyncAndRepo.value = driveType.value == DriveType.Sync && !id;
 
 	if (operateinStore.copyFiles && operateinStore.copyFiles.length > 0) {
 		copied.value = true;

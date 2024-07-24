@@ -24,7 +24,7 @@
 import { useDataStore } from '../../../stores/data';
 
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import Errors from '../../Files/Errors.vue';
 import ListingFiles from './ListingFiles.vue';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
@@ -39,7 +39,6 @@ const store = useDataStore();
 const filesStore = useFilesStore();
 const error = ref<any>(null);
 const route = useRoute();
-const router = useRouter();
 const $q = useQuasar();
 
 const title = ref('');
@@ -59,7 +58,6 @@ onMounted(async () => {
 	filesStore.currentFileList = [];
 	if (route.params.repo === MenuItem.MYLIBRARIES) {
 		const res = await seahub.fetchMineRepo();
-		console.log('resres', res);
 		filesStore.currentFileList = await formatSeahubRepos(route.params.repo, res)
 			.items;
 	} else if (route.params.repo === MenuItem.SHAREDWITH) {

@@ -155,10 +155,19 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		getCurrentRepo(state): string {
-			const currentPath =
-				state.backStack &&
-				state.backStack[state.backStack.length - 1].path.split('/');
-			return currentPath.length < 1 ? '' : currentPath[currentPath.length - 2];
+			if (this.backStack.length == 0) {
+				return '0';
+			}
+			const isEndWith =
+				state.backStack[state.backStack.length - 1].path.endsWith('/');
+			const currentPath = decodeURIComponent(
+				state.backStack[state.backStack.length - 1].path
+			).split('/');
+			return currentPath.length < 1
+				? ''
+				: currentPath[
+						isEndWith ? currentPath.length - 2 : currentPath.length - 1
+				  ];
 		}
 	},
 	actions: {
@@ -288,6 +297,11 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		async back() {
+			console.log('this.backStack.length ===>', this.backStack.length);
+			const path = this.backStack.pop();
+			if (this.backStack.length == 0) {
+				return;
+			}
 			const initPath = new FilePath({
 				path: '/Files/Home',
 				param: '',
@@ -295,7 +309,6 @@ export const useFilesStore = defineStore('files', {
 				driveType: DriveType.Drive
 			});
 
-			const path = this.backStack.pop();
 			console.log('pathpathpath', path);
 			const currentPath = this.backStack[this.backStack.length - 1] || initPath;
 
