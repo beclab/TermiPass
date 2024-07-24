@@ -38,10 +38,9 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 	dirent_lists.forEach((el, index) => {
 		const extension = getextension(el.name);
 		const fileTypeName = el.type === 'dir' ? 'folder' : getFileType(el.name);
-		const itemPath = `/Files/Seahub/${repo_name}${el.parent_dir.replace(
-			/\/$/,
-			''
-		)}${el.path || ''}/?id=${repo_id}&type=${type}&p=${p}`;
+		const itemPath = `/Files/Seahub/${repo_name}${
+			el.path || ''
+		}/?id=${repo_id}&type=${type}&p=${p}`;
 
 		const obj: FileItem = {
 			path: itemPath,

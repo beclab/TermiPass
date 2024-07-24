@@ -88,7 +88,6 @@ const store = useDataStore();
 const menuStore = useMenuStore();
 const route = useRoute();
 const operateinStore = useOperateinStore();
-const touches = ref<number>(0);
 const selectIndex = ref<number | null>(null);
 const renameRef = ref<any>(null);
 const fileName = ref('');
@@ -236,7 +235,16 @@ const drop = async (event: any) => {
 		props.item.driveType,
 		async () => {
 			const url = route.fullPath;
-			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
+			const splitUrl = url.split('?');
+			await filesStore.setFilePath(
+				{
+					path: splitUrl[0],
+					isDir: props.item.isDir,
+					driveType: props.item.driveType,
+					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+				},
+				false
+			);
 		}
 	);
 };
@@ -282,8 +290,6 @@ const open = async () => {
 	emits('closeMenu');
 	filesStore.addSelected(props.item.index);
 
-	const splitUrl = props.item.path.split('?');
-
 	if (!props.item.isDir) {
 		if (store.preview.isShow) {
 			return;
@@ -300,15 +306,7 @@ const open = async () => {
 		}
 	}
 
-	await filesStore.setFilePath(
-		{
-			path: splitUrl[0],
-			isDir: props.item.isDir,
-			driveType: props.item.driveType,
-			param: splitUrl[1] ? `?${splitUrl[1]}` : ''
-		},
-		false
-	);
+	filesStore.setBrowserUrl(props.item.path, props.item.driveType);
 
 	filesStore.resetSelected();
 };

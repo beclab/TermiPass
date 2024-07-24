@@ -42,7 +42,7 @@ const router = useRouter();
 const error = ref<any>(null);
 const $q = useQuasar();
 const termipassStore = useTermipassStore();
-const fileStore = useFilesStore();
+const filesStore = useFilesStore();
 const menuStore = useMenuStore();
 
 // import dataAPI from './../../api/data';
@@ -60,11 +60,20 @@ const checkUserStatus = (status: any) => {
 		return false;
 	}
 	if (error.value != null || error.value != undefined) {
-		setTimeout(() => {
+		setTimeout(async () => {
 			// fetchData();
 			let url = route.fullPath;
 			if (url.indexOf('Files') < 0) return;
-			fileStore.setBrowserUrl(url, DriveType.Drive);
+			const splitUrl = url.split('?');
+			await filesStore.setFilePath(
+				{
+					path: splitUrl[0],
+					isDir: true,
+					driveType: DriveType.Drive,
+					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+				},
+				false
+			);
 		}, 2000);
 	}
 	return true;
@@ -93,7 +102,7 @@ onMounted(async () => {
 	menuStore.activeMenu = await formatUrltoActiveMenu(url);
 	const driveType = await common.formatUrltoDriveType(url);
 
-	fileStore.setBrowserUrl(url, driveType);
+	filesStore.setBrowserUrl(url, driveType, true);
 
 	window.addEventListener('keydown', keyEvent);
 });

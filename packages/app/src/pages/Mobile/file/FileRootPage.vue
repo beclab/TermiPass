@@ -91,13 +91,14 @@ import { useRouter, useRoute } from 'vue-router';
 import BindTerminusName from '../../../components/common/BindTerminusName.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 // import { useUserStore } from '../../../stores/user';
-import { UserStatusActive } from '../../../utils/checkTerminusState';
-import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
+// import { UserStatusActive } from '../../../utils/checkTerminusState';
+// import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
 import { useMenuStore } from '../../../stores/files-menu';
 import { DriveType, useFilesStore } from '../../../stores/files';
 import { DriveDataAPI, seahub } from './../../../api';
 import { formatSeahubRepos } from './../../../api/sync/filesFormat';
+import { route } from 'quasar/wrappers';
 
 const { t } = useI18n();
 
@@ -189,22 +190,23 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 		case MenuItem.MYLIBRARIES:
 		case MenuItem.SHAREDWITH:
 			Router.push({
-				path: '/Files/Seahub/',
+				path: `/repo/${menu}`,
 				query
 			});
-			openSyncFolder(menu);
+			// openSyncFolder(menu, query);
 			break;
 
 		default:
-			query.modified = driveList.value.find(
-				(item) => item.name === menu
-			).modified;
-			openDriveFolder(menu);
-			Router.push({
-				path:
-					'/Files/Home/' + (menu && menu != MenuItem.HOME ? menu + '/' : ''),
-				query
-			});
+			if (menu === MenuItem.HOME) {
+				const url = `/Files/Home`;
+				openDriveFolder(menu, url);
+			} else {
+				query.modified = driveList.value.find(
+					(item) => item.name === menu
+				).modified;
+				const url = `/Files/Home/${menu}/`;
+				openDriveFolder(menu, url);
+			}
 
 			menuStore.activeMenu = {
 				driveType: DriveType.Drive,
@@ -215,26 +217,33 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 	}
 };
 
-const openDriveFolder = (menu: string) => {
-	let url = `/Files/Home/${menu}/`;
+const openDriveFolder = (menu: string, url: string) => {
 	fileStore.setBrowserUrl(url, DriveType.Drive);
 };
 
-const openSyncFolder = async (menu: string) => {
-	fileStore.currentFileList = [];
-	if (menu === MenuItem.MYLIBRARIES) {
-		const res = await seahub.fetchMineRepo();
-		console.log('resres', res);
-		fileStore.currentFileList = await formatSeahubRepos(menu, res).items;
-	} else if (menu === MenuItem.SHAREDWITH) {
-		const res2 = await seahub.fetchtosharedRepo();
-		const res3 = await seahub.fetchsharedRepo();
-		fileStore.currentFileList = await formatSeahubRepos(menu, [
-			...res2,
-			...res3
-		]).items;
-	}
-};
+// const openSyncFolder = async (menu: string, query: any) => {
+// 	const mobilePath = {
+// 		path: menu,
+// 		isDir: true,
+// 		driveType: DriveType.Sync,
+// 		param: query
+// 	};
+// 	fileStore.backStack.push(mobilePath);
+
+// 	fileStore.currentFileList = [];
+// 	if (menu === MenuItem.MYLIBRARIES) {
+// 		const res = await seahub.fetchMineRepo();
+// 		console.log('resres', res);
+// 		fileStore.currentFileList = await formatSeahubRepos(menu, res).items;
+// 	} else if (menu === MenuItem.SHAREDWITH) {
+// 		const res2 = await seahub.fetchtosharedRepo();
+// 		const res3 = await seahub.fetchsharedRepo();
+// 		fileStore.currentFileList = await formatSeahubRepos(menu, [
+// 			...res2,
+// 			...res3
+// 		]).items;
+// 	}
+// };
 
 const syncMenus = ref([
 	{

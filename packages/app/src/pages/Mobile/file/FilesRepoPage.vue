@@ -4,8 +4,6 @@
 			:title="title"
 			:is-dark="isDark"
 			:right-icon="rightIcon"
-			:hook-back-action="true"
-			@on-return-action="onReturnAction"
 			@on-right-click="showOperation"
 		/>
 		<div class="content">
@@ -25,22 +23,17 @@
 <script lang="ts" setup>
 import { useDataStore } from '../../../stores/data';
 
-// import { onMounted } from 'vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Errors from '../../Files/Errors.vue';
 import ListingFiles from './ListingFiles.vue';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
 import DirOperationDialog from './DirOperationDialog.vue';
 import { useQuasar } from 'quasar';
-// import { useMenuStore } from '../../../stores/files-menu';
 import { useFilesStore } from '../../../stores/files';
-// import { common, seahub } from './../../../api';
-// import { MenuItem } from '../../../utils/contact';
-// import { formatSeahubRepos } from './../../../api/sync/filesFormat';
-
-// import { DriveType } from '../../../stores/files';
-// import { useFilesStore } from './../../../stores/files';
+import { seahub } from './../../../api';
+import { MenuItem } from '../../../utils/contact';
+import { formatSeahubRepos } from './../../../api/sync/filesFormat';
 
 const store = useDataStore();
 const filesStore = useFilesStore();
@@ -62,10 +55,22 @@ const showOperation = () => {
 	});
 };
 
-const onReturnAction = () => {
-	router.go(-1);
-	filesStore.back();
-};
+onMounted(async () => {
+	filesStore.currentFileList = [];
+	if (route.params.repo === MenuItem.MYLIBRARIES) {
+		const res = await seahub.fetchMineRepo();
+		console.log('resres', res);
+		filesStore.currentFileList = await formatSeahubRepos(route.params.repo, res)
+			.items;
+	} else if (route.params.repo === MenuItem.SHAREDWITH) {
+		const res2 = await seahub.fetchtosharedRepo();
+		const res3 = await seahub.fetchsharedRepo();
+		filesStore.currentFileList = await formatSeahubRepos(route.params.repo, [
+			...res2,
+			...res3
+		]).items;
+	}
+});
 </script>
 
 <style lang="scss" scoped>

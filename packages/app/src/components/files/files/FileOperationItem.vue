@@ -50,7 +50,16 @@ const handle = (e: any, action: OPERATE_ACTION) => {
 			emit('onItemClick', action, data);
 
 			const url = route.fullPath;
-			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
+			const splitUrl = url.split('?');
+			await filesStore.setFilePath(
+				{
+					path: splitUrl[0],
+					isDir: true,
+					driveType: menuStore.activeMenu.driveType,
+					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+				},
+				false
+			);
 
 			if (action == OPERATE_ACTION.PASTE) {
 				operateinStore.resetCopyFiles();

@@ -6,34 +6,8 @@
 			class="row items-center justify-between header-content drag-content-header q-pl-md"
 		>
 			<div class="row items-center justify-start ellipsis" style="flex: 1">
-				<div style="width: 66px">
-					<q-btn
-						icon="chevron_left"
-						flat
-						dense
-						:disabled="!backFlag ? false : true"
-						@click="goBack"
-						class="btn-no-text btn-no-border btn-size-sm"
-						:class="!backFlag ? 'items-no-drag' : ''"
-						color="ink-3"
-						:style="{ pointerEvents: `${!backFlag ? 'auto' : 'none'}` }"
-					/>
-					<q-btn
-						icon="chevron_right"
-						flat
-						dense
-						:disabled="!goFlag ? false : true"
-						@click="goForward"
-						class="btn-no-text btn-no-border btn-size-sm"
-						:class="!goFlag ? 'items-no-drag' : ''"
-						color="ink-3"
-						:style="{ pointerEvents: `${!goFlag ? 'auto' : 'none'}` }"
-					/>
-				</div>
-
-				<div class="ellipsis text-ink-1" style="flex: 1; font-weight: 800">
-					{{ fileTitle }}
-				</div>
+				<NavigationComponent />
+				<BreadcrumbsComponent base="/Files" />
 			</div>
 
 			<div
@@ -128,37 +102,34 @@
 </template>
 
 <script lang="ts" setup>
-import { nextTick, onMounted, ref, watch, computed } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { users, common } from '../../../api';
 import { useDataStore } from '../../../stores/data';
 import { useMenuStore, ActiveMenuType } from '../../../stores/files-menu';
-import { MenuItem } from '../../../utils/contact';
 import { hideHeaderOpt } from './../../../utils/file';
 import { bytetrade } from '@bytetrade/core';
 
 import PopupMenu from '../../../components/files/popup/PopupMenu.vue';
 import TerminusUserHeaderReminder from './../../../components/common/TerminusUserHeaderReminder.vue';
+import BreadcrumbsComponent from './../../../components/files/BreadcrumbsComponent.vue';
+import NavigationComponent from './../../../components/files/NavigationComponent.vue';
 import { useI18n } from 'vue-i18n';
 import { dataAPIs } from '../../../api';
-import { DriveType, useFilesStore } from '../../../stores/files';
+import { DriveType } from '../../../stores/files';
+import { getParams } from './../../../utils/utils';
 
-const Router = useRouter();
 const Route = useRoute();
 const store = useDataStore();
 const menuStore = useMenuStore();
-const filesMenu = useFilesStore();
 
 const fileTitle = ref();
 const hoverItemAvtive = ref();
 const isSeahub = ref(false);
 const hideOption = ref(false);
 
-const platform = ref(process.env.PLATFORM);
 const viewMode = ref((store.user && store.user.viewMode) || 'list');
 
-const backFlag = ref(true);
-const goFlag = ref(true);
 const watchFrom = ref();
 
 const { t } = useI18n();
@@ -203,6 +174,7 @@ const checkMenuPath = (path: string) => {
 
 	let currentPath: ActiveMenuType = {
 		label: 'Home',
+		id: 'Home',
 		driveType: DriveType.Drive
 	};
 
@@ -211,15 +183,21 @@ const checkMenuPath = (path: string) => {
 			label:
 				parts[parts.findIndex((part: string) => ['Home'].includes(part)) + 1] ||
 				'Home',
+			id:
+				parts[parts.findIndex((part: string) => ['Home'].includes(part)) + 1] ||
+				'Home',
+
 			driveType: DriveType.Drive
 		};
 	} else if (
 		parts.findIndex((part: string) => ['Seahub'].includes(part)) >= 0
 	) {
+		const repo_id = getParams(Route.fullPath, 'id');
 		currentPath = {
 			label:
 				parts[parts.findIndex((part: string) => ['Home'].includes(part)) + 1] ||
 				'Home',
+			id: repo_id,
 			driveType: DriveType.Sync
 		};
 	} else if (
@@ -234,6 +212,11 @@ const checkMenuPath = (path: string) => {
 						['Application', 'AppData'].includes(part)
 					) + 1
 				],
+			id: parts[
+				parts.findIndex((part: string) =>
+					['Application', 'AppData'].includes(part)
+				) + 1
+			],
 			driveType: DriveType.Cache
 		};
 	}
@@ -282,22 +265,6 @@ watch(
 				splitPath[splitPath.findIndex((part) => part === 'Seahub') + 2] == '';
 		}
 
-		if (currentPath) {
-			backFlag.value = true;
-		} else {
-			backFlag.value = false;
-		}
-
-		if (
-			window.history.state.forward &&
-			menuStore.canForward &&
-			oldIsSeahubValue == isSeahub.value
-		) {
-			goFlag.value = false;
-		} else {
-			goFlag.value = true;
-		}
-
 		getFileTitle(newVaule);
 		hideOption.value = hideHeaderOpt(newVaule);
 	}
@@ -331,34 +298,6 @@ const switchView = async (type: string) => {
 		/*this.$showError*/
 		();
 	await store.updateUser(data);
-};
-
-const goBack = async () => {
-	if (backFlag.value) {
-		return false;
-	}
-	if (fileTitle.value === MenuItem.HOME) {
-		return false;
-	}
-	menuStore.canForward = true;
-
-	// if (!window.history.state.back.endsWith('a=111')) {
-	// 	menuStore.canBack = false;
-	// }
-
-	const driveMenu = menuStore.menu[0].children;
-
-	if (driveMenu?.find((menu) => menu.label === fileTitle.value)) {
-		Router.push({
-			path: '/Files/Home/'
-		});
-	} else {
-		Router.go(-1);
-	}
-};
-
-const goForward = async () => {
-	Router.forward();
 };
 
 const uploadFiles = () => {

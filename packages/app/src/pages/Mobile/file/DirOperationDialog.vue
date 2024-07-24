@@ -18,7 +18,9 @@
 						style="width: 30px; height: 30px"
 					/>
 					<div class="column justify-center" style="width: calc(100% - 50px)">
-						<div class="title text-subtitle2">{{ nameRef }}</div>
+						<div class="title text-subtitle2">
+							{{ nameRef }}
+						</div>
 						<div class="detail text-body3">{{ modifiedRef }}</div>
 					</div>
 				</div>
@@ -84,11 +86,11 @@ const driveType = ref();
 const { t } = useI18n();
 const operateinStore = useOperateinStore();
 
-const onShow = () => {
+const onShow = async () => {
 	nameRef.value = route.query.name;
 	modifiedRef.value = formatFileModified(Number(route.query.modified));
 
-	driveType.value = formatUrltoDriveType(route.fullPath);
+	driveType.value = await formatUrltoDriveType(route.fullPath);
 
 	if (operateinStore.copyFiles && operateinStore.copyFiles.length > 0) {
 		copied.value = true;

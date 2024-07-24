@@ -118,8 +118,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
-import { format, useQuasar } from 'quasar';
+import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue';
+import { useQuasar } from 'quasar';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';
 import { useDataStore } from '../../../stores/data';

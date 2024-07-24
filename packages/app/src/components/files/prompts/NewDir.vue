@@ -63,8 +63,16 @@ const submit = async (_event: any) => {
 
 	try {
 		await dataAPI.createDir(name.value, route.path);
-
-		filesStore.setBrowserUrl(route.fullPath, menuStore.activeMenu.driveType);
+		const splitUrl = route.fullPath.split('?');
+		await filesStore.setFilePath(
+			{
+				path: splitUrl[0],
+				isDir: true,
+				driveType: menuStore.activeMenu.driveType,
+				param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+			},
+			false
+		);
 		loading.value = false;
 		store.closeHovers();
 	} catch (error) {

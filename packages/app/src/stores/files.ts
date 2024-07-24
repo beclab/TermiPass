@@ -3,7 +3,6 @@ import { Origin } from '../api/origin';
 import { Data as DriveData } from '../api/drive/data';
 import { Data as SyncData } from '../api/sync/data';
 import { FilesSortType } from '../utils/contact';
-
 export enum DriveType {
 	Drive = 'drive',
 	Sync = 'sync',
@@ -143,10 +142,20 @@ export const useFilesStore = defineStore('files', {
 			return this.currentFileList.filter((item) => item.isDir);
 		},
 
-		selectedCount: (state) => state.selected.length
+		selectedCount: (state) => state.selected.length,
+
+		hasPrevPath(state): boolean {
+			return state.previousStack && state.previousStack.length > 0
+				? true
+				: false;
+		},
+
+		hasBackPath(state): boolean {
+			return state.backStack && state.backStack.length > 0 ? true : false;
+		}
 	},
 	actions: {
-		async setFilePath(path: FilePath, isBack = false) {
+		async setFilePath(path: FilePath, isBack = false, init = false) {
 			console.log('setFilePath', path);
 			// this.selected = [];
 			if (!path.isDir) {
@@ -172,7 +181,7 @@ export const useFilesStore = defineStore('files', {
 			this.isInPreview = false;
 			this.currentPath = path;
 
-			if (!isBack) {
+			if (!isBack && !init) {
 				this.backStack.push(path);
 				this.previousStack = [];
 			}
@@ -189,6 +198,8 @@ export const useFilesStore = defineStore('files', {
 
 			console.log('driveType', path.driveType);
 			console.log('requestUrl', requestUrl);
+			console.log('previousStack', this.previousStack);
+			console.log('hasBackPath', this.backStack);
 
 			getAPI(path.driveType)
 				.fetch(requestUrl)
@@ -209,7 +220,11 @@ export const useFilesStore = defineStore('files', {
 				});
 		},
 
-		setBrowserUrl(url: string, driveType: DriveType = DriveType.Drive) {
+		setBrowserUrl(
+			url: string,
+			driveType: DriveType = DriveType.Drive,
+			init = false
+		) {
 			console.log('setBrowserUrlsetBrowserUrl', url);
 			const splitUrl = url.split('?');
 			console.log('splitUrl', splitUrl);
@@ -224,7 +239,7 @@ export const useFilesStore = defineStore('files', {
 				isDir: true,
 				driveType: driveType
 			});
-			this.setFilePath(path, false);
+			this.setFilePath(path, false, init);
 			// }
 		},
 
@@ -265,28 +280,37 @@ export const useFilesStore = defineStore('files', {
 			}
 		},
 
-		back() {
-			if (this.backStack.length == 0) {
-				return;
-			}
+		async back() {
+			const initPath = new FilePath({
+				path: '/Files/Home',
+				param: '',
+				isDir: true,
+				driveType: DriveType.Drive
+			});
 
 			const path = this.backStack.pop();
+			console.log('pathpathpath', path);
+			const currentPath = this.backStack[this.backStack.length - 1] || initPath;
+
+			console.log('currentPathcurrentPath', currentPath);
 
 			if (path) {
 				this.previousStack.push(path);
-				this.setFilePath(path, true);
+				this.setFilePath(currentPath, true);
 			}
 		},
+
 		previous() {
 			if (this.previousStack.length == 0) {
 				return;
 			}
 
 			const path = this.previousStack.pop();
+			const currentPath = this.backStack[this.backStack.length + 1];
 
 			if (path) {
 				this.backStack.push(path);
-				this.setFilePath(path, true);
+				this.setFilePath(currentPath, true);
 			}
 		},
 
@@ -313,20 +337,14 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		async openPreviewDialog(path) {
-			console.log('openPreviewDialog', path);
-			console.log('selected', this.selected);
-			console.log('selected', this.selectedCount);
-
 			if (this.selectedCount === 1) {
 				const item = this.currentFileList.find(
 					(item) => item.index === this.selected[0]
 				);
 
-				console.log('itemitem', item);
 				await getAPI(path.driveType)
 					.openPreview(item)
 					.then((res) => {
-						console.log('ress', res);
 						this.previewItem = res;
 					});
 			}

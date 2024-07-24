@@ -5,7 +5,10 @@ import { getParams } from './../../utils/utils';
 export async function formatUrltoDriveType(href: string): Promise<DriveType> {
 	if (href.indexOf('/Files/Home') > -1) {
 		return DriveType.Drive;
-	} else if (href.indexOf('/Files/Seahub') > -1) {
+	} else if (
+		href.indexOf('/Files/Seahub') > -1 ||
+		href.indexOf('/repo/') > -1
+	) {
 		return DriveType.Sync;
 	} else if (href.indexOf('/Files/Application') > -1) {
 		return DriveType.Cache;

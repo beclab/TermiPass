@@ -87,7 +87,16 @@ const submit = async () => {
 		onDialogOK();
 		loading.value = false;
 		filesStore.resetSelected();
-		filesStore.setBrowserUrl(route.fullPath, menuStore.activeMenu.driveType);
+		const splitUrl = route.fullPath.split('?');
+		await filesStore.setFilePath(
+			{
+				path: splitUrl[0],
+				isDir: true,
+				driveType: menuStore.activeMenu.driveType,
+				param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+			},
+			false
+		);
 		notifyHide();
 	} catch (error) {
 		loading.value = false;

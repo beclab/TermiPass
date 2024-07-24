@@ -67,9 +67,9 @@ import { computed, PropType } from 'vue';
 import { useDataStore } from '../../../stores/data';
 import { format, useQuasar } from 'quasar';
 const { humanStorageSize } = format;
-import { useRouter, useRoute } from 'vue-router';
-import { fetchURL } from '../../../api/utils';
-import { useSeahubStore } from '../../../stores/seahub';
+import { useRoute } from 'vue-router';
+// import { fetchURL } from '../../../api/utils';
+// import { useSeahubStore } from '../../../stores/seahub';
 import TerminusFileIcon from '../../../components/common/TerminusFileIcon.vue';
 import FileOperationDialog from './FileOperationDialog.vue';
 import { formatFileModified } from '../../../utils/file';
@@ -91,13 +91,12 @@ const props = defineProps({
 	}
 });
 const store = useDataStore();
-const router = useRouter();
 const filesStore = useFilesStore();
 const menuStore = useMenuStore();
 const route = useRoute();
 const operateinStore = useOperateinStore();
 
-const seahubStore = useSeahubStore();
+// const seahubStore = useSeahubStore();
 
 const isSelected = computed(function () {
 	return filesStore.selected.indexOf(props.item.index) !== -1;
@@ -182,7 +181,17 @@ const drop = async (event: any) => {
 		props.item.driveType,
 		async (action: OPERATE_ACTION, data: any) => {
 			const url = route.fullPath;
-			filesStore.setBrowserUrl(url, menuStore.activeMenu.driveType);
+
+			const splitUrl = url.split('?');
+			await filesStore.setFilePath(
+				{
+					path: splitUrl[0],
+					isDir: true,
+					driveType: menuStore.activeMenu.driveType,
+					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+				},
+				false
+			);
 		}
 	);
 };
@@ -191,16 +200,16 @@ const itemClick = () => {
 	open();
 };
 
-const fetchFileContent = async (file: any) => {
-	const currentItemLength = store.currentItem.length;
-	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-	const hasSeahub = file.path.slice(startIndex);
-	const res = await fetchURL(
-		`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
-		{}
-	);
-	return res;
-};
+// const fetchFileContent = async (file: any) => {
+// 	const currentItemLength = store.currentItem.length;
+// 	const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
+// 	const hasSeahub = file.path.slice(startIndex);
+// 	const res = await fetchURL(
+// 		`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
+// 		{}
+// 	);
+// 	return res;
+// };
 
 const $q = useQuasar();
 
@@ -234,15 +243,7 @@ const open = async () => {
 		});
 	}
 
-	await filesStore.setFilePath(
-		{
-			path: splitUrl[0],
-			isDir: props.item.isDir,
-			driveType: props.item.driveType,
-			param: splitUrl[1] ? `?${splitUrl[1]}` : ''
-		},
-		false
-	);
+	filesStore.setBrowserUrl(props.item.path, props.item.driveType);
 
 	filesStore.resetSelected();
 };

@@ -184,9 +184,17 @@ export const useFilesUploadStore = defineStore('upload', {
 				await this.processUploads();
 			}
 
-			filesStore.setBrowserUrl(
-				window.location.href.slice(window.location.origin.length),
-				menuStore.activeMenu.driveType
+			const splitUrl = window.location.href
+				.slice(window.location.origin.length)
+				.split('?');
+			await filesStore.setFilePath(
+				{
+					path: splitUrl[0],
+					isDir: true,
+					driveType: menuStore.activeMenu.driveType,
+					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+				},
+				false
 			);
 		},
 

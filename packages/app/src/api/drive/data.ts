@@ -419,7 +419,7 @@ class Data extends Origin {
 		return createURL('api/preview/' + thumb + file.path, params);
 	}
 
-	getDownloadURL(file: any, inline: boolean, _download: boolean): string {
+	getDownloadURL(file: any, inline: boolean): string {
 		const params = {
 			...(inline && { inline: 'true' })
 		};
