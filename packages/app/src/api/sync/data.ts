@@ -4,9 +4,19 @@ import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
 import { files, seahub } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
-import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
+import {
+	notifyWaitingShow,
+	notifyHide,
+	notifySuccess,
+	notifyFailed
+} from '../../utils/notifyRedefinedUtil';
 
-import { ShareInfoResType, SyncRepoSharedType, SyncRepoMineType } from './type';
+import {
+	ShareInfoResType,
+	SyncRepoSharedType,
+	SyncRepoMineType,
+	SyncRepoItemType
+} from './type';
 
 import { formatSeahub } from './filesFormat';
 import { getParams } from './../../utils/utils';
@@ -65,8 +75,6 @@ class Data extends Origin {
 			url,
 			JSON.parse(JSON.stringify(res))
 		);
-
-		console.log('fetchsync -->', data);
 
 		return data;
 	}
@@ -209,22 +217,15 @@ class Data extends Origin {
 
 	async copy(): Promise<CopyStoragesType[]> {
 		const fileStore = useFilesStore();
-		const menuStore = useMenuStore();
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of fileStore.selected) {
 			const el = fileStore.currentFileList[item];
-			const pathFromStart =
-				decodeURIComponent(el.path).indexOf(menuStore.activeMenu.label) +
-				menuStore.activeMenu.label.length;
 
-			const pathFromEnd = decodeURIComponent(el.path).indexOf('?');
 			const repo_id = getParams(el.path, 'id');
 
-			const from =
-				'/' +
-				repo_id +
-				decodeURIComponent(el.path).slice(pathFromStart, pathFromEnd) +
-				el.name;
+			const from = '/' + repo_id + el.parentPath + el.name;
+
+			console.log('fromfromfrom', from);
 
 			copyStorages.push({
 				from: from,
@@ -241,23 +242,13 @@ class Data extends Origin {
 
 	async cut(): Promise<CopyStoragesType[]> {
 		const fileStore = useFilesStore();
-		const menuStore = useMenuStore();
 		const copyStorages: CopyStoragesType[] = [];
 
 		for (const item of fileStore.selected) {
 			const el = fileStore.currentFileList[item];
-			const pathFromStart =
-				decodeURIComponent(el.path).indexOf(menuStore.activeMenu.label) +
-				menuStore.activeMenu.label.length;
-
-			const pathFromEnd = decodeURIComponent(el.path).indexOf('?');
 			const repo_id = getParams(el.path, 'id');
+			const from = '/' + repo_id + el.parentPath + el.name;
 
-			const from =
-				'/' +
-				repo_id +
-				decodeURIComponent(el.path).slice(pathFromStart, pathFromEnd) +
-				el.name;
 			copyStorages.push({
 				from: from,
 				to: '',
@@ -561,6 +552,33 @@ class Data extends Origin {
 		};
 		const url = 'api2/repos';
 		await seahub.fileOperate(p, url, parmas, 'dir');
+	}
+
+	async deleteRepo(item: SyncRepoItemType): Promise<void> {
+		notifyWaitingShow('Deleting, Please wait...');
+		const path = `seahub/api/v2.1/repos/${item.repo_id}/`;
+		try {
+			await seahub.deleteRepo(path);
+			notifySuccess('Successful!');
+		} catch (error) {
+			notifyFailed('Failed!');
+		}
+		notifyHide();
+	}
+
+	async renameRepo(item: SyncRepoItemType, newName: string): Promise<void> {
+		notifyWaitingShow('Renaming, Please wait...');
+		const url = `seahub/api2/repos/${item.repo_id}/?op=rename`;
+		const data = {
+			repo_name: newName
+		};
+		try {
+			await seahub.reRepoName(url, data);
+			notifySuccess('Successful!');
+		} catch (error) {
+			notifyFailed('Failed!');
+		}
+		notifyHide();
 	}
 }
 

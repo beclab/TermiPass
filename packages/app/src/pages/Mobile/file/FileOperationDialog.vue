@@ -3,7 +3,6 @@
 		position="bottom"
 		ref="dialogRef"
 		@show="onShow"
-		@update:model-value="updateModel"
 		transition-show="jump-up"
 		transition-hide="jump-down"
 		transition-duration="300"
@@ -58,12 +57,16 @@
 					<file-operation-item
 						icon="sym_r_delete"
 						:label="t('delete')"
-						:action="OPERATE_ACTION.DELETE"
+						:action="
+							isSyncAndRepo ? OPERATE_ACTION.REPO_DELETE : OPERATE_ACTION.DELETE
+						"
 					/>
 					<file-operation-item
 						icon="sym_r_edit_square"
 						:label="t('buttons.rename')"
-						:action="OPERATE_ACTION.RENAME"
+						:action="
+							isSyncAndRepo ? OPERATE_ACTION.REPO_RENAME : OPERATE_ACTION.DELETE
+						"
 					/>
 					<file-operation-item
 						icon="sym_r_contract"
@@ -77,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDataStore } from '../../../stores/data';
 import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogDisplayContent from '../../../components/common/TerminusDialogDisplayContent.vue';
@@ -86,13 +88,15 @@ import { stopScrollMove } from '../../../utils/utils';
 import TerminusFileIcon from '../../../components/common/TerminusFileIcon.vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 import { ref, PropType } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { formatFileModified } from '../../../utils/file';
 import { notifySuccess } from '../../../utils/notifyRedefinedUtil';
 import { OPERATE_ACTION } from '../../../utils/contact';
+import { getParams } from '../../../utils/utils';
 import { useI18n } from 'vue-i18n';
 import { DriveType, useFilesStore } from './../../../stores/files';
+import { formatUrltoDriveType } from './../../../api/common/common';
 
 const { dialogRef } = useDialogPluginComponent();
 
@@ -131,28 +135,43 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const dataStore = useDataStore();
 const menuStore = useMenuStore();
 const filesStore = useFilesStore();
 const $q = useQuasar();
 const copied = ref(false);
-const router = useRouter();
+const route = useRoute();
+const isSyncAndRepo = ref(false);
 
-const onShow = () => {
+const onShow = async () => {
+	const driveType = await formatUrltoDriveType(route.fullPath);
+	const id = route.query.id;
+	isSyncAndRepo.value = driveType == DriveType.Sync && !id;
+
 	const index = filesStore.currentFileList.findIndex(
 		(item) => item.index === props.index
 	);
+
+	// const repo_id = getParams(foucsItem.path, 'id');
+
 	if (index !== -1) {
 		menuStore.shareRepoInfo = filesStore.currentFileList[index];
+
+		if (getParams(menuStore.shareRepoInfo.path, 'id')) {
+			menuStore.shareRepoInfo.id = getParams(
+				menuStore.shareRepoInfo.path,
+				'id'
+			);
+			menuStore.shareRepoInfo.repo_name = props.name;
+			const start =
+				menuStore.shareRepoInfo.path.indexOf(props.name) + props.name.length;
+			const end = menuStore.shareRepoInfo.path.indexOf('?', start);
+			const resultPath = menuStore.shareRepoInfo.path.substring(start, end);
+			menuStore.shareRepoInfo.path = resultPath;
+		}
+
 		stopScrollMove();
 		filesStore.resetSelected();
 		filesStore.addSelected(index);
-	}
-};
-
-const updateModel = (value: boolean) => {
-	if (value) {
-		filesStore.addSelected(props.index);
 	}
 };
 

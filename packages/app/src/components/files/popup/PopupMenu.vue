@@ -181,6 +181,7 @@ const handleEvent = async (action: OPERATE_ACTION, e: any) => {
 	const path = '/';
 	switch (action) {
 		case OPERATE_ACTION.SHARE_WITH:
+			console.log('shareRepoInfo', props.item);
 			dataStore.showHover('share-dialog');
 			menuStore.shareRepoInfo = props.item;
 			menuStore.shareRepoInfo.path = path;
@@ -257,7 +258,7 @@ const showRename = (e: any) => {
 const deleteRepo = async (e: any) => {
 	const jsonItem = JSON.parse(JSON.stringify(props.item));
 
-	if (props.from === 'sync') {
+	if (props.from === DriveType.Sync) {
 		try {
 			const res = await menuStore.fetchShareInfo(jsonItem.repo_id);
 
@@ -269,10 +270,6 @@ const deleteRepo = async (e: any) => {
 					item: jsonItem,
 					shared_length: shared_user_emails_length
 				}
-			}).onOk(async () => {
-				const path = `seahub/api/v2.1/repos/${jsonItem.repo_id}/`;
-				await seahub.deleteRepo(path);
-				menuStore.getSyncMenu();
 			});
 		} catch (error) {
 			return false;
@@ -293,7 +290,7 @@ const deleteRepo = async (e: any) => {
 
 const syncRepoInfo = (e) => {
 	const jsonItem = JSON.parse(JSON.stringify(props.item));
-	if (props.from === 'sync') {
+	if (props.from === DriveType.Sync) {
 		try {
 			$q.dialog({
 				component: SyncInfo,
