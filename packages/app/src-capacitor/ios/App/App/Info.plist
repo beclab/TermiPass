@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.11</string>
+	<string>1.2.12</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -54,7 +54,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>28</string>
+	<string>30</string>
 	<key>FacebookAppID</key>
 	<string>549140590110570</string>
 	<key>FacebookClientToken</key>
@@ -95,11 +95,11 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>To Take Photos and Video</string>
+	<string>TermiPass need access to your camera so you can read the QR code.</string>
 	<key>NSCrossWebsiteTrackingUsageDescription</key>
 	<string>Allow authentication and device trackers.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>To Allow Face ID</string>
+	<string>TermiPass need Face ID to verify your identity so you can securely access your account.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Always allow Geolocation?</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -109,7 +109,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Store camera photos to camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>To Pick Photos from Library</string>
+	<string>TermiPass need access to your photo library so you can select and identify the QR code in your photo</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
