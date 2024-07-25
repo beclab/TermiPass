@@ -51,8 +51,6 @@ const route = useRoute();
 const router = useRouter();
 const $q = useQuasar();
 
-const title = ref('');
-
 const rightIcon = ref('sym_r_more_horiz');
 
 const isDark = ref(false);

@@ -156,8 +156,7 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 	// dataStore.updateActiveMenu(menu);
 
 	const query = {
-		name: name ? name : menu,
-		modified: ''
+		name: name ? name : menu
 	};
 
 	switch (menu) {
@@ -201,9 +200,6 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 				const url = `/Files/Home`;
 				openDriveFolder(menu, url);
 			} else {
-				query.modified = driveList.value.find(
-					(item) => item.name === menu
-				).modified;
 				const url = `/Files/Home/${menu}/`;
 				openDriveFolder(menu, url);
 			}

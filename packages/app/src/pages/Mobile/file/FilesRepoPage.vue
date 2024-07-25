@@ -41,7 +41,7 @@ const error = ref<any>(null);
 const route = useRoute();
 const $q = useQuasar();
 
-const title = ref('');
+const title = ref(route.query.name);
 
 const rightIcon = ref('sym_r_more_horiz');
 

@@ -70,7 +70,7 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { formatFileModified } from '../../../utils/file';
 import { useI18n } from 'vue-i18n';
-import { DriveType } from './../../../stores/files';
+import { DriveType, useFilesStore } from './../../../stores/files';
 import { useOperateinStore } from './../../../stores/operation';
 import { formatUrltoDriveType } from './../../../api/common/common';
 
@@ -86,10 +86,12 @@ const driveType = ref();
 const isSyncAndRepo = ref(false);
 const { t } = useI18n();
 const operateinStore = useOperateinStore();
+const filesStore = useFilesStore();
 
 const onShow = async () => {
-	nameRef.value = route.query.name;
-	modifiedRef.value = formatFileModified(Number(route.query.modified));
+	nameRef.value = route.query.name || filesStore.getCurrentRepo;
+
+	modifiedRef.value = formatFileModified(filterLastModified());
 	const id = route.query.id;
 
 	driveType.value = await formatUrltoDriveType(route.fullPath);
@@ -100,6 +102,14 @@ const onShow = async () => {
 	} else {
 		copied.value = false;
 	}
+};
+
+const filterLastModified = () => {
+	const maxValue = filesStore.currentFileList.reduce((max, item) => {
+		return item.modified > max ? item.modified : max;
+	}, filesStore.currentFileList[0].modified);
+	console.log('maxValuemaxValue', maxValue);
+	return maxValue;
 };
 
 const onItemClick = async (action: any, data: any) => {
