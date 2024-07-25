@@ -29,5 +29,8 @@
       "enabled": true
     }
   },
-  "backgroundColor": "#ffffff"
+  "backgroundColor": "#ffffff",
+  "server": {
+    "androidScheme": "http"
+  }
 }

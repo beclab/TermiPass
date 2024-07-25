@@ -4,14 +4,12 @@ on:
     workflow_dispatch:
 
     push:
-        branches:
-            - "build/release"
         tags:
           - 'v*'
 
 jobs:
     update_ios:
-        runs-on: macos-13
+        runs-on: macos-14
         steps:
             - name: Check out the repo
               uses: actions/checkout@v3
@@ -33,7 +31,7 @@ jobs:
             - name: Setup Xcode
               uses: maxim-lobanov/setup-xcode@v1
               with:
-                xcode-version: '14.2'
+                xcode-version: '15.4'
 
             - name: Cache
               uses: actions/cache@v1
@@ -119,7 +117,7 @@ jobs:
                 cp $ACTION_EXTENSION_PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
 
             - name: Make ipa
-              run: cd packages/app/src-capacitor/ios/App/;xcodebuild archive -workspace App.xcworkspace -scheme App -configuration Release -archivePath Archive/App;xcodebuild -exportArchive -archivePath Archive/App.xcarchive -exportOptionsPlist Ipa/App/ExportOptions.plist -exportPath Ipa/App/;
+              run: cd packages/app/src-capacitor/ios/App/;xcodebuild archive -destination 'platform=iOS Simulator,name=iPad (10th generation),OS=17.4' -workspace App.xcworkspace -scheme App -configuration Release -archivePath Archive/App;xcodebuild -exportArchive -archivePath Archive/App.xcarchive -exportOptionsPlist Ipa/App/ExportOptions.plist -exportPath Ipa/App/;
 
             - name: Show
               run: ls -a packages/app/src-capacitor/ios/App/Ipa/App/
