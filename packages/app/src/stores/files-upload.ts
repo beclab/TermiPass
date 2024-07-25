@@ -194,6 +194,7 @@ export const useFilesUploadStore = defineStore('upload', {
 					driveType: menuStore.activeMenu.driveType,
 					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 				},
+				false,
 				false
 			);
 		},

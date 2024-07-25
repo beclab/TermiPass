@@ -171,7 +171,7 @@ export const useFilesStore = defineStore('files', {
 		}
 	},
 	actions: {
-		async setFilePath(path: FilePath, isBack = false) {
+		async setFilePath(path: FilePath, isBack = false, isPrev = true) {
 			console.log('setFilePath', path);
 			// this.selected = [];
 			if (!path.isDir) {
@@ -197,7 +197,7 @@ export const useFilesStore = defineStore('files', {
 			this.isInPreview = false;
 			this.currentPath = path;
 
-			if (!isBack) {
+			if (!isBack && isPrev) {
 				this.backStack.push(path);
 				this.previousStack = [];
 			}

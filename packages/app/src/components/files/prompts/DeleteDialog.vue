@@ -88,6 +88,7 @@ const submit = async () => {
 				driveType: menuStore.activeMenu.driveType,
 				param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 			},
+			false,
 			false
 		);
 		notifyHide();

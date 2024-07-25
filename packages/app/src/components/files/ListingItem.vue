@@ -243,6 +243,7 @@ const drop = async (event: any) => {
 					driveType: props.item.driveType,
 					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 				},
+				false,
 				false
 			);
 		}

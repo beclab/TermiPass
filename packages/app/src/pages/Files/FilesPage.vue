@@ -72,6 +72,7 @@ const checkUserStatus = (status: any) => {
 					driveType: DriveType.Drive,
 					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 				},
+				false,
 				false
 			);
 		}, 2000);
