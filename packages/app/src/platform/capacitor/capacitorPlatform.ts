@@ -63,6 +63,7 @@ import {
 	registerNativeScanQRProtocols,
 	NativeScanQRProtocol
 } from './scanQRProtocols';
+import { useFilesStore } from 'src/stores/files';
 
 declare let cordova: any;
 declare let plugins: any;
@@ -789,5 +790,7 @@ export class CapacitorPlatform
 			}
 		}
 		this.router?.back();
+		const filesStore = useFilesStore();
+		filesStore.back();
 	}
 }
