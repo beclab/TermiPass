@@ -8,7 +8,9 @@
 	>
 		<div id="video-previewer">
 			<div class="header row items-center justify-between">
-				<div class="title text-ink-on-brand text-h5">{{ title }}</div>
+				<div class="title text-ink-on-brand text-h5">
+					{{ filesStore.previewItem.name }}
+				</div>
 				<div>
 					<q-btn
 						dense
@@ -41,8 +43,6 @@ const maximizedToggle = ref(true);
 
 const store = useDataStore();
 const filesStore = useFilesStore();
-
-const title = ref(filesStore.previewItem.name);
 
 const isDark = ref(false);
 

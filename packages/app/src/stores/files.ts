@@ -171,7 +171,7 @@ export const useFilesStore = defineStore('files', {
 		}
 	},
 	actions: {
-		async setFilePath(path: FilePath, isBack = false, init = false) {
+		async setFilePath(path: FilePath, isBack = false) {
 			console.log('setFilePath', path);
 			// this.selected = [];
 			if (!path.isDir) {
@@ -197,7 +197,7 @@ export const useFilesStore = defineStore('files', {
 			this.isInPreview = false;
 			this.currentPath = path;
 
-			if (!isBack && !init) {
+			if (!isBack) {
 				this.backStack.push(path);
 				this.previousStack = [];
 			}
@@ -236,11 +236,7 @@ export const useFilesStore = defineStore('files', {
 				});
 		},
 
-		setBrowserUrl(
-			url: string,
-			driveType: DriveType = DriveType.Drive,
-			init = false
-		) {
+		setBrowserUrl(url: string, driveType: DriveType = DriveType.Drive) {
 			console.log('setBrowserUrlsetBrowserUrl', url);
 			const splitUrl = url.split('?');
 			console.log('splitUrl', splitUrl);
@@ -255,7 +251,7 @@ export const useFilesStore = defineStore('files', {
 				isDir: true,
 				driveType: driveType
 			});
-			this.setFilePath(path, false, init);
+			this.setFilePath(path, false);
 			// }
 		},
 
