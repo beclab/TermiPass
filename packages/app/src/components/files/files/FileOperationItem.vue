@@ -22,7 +22,7 @@ import { getParams } from '../../../utils/utils';
 import { useFilesStore } from '../../../stores/files';
 import { useMenuStore } from '../../../stores/files-menu';
 import DeleteRepo from './../popup/DeleteRepo.vue';
-import ReName from './../popup/rename.vue';
+import ReName from './../popup/ReName.vue';
 
 const props = defineProps({
 	icon: String,
