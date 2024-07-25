@@ -42,10 +42,10 @@ export function formatAppDataNode(url, data) {
 		nodeDir.numDirs = data.data.length;
 
 		data.data.forEach((el, index) => {
-			const extension = getextension(el.name);
+			const extension = getextension(el.metadata.name);
 
 			const item: FileItem = {
-				path: url,
+				path: '/Files' + url + '/' + el.metadata.name,
 				name: el.metadata.name,
 				size: 4096,
 				extension: extension,
