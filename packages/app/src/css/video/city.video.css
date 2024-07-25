@@ -342,3 +342,7 @@
 	border-radius: 4px;
 	background: rgba(255, 255, 255, 0.15);
 }
+
+.vjs-theme-city .vjs-modal-dialog-content {
+	margin-top: 50px;
+}

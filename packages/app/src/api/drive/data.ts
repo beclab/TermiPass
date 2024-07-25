@@ -58,7 +58,10 @@ class Data extends Origin {
 	}
 
 	async fetchDrive(url: string): Promise<FileResType> {
-		const res = await this.commonAxios.get(`/api/resources${url}`, {});
+		const res = await this.commonAxios.get(
+			`/api/resources${encodeURIComponent(url)}`,
+			{}
+		);
 
 		let data: FileResType;
 		if (isAppData(url)) {
