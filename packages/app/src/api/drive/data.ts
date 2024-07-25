@@ -35,7 +35,7 @@ class Data extends Origin {
 	}
 
 	async fetch(url: string): Promise<FileResType> {
-		url = encodeURIComponent(removePrefix(url));
+		url = decodeURIComponent(removePrefix(url));
 		const res = await this.fetchDrive(url);
 
 		console.log('fetch-res', res);
@@ -58,9 +58,12 @@ class Data extends Origin {
 	}
 
 	async fetchDrive(url: string): Promise<FileResType> {
-		let res = await this.commonAxios.get(`/api/resources${url}`, {});
+		let res = await this.commonAxios.get(
+			`/api/resources${encodeURIComponent(url)}`,
+			{}
+		);
 
-		if (isAppData(url)) {
+		if (isAppData(decodeURIComponent(url))) {
 			res = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
 		}
 

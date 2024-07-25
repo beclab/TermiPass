@@ -167,6 +167,7 @@ const humanSize = () => {
 };
 
 const humanTime = () => {
+	if (!props.item.modified) return '-';
 	if (store.user.dateFormat) {
 		return moment(props.item.modified).format('L LT');
 	}
