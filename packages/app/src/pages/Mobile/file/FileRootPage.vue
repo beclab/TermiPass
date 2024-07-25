@@ -165,11 +165,11 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 				path: '/Files/Application/'
 			});
 
-			menuStore.activeMenu = {
-				driveType: DriveType.Drive,
-				label: menu,
-				id: menu
-			};
+			// menuStore.activeMenu = {
+			// 	driveType: DriveType.Drive,
+			// 	label: menu,
+			// 	id: menu
+			// };
 
 			break;
 
@@ -178,11 +178,11 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 				path: '/Files/AppData'
 			});
 
-			menuStore.activeMenu = {
-				driveType: DriveType.Cache,
-				label: menu,
-				id: menu
-			};
+			// menuStore.activeMenu = {
+			// 	driveType: DriveType.Cache,
+			// 	label: menu,
+			// 	id: menu
+			// };
 
 			break;
 
@@ -204,11 +204,11 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 				openDriveFolder(menu, url);
 			}
 
-			menuStore.activeMenu = {
-				driveType: DriveType.Drive,
-				label: menu,
-				id: menu
-			};
+			// menuStore.activeMenu = {
+			// 	driveType: DriveType.Drive,
+			// 	label: menu,
+			// 	id: menu
+			// };
 			break;
 	}
 };

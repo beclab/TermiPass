@@ -73,14 +73,14 @@ import { useRoute } from 'vue-router';
 import TerminusFileIcon from '../../../components/common/TerminusFileIcon.vue';
 import FileOperationDialog from './FileOperationDialog.vue';
 import { formatFileModified } from '../../../utils/file';
-import { useFilesStore, FileItem, DriveType } from './../../../stores/files';
+import { useFilesStore, FileItem } from './../../../stores/files';
 import { useMenuStore } from './../../../stores/files-menu';
 import { useOperateinStore } from '../../../stores/operation';
 import { OPERATE_ACTION } from '../../../utils/contact';
-import { formatUrltoDriveType } from './../../../api/common/common';
+// import { formatUrltoDriveType } from './../../../api/common/common';
 
 import FilePreviewPage from './FilePreviewPage.vue';
-import { getParams } from '../../../utils/utils';
+// import { getParams } from '../../../utils/utils';
 
 const props = defineProps({
 	item: {
@@ -234,24 +234,17 @@ const open = async () => {
 	filesStore.addSelected(props.item.index);
 
 	const splitUrl = props.item.path.split('?');
-	const driveType = await formatUrltoDriveType(props.item.path);
-
-	if (driveType === DriveType.Sync) {
-		const repo_id = getParams(splitUrl[1], 'id');
-		if (repo_id) {
-			menuStore.activeMenu = {
-				driveType: driveType,
-				label: props.item.name,
-				id: repo_id
-			};
-		}
-	} else if (driveType === DriveType.Drive) {
-		menuStore.activeMenu = {
-			driveType: driveType,
-			label: props.item.name,
-			id: props.item.name
-		};
-	}
+	// const driveType = await formatUrltoDriveType(props.item.path);
+	// if (driveType === DriveType.Sync) {
+	// 	const repo_id = getParams(splitUrl[1], 'id');
+	// 	if (repo_id && !props.item.url) {
+	// 		menuStore.activeMenu = {
+	// 			driveType: driveType,
+	// 			label: props.item.name,
+	// 			id: repo_id
+	// 		};
+	// 	}
+	// }
 
 	if (!props.item.isDir) {
 		if (store.preview.isShow) {

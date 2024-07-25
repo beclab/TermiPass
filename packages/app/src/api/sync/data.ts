@@ -547,6 +547,9 @@ class Data extends Origin {
 
 	async createDir(dirName: string, path: string): Promise<void> {
 		const menuStore = useMenuStore();
+		console.log('dirname ====>', dirName);
+		console.log('path ====>', path);
+		console.log(menuStore.activeMenu.label);
 
 		const pathlen =
 			decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +

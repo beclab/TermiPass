@@ -3,6 +3,8 @@ import { Origin } from '../api/origin';
 import { Data as DriveData } from '../api/drive/data';
 import { Data as SyncData } from '../api/sync/data';
 import { FilesSortType } from '../utils/contact';
+import { useMenuStore } from './files-menu';
+import { formatUrltoActiveMenu } from 'src/api/common/common';
 export enum DriveType {
 	Drive = 'drive',
 	Sync = 'sync',
@@ -135,11 +137,11 @@ export const useFilesStore = defineStore('files', {
 	},
 	getters: {
 		currentFileItems(): FileItem[] {
-			return this.currentFileList.filter((item) => !item.isDir);
+			return this.currentFileList?.filter((item) => !item.isDir);
 		},
 
 		currentDirItems(): FileItem[] {
-			return this.currentFileList.filter((item) => item.isDir);
+			return this.currentFileList?.filter((item) => item.isDir);
 		},
 
 		selectedCount: (state) => state.selected.length,
@@ -211,11 +213,15 @@ export const useFilesStore = defineStore('files', {
 			});
 
 			const requestUrl = await this.formatPathtoUrl(path);
-
 			console.log('driveType', path.driveType);
 			console.log('requestUrl', requestUrl);
 			console.log('previousStack', this.previousStack);
 			console.log('hasBackPath', this.backStack);
+
+			const menuStore = useMenuStore();
+			menuStore.activeMenu = await formatUrltoActiveMenu(
+				path.path + path.param
+			);
 
 			getAPI(path.driveType)
 				.fetch(requestUrl)
@@ -295,7 +301,7 @@ export const useFilesStore = defineStore('files', {
 		async back() {
 			console.log('this.backStack.length ===>', this.backStack.length);
 			const path = this.backStack.pop();
-			if (this.backStack.length == 0) {
+			if (this.backStack.length == 0 && process.env.PLATFORM == 'MOBILE') {
 				return;
 			}
 			const initPath = new FilePath({
