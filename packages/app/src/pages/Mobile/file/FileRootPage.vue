@@ -221,30 +221,6 @@ const openDriveFolder = (menu: string, url: string) => {
 	fileStore.setBrowserUrl(url, DriveType.Drive);
 };
 
-// const openSyncFolder = async (menu: string, query: any) => {
-// 	const mobilePath = {
-// 		path: menu,
-// 		isDir: true,
-// 		driveType: DriveType.Sync,
-// 		param: query
-// 	};
-// 	fileStore.backStack.push(mobilePath);
-
-// 	fileStore.currentFileList = [];
-// 	if (menu === MenuItem.MYLIBRARIES) {
-// 		const res = await seahub.fetchMineRepo();
-// 		console.log('resres', res);
-// 		fileStore.currentFileList = await formatSeahubRepos(menu, res).items;
-// 	} else if (menu === MenuItem.SHAREDWITH) {
-// 		const res2 = await seahub.fetchtosharedRepo();
-// 		const res3 = await seahub.fetchsharedRepo();
-// 		fileStore.currentFileList = await formatSeahubRepos(menu, [
-// 			...res2,
-// 			...res3
-// 		]).items;
-// 	}
-// };
-
 const syncMenus = ref([
 	{
 		name: t('files.syncMenus.myLibraries'),

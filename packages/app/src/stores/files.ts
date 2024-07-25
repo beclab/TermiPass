@@ -321,16 +321,16 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		previous() {
+			console.log('previousStackpreviousStack', this.previousStack);
 			if (this.previousStack.length == 0) {
 				return;
 			}
 
 			const path = this.previousStack.pop();
-			const currentPath = this.backStack[this.backStack.length + 1];
 
 			if (path) {
 				this.backStack.push(path);
-				this.setFilePath(currentPath, true);
+				this.setFilePath(path, true);
 			}
 		},
 
