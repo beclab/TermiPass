@@ -18,8 +18,11 @@ import { useQuasar } from 'quasar';
 import { PropType } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { OPERATE_ACTION } from '../../../utils/contact';
-import { useFilesStore, DriveType } from '../../../stores/files';
+import { getParams } from '../../../utils/utils';
+import { useFilesStore } from '../../../stores/files';
 import { useMenuStore } from '../../../stores/files-menu';
+import DeleteRepo from './../popup/DeleteRepo.vue';
+import ReName from './../popup/rename.vue';
 
 const props = defineProps({
 	icon: String,
@@ -37,6 +40,17 @@ const menuStore = useMenuStore();
 const emit = defineEmits(['onItemClick', 'hideMenu']);
 
 const handle = (e: any, action: OPERATE_ACTION) => {
+	console.log('handlehandle', action);
+	console.log('handlehandle e', e);
+
+	if (action === OPERATE_ACTION.REPO_DELETE) {
+		return deleteRepo();
+	}
+
+	if (action === OPERATE_ACTION.REPO_RENAME) {
+		return renameRepo();
+	}
+
 	// if (props.repo) {
 	// 	handleRepoOperate(e, action);
 	// } else {
@@ -74,6 +88,34 @@ const handle = (e: any, action: OPERATE_ACTION) => {
 		}
 	);
 	// }
+};
+
+const deleteRepo = async () => {
+	const foucsItem = filesStore.currentFileList[filesStore.selected[0]];
+	const repo_id = getParams(foucsItem.path, 'id');
+	const res = await menuStore.fetchShareInfo(repo_id);
+
+	const shared_user_emails_length = res.shared_user_emails.length || 0;
+
+	$q.dialog({
+		component: DeleteRepo,
+		componentProps: {
+			item: { repo_id, ...foucsItem },
+			shared_length: shared_user_emails_length
+		}
+	});
+};
+
+const renameRepo = async () => {
+	const foucsItem = filesStore.currentFileList[filesStore.selected[0]];
+	const repo_id = getParams(foucsItem.path, 'id');
+
+	$q.dialog({
+		component: ReName,
+		componentProps: {
+			item: { repo_id, ...foucsItem }
+		}
+	});
 };
 </script>
 
