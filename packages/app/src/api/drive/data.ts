@@ -35,7 +35,7 @@ class Data extends Origin {
 	}
 
 	async fetch(url: string): Promise<FileResType> {
-		url = decodeURIComponent(removePrefix(url));
+		url = encodeURIComponent(removePrefix(url));
 		const res = await this.fetchDrive(url);
 
 		console.log('fetch-res', res);

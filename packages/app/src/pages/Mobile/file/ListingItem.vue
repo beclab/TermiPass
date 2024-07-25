@@ -216,6 +216,7 @@ const itemClick = () => {
 const $q = useQuasar();
 
 const fileOperation = () => {
+	filesStore.addSelected(props.item.index);
 	$q.dialog({
 		component: FileOperationDialog,
 		componentProps: {

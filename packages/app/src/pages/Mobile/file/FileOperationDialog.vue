@@ -3,6 +3,7 @@
 		position="bottom"
 		ref="dialogRef"
 		@show="onShow"
+		@hidden="onHidden"
 		transition-show="jump-up"
 		transition-hide="jump-down"
 		transition-duration="300"
@@ -147,6 +148,10 @@ const onShow = () => {
 		filesStore.resetSelected();
 		filesStore.addSelected(index);
 	}
+};
+
+const onHidden = () => {
+	console.log('onHidden');
 };
 
 const onItemClick = async (action, data) => {
