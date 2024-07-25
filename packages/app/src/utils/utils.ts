@@ -282,84 +282,6 @@ export const utcToStamp = (utc_datetime: string) => {
 	return new Date(Date.parse(new_datetime));
 };
 
-export const downloadFile = async (fileUrl: any, filename = '') => {
-	const targetUrl = fileUrl.url;
-	const headers = fileUrl.headers;
-
-	const xhr = new XMLHttpRequest();
-	xhr.open('GET', targetUrl, true);
-	xhr.setRequestHeader('Content-Type', 'application/octet-stream');
-
-	Object.keys(headers).forEach((key) => {
-		xhr.setRequestHeader(key, headers[key]);
-	});
-
-	xhr.responseType = 'blob';
-
-	xhr.onload = () => {
-		if (xhr.status === 200) {
-			const disposition = xhr.getResponseHeader('content-disposition');
-			let name = filename;
-			if (!name) {
-				const urlParts = targetUrl.split('/');
-				const lastPart = urlParts[urlParts.length - 1];
-				const fileNameParts = lastPart.split('?');
-				name = fileNameParts[0];
-				const remainingPart = fileNameParts[fileNameParts.length - 1];
-				const argParts = remainingPart.split('&');
-
-				let algoValue = '';
-				argParts.forEach((arg) => {
-					const keyValue = arg.split('=');
-					if (keyValue[0] === 'algo') {
-						algoValue = keyValue[1];
-					}
-				});
-				if (name === '') {
-					const secondLastPart = urlParts[urlParts.length - 2];
-					const secondLastFileNameParts = secondLastPart.split('/');
-					name = secondLastFileNameParts[secondLastFileNameParts.length - 1];
-				}
-
-				if (algoValue) {
-					name += `.${algoValue}`;
-				}
-			}
-
-			if (disposition) {
-				const match = disposition.match(/filename="(.+)"/);
-				name = match ? match[1] : name;
-			}
-
-			name = decodeURIComponent(name);
-
-			const blob = new Blob([xhr.response], {
-				type: 'application/octet-stream'
-			});
-			const url = URL.createObjectURL(blob);
-
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', name);
-			link.style.display = 'none';
-
-			document.body.appendChild(link);
-			link.click();
-			document.body.removeChild(link);
-
-			URL.revokeObjectURL(url);
-		} else {
-			console.error(`Download failed with status ${xhr.status}`);
-		}
-	};
-
-	xhr.onerror = () => {
-		console.error('Download failed');
-	};
-
-	xhr.send();
-};
-
 export const formatMinutesTime = (minutes: number) => {
 	const { t } = useI18n();
 
@@ -393,4 +315,35 @@ export const formatMinutesTime = (minutes: number) => {
 		`${min}` +
 		t('time.minutes_short')
 	);
+};
+
+export const getParams = (url: string, params: string) => {
+	const res = new RegExp('(?:&|/?)' + params + '=([^&$]+)').exec(url);
+	return res ? res[1] : '';
+};
+
+export const detectType = (mimetype: string) => {
+	if (mimetype.startsWith('video')) return 'video';
+	if (mimetype.startsWith('audio')) return 'audio';
+	if (mimetype.startsWith('image')) return 'image';
+	if (mimetype.startsWith('pdf')) return 'pdf';
+	if (mimetype.startsWith('text')) return 'text';
+	return 'blob';
+};
+
+// Determine if two object arrays contain the same value
+export function containsSameValue<T>(
+	arr1: T[],
+	arr2: string[],
+	key: string
+): boolean {
+	return arr1
+		? arr1.some(
+				(item1) => arr2.find((item2) => item1[key] === item2) !== undefined
+		  )
+		: false;
+}
+
+export const getextension = (name: string) => {
+	return name.indexOf('.') > -1 ? name.substring(name.lastIndexOf('.')) : '';
 };

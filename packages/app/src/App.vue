@@ -65,11 +65,11 @@ export default defineComponent({
 		}
 
 		onMounted(async () => {
-			if (process.env.PLATFORM === 'FILES') {
-				router.replace({
-					path: '/Files/Home/'
-				});
-			}
+			// if (process.env.PLATFORM === 'FILES') {
+			// 	router.replace({
+			// 		path: '/Files/Home/'
+			// 	});
+			// }
 
 			let state = $q.platform.is.mobile;
 			if (state) {

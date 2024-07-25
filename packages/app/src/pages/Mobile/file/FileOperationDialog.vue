@@ -14,7 +14,6 @@
 						class="q-mr-md"
 						:name="name"
 						:type="type"
-						:read-only="readOnly"
 						:is-dir="isDir"
 						style="width: 30px; height: 30px"
 					/>
@@ -29,28 +28,28 @@
 			<template v-slot:content>
 				<q-list style="margin: 8px">
 					<file-operation-item
-						v-if="!id"
+						v-if="driveType === DriveType.Drive"
 						icon="sym_r_move_up"
 						:label="t('files.cut')"
 						:action="OPERATE_ACTION.CUT"
 						@on-item-click="onItemClick"
 					/>
 					<file-operation-item
-						v-if="!id"
+						v-if="driveType === DriveType.Drive"
 						icon="sym_r_content_copy"
 						:label="t('copy')"
 						:action="OPERATE_ACTION.COPY"
 						@on-item-click="onItemClick"
 					/>
 					<file-operation-item
-						v-if="!id && !$q.platform.is.mobile"
+						v-if="driveType === DriveType.Drive && !$q.platform.is.mobile"
 						icon="sym_r_browser_updated"
 						:label="t('download')"
 						:action="OPERATE_ACTION.DOWNLOAD"
 						@on-item-click="onItemClick"
 					/>
 					<file-operation-item
-						v-if="id"
+						v-if="driveType === DriveType.Sync"
 						icon="sym_r_share_windows"
 						:label="t('buttons.share')"
 						:action="OPERATE_ACTION.SHARE"
@@ -58,12 +57,16 @@
 					<file-operation-item
 						icon="sym_r_delete"
 						:label="t('delete')"
-						:action="OPERATE_ACTION.DELETE"
+						:action="
+							isSyncAndRepo ? OPERATE_ACTION.REPO_DELETE : OPERATE_ACTION.DELETE
+						"
 					/>
 					<file-operation-item
 						icon="sym_r_edit_square"
 						:label="t('buttons.rename')"
-						:action="OPERATE_ACTION.RENAME"
+						:action="
+							isSyncAndRepo ? OPERATE_ACTION.REPO_RENAME : OPERATE_ACTION.DELETE
+						"
 					/>
 					<file-operation-item
 						icon="sym_r_contract"
@@ -77,7 +80,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDataStore } from '../../../stores/data';
 import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogDisplayContent from '../../../components/common/TerminusDialogDisplayContent.vue';
@@ -85,19 +87,22 @@ import FileOperationItem from '../../../components/files/files/FileOperationItem
 import { stopScrollMove } from '../../../utils/utils';
 import TerminusFileIcon from '../../../components/common/TerminusFileIcon.vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, PropType } from 'vue';
+import { useRoute } from 'vue-router';
 import { INewDownloadFile } from '../../../platform/electron/interface';
 import { formatFileModified } from '../../../utils/file';
 import { notifySuccess } from '../../../utils/notifyRedefinedUtil';
 import { OPERATE_ACTION } from '../../../utils/contact';
+import { getParams } from '../../../utils/utils';
 import { useI18n } from 'vue-i18n';
+import { DriveType, useFilesStore } from './../../../stores/files';
+import { formatUrltoDriveType } from './../../../api/common/common';
 
 const { dialogRef } = useDialogPluginComponent();
 
 const props = defineProps({
-	id: {
-		type: String,
+	driveType: {
+		type: String as PropType<DriveType>,
 		default: '',
 		required: true
 	},
@@ -116,11 +121,6 @@ const props = defineProps({
 		default: '',
 		required: true
 	},
-	readOnly: {
-		type: Boolean,
-		default: false,
-		required: true
-	},
 	index: {
 		type: Number,
 		default: -1,
@@ -135,27 +135,43 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const dataStore = useDataStore();
 const menuStore = useMenuStore();
+const filesStore = useFilesStore();
 const $q = useQuasar();
 const copied = ref(false);
-const router = useRouter();
+const route = useRoute();
+const isSyncAndRepo = ref(false);
 
-const onShow = () => {
-	const index = dataStore.req.items.findIndex(
+const onShow = async () => {
+	const driveType = await formatUrltoDriveType(route.fullPath);
+	const id = route.query.id;
+	isSyncAndRepo.value = driveType == DriveType.Sync && !id;
+
+	const index = filesStore.currentFileList.findIndex(
 		(item) => item.index === props.index
 	);
+
+	// const repo_id = getParams(foucsItem.path, 'id');
+
 	if (index !== -1) {
-		menuStore.shareRepoInfo = dataStore.req.items[index];
+		menuStore.shareRepoInfo = filesStore.currentFileList[index];
+
+		if (getParams(menuStore.shareRepoInfo.path, 'id')) {
+			menuStore.shareRepoInfo.id = getParams(
+				menuStore.shareRepoInfo.path,
+				'id'
+			);
+			menuStore.shareRepoInfo.repo_name = props.name;
+			const start =
+				menuStore.shareRepoInfo.path.indexOf(props.name) + props.name.length;
+			const end = menuStore.shareRepoInfo.path.indexOf('?', start);
+			const resultPath = menuStore.shareRepoInfo.path.substring(start, end);
+			menuStore.shareRepoInfo.path = resultPath;
+		}
+
 		stopScrollMove();
-		if (dataStore.selectedCount === 0) {
-			dataStore.addSelected(index);
-			return;
-		}
-		if (dataStore.selected.indexOf(index) === -1) {
-			dataStore.resetSelected();
-			dataStore.addSelected(index);
-		}
+		filesStore.resetSelected();
+		filesStore.addSelected(index);
 	}
 };
 
@@ -172,9 +188,9 @@ const onItemClick = async (action, data) => {
 			const savePath = await window.electron.api.download.getDownloadPath();
 			const formData: INewDownloadFile = {
 				url: data,
-				fileName: dataStore.req.items[dataStore.selected[0]].name,
+				fileName: filesStore.currentFileList[filesStore.selected[0]].name,
 				path: savePath,
-				totalBytes: dataStore.req.items[dataStore.selected[0]].size
+				totalBytes: filesStore.currentFileList[filesStore.selected[0]].size
 			};
 			await window.electron.api.download.newDownloadFile(formData);
 		}
@@ -187,9 +203,6 @@ const onItemClick = async (action, data) => {
 		notifySuccess(t('files.cut_to_clipboard'));
 	} else if (action === OPERATE_ACTION.PASTE) {
 		copied.value = false;
-		if (data) {
-			router.push({ path: data });
-		}
 	}
 };
 </script>

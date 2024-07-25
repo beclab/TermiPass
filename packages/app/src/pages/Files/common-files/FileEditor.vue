@@ -7,7 +7,7 @@
 		:class="$q.platform.is.mobile ? 'q-pa-md' : 'q-pa-lg'"
 		v-if="!store.preview.isEditing"
 	>
-		{{ store.req.content }}
+		{{ filesStore.previewItem.content }}
 	</div>
 </template>
 
@@ -20,26 +20,32 @@ import { files as api, seahub } from '../../../api';
 import { useQuasar } from 'quasar';
 import 'ace-builds/webpack-resolver';
 import { checkSeahub } from '../../../utils/file';
+import { useFilesStore } from '../../../stores/files';
 
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
+import { dataAPIs } from '../../../api';
 
 const store = useDataStore();
 const editor = ref();
 const $q = useQuasar();
+const filesStore = useFilesStore();
+const dataAPI = dataAPIs();
 
 onMounted(async () => {
-	if (store.req.content == undefined) {
-		store.req = await api.formatFileContent(store.req);
+	if (filesStore.previewItem.content == undefined) {
+		filesStore.previewItem = await dataAPI.formatFileContent(
+			filesStore.previewItem
+		);
 	}
 
-	const fileContent = store.req.content || '';
+	const fileContent = filesStore.previewItem.content || '';
 
 	editor.value = ace.edit('editor', {
 		value: fileContent,
 		showPrintMargin: false,
-		readOnly: store.req.type === 'textImmutable',
+		readOnly: filesStore.previewItem.type === 'textImmutable',
 		theme: 'ace/theme/chrome',
-		mode: modelist.getModeForPath(store.req.name).mode,
+		mode: modelist.getModeForPath(filesStore.previewItem.name).mode,
 		wrap: true
 	});
 });
@@ -53,17 +59,17 @@ const save = async () => {
 	let editorValue = editor.value.getValue();
 	try {
 		editorValue = (editorValue as string).trim();
-		if (checkSeahub(store.req.url)) {
+		if (checkSeahub(filesStore.previewItem.url)) {
 			await seahub.updateFile(
-				store.req,
+				filesStore.previewItem,
 				editorValue,
 				$q.platform.is.nativeMobile
 			);
 		} else {
-			await api.put(store.req.url, editorValue);
+			await api.put(filesStore.previewItem.url, editorValue);
 		}
 
-		store.req.content = editorValue;
+		filesStore.previewItem.content = editorValue;
 		store.preview.isSaving = false;
 		store.preview.isEditing = false;
 	} catch (e) {

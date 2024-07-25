@@ -313,6 +313,8 @@ async function requestVC() {
 		await cloudStore.getDomains();
 		domain.value = await cloudStore.selectDomain(domainName.value);
 	} catch (error) {
+		console.log(error);
+
 		notifyFailed(error.message);
 	} finally {
 		$q.loading.hide();
