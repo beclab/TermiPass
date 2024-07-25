@@ -1,7 +1,7 @@
 import { Origin } from './../origin';
 import { removePrefix, createURL } from '../utils';
 import { getAppDataPath, isAppData } from '../../utils/file';
-import { formatAppDataNode } from '../../utils/appdata';
+import { formatAppDataNode } from './filesFormat';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { files } from './../index';
@@ -58,18 +58,14 @@ class Data extends Origin {
 	}
 
 	async fetchDrive(url: string): Promise<FileResType> {
-		let res = await this.commonAxios.get(
-			`/api/resources${encodeURIComponent(url)}`,
-			{}
-		);
+		const res = await this.commonAxios.get(`/api/resources${url}`, {});
 
-		if (isAppData(decodeURIComponent(url))) {
-			res = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
+		let data: FileResType;
+		if (isAppData(url)) {
+			data = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
+		} else {
+			data = await formatDrive(JSON.parse(JSON.stringify(res)));
 		}
-
-		const data: FileResType = await formatDrive(
-			JSON.parse(JSON.stringify(res))
-		);
 
 		return data;
 	}
