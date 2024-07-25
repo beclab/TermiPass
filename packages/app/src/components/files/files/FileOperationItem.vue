@@ -58,6 +58,7 @@ const handle = (e: any, action: OPERATE_ACTION) => {
 					driveType: menuStore.activeMenu.driveType,
 					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 				},
+				false,
 				false
 			);
 

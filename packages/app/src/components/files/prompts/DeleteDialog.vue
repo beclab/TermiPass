@@ -11,7 +11,6 @@
 				class="dialog-desc"
 				:style="{ textAlign: isMobile ? 'center' : 'left' }"
 			>
-				111
 				{{
 					filesStore.selectedCount <= 1
 						? t('prompts.deleteMessageSingle')
@@ -69,10 +68,13 @@ const submit = async () => {
 	notifyWaitingShow('Deleting, Please wait...');
 
 	try {
+		console.log('currentFileListcurrentFileList', filesStore.currentFileList);
+		console.log('filesStoreselected', filesStore.selected);
 		const selectFiles = filesStore.currentFileList.filter((obj) =>
 			filesStore.selected.includes(obj.index)
 		);
 
+		console.log('selectFilesselectFiles', selectFiles);
 		const dataAPI = dataAPIs();
 		await dataAPI.deleteItem(selectFiles);
 
@@ -88,6 +90,7 @@ const submit = async () => {
 				driveType: menuStore.activeMenu.driveType,
 				param: splitUrl[1] ? `?${splitUrl[1]}` : ''
 			},
+			false,
 			false
 		);
 		notifyHide();

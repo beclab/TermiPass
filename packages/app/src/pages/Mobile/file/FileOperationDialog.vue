@@ -3,7 +3,7 @@
 		position="bottom"
 		ref="dialogRef"
 		@show="onShow"
-		@hidden="onHidden"
+		@update:model-value="updateModel"
 		transition-show="jump-up"
 		transition-hide="jump-down"
 		transition-duration="300"
@@ -150,8 +150,10 @@ const onShow = () => {
 	}
 };
 
-const onHidden = () => {
-	console.log('onHidden');
+const updateModel = (value: boolean) => {
+	if (value) {
+		filesStore.addSelected(props.index);
+	}
 };
 
 const onItemClick = async (action, data) => {
