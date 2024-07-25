@@ -11,7 +11,7 @@
 			<bt-menu
 				:items="menuStore.menu"
 				:modelValue="menuStore.activeMenu.id"
-				:sameActiveable="true"
+				:sameActiveable="false"
 				@select="selectHandler"
 				style="width: 100%"
 				class="title-norla"
@@ -127,11 +127,11 @@ onMounted(async () => {
 });
 
 const selectHandler = async (value) => {
-	menuStore.activeMenu = {
-		driveType: value.item.driveType,
-		label: value.item.label,
-		id: value.item.key
-	};
+	// menuStore.activeMenu = {
+	// 	driveType: value.item.driveType,
+	// 	label: value.item.label,
+	// 	id: value.item.key
+	// };
 	console.log('valueitemvalueitemvalueitem', value.item);
 	const path = await filesStore.formatRepotoPath(value.item);
 

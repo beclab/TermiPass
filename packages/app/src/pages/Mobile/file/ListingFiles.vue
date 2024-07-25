@@ -8,8 +8,8 @@
 			class="empty column items-center justify-center"
 			style="height: calc(100% - 4em)"
 			v-if="
-				filesStore.currentDirItems.length +
-					filesStore.currentFileItems.length ==
+				filesStore.currentDirItems?.length +
+					filesStore.currentFileItems?.length ==
 				0
 			"
 		>
@@ -193,7 +193,7 @@ const preventDefault = (event: any) => {
 
 const scrollEvent = throttle(() => {
 	const totalItems =
-		filesStore.currentDirItems.length + filesStore.currentFileItems.length;
+		filesStore.currentDirItems?.length + filesStore.currentFileItems?.length;
 
 	// All items are displayed
 	if (showLimit >= totalItems) return;
@@ -253,7 +253,7 @@ const setItemWeight = () => {
 	if (listing.value == null) return;
 
 	let itemQuantity =
-		filesStore.currentDirItems.length + filesStore.currentFileItems.length;
+		filesStore.currentDirItems?.length + filesStore.currentFileItems?.length;
 	if (itemQuantity > showLimit) itemQuantity = showLimit;
 
 	// How much every listing item affects the window height
@@ -262,7 +262,7 @@ const setItemWeight = () => {
 
 const fillWindow = (fit = false) => {
 	const totalItems =
-		filesStore.currentDirItems.length + filesStore.currentFileItems.length;
+		filesStore.currentDirItems?.length + filesStore.currentFileItems?.length;
 
 	// More items are displayed than the total
 	if (showLimit >= totalItems && !fit) return;

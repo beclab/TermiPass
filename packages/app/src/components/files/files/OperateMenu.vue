@@ -130,7 +130,7 @@ const filterItem = (item: any) => {
 		}
 	}
 
-	const hasSelected = filesStore.currentFileList.filter((_, index) => {
+	const hasSelected = filesStore.currentFileList?.filter((_, index) => {
 		return filesStore.selected.includes(index);
 	});
 

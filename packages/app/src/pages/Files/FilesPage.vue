@@ -34,7 +34,7 @@ import UploadModal from '../../components/files/UploadModal.vue';
 import { DriveType } from './../../stores/files';
 import { useMenuStore } from './../../stores/files-menu';
 import { common } from './../../api';
-import { formatUrltoActiveMenu } from './../../api/common/common';
+// import { formatUrltoActiveMenu } from './../../api/common/common';
 
 const store = useDataStore();
 const route = useRoute();
@@ -100,7 +100,6 @@ onBeforeRouteUpdate((_to, from, next) => {
 
 onMounted(async () => {
 	let url = route.fullPath;
-	menuStore.activeMenu = await formatUrltoActiveMenu(url);
 	const driveType = await common.formatUrltoDriveType(url);
 
 	filesStore.setBrowserUrl(url, driveType, true);
