@@ -72,6 +72,7 @@ import { useRoute } from 'vue-router';
 // import { useSeahubStore } from '../../../stores/seahub';
 import TerminusFileIcon from '../../../components/common/TerminusFileIcon.vue';
 import FileOperationDialog from './FileOperationDialog.vue';
+import FilePreVideoDialog from './../../Files/preview/FilePreVideoDialog.vue';
 import { formatFileModified } from '../../../utils/file';
 import { useFilesStore, FileItem } from './../../../stores/files';
 import { useMenuStore } from './../../../stores/files-menu';
@@ -252,9 +253,15 @@ const open = async () => {
 			return;
 		}
 
-		$q.dialog({
-			component: FilePreviewPage
-		});
+		if (props.item.type === 'video') {
+			$q.dialog({
+				component: FilePreVideoDialog
+			});
+		} else {
+			$q.dialog({
+				component: FilePreviewPage
+			});
+		}
 	}
 	await filesStore.setFilePath(
 		{
