@@ -44,6 +44,7 @@ export interface MenuItemType {
 	key: string | number;
 	icon: string;
 	expationFlag?: boolean;
+	driveType?: DriveType;
 	children?: MenuItemType[];
 }
 
@@ -118,12 +119,14 @@ export const useMenuStore = defineStore('filesMenu', {
 						{
 							label: MenuItem.DATA,
 							key: MenuItem.DATA,
-							icon: 'bi-database'
+							icon: 'sym_r_database',
+							driveType: DriveType.Data
 						},
 						{
 							label: MenuItem.CACHE,
 							key: MenuItem.CACHE,
-							icon: 'bi-file-bar-graph'
+							icon: 'sym_r_analytics',
+							driveType: DriveType.Cache
 						}
 					]
 				}

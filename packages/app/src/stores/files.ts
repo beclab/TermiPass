@@ -223,6 +223,8 @@ export const useFilesStore = defineStore('files', {
 				path.path + path.param
 			);
 
+			console.log('formatUrltoActiveMenu', menuStore.activeMenu.label);
+
 			getAPI(path.driveType)
 				.fetch(requestUrl)
 				.then((res: FileResType) => {

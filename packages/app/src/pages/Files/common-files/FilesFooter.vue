@@ -16,26 +16,26 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import { format } from 'quasar';
-import { useRoute } from 'vue-router';
 import { useDataStore } from '../../../stores/data';
+import { useFilesStore } from '../../../stores/files';
 
 const store = useDataStore();
-const route = useRoute();
+const filesStore = useFilesStore();
 
 const selectFileCount = ref(0);
 const selectFileSize = ref(0);
 const totalFileCount = ref(0);
 
 watch(
-	() => store.selected,
+	() => filesStore.selected,
 	async (newVaule) => {
-		selectFileCount.value = store.selectedCount;
+		selectFileCount.value = filesStore.selectedCount;
 		let totalSize = 0;
-		if (store.selectedCount && newVaule.length > 0) {
+		if (filesStore.selectedCount && newVaule.length > 0) {
 			for (let i = 0; i < newVaule.length; i++) {
 				const el = newVaule[i];
 
-				let filesSize: number = store.req.items[el].size || 0;
+				let filesSize: number = filesStore.currentFileList[el].size || 0;
 				totalSize += filesSize;
 			}
 		}
@@ -48,11 +48,10 @@ watch(
 );
 
 watch(
-	() => store.req,
+	() => filesStore.currentFileList,
 	(newVal) => {
 		if (newVal) {
-			totalFileCount.value =
-				newVal.items && newVal.items.length > 0 ? newVal.items.length : 0;
+			totalFileCount.value = newVal && newVal.length > 0 ? newVal.length : 0;
 		}
 	}
 );
