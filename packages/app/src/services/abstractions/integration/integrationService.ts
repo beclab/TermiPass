@@ -16,6 +16,7 @@ export interface IntegrationAccountData {
 export interface GoogleIntegrationAccountData extends IntegrationAccountData {
 	scope: string;
 	id_token: string;
+	client_id: string;
 }
 
 export interface SpaceIntegrationAccountData extends IntegrationAccountData {

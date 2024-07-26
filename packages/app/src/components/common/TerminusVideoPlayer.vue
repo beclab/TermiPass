@@ -16,8 +16,9 @@ import 'video.js/dist/video-js.css';
 import './../../css/video/city.video.css';
 import SettingsPlugin from '../video_plugins/SettingsPlugin';
 import QualityPlugin from '../video_plugins/QualityPlugin';
+import { useUserStore } from '../../stores/user';
 
-const overrideNative = ref(false);
+const overrideNative = ref(true);
 const props = defineProps({
 	id: { type: String, default: 'vd' },
 	src: { type: String, default: '' },
@@ -128,7 +129,25 @@ function options() {
 }
 
 onMounted(() => {
+	const userStore = useUserStore();
 	try {
+		(videojs as any).Vhs.xhr.onRequest((req) => {
+			console.log('videojs request ===>');
+			console.log(req);
+			if (!req.headers) {
+				req.headers = {
+					'X-Authorization': userStore.current_user?.access_token
+				};
+			} else {
+				req.headers = {
+					...req.headers,
+					'X-Authorization': userStore.current_user?.access_token
+				};
+			}
+			return req;
+		});
+		// console.log(videojs.Vhs);
+
 		player = videojs(props.id, options(), () => {
 			videojs.log('player ready!');
 			player.pause();
@@ -148,11 +167,14 @@ onMounted(() => {
 			});
 		});
 
+		console.log('player ===>');
+		console.log(player);
+
 		videojs.registerPlugin('settingsPlugin', SettingsPlugin);
 		videojs.registerPlugin('qualityPlugin', QualityPlugin);
 
-		player.settingsPlugin();
-		player.qualityPlugin();
+		(player as any).settingsPlugin();
+		(player as any).qualityPlugin();
 	} catch (error) {
 		console.log('catch', error);
 	}

@@ -71,6 +71,7 @@ export interface IOpenVpnInterface {
 export interface IFilesLoginAccountInterface {
 	url: string;
 	username: string;
+	authToken: string;
 }
 
 export interface IFilesRepoAddSyncInterface {

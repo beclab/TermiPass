@@ -1155,7 +1155,7 @@ If you want to create an organization, please refer to the steps listed in the T
 	domain_list: 'Domain List',
 	refresh: 'refresh',
 	select_binding_rules: 'Select binding rules',
-	fixed_email_suffix: 'Fixed Email_Suffix',
+	fixed_email_suffix: 'Fixed email Fuffix',
 	please_enter_your_organization_email_suffix_enter_multiple_separated_by_commas:
 		"Please enter your organization's email suffix, Enter multiple, separated by commas.",
 
@@ -1343,5 +1343,7 @@ If you want to create an organization, please refer to the steps listed in the T
 			'Congratulations, you have successfully mounted the object storage service!',
 		object_storage: 'Object Storage'
 	},
+	active: 'Active',
+	inactive: 'Inactive',
 	...termipass_en
 };

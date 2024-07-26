@@ -70,47 +70,45 @@
 					</div>
 				</div>
 			</div>
-			<terminus-scroll-area style="width: 100%; height: calc(100% - 32px)">
-				<template v-slot:content>
-					<div
-						id="listing"
-						ref="listing"
-						:class="store.user.viewMode + ' file-icons'"
-						style="width: 100%; height: 100%"
+			<BtScrollArea style="width: 100%; height: calc(100% - 32px)">
+				<div
+					id="listing"
+					ref="listing"
+					:class="store.user.viewMode + ' file-icons'"
+					style="width: 100%; height: 100%"
+				>
+					<ListingItem
+						v-for="item in filesStore.currentDirItems"
+						:key="base64(item.name)"
+						:item="item"
+						v-bind:viewMode="store.user.viewMode"
 					>
-						<ListingItem
-							v-for="item in filesStore.currentDirItems"
-							:key="base64(item.name)"
-							:item="item"
-							v-bind:viewMode="store.user.viewMode"
-						>
-						</ListingItem>
-						<ListingItem
-							v-for="item in filesStore.currentFileItems"
-							:key="base64(item.name)"
-							:item="item"
-							v-bind:viewMode="store.user.viewMode"
-						>
-						</ListingItem>
+					</ListingItem>
+					<ListingItem
+						v-for="item in filesStore.currentFileItems"
+						:key="base64(item.name)"
+						:item="item"
+						v-bind:viewMode="store.user.viewMode"
+					>
+					</ListingItem>
 
-						<input
-							style="display: none"
-							type="file"
-							id="upload-input"
-							@change="uploadInput($event)"
-							multiple
-						/>
-						<input
-							style="display: none"
-							type="file"
-							id="upload-folder-input"
-							@change="uploadInput($event)"
-							webkitdirectory
-							multiple
-						/>
-					</div>
-				</template>
-			</terminus-scroll-area>
+					<input
+						style="display: none"
+						type="file"
+						id="upload-input"
+						@change="uploadInput($event)"
+						multiple
+					/>
+					<input
+						style="display: none"
+						type="file"
+						id="upload-folder-input"
+						@change="uploadInput($event)"
+						webkitdirectory
+						multiple
+					/>
+				</div>
+			</BtScrollArea>
 		</div>
 	</div>
 

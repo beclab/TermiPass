@@ -226,6 +226,7 @@ body.rtl #listing {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	word-break: break-word;
 	/* background-color: red; */
 }
 

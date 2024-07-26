@@ -139,7 +139,6 @@ export class CapacitorPlatform
 	async appMounted() {
 		super.appMounted();
 		this.resetOrientationLockType();
-		GoogleAuth.initialize();
 
 		const userStore = useUserStore();
 
