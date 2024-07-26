@@ -1,4 +1,3 @@
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { TerminusCommonPlatform } from '../terminusCommon/terminalCommonPlatform';
 import { useUserStore } from '../../stores/user';
 import { useTransferStore } from 'src/stores/transfer';

@@ -64,7 +64,6 @@ import {
 	NativeScanQRProtocol
 } from './scanQRProtocols';
 import { useFilesStore } from 'src/stores/files';
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 
 declare let cordova: any;
 declare let plugins: any;
