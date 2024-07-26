@@ -19,6 +19,7 @@ export async function googleLogin(
 	}
 	const manifest = stringToBase64(JSON.stringify(schema?.manifest));
 
+	await GoogleAuth.initialize();
 	await GoogleAuth.signOut();
 	const googleResponse = await GoogleAuth.signIn();
 	if (!googleResponse || !googleResponse.authentication.accessToken) {

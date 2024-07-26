@@ -1,4 +1,4 @@
-import { GoogleAuth } from 'src/plugins/googleAuth';
+import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import {
 	AccountAddMode,
 	AccountType,
@@ -17,11 +17,18 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 			scopes
 		});
 		await GoogleAuth.signOut();
+		console.log(1111);
+
 		const googleDriveSignInResponse = await GoogleAuth.signIn();
+		console.log(2222);
 
 		let response;
 
+		let clientId = '';
+
 		if (getAppPlatform().getQuasar()?.platform.is?.android) {
+			clientId =
+				'343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com';
 			const form = new FormData();
 			form.append('code', googleDriveSignInResponse.serverAuthCode);
 			response = await axiosInstanceProxy({
@@ -41,9 +48,12 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 						: ''
 				);
 			}
+		} else {
+			clientId =
+				'343424174381-vrtlie7g85jcso7c98c4vavo17qoied7.apps.googleusercontent.com';
 		}
 
-		return {
+		const result = {
 			name: googleDriveSignInResponse.email,
 			type: AccountType.Google,
 			raw_data: {
@@ -56,9 +66,14 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 				expires_at: Date.now() + 30 * 60 * 1000,
 				expires_in: 30 * 60 * 1000,
 				scope: scopes.join(','),
-				id_token: googleDriveSignInResponse.authentication.idToken
+				id_token: googleDriveSignInResponse.authentication.idToken,
+				client_id: clientId
 			}
 		};
+
+		console.log(result);
+
+		return result;
 	}
 	async permissions() {
 		return {
