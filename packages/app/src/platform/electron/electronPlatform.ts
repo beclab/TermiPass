@@ -38,8 +38,9 @@ export class ElectronPlatform extends TerminusCommonPlatform {
 			}
 
 			const currentAccount = {
-				url: userStore.getModuleSever('seafile'),
-				username: app.account?.name + '@seafile.com'
+				url: userStore.getModuleSever('files') + '/' + 'seahub',
+				username: app.account?.name + '@seafile.com',
+				authToken: userStore.current_user.access_token
 			};
 
 			if (forceReload) {

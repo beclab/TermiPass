@@ -22,7 +22,8 @@ parentPort.on('message', async (message) => {
 			params.url,
 			params.username,
 			'abcd123456',
-			os.hostname()
+			os.hostname(),
+			params.authToken
 		);
 
 		parentPort.postMessage({
