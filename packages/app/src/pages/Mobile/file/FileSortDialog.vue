@@ -30,8 +30,8 @@
 							</div>
 							<div class="q-mx-xs text-body2 sort-detail">
 								{{
-									dataStore.activeSort.by === sort
-										? dataStore.activeSort.asc
+									filesStore.activeSort.by === sort
+										? filesStore.activeSort.asc
 											? filesSortTypeInfo[sort].introduce.asc
 											: filesSortTypeInfo[sort].introduce.desc
 										: filesSortTypeInfo[sort].introduce.asc
@@ -40,7 +40,7 @@
 						</div>
 						<div class="col row items-center justify-end">
 							<q-icon
-								v-if="dataStore.activeSort.by === sort"
+								v-if="filesStore.activeSort.by === sort"
 								name="sym_r_check"
 								size="20px"
 								color="grey-8"
@@ -57,8 +57,8 @@
 import { useDialogPluginComponent } from 'quasar';
 import { ref } from 'vue';
 import { FilesSortType, filesSortTypeInfo } from '../../../utils/contact';
-import { useDataStore } from '../../../stores/data';
 import TerminusDialogDisplayContent from '../../../components/common/TerminusDialogDisplayContent.vue';
+import { useFilesStore } from './../../../stores/files';
 const { dialogRef, onDialogOK } = useDialogPluginComponent();
 
 const sortTypes = ref([
@@ -68,13 +68,13 @@ const sortTypes = ref([
 	FilesSortType.Modified
 ]);
 
-const dataStore = useDataStore();
+const filesStore = useFilesStore();
 
 function fileSort(sort: FilesSortType) {
-	if (dataStore.activeSort.by == sort) {
-		dataStore.updateActiveSort(sort, !dataStore.activeSort.asc);
+	if (filesStore.activeSort.by == sort) {
+		filesStore.updateActiveSort(sort, !filesStore.activeSort.asc);
 	} else {
-		dataStore.updateActiveSort(sort, true);
+		filesStore.updateActiveSort(sort, true);
 	}
 
 	onDialogOK();

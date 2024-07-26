@@ -66,6 +66,11 @@ const mobileCommon: RouteRecordRaw[] = [
 			},
 
 			{
+				path: 'repo/:repo',
+				component: () => import('pages/Mobile/file/FilesRepoPage.vue')
+			},
+
+			{
 				path: 'Files/:path*',
 				name: 'Files',
 				component: () => import('pages/Mobile/file/FilesPage.vue')

@@ -102,8 +102,8 @@ body.rtl #listing {
 	justify-content: space-around;
 	border-radius: 10px;
 	/* background-color: red; */
-  padding-left: 10px;
-  padding-right: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 #listing.mosaic .mobile-item:hover {
@@ -306,26 +306,4 @@ body.rtl #listing {
 
 #listing.list .mobile-item.header .active {
 	font-weight: bold;
-}
-
-#listing #multiple-selection {
-	position: fixed;
-	bottom: -4em;
-	left: 0;
-	z-index: 99999;
-	width: 100%;
-	background-color: var(--blue);
-	height: 4em;
-	padding: 0.5em 0.5em 0.5em 1em;
-	justify-content: space-between;
-	transition: 0.2s ease bottom;
-}
-
-#listing #multiple-selection.active {
-	bottom: 0;
-}
-
-#listing #multiple-selection p,
-#listing #multiple-selection i {
-	color: var(--item-selected);
 }

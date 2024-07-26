@@ -35,8 +35,9 @@
 <script lang="ts" setup>
 import { useQuasar, useDialogPluginComponent } from 'quasar';
 import { ref, onMounted } from 'vue';
-import { seahub, sync } from '../../../api';
-
+import { dataAPIs } from '../../../api';
+import { DriveType } from '../../../stores/files';
+import { useMenuStore } from '../../../stores/files-menu';
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
@@ -47,10 +48,12 @@ const props = defineProps({
 	}
 });
 
-const { onDialogHide, dialogRef, onDialogCancel } = useDialogPluginComponent();
+const { onDialogOK, dialogRef, onDialogCancel } = useDialogPluginComponent();
 
 const $q = useQuasar();
+const menuStore = useMenuStore();
 
+const dataAPI = dataAPIs(DriveType.Sync);
 const name = ref('');
 const showDialog = ref(true);
 const submitLoading = ref(false);
@@ -70,14 +73,15 @@ const submit = async () => {
 	}
 
 	submitLoading.value = true;
-	const url = `seahub/api2/repos/${props.item!.repo_id}/?op=rename`;
-	const data = {
-		repo_name: name.value
-	};
-	await seahub.reRepoName(url, data);
-	sync.getSyncMenu();
-	onDialogHide();
-	submitLoading.value = false;
+
+	try {
+		await dataAPI.renameRepo(props.item, name.value);
+		submitLoading.value = false;
+		onDialogOK();
+		await menuStore.getSyncMenu();
+	} catch (error) {
+		submitLoading.value = false;
+	}
 };
 </script>
 

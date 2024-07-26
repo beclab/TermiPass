@@ -1,9 +1,5 @@
 <template>
-	<div
-		class="uploadModal bg-background-2"
-		v-if="showUploadModal && !store.hideUploadModal"
-		:style="{ visibility: store.hideUploadModal ? 'hidden' : 'visible' }"
-	>
+	<div class="uploadModal bg-background-2" v-if="showUploadModal">
 		<div class="uploadHeader row items-center justify-between">
 			<div
 				class="row items-center justify-center"
@@ -128,8 +124,10 @@ import { useDataStore } from '../../stores/data';
 import { useFilesUploadStore } from '../../stores/files-upload';
 import { fileList } from '../../utils/constants';
 import { scrollBarStyle } from '../../utils/contact';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { dataAPIs } from '../../api';
+import { common } from './../../api';
 
 export default defineComponent({
 	name: 'UploadModal',
@@ -141,6 +139,7 @@ export default defineComponent({
 		const { t } = useI18n();
 
 		const Router = useRouter();
+		const Route = useRoute();
 		const showUpload = ref(true);
 		const showUploadModal = ref(store.showUploadModal);
 		const uploadQueue = ref(uploadSrore.uploadQueue);
@@ -163,13 +162,10 @@ export default defineComponent({
 			showUpload.value = false;
 		});
 
-		const forWord = (item: { path: any }) => {
-			Router.push({
-				path: item.path,
-				query: {
-					type: 'preview'
-				}
-			});
+		const forWord = async (item: any) => {
+			const driveType = await common.formatUrltoDriveType(item.path);
+			let dataAPI = dataAPIs(driveType);
+			dataAPI.openPreview(item, Router);
 		};
 
 		const toggle = () => {
