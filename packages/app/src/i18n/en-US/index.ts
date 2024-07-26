@@ -1343,5 +1343,7 @@ If you want to create an organization, please refer to the steps listed in the T
 			'Congratulations, you have successfully mounted the object storage service!',
 		object_storage: 'Object Storage'
 	},
+	active: 'Active',
+	inactive: 'Inactive',
 	...termipass_en
 };
