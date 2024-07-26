@@ -13,7 +13,7 @@ export async function formatUrltoDriveType(href: string): Promise<DriveType> {
 	) {
 		return DriveType.Sync;
 	} else if (href.indexOf('/Files/Application') > -1) {
-		return DriveType.Cache;
+		return DriveType.Data;
 	} else if (href.indexOf('/Files/AppData') > -1) {
 		return DriveType.Cache;
 	} else {
@@ -75,5 +75,15 @@ export async function formatUrltoActiveMenu(
 			id: label,
 			driveType: DriveType.Drive
 		};
+	}
+}
+
+export function filterPcvPath(path: string): string {
+	const splitPath = path.split('/');
+	if (splitPath[1] && splitPath[1].indexOf('pvc-') > -1) {
+		splitPath.splice(1, 1);
+		return splitPath.join('/');
+	} else {
+		return path;
 	}
 }

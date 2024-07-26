@@ -1,12 +1,11 @@
 import { Origin } from './../origin';
 import { removePrefix, createURL } from '../utils';
-import { getAppDataPath, isAppData } from '../../utils/file';
-import { formatAppDataNode } from './filesFormat';
+import { getAppDataPath } from '../../utils/file';
+import { formatAppDataNode, formatDrive, formatAppData } from './filesFormat';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { files } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
-import { formatDrive } from './filesFormat';
 import { checkAppData } from '../../utils/file';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
@@ -16,8 +15,7 @@ import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
-// import { CopyStoragesType } from '../common/encoding';
-// import { formatSeahub } from './filesFormat';
+import { formatUrltoDriveType } from '../common/common';
 import {
 	FileItem,
 	FileResType,
@@ -35,11 +33,16 @@ class Data extends Origin {
 	}
 
 	async fetch(url: string): Promise<FileResType> {
-		url = decodeURIComponent(removePrefix(url));
-		const res = await this.fetchDrive(url);
+		const pureUrl = decodeURIComponent(removePrefix(url));
 
-		console.log('fetch-res', res);
-		res.url = `/Files${url}`;
+		let res: FileResType;
+		if ((await formatUrltoDriveType(url)) === DriveType.Cache) {
+			res = await this.fetchCache(pureUrl);
+		} else {
+			res = await this.fetchDrive(pureUrl);
+		}
+
+		res.url = `/Files${pureUrl}`;
 
 		if (res.isDir) {
 			if (!res.url.endsWith('/')) res.url += '/';
@@ -63,25 +66,41 @@ class Data extends Origin {
 			{}
 		);
 
-		let data: FileResType;
-		if (isAppData(url)) {
-			data = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
-		} else {
-			data = await formatDrive(JSON.parse(JSON.stringify(res)));
-		}
+		const data: FileResType = await formatDrive(
+			JSON.parse(JSON.stringify(res))
+		);
 
 		return data;
 	}
 
 	async fetchCache(url: string): Promise<FileResType> {
 		const { path, node } = getAppDataPath(url);
-		const res: FileResType = await this.commonAxios.get(
+
+		let headers = {
+			auth: false,
+			'X-Terminus-Node': ''
+		};
+		if (node) {
+			headers = {
+				auth: true,
+				'X-Terminus-Node': node
+			};
+		}
+		const options = headers.auth ? { headers: headers } : {};
+
+		const res: any = await this.commonAxios.get(
 			`/api/resources/AppData${path}`,
-			{},
-			{ auth: true, node }
+			options
 		);
 
-		return res;
+		let data: FileResType;
+		if (res.data) {
+			data = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
+		} else {
+			data = formatAppData(node, JSON.parse(JSON.stringify(res)));
+		}
+
+		return data;
 	}
 
 	async fetchMenuRepo(): Promise<DriveMenuType[]> {
@@ -120,10 +139,7 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		console.log('drive download', path);
-
 		const filesStore = useFilesStore();
-		console.log('pathpath', path);
 
 		if (
 			filesStore.selectedCount === 1 &&
@@ -182,8 +198,6 @@ class Data extends Origin {
 				src_drive_type: DriveType.Drive
 			});
 		}
-
-		console.log('copyStorages', copyStorages);
 
 		return copyStorages;
 	}
@@ -407,7 +421,6 @@ class Data extends Origin {
 
 	async openPreview(item: any): Promise<FileResType> {
 		const res = await this.fetch(item.path);
-		console.log('openPreviewopenPreview', res);
 		res.driveType = DriveType.Drive;
 		return res;
 	}
@@ -470,7 +483,6 @@ class Data extends Origin {
 	}
 
 	async deleteItem(items: FileItem[]): Promise<void> {
-		console.log('FileItemFileItem', items);
 		// const filesStore = useFilesStore();
 
 		const promises: any = [];
