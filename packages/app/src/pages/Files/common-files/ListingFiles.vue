@@ -198,6 +198,9 @@ watch(
 		fileUploaderPath.value =
 			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
 			'/';
+	},
+	{
+		immediate: true
 	}
 );
 
