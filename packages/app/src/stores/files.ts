@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { Origin } from '../api/origin';
-import { Data as DriveData } from '../api/drive/data';
-import { Data as SyncData } from '../api/sync/data';
+
+import { dataAPIs } from '../api';
+
 import { FilesSortType } from '../utils/contact';
 import { useMenuStore } from './files-menu';
 import { formatUrltoActiveMenu } from 'src/api/common/common';
@@ -98,15 +99,31 @@ export type FileState = {
 	};
 };
 
-const driveData = new DriveData();
-const syncData = new SyncData();
+// const driveData = new DriveDataAPI();
+// const syncData = new SyncDataAPI();
+// const dataData = new DataDataAPI();
+// const cacheData = new CacheDataAPI();
 
 function getAPI(driveType: DriveType): Origin {
-	if (driveType == DriveType.Sync) {
-		return syncData;
-	} else {
-		return driveData;
-	}
+	return dataAPIs(driveType);
+	// switch (driveType) {
+	// 	case DriveType.Sync:
+	// 		return syncData;
+	// 		break;
+	// 	case DriveType.Drive:
+	// 		return driveData;
+	// 		break;
+	// 	case DriveType.Data:
+	// 		return dataData;
+	// 		break;
+	// 	case DriveType.Cache:
+	// 		return cacheData;
+	// 		break;
+
+	// 	default:
+	// 		return driveData;
+	// 		break;
+	// }
 }
 
 export const useFilesStore = defineStore('files', {
@@ -213,17 +230,11 @@ export const useFilesStore = defineStore('files', {
 			});
 
 			const requestUrl = await this.formatPathtoUrl(path);
-			console.log('driveType', path.driveType);
-			console.log('requestUrl', requestUrl);
-			console.log('previousStack', this.previousStack);
-			console.log('hasBackPath', this.backStack);
 
 			const menuStore = useMenuStore();
 			menuStore.activeMenu = await formatUrltoActiveMenu(
 				path.path + path.param
 			);
-
-			console.log('formatUrltoActiveMenu', menuStore.activeMenu.label);
 
 			getAPI(path.driveType)
 				.fetch(requestUrl)

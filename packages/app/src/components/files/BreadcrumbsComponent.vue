@@ -53,11 +53,7 @@ const items = computed(function () {
 			? route.fullPath.slice(route.fullPath.indexOf('?'))
 			: '';
 
-	console.log('relativequery', relativequery);
-
 	let parts = relativePath.split('/');
-
-	console.log('partspartsparts', parts);
 
 	if (parts[0] === '') {
 		parts.shift();
@@ -73,9 +69,7 @@ const items = computed(function () {
 
 	let breadcrumbs: any[] = [];
 
-	console.log('partspartsparts-111', parts);
 	for (let i = 0; i < parts.length; i++) {
-		console.log('parts[i]', parts[i]);
 		if (i === 0) {
 			breadcrumbs.push({
 				name: decodeURIComponent(parts[i]),
@@ -99,14 +93,10 @@ const items = computed(function () {
 		breadcrumbs[0].name = '...';
 	}
 
-	console.log('breadcrumbsbreadcrumbs', breadcrumbs);
-
 	return breadcrumbs;
 });
 
 const go = async (url: string, query: any) => {
-	console.log('urlurlurl', url);
-	console.log('queryquery', query);
 	const driveType = await formatUrltoDriveType(url);
 	filesStore.setBrowserUrl(url + query, driveType);
 };

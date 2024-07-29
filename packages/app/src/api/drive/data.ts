@@ -6,7 +6,6 @@ import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { files } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
-import { checkAppData } from '../../utils/file';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
 import { checkSameName } from './../../utils/file';
@@ -187,10 +186,7 @@ class Data extends Origin {
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of filesStore.selected) {
 			const el = filesStore.currentFileList[item];
-			let from = decodeURIComponent(el.url).slice(6);
-			if (checkAppData(el.url)) {
-				from = decodeURIComponent(el.url);
-			}
+			const from = decodeURIComponent(el.url).slice(6);
 			copyStorages.push({
 				from: from,
 				to: '',
@@ -208,10 +204,7 @@ class Data extends Origin {
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of filesStore.selected) {
 			const el = filesStore.currentFileList[item];
-			let from = decodeURIComponent(el.url).slice(6);
-			if (checkAppData(el.url)) {
-				from = decodeURIComponent(el.url);
-			}
+			const from = decodeURIComponent(el.url).slice(6);
 			copyStorages.push({
 				from: from,
 				to: '',
@@ -233,15 +226,16 @@ class Data extends Origin {
 
 		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
 			const element: any = operateinStore.copyFiles[i];
-			const lastPathIndex =
+			let lastPathIndex =
 				path.indexOf('?') > -1
 					? decodeURIComponent(path).slice(6, path.indexOf('?'))
 					: decodeURIComponent(path).slice(6);
-			let to = lastPathIndex + decodeURIComponent(element.name);
 
-			if (checkAppData(path)) {
-				to = decodeURIComponent(path) + decodeURIComponent(element.name);
-			}
+			lastPathIndex = lastPathIndex.endsWith('/')
+				? lastPathIndex
+				: lastPathIndex + '/';
+
+			const to = lastPathIndex + decodeURIComponent(element.name);
 			items.push({
 				from: element.from,
 				to: to,
@@ -279,12 +273,8 @@ class Data extends Origin {
 		for (const i of filesStore.selected) {
 			const element: any = filesStore.currentFileList[i];
 
-			let from = decodeURIComponent(element.url).slice(6);
-			let to = decodeURIComponent(path + '/' + element.name).slice(6);
-			if (checkAppData(element.url)) {
-				from = decodeURIComponent(element.url);
-				to = decodeURIComponent(path + element.name);
-			}
+			const from = decodeURIComponent(element.url).slice(6);
+			const to = decodeURIComponent(path + '/' + element.name).slice(6);
 			items.push({
 				from: from,
 				to: to,
@@ -305,8 +295,6 @@ class Data extends Origin {
 		isMove: boolean | undefined,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		// const dataStore = useDataStore();
-		// const filesStore = useFilesStore();
 		const dest = path;
 
 		notifyWaitingShow('Pasting, Please wait...');
@@ -317,7 +305,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.MOVE, dest);
 					notifyHide();
-					// dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -328,7 +315,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.PASTE, dest);
 					notifyHide();
-					// dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -375,18 +361,9 @@ class Data extends Origin {
 	): Promise<void> {
 		const newurl = removePrefix(decodeURIComponent(url));
 
-		let fileInfo: any;
-		let appNode = '';
+		const appNode = '';
 
-		if (checkAppData(newurl)) {
-			const { path, node } = getAppDataPath(newurl);
-			appNode = node;
-			if (node) {
-				fileInfo = await files.getUploadInfo(path, `/appdata`, content);
-			}
-		} else {
-			fileInfo = await files.getUploadInfo(newurl, '/data', content);
-		}
+		const fileInfo: any = await files.getUploadInfo(newurl, '/data', content);
 
 		const fileChunkList = await files.createFileChunk(fileInfo, content);
 
@@ -465,13 +442,6 @@ class Data extends Origin {
 	}
 
 	async formatRepotoPath(item: any): Promise<string> {
-		if (item.key.toLowerCase() == DriveType.Data) {
-			return '/Files/Application';
-		}
-
-		if (item.key.toLowerCase() == DriveType.Cache) {
-			return '/Files/AppData';
-		}
 		return (
 			'/Files/Home/' +
 			(item.label && item.label != MenuItem.HOME ? item.label + '/' : '')
