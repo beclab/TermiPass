@@ -158,6 +158,7 @@ export const useOperateinStore = defineStore('operation', {
 
 			console.log('handleFileOperate ===>');
 			console.log('CREATE_FOLDER => action', action);
+			console.log('CREATE_FOLDER => driveType', driveType);
 
 			switch (action) {
 				case OPERATE_ACTION.CREATE_FOLDER:

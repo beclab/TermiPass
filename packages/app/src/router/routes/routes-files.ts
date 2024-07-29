@@ -23,23 +23,23 @@ export default [
 				}
 			},
 			{
-				path: 'Files/Application/:path*',
-				name: 'Application',
+				path: 'Data/:path*',
+				name: 'Data',
 				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}
 			},
 			{
-				path: 'Files/AppData/:path*',
-				name: 'AppData',
+				path: 'Cache/:path*',
+				name: 'Cache',
 				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}
 			},
 			{
-				path: 'Files/Seahub/:path*',
+				path: 'Seahub/:path*',
 				name: 'Seahub',
 				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {

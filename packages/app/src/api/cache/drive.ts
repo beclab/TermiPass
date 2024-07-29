@@ -205,8 +205,6 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 			item.src_drive_type
 		}&dst_type=${item.dst_drive_type}`;
 
-		console.log('urlurlurlurlurl', url);
-
 		promises.push(pasteAction(url, terminusNode));
 	}
 

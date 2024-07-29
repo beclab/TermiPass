@@ -114,7 +114,7 @@ export abstract class Origin {
 	/**
 	 * format Repo to Path
 	 */
-	abstract formatRepotoPath(item: any): Promise<string>;
+	abstract formatRepotoPath(item?: any): Promise<string>;
 
 	/**
 	 * format path to url
