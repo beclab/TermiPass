@@ -498,7 +498,7 @@ class Data extends Origin {
 	}
 
 	async formatRepotoPath(item: any): Promise<string> {
-		return `/Files/Seahub/${item.label}/?id=${item.id}&type=${
+		return `/Seahub/${item.label}/?id=${item.id}&type=${
 			item.type || 'mine'
 		}&p=${item.permission ? item.permission.trim() : 'rw'}`;
 	}

@@ -5,16 +5,15 @@ import { getParams } from './../../utils/utils';
 import { Data as DriveDataAPI } from '../drive/data';
 
 export function formatUrltoDriveType(href: string): DriveType {
-	if (href.indexOf('/Files/Home') > -1) {
+	// console.log('hrefhref', href);
+	// console.log('hrefhref', href.startsWith('/Files'));
+	if (href.startsWith('/Files')) {
 		return DriveType.Drive;
-	} else if (
-		href.indexOf('/Files/Seahub') > -1 ||
-		href.indexOf('/repo/') > -1
-	) {
+	} else if (href.startsWith('/Seahub') || href.startsWith('/repo')) {
 		return DriveType.Sync;
-	} else if (href.indexOf('/Files/Application') > -1) {
+	} else if (href.startsWith('/Data')) {
 		return DriveType.Data;
-	} else if (href.indexOf('/Files/AppData') > -1) {
+	} else if (href.startsWith('/Cache')) {
 		return DriveType.Cache;
 	} else {
 		return DriveType.Drive;
@@ -24,8 +23,10 @@ export function formatUrltoDriveType(href: string): DriveType {
 export async function formatUrltoActiveMenu(
 	href: string
 ): Promise<ActiveMenuType> {
-	if (href.indexOf('/Files/Home') > -1) {
-		const label = decodeURIComponent(href).split('/')[3] || MenuItem.HOME;
+	// console.log('hrefhref', href);
+	// console.log('hrefhref', href.startsWith('/Files'));
+	if (href.startsWith('/Files')) {
+		const label = decodeURIComponent(href).split('/')[2] || MenuItem.HOME;
 		const driveApi = new DriveDataAPI();
 		const menus = await driveApi.fetchMenuRepo();
 		const isHome = menus.find((e) => e.key == label) == undefined;
@@ -34,8 +35,8 @@ export async function formatUrltoActiveMenu(
 			id: isHome ? MenuItem.HOME : label,
 			driveType: DriveType.Drive
 		};
-	} else if (href.indexOf('/Files/Seahub') > -1) {
-		const label = decodeURIComponent(href).split('/')[3];
+	} else if (href.startsWith('/Seahub')) {
+		const label = decodeURIComponent(href).split('/')[2];
 		const splitUrl = href.split('?');
 		const repo_id = getParams(splitUrl.length > 1 ? splitUrl[1] : href, 'id');
 
@@ -44,21 +45,21 @@ export async function formatUrltoActiveMenu(
 			id: repo_id,
 			driveType: DriveType.Sync
 		};
-	} else if (href.indexOf('/Files/Application') > -1) {
+	} else if (href.startsWith('/Data')) {
 		// console.log(label);
 		return {
 			label: MenuItem.DATA,
 			id: MenuItem.DATA,
 			driveType: DriveType.Data
 		};
-	} else if (href.indexOf('/Files/AppData') > -1) {
+	} else if (href.startsWith('/Cache')) {
 		return {
 			label: MenuItem.CACHE,
 			id: MenuItem.CACHE,
 			driveType: DriveType.Cache
 		};
 	} else {
-		const label = decodeURIComponent(href).split('/')[3];
+		const label = decodeURIComponent(href).split('/')[2];
 		return {
 			label: label,
 			id: label,

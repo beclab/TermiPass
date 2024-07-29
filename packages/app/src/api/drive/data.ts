@@ -1,7 +1,6 @@
 import { Origin } from './../origin';
 import { removePrefix, createURL } from '../utils';
-import { getAppDataPath } from '../../utils/file';
-import { formatAppDataNode, formatDrive, formatAppData } from './filesFormat';
+import { formatDrive } from './filesFormat';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { files } from './../index';
@@ -14,7 +13,6 @@ import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
-import { formatUrltoDriveType } from '../common/common';
 import {
 	FileItem,
 	FileResType,
@@ -32,14 +30,12 @@ class Data extends Origin {
 	}
 
 	async fetch(url: string): Promise<FileResType> {
+		console.log('urlrrr', url);
 		const pureUrl = decodeURIComponent(removePrefix(url));
+		console.log('pureUrlpureUrl', pureUrl);
 
-		let res: FileResType;
-		if ((await formatUrltoDriveType(url)) === DriveType.Cache) {
-			res = await this.fetchCache(pureUrl);
-		} else {
-			res = await this.fetchDrive(pureUrl);
-		}
+		const res: FileResType = await this.fetchDrive(pureUrl);
+		console.log('res', res);
 
 		res.url = `/Files${pureUrl}`;
 
@@ -68,36 +64,6 @@ class Data extends Origin {
 		const data: FileResType = await formatDrive(
 			JSON.parse(JSON.stringify(res))
 		);
-
-		return data;
-	}
-
-	async fetchCache(url: string): Promise<FileResType> {
-		const { path, node } = getAppDataPath(url);
-
-		let headers = {
-			auth: false,
-			'X-Terminus-Node': ''
-		};
-		if (node) {
-			headers = {
-				auth: true,
-				'X-Terminus-Node': node
-			};
-		}
-		const options = headers.auth ? { headers: headers } : {};
-
-		const res: any = await this.commonAxios.get(
-			`/api/resources/AppData${path}`,
-			options
-		);
-
-		let data: FileResType;
-		if (res.data) {
-			data = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
-		} else {
-			data = formatAppData(node, JSON.parse(JSON.stringify(res)));
-		}
 
 		return data;
 	}
@@ -194,6 +160,8 @@ class Data extends Origin {
 				src_drive_type: DriveType.Drive
 			});
 		}
+
+		console.log('copyStorages', copyStorages);
 
 		return copyStorages;
 	}

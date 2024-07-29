@@ -291,6 +291,8 @@ const click = (event: any) => {
 const open = async () => {
 	emits('closeMenu');
 	filesStore.addSelected(props.item.index);
+
+	console.log('propsitemopen', props.item);
 	const splitUrl = props.item.path.split('?');
 
 	if (!props.item.isDir) {

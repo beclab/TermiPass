@@ -231,6 +231,8 @@ export const useFilesStore = defineStore('files', {
 
 			const requestUrl = await this.formatPathtoUrl(path);
 
+			console.log('requestUrlrequestUrl', requestUrl);
+
 			const menuStore = useMenuStore();
 			menuStore.activeMenu = await formatUrltoActiveMenu(
 				path.path + path.param

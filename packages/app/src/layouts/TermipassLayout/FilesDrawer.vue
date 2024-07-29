@@ -134,6 +134,8 @@ const selectHandler = async (value) => {
 	// };
 	const path = await filesStore.formatRepotoPath(value.item);
 
+	console.log('pathpathpath', path);
+
 	filesStore.setBrowserUrl(path, value.item.driveType);
 	filesStore.resetSelected();
 };

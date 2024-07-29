@@ -15,7 +15,7 @@ export default [
 		},
 		children: [
 			{
-				path: 'Files/Home/:path*',
+				path: 'Files/:path*',
 				name: 'Files',
 				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
