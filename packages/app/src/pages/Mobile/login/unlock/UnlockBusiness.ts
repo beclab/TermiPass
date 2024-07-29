@@ -36,11 +36,11 @@ export async function unlockByPwd(
 	password: string,
 	callback: BusinessAsyncCallback
 ) {
+	const userStore = useUserStore();
 	try {
 		if (!password) {
 			throw new Error(i18n.global.t('password_not_empty'));
 		}
-		const userStore = useUserStore();
 
 		// await userStore.users!.unlock(password);
 		// userStore.password = password;
@@ -64,6 +64,7 @@ export async function unlockByPwd(
 		}
 		await callback.onSuccess(userStore.current_id);
 	} catch (error) {
+		userStore.users?.lock();
 		callback.onFailure(i18n.global.t('password_error'));
 	}
 }

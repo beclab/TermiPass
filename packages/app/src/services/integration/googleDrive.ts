@@ -17,11 +17,8 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 			scopes
 		});
 		await GoogleAuth.signOut();
-		console.log(1111);
 
 		const googleDriveSignInResponse = await GoogleAuth.signIn();
-		console.log(2222);
-
 		let response;
 
 		let clientId = '';
