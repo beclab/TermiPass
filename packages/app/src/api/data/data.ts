@@ -1,13 +1,17 @@
 import { DriveDataAPI } from './../index';
-import { removePrefix } from '../utils';
+// import { removePrefix } from '../utils';
 import { MenuItem } from './../../utils/contact';
 import { formatData } from './filesFormat';
 
-import { FileResType, DriveType } from './../../stores/files';
+import { FileResType, DriveType, FilePath } from './../../stores/files';
 import { DriveMenuType } from './type';
+
 class Data extends DriveDataAPI {
 	async fetch(url: string): Promise<FileResType> {
-		const pureUrl = decodeURIComponent(removePrefix(url));
+		console.log('urlurlurl', url);
+		// const pureUrl = decodeURIComponent(removePrefix(url));
+		const pureUrl = decodeURIComponent(url);
+		console.log('pureUrlpureUrl', pureUrl);
 
 		const res: FileResType = await this.fetchData(pureUrl);
 
@@ -51,8 +55,20 @@ class Data extends DriveDataAPI {
 		];
 	}
 
-	async formatRepotoPath(): Promise<string> {
-		return '/Files/Application';
+	async formatRepotoPath(item: any): Promise<string> {
+		console.log('formatRepotoPath - itemitem', item);
+		if (item.label === 'Data') return '/Data/';
+		return '/Data/' + item.label;
+	}
+
+	async formatPathtoUrl(item: FilePath): Promise<string> {
+		if (item.path.endsWith('/Data/')) {
+			return '/Application';
+		}
+
+		const purePath = item.path.replace('/Data', '/Application');
+		console.log('purePath', purePath);
+		return purePath;
 	}
 }
 

@@ -7,9 +7,9 @@ export function formatData(data) {
 	data.items &&
 		data.items.map((el) => {
 			const extension = getextension(el.name);
-			let pvcPath = filterPcvPath(el.path);
-			pvcPath = pvcPath.replace('/Data', '/Application');
-			el.path = `/Files${pvcPath}`;
+			const pvcPath = filterPcvPath(el.path);
+			// pvcPath = pvcPath.replace('/Data', '/Application');
+			el.path = `${pvcPath}`;
 			el.driveType = DriveType.Data;
 			el.extension = extension;
 			el.modified = new Date(el.modified).getTime();

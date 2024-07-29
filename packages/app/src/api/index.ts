@@ -19,7 +19,7 @@ import { DriveType } from './../stores/files';
 function dataAPIs(
 	origin?: DriveType
 ): SyncDataAPI | DriveDataAPI | DataDataAPI | CacheDataAPI {
-	const driveType = common.formatUrltoDriveType(window.location.href);
+	const driveType = common.formatUrltoDriveType(window.location.pathname);
 	if (origin === DriveType.Sync) {
 		return new SyncDataAPI();
 	} else if (origin === DriveType.Drive) {

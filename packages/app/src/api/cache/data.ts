@@ -10,7 +10,7 @@ import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
-import { FileResType, DriveType } from './../../stores/files';
+import { FileResType, DriveType, FilePath } from './../../stores/files';
 import { DriveMenuType } from './type';
 
 class Data extends DriveDataAPI {
@@ -22,9 +22,13 @@ class Data extends DriveDataAPI {
 	}
 
 	async fetch(url: string): Promise<FileResType> {
-		const pureUrl = decodeURIComponent(removePrefix(url));
+		console.log('urlurl', url);
+		const pureUrl = decodeURIComponent(url);
+		console.log('pureUrlpureUrlpureUrl', pureUrl);
 
 		const res: FileResType = await this.fetchCache(pureUrl);
+		console.log('res', res);
+
 		res.url = `/Files${pureUrl}`;
 
 		if (res.isDir) {
@@ -83,8 +87,39 @@ class Data extends DriveDataAPI {
 		];
 	}
 
-	async formatRepotoPath(): Promise<string> {
-		return '/Files/AppData';
+	// async formatRepotoPath(item: any): Promise<string> {
+	// 	console.log('formatRepotoPath - itemitem', item);
+	// 	if (item.label === 'Data') return '/Data/';
+	// 	return '/Data/' + item.label;
+	// }
+
+	// async formatPathtoUrl(item: FilePath): Promise<string> {
+	// 	if (item.path.endsWith('/Data/')) {
+	// 		return '/Application';
+	// 	}
+
+	// 	const purePath = item.path.replace('/Data', '/Application');
+	// 	console.log('purePath', purePath);
+	// 	return purePath;
+	// }
+
+	async formatRepotoPath(item: any): Promise<string> {
+		console.log('formatRepotoPath - itemitem', item);
+
+		if (item.label === 'Cache') return '/Cache/';
+		return '/Cache/' + item.label;
+	}
+
+	async formatPathtoUrl(item: FilePath): Promise<string> {
+		console.log('formatPathtoUrl - itemitem', item);
+
+		if (item.path.endsWith('/Cache/')) {
+			return '/AppData';
+		}
+
+		const purePath = item.path.replace('/Cache', '/AppData');
+		console.log('purePath', purePath);
+		return purePath;
 	}
 
 	async copy(): Promise<CopyStoragesType[]> {

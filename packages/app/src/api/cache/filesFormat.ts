@@ -2,26 +2,6 @@ import { FileItem, DriveType } from './../../stores/files';
 import { getextension } from '../../utils/utils';
 import { filterPcvPath } from './../common/common';
 
-export function formatDrive(data) {
-	data.origin = DriveType.Drive;
-	data.items &&
-		data.items.map((el) => {
-			const extension = getextension(el.name);
-			let pvcPath = filterPcvPath(el.path);
-
-			// Temporary code
-			if (pvcPath.startsWith('/Data')) {
-				pvcPath = pvcPath.replace('/Data', '/Application');
-			}
-			el.path = `/Files${pvcPath}`;
-			el.driveType = DriveType.Drive;
-			el.extension = extension;
-			el.modified = new Date(el.modified).getTime();
-		});
-
-	return data;
-}
-
 export function formatAppData(node, data) {
 	data.origin = DriveType.Cache;
 	data.items &&
@@ -30,16 +10,19 @@ export function formatAppData(node, data) {
 			const splitPath = filterPcvPath(el.path).split('/');
 			splitPath.splice(splitPath.indexOf('AppData') + 1, 0, node);
 			const joinPath = splitPath.join('/');
-			el.path = `/Files${joinPath}`;
+			el.path = `/Cache${joinPath}`;
 			el.driveType = DriveType.Cache;
 			el.extension = extension;
 			el.modified = new Date(el.modified).getTime();
 		});
 
+	console.log('datadata', data);
+
 	return data;
 }
 
 export function formatAppDataNode(url, data) {
+	console.log('formatAppDataNode', url);
 	const nodeDir = {
 		path: url,
 		name: 'AppData',
@@ -69,7 +52,7 @@ export function formatAppDataNode(url, data) {
 			const extension = getextension(el.metadata.name);
 
 			const item: FileItem = {
-				path: '/Files' + url + '/' + el.metadata.name,
+				path: '/Cache/' + el.metadata.name,
 				name: el.metadata.name,
 				size: 4096,
 				extension: extension,
@@ -91,6 +74,8 @@ export function formatAppDataNode(url, data) {
 			nodeDir.items.push(item);
 		});
 	}
+
+	console.log('nodeDirnodeDir', nodeDir);
 
 	return nodeDir;
 }
