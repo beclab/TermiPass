@@ -185,8 +185,7 @@ class Data extends Origin {
 			!fileStore.currentFileList[fileStore.selected[0]].isDir
 		) {
 			const url = await seahub.downloaFile(
-				fileStore.currentFileList[fileStore.selected[0]].path,
-				fileStore.currentFileList[fileStore.selected[0]].name
+				fileStore.currentFileList[fileStore.selected[0]]
 			);
 
 			return { url: url, headers: {} };
@@ -461,15 +460,14 @@ class Data extends Origin {
 
 	getDownloadURL(file: any, _inline: boolean, download?: boolean): string {
 		const store = useDataStore();
-		const startIndex =
-			file.path.indexOf(file.repo_name) + file.repo_name?.length;
-		const hasSeahub = file.path.slice(startIndex);
+		const repo_id = getParams(file.path, 'id');
+
 		if (['audio', 'video'].includes(file.type) && !download) {
 			return file.url;
 		} else {
-			return `${store.baseURL()}/seahub/lib/${
-				file.repo_id
-			}/file${hasSeahub}?dl=1`;
+			return `${store.baseURL()}/seahub/lib/${repo_id}/file${file.parentPath}${
+				file.name
+			}?dl=1`;
 		}
 	}
 
@@ -516,7 +514,7 @@ class Data extends Origin {
 		const repo_id = getParams(item.param, 'id');
 		const pathList = item.path.split('/');
 		let path = '';
-		for (let i = 4; i < pathList.length; i++) {
+		for (let i = 3; i < pathList.length; i++) {
 			const p = pathList[i];
 			path += `/${p}`;
 		}
