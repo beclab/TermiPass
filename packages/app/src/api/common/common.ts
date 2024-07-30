@@ -70,10 +70,12 @@ export async function formatUrltoActiveMenu(
 
 export function filterPcvPath(path: string): string {
 	const splitPath = path.split('/');
-	if (splitPath[1] && splitPath[1].indexOf('pvc-') > -1) {
-		splitPath.splice(1, 1);
-		return splitPath.join('/');
-	} else {
-		return path;
+	const newPathArr: string[] = [];
+	for (let i = 0; i < splitPath.length; i++) {
+		const path_1 = splitPath[i];
+		if (path_1.indexOf('pvc-') <= -1) {
+			newPathArr.push(path_1);
+		}
 	}
+	return newPathArr.join('/');
 }

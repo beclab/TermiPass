@@ -48,6 +48,7 @@ class Data extends DriveDataAPI {
 	}
 
 	async fetchCache(url: string): Promise<FileResType> {
+		console.log('fetchCachefetchCache', url);
 		const { path, node } = getAppDataPath(url);
 		let headers = {
 			auth: false,
@@ -119,6 +120,14 @@ class Data extends DriveDataAPI {
 
 		const purePath = item.path.replace('/Cache', '/AppData');
 		console.log('purePath', purePath);
+
+		// const hasAli = purePath.indexOf('ali-');
+		// if (hasAli > -1) {
+		// 	purePath = purePath.replace(/\/?ali-[^\/]*\//, '/');
+		// }
+
+		console.log('purePath', purePath);
+
 		return purePath;
 	}
 

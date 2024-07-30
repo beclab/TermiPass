@@ -8,9 +8,10 @@ export function formatAppData(node, data) {
 		data.items.map((el) => {
 			const extension = getextension(el.name);
 			const splitPath = filterPcvPath(el.path).split('/');
+			console.log('splitPathsplitPath', splitPath);
 			splitPath.splice(splitPath.indexOf('AppData') + 1, 0, node);
 			const joinPath = splitPath.join('/');
-			el.path = `/Cache${joinPath}`;
+			el.path = `${joinPath}`;
 			el.driveType = DriveType.Cache;
 			el.extension = extension;
 			el.modified = new Date(el.modified).getTime();
