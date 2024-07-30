@@ -147,6 +147,16 @@ class Data extends Origin {
 		return { url, headers };
 	}
 
+	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = fileUrl.url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+	}
+
 	async copy(): Promise<CopyStoragesType[]> {
 		const filesStore = useFilesStore();
 		const copyStorages: CopyStoragesType[] = [];
@@ -366,6 +376,7 @@ class Data extends Origin {
 
 	async openPreview(item: any): Promise<FileResType> {
 		const res = await this.fetch(item.path);
+		console.log('resres', res);
 		res.driveType = DriveType.Drive;
 		return res;
 	}

@@ -4,6 +4,8 @@ import { filterPcvPath } from './../common/common';
 
 export function formatData(data) {
 	data.origin = DriveType.Data;
+	data.path = filterPcvPath(data.path);
+
 	data.items &&
 		data.items.map((el) => {
 			const extension = getextension(el.name);

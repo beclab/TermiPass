@@ -4,7 +4,7 @@ import { OPERATE_ACTION } from './../utils/contact';
 // import { EventType, ContextType } from './../api/common/encoding';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 
-import { downloadFile, downloadElectron } from '../api/common/downloadFormat';
+import { downloadElectron } from '../api/common/downloadFormat';
 import { useMenuStore } from './../stores/files-menu';
 import { DriveType, useFilesStore } from './files';
 
@@ -243,10 +243,15 @@ export const useOperateinStore = defineStore('operation', {
 			console.log('downloaddownload', path);
 			const { url, headers } = await dataAPI.download(path);
 
+			console.log('downloaddownload ----->');
+			console.log('url', url);
+			console.log('headers', headers);
+
 			const isElectron = Platform.is.electron;
 
 			if (!isElectron && url) {
-				downloadFile({ url, headers });
+				// downloadFile({ url, headers });
+				await dataAPI.downloadFile({ url, headers });
 			}
 
 			if (isElectron && url && url.length > 0) {
