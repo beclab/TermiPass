@@ -341,7 +341,7 @@ class Data extends Origin {
 		timer = this.RETRY_TIMER,
 		callback?: (event?: any) => void
 	): Promise<void> {
-		const newurl = decodeURIComponent(url);
+		let newurl = decodeURIComponent(url);
 
 		let fileInfo: any;
 		let appNode = '';
@@ -349,14 +349,30 @@ class Data extends Origin {
 		if (formatUrltoDriveType(newurl) === DriveType.Cache) {
 			const { path, node } = getAppDataPath(newurl);
 			appNode = node;
+
+			console.log('pathpathpath', path);
+
 			if (node) {
 				fileInfo = await files.getUploadInfo(path, `/appdata`, content);
 			}
 		} else {
+			// Temporary code
+			if (formatUrltoDriveType(newurl) === DriveType.Data) {
+				newurl = newurl.replace('/Data', '/Application');
+			} else {
+				newurl = removePrefix(newurl);
+			}
+			console.log('pathpathpath', newurl);
+
 			fileInfo = await files.getUploadInfo(newurl, '/data', content);
 		}
 
+		console.log('fileInfofileInfo', fileInfo);
+		console.log('contentcontent', content);
+
 		const fileChunkList = await files.createFileChunk(fileInfo, content);
+
+		console.log('fileChunkList', fileChunkList);
 
 		const exportProgress = (e) => {
 			if (typeof callback === 'function') {

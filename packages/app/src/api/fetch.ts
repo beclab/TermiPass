@@ -102,9 +102,10 @@ class Fetch {
 
 	async patch<T = any>(
 		url: string,
+		data?: any,
 		config?: AxiosRequestConfig
 	): Promise<AxiosResponse<T>> {
-		return this.instance.patch(url, {}, config);
+		return this.instance.patch(url, data, config);
 	}
 }
 

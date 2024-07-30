@@ -9,7 +9,11 @@
 			<i class="material-icons">home</i>
 		</component> -->
 
-		<span v-for="(link, index) in items" :key="index">
+		<span
+			class="row items-center justify-center"
+			v-for="(link, index) in items"
+			:key="index"
+		>
 			<span class="chevron" v-if="index > 0">
 				<i class="material-icons">keyboard_arrow_right</i>
 			</span>
@@ -110,6 +114,7 @@ const go = async (url: string, query: any) => {
 .breadcrumbs {
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	color: #6f6f6f;
 
 	.chevron {
@@ -122,6 +127,11 @@ const go = async (url: string, query: any) => {
 
 	.link-text {
 		cursor: pointer;
+		display: inline-block;
+		max-width: 200px;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 		&:hover {
 			color: $info !important;
 		}

@@ -44,6 +44,10 @@ export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 	const opts: any = {};
 	const dataAPI = dataAPIs();
 	let res: any;
+
+	console.log('fromUrlfromUrl', fromUrl);
+	console.log('formatUrltoDriveType', formatUrltoDriveType(fromUrl));
+
 	if (formatUrltoDriveType(fromUrl) === DriveType.Cache) {
 		const { path, node } = getAppDataPath(fromUrl);
 
@@ -57,6 +61,7 @@ export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 
 			res = await dataAPI.commonAxios.patch(
 				`/api/paste/AppData${path}`,
+				{},
 				options
 			);
 		}
@@ -67,7 +72,7 @@ export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 			};
 		}
 
-		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, opts);
+		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, {}, opts);
 	}
 
 	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {
@@ -198,7 +203,7 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 		let to = encodeURIComponent(item.to);
 		let terminusNode = '';
 
-		if (formatUrltoDriveType(item.to)) {
+		if (formatUrltoDriveType(item.to) === DriveType.Cache) {
 			const { path, node } = getAppDataPath(item.to);
 			to = encodeURIComponent(`/AppData${path}`);
 			terminusNode = node;
@@ -350,9 +355,14 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 }
 
 export async function getUploadInfo(url: string, prefix: string, content: any) {
+	console.log('urlurl', url);
+
 	const store = useDataStore();
 	const baseURL = store.baseURL();
 	const appendUrl = splitUrl(url, content);
+
+	console.log('appendUrl', appendUrl);
+
 	const params = new FormData();
 	params.append('storage_path', `${prefix}${appendUrl.storage_path}`);
 	params.append('file_relative_path', appendUrl.file_relative_path);
