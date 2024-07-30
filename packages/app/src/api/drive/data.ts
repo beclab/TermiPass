@@ -1,6 +1,7 @@
 import { Origin } from './../origin';
 import { removePrefix, createURL } from '../utils';
 import { formatDrive } from './filesFormat';
+import { getAppDataPath } from '../../utils/file';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { files } from './../index';
@@ -12,6 +13,7 @@ import url from '../../utils/url';
 import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
+import { formatUrltoDriveType } from './../common/common';
 
 import {
 	FileItem,
@@ -239,6 +241,8 @@ class Data extends Origin {
 			isMove = true;
 		}
 
+		console.log('operateinStoreoperateinStore', items);
+
 		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
@@ -337,11 +341,20 @@ class Data extends Origin {
 		timer = this.RETRY_TIMER,
 		callback?: (event?: any) => void
 	): Promise<void> {
-		const newurl = removePrefix(decodeURIComponent(url));
+		const newurl = decodeURIComponent(url);
 
-		const appNode = '';
+		let fileInfo: any;
+		let appNode = '';
 
-		const fileInfo: any = await files.getUploadInfo(newurl, '/data', content);
+		if (formatUrltoDriveType(newurl) === DriveType.Cache) {
+			const { path, node } = getAppDataPath(newurl);
+			appNode = node;
+			if (node) {
+				fileInfo = await files.getUploadInfo(path, `/appdata`, content);
+			}
+		} else {
+			fileInfo = await files.getUploadInfo(newurl, '/data', content);
+		}
 
 		const fileChunkList = await files.createFileChunk(fileInfo, content);
 

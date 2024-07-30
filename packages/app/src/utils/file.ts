@@ -75,12 +75,15 @@ export function isAppData(url: string) {
 }
 
 export function checkAppData(url: string) {
-	return url.startsWith('/AppData/') && !isAppData(url);
+	return (
+		url.startsWith('/AppData/') ||
+		(url.startsWith('/cache/') && !isAppData(url))
+	);
 }
 
 export function getAppDataPath(url: string) {
 	const res = url.split('/');
-	if (res[1] != 'AppData') {
+	if (res[1] != 'AppData' && res[1] != 'Cache') {
 		throw Error('Invalid AppData path');
 	}
 	const node = res[2];
@@ -120,7 +123,7 @@ export function checkSameName(fileName: string, items: any, index = 0) {
 }
 
 export function disabledClick(path: string) {
-	const disabledRightClick = ['/Files/Application/', '/Files/AppData/'];
+	const disabledRightClick = ['/Data/', '/Cache/'];
 	let prefix = path;
 	if (!prefix.endsWith('/')) {
 		prefix = prefix + '/';
@@ -134,7 +137,7 @@ export function disabledClick(path: string) {
 }
 
 export function hideHeaderOpt(path: string) {
-	const disabledRightClick = ['/Files/Application/', '/Files/AppData'];
+	const disabledRightClick = ['/Data/', '/Cache/'];
 
 	let prefix = path;
 	if (!prefix.endsWith('/')) {

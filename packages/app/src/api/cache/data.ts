@@ -5,13 +5,14 @@ import { getAppDataPath } from '../../utils/file';
 import { formatAppDataNode, formatAppData } from './filesFormat';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
-import { files } from './../index';
+// import { files } from './../index';
 import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
 import { FileResType, DriveType, FilePath } from './../../stores/files';
 import { DriveMenuType } from './type';
+import { useDataStore } from 'src/stores/data';
 
 class Data extends DriveDataAPI {
 	public commonAxios: any;
@@ -27,7 +28,7 @@ class Data extends DriveDataAPI {
 		console.log('pureUrlpureUrlpureUrl', pureUrl);
 
 		const res: FileResType = await this.fetchCache(pureUrl);
-		console.log('res', res);
+		console.log('cache res', res);
 
 		res.url = `/Files${pureUrl}`;
 
@@ -108,6 +109,7 @@ class Data extends DriveDataAPI {
 		console.log('formatRepotoPath - itemitem', item);
 
 		if (item.label === 'Cache') return '/Cache/';
+		// if (item.label === 'Cache') return '/CacheList';
 		return '/Cache/' + item.label;
 	}
 
@@ -136,12 +138,12 @@ class Data extends DriveDataAPI {
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of filesStore.selected) {
 			const el = filesStore.currentFileList[item];
-			const from = decodeURIComponent(el.url);
+			const from = decodeURIComponent(el.path);
 			copyStorages.push({
 				from: from,
 				to: '',
 				name: el.name,
-				src_drive_type: DriveType.Drive
+				src_drive_type: DriveType.Cache
 			});
 		}
 
@@ -154,12 +156,12 @@ class Data extends DriveDataAPI {
 		const copyStorages: CopyStoragesType[] = [];
 		for (const item of filesStore.selected) {
 			const el = filesStore.currentFileList[item];
-			const from = decodeURIComponent(el.url);
+			const from = decodeURIComponent(el.path);
 			copyStorages.push({
 				from: from,
 				to: '',
 				name: el.name,
-				src_drive_type: DriveType.Drive,
+				src_drive_type: DriveType.Cache,
 				key: 'x'
 			});
 		}
@@ -174,16 +176,20 @@ class Data extends DriveDataAPI {
 		const operateinStore = useOperateinStore();
 		const items: CopyStoragesType[] = [];
 
+		const modifiedPath = path.endsWith('/') ? path : path + '/';
+
 		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
 			const element: any = operateinStore.copyFiles[i];
 
-			const to = decodeURIComponent(path) + decodeURIComponent(element.name);
+			const to =
+				decodeURIComponent(modifiedPath) + decodeURIComponent(element.name);
+
 			items.push({
 				from: element.from,
 				to: to,
 				name: element.name,
 				src_drive_type: element.src_drive_type,
-				dst_drive_type: DriveType.Drive
+				dst_drive_type: DriveType.Cache
 			});
 			if (path + decodeURIComponent(element.name) === element.from) {
 				this.action(false, true, items, path, false, callback);
@@ -215,71 +221,24 @@ class Data extends DriveDataAPI {
 		for (const i of filesStore.selected) {
 			const element: any = filesStore.currentFileList[i];
 
-			const from = decodeURIComponent(element.url);
+			const from = decodeURIComponent(element.path);
 			const to = decodeURIComponent(path + element.name);
 			items.push({
 				from: from,
 				to: to,
 				name: element.name,
 				src_drive_type: element.driveType,
-				dst_drive_type: DriveType.Drive
+				dst_drive_type: DriveType.Cache
 			});
 		}
 		const overwrite = true;
 		this.action(overwrite, true, items, path, true, callback);
 	}
 
-	async fetchUploader(
-		url: string,
-		content: any,
-		overwrite = false,
-		timer = this.RETRY_TIMER,
-		callback?: (event?: any) => void
-	): Promise<void> {
-		const newurl = removePrefix(decodeURIComponent(url));
-
-		let fileInfo: any;
-		let appNode = '';
-
-		const { path, node } = getAppDataPath(newurl);
-		appNode = node;
-		if (node) {
-			fileInfo = await files.getUploadInfo(path, `/appdata`, content);
-		}
-
-		const fileChunkList = await files.createFileChunk(fileInfo, content);
-
-		const exportProgress = (e) => {
-			if (typeof callback === 'function') {
-				callback(e);
-			}
-		};
-
-		for (let i = 0; i < fileChunkList.length; i++) {
-			const chunkFile = fileChunkList[i];
-			try {
-				await files.uploadChunks(
-					fileInfo,
-					chunkFile,
-					i,
-					exportProgress,
-					appNode
-				);
-			} catch (error) {
-				if (timer === 1) {
-					exportProgress({
-						loaded: -1,
-						total: fileInfo.file_size,
-						lengthComputable: true
-					});
-				}
-				await files.errorRetry(url, content, overwrite, callback, timer);
-			}
-		}
-	}
-
 	async download(path: string): Promise<{ url: string; headers: any }> {
 		const filesStore = useFilesStore();
+		const store = useDataStore();
+		const baseURL = store.baseURL();
 
 		console.log('download path', path);
 		console.log('currentFileList', filesStore.currentFileList);
@@ -288,28 +247,17 @@ class Data extends DriveDataAPI {
 		const nodes = path.split('/')[2];
 		console.log('nodes', nodes);
 		const p = path.slice(path.indexOf(nodes) + nodes.length);
+		console.log('pppp', p);
 
 		if (
 			filesStore.selectedCount === 1 &&
 			!filesStore.currentFileList[filesStore.selected[0]].isDir
 		) {
-			// const { url, node } = await files.download(
-			// 	null,
-			// 	filesStore.currentFileList[filesStore.selected[0]].url
-			// );
+			const name = filesStore.currentFileList[filesStore.selected[0]].name;
 
-			// const headers = {
-			// 	'Content-Type': 'application/octet-stream'
-			// };
-			// if (node) {
-			// 	headers['X-Terminus-Node'] = node;
-			// }
+			const url = `${baseURL}/api/cache/${nodes}/raw/AppData${p}/${name}`;
 
-			// return { url, headers };
-
-			// /api/cache/{{nodename}}/raw/AppData
-
-			const url = `/api/cache/${nodes}/raw/AppData/${p}`;
+			console.log('urlurlurl', url);
 
 			return { url, headers: {} };
 		}
@@ -317,27 +265,42 @@ class Data extends DriveDataAPI {
 		const filesDownload: any[] = [];
 
 		if (filesStore.selectedCount > 0) {
-			alert(1);
 			for (const i of filesStore.selected) {
 				filesDownload.push(filesStore.currentFileList[i].url);
 			}
 		} else {
-			alert(2);
 			filesDownload.push(path);
 		}
 
 		console.log('filesDownload', filesDownload);
 
-		const { url, node } = files.download('zip', ...filesDownload);
+		// const { url, node } = files.download('zip', ...filesDownload);
 
+		let arg = '';
+		let zipUrl = '';
+		// let node = '';
+		for (const file of filesDownload) {
+			arg += removePrefix(file) + ',';
+		}
+
+		arg = arg.substring(0, arg.length - 1);
+		// arg = encodeURIComponent(arg);
+		// zipUrl += `/?files=${arg}&`;
+		// zipUrl += `algo=zip&`;
+
+		console.log('zipUrlzipUrl', zipUrl);
+
+		const rPath = zipUrl.slice(zipUrl.indexOf(nodes) + nodes.length);
+
+		zipUrl = `${baseURL}/api/cache/${nodes}/raw/AppData${rPath}`;
 		const headers = {
 			'Content-Type': 'application/octet-stream'
 		};
-		if (node) {
-			headers['X-Terminus-Node'] = node;
-		}
+		// if (node) {
+		// 	headers['X-Terminus-Node'] = node;
+		// }
 
-		return { url, headers };
+		return { url: zipUrl, headers };
 	}
 }
 

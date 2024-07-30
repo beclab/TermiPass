@@ -12,7 +12,7 @@ export function formatAppData(node, data) {
 			const splitPath = filterPcvPath(el.path).split('/');
 			console.log('splitPathsplitPath', splitPath);
 			splitPath.splice(splitPath.indexOf('AppData') + 1, 0, node);
-			const joinPath = splitPath.join('/');
+			const joinPath = splitPath.join('/').replace('AppData', 'Cache');
 			el.path = `${joinPath}`;
 			el.driveType = DriveType.Cache;
 			el.extension = extension;

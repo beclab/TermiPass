@@ -17,7 +17,6 @@ export default [
 			{
 				path: 'Files/:path*',
 				name: 'Files',
-				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}
@@ -25,7 +24,6 @@ export default [
 			{
 				path: 'Data/:path*',
 				name: 'Data',
-				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}
@@ -33,15 +31,14 @@ export default [
 			{
 				path: 'Cache/:path*',
 				name: 'Cache',
-				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}
 			},
+
 			{
 				path: 'Seahub/:path*',
 				name: 'Seahub',
-				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}

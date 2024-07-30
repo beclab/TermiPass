@@ -26,7 +26,7 @@ export async function formatUrltoActiveMenu(
 	// console.log('hrefhref', href);
 	// console.log('hrefhref', href.startsWith('/Files'));
 	if (href.startsWith('/Files')) {
-		const label = decodeURIComponent(href).split('/')[2] || MenuItem.HOME;
+		const label = decodeURIComponent(href).split('/')[3] || MenuItem.HOME;
 		const driveApi = new DriveDataAPI();
 		const menus = await driveApi.fetchMenuRepo();
 		const isHome = menus.find((e) => e.key == label) == undefined;

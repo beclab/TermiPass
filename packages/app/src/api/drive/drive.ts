@@ -4,8 +4,10 @@ import { useDataStore } from '../../stores/data';
 import { checkAppData, getAppDataPath } from '../../utils/file';
 // import { seahubGetRepos } from './syncMenu';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
+import { formatUrltoDriveType } from './../common/common';
 
 import axios from 'axios';
+import { DriveType } from 'src/stores/files';
 
 export async function resourceAction(
 	url: string,
@@ -41,27 +43,30 @@ export async function resourceAction(
 export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 	const opts: any = {};
 	const dataAPI = dataAPIs();
-
 	let res: any;
-	if (checkAppData(fromUrl)) {
+	if (formatUrltoDriveType(fromUrl) === DriveType.Cache) {
 		const { path, node } = getAppDataPath(fromUrl);
 
 		if (node) {
-			opts.headers = {
-				...opts.headers,
-				'X-Terminus-Node': node,
-				timeout: 600000
+			const headers = {
+				auth: true,
+				'X-Terminus-Node': node
 			};
-			res = await dataAPI.commonAxios.patch(`/api/paste/AppData${path}`, opts);
+
+			const options = { headers: headers };
+
+			res = await dataAPI.commonAxios.patch(
+				`/api/paste/AppData${path}`,
+				options
+			);
 		}
 	} else {
 		if (terminusNode) {
 			opts.headers = {
-				...opts.headers,
-				'X-Terminus-Node': terminusNode,
-				timeout: 600000
+				'X-Terminus-Node': terminusNode
 			};
 		}
+
 		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, opts);
 	}
 
@@ -193,7 +198,7 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 		let to = encodeURIComponent(item.to);
 		let terminusNode = '';
 
-		if (checkAppData(item.to)) {
+		if (formatUrltoDriveType(item.to)) {
 			const { path, node } = getAppDataPath(item.to);
 			to = encodeURIComponent(`/AppData${path}`);
 			terminusNode = node;
