@@ -277,6 +277,128 @@ class Data extends DriveDataAPI {
 			}
 		}
 	}
+
+	async download(path: string): Promise<{ url: string; headers: any }> {
+		const filesStore = useFilesStore();
+
+		if (
+			filesStore.selectedCount === 1 &&
+			!filesStore.currentFileList[filesStore.selected[0]].isDir
+		) {
+			const { url, node } = await files.download(
+				null,
+				filesStore.currentFileList[filesStore.selected[0]].url
+			);
+
+			const headers = {
+				'Content-Type': 'application/octet-stream'
+			};
+			if (node) {
+				headers['X-Terminus-Node'] = node;
+			}
+
+			return { url, headers };
+		}
+
+		const filesDownload: any[] = [];
+
+		if (filesStore.selectedCount > 0) {
+			for (const i of filesStore.selected) {
+				filesDownload.push(filesStore.currentFileList[i].url);
+			}
+		} else {
+			filesDownload.push(path);
+		}
+
+		const { url, node } = files.download('zip', ...filesDownload);
+
+		const headers = {
+			'Content-Type': 'application/octet-stream'
+		};
+		if (node) {
+			headers['X-Terminus-Node'] = node;
+		}
+
+		return { url, headers };
+	}
+
+	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
+		const targetUrl = fileUrl.url;
+		const headers = fileUrl.headers;
+
+		const xhr = new XMLHttpRequest();
+		xhr.open('GET', targetUrl, true);
+		xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+		Object.keys(headers).forEach((key) => {
+			xhr.setRequestHeader(key, headers[key]);
+		});
+
+		xhr.responseType = 'blob';
+
+		xhr.onload = () => {
+			if (xhr.status === 200) {
+				const disposition = xhr.getResponseHeader('content-disposition');
+				let name = filename;
+				if (!name) {
+					const urlParts = targetUrl.split('/');
+					const lastPart = urlParts[urlParts.length - 1];
+					const fileNameParts = lastPart.split('?');
+					name = fileNameParts[0];
+					const remainingPart = fileNameParts[fileNameParts.length - 1];
+					const argParts = remainingPart.split('&');
+
+					let algoValue = '';
+					argParts.forEach((arg) => {
+						const keyValue = arg.split('=');
+						if (keyValue[0] === 'algo') {
+							algoValue = keyValue[1];
+						}
+					});
+					if (name === '') {
+						const secondLastPart = urlParts[urlParts.length - 2];
+						const secondLastFileNameParts = secondLastPart.split('/');
+						name = secondLastFileNameParts[secondLastFileNameParts.length - 1];
+					}
+
+					if (algoValue) {
+						name += `.${algoValue}`;
+					}
+				}
+
+				if (disposition) {
+					const match = disposition.match(/filename="(.+)"/);
+					name = match ? match[1] : name;
+				}
+
+				name = decodeURIComponent(name);
+
+				const blob = new Blob([xhr.response], {
+					type: 'application/octet-stream'
+				});
+				const url = URL.createObjectURL(blob);
+
+				const link = document.createElement('a');
+				link.href = url;
+				link.setAttribute('download', name);
+				link.style.display = 'none';
+
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+
+				URL.revokeObjectURL(url);
+			} else {
+				console.error(`Download failed with status ${xhr.status}`);
+			}
+		};
+
+		xhr.onerror = () => {
+			console.error('Download failed');
+		};
+
+		xhr.send();
+	}
 }
 
 export { Data };

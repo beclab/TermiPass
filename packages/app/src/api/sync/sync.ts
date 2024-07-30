@@ -129,26 +129,18 @@ export async function batchDeleteItem(data) {
 	return res;
 }
 
-export async function downloaFile(path) {
-	console.log('downloaFile path', path);
-
+export async function downloaFile(path, name) {
 	const store = useDataStore();
 	const menuStore = useMenuStore();
 	const currentItemLength = menuStore.activeMenu.label.length;
 	const startIndex =
 		path.indexOf(menuStore.activeMenu.label) + currentItemLength;
-	const hasSeahub = path.slice(startIndex);
-
-	console.log('hasSeahubhasSeahub', hasSeahub);
+	const endIndex = path.indexOf('?');
+	const hasSeahub = path.slice(startIndex, endIndex);
 
 	const baseURL = store.baseURL();
 
-	console.log(
-		'1212--12',
-		`${baseURL}/seahub/lib/${menuStore.activeMenu.id}/file/${hasSeahub}?dl=1`
-	);
-
-	return `${baseURL}/seahub/lib/${menuStore.activeMenu.id}/file/${hasSeahub}?dl=1`;
+	return `${baseURL}/seahub/lib/${menuStore.activeMenu.id}/file/${name}${hasSeahub}?dl=1`;
 }
 
 export async function batchMoveItem(data) {

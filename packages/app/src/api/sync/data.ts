@@ -179,22 +179,16 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		console.log('sync download', path);
-
-		// const dataStore = useDataStore();
 		const fileStore = useFilesStore();
-		console.log('currentFileList', fileStore.currentFileList);
-		console.log('selected', fileStore.selected);
-
 		if (
 			fileStore.selectedCount === 1 &&
 			!fileStore.currentFileList[fileStore.selected[0]].isDir
 		) {
 			const url = await seahub.downloaFile(
-				fileStore.currentFileList[fileStore.selected[0]].path
+				fileStore.currentFileList[fileStore.selected[0]].path,
+				fileStore.currentFileList[fileStore.selected[0]].name
 			);
 
-			console.log('downloaFile', url);
 			return { url: url, headers: {} };
 		}
 
@@ -221,8 +215,6 @@ class Data extends Origin {
 	}
 
 	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
-		console.log('fileUrl', fileUrl);
-		console.log('filename', filename);
 		const a = document.createElement('a');
 		a.style.display = 'none';
 		a.href = fileUrl.url;
