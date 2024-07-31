@@ -4,6 +4,8 @@ on:
     workflow_dispatch:
 
     push:
+        branches:
+            - "fix/bex-font"
         tags:
           - 'v*'
 
@@ -53,8 +55,6 @@ jobs:
                 zip -r vault.zip ./vault/
                 rm -rf vault/
 
-
-            
 
             - name: Show path
               run: ls -a packages/app/dist/bex/

@@ -56,7 +56,12 @@ module.exports = configure(function (ctx) {
 		],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: ['material-icons', 'bootstrap-icons', 'roboto-font'],
+		extras: [
+			'material-icons',
+			'bootstrap-icons',
+			'roboto-font',
+			ctx.modeName === 'bex' ? 'material-symbols-rounded' : undefined
+		],
 
 		vendor: {
 			remove: ['moment', '@bytetrade/ui', 'video.js']
