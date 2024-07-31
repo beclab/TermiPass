@@ -22,10 +22,24 @@ export const useIntegrationStore = defineStore('integration', {
 		): Promise<IntegrationAccountMiniData[]> {
 			const instance = this.createAxiosInstanceProxy();
 			const result = await instance.get('/api/account/' + type);
-			if (type == 'all' && result && result.data) {
-				this.accounts = result.data.data;
+
+			const spaces: IntegrationAccountMiniData[] = [];
+			const othes: IntegrationAccountMiniData[] = [];
+			if (result && result.data) {
+				for (let index = 0; index < result.data.data.length; index++) {
+					const element = result.data.data[index] as IntegrationAccountMiniData;
+					if (element.type == AccountType.Space) {
+						spaces.push(element);
+					} else {
+						othes.push(element);
+					}
+				}
 			}
-			return result.data.data;
+			const data = [...spaces, ...othes];
+			if (type == 'all' && result && result.data) {
+				this.accounts = data;
+			}
+			return data;
 		},
 		async getAccountByTypeAndName(
 			type: AccountType,

@@ -1,18 +1,21 @@
 import { createURL, fetchURL, removePrefix } from '../utils';
-import { dataAPIs, DriveDataAPI } from '../index';
+import { dataAPIs } from '../index';
 import { useDataStore } from '../../stores/data';
 import { checkAppData, getAppDataPath } from '../../utils/file';
 // import { seahubGetRepos } from './syncMenu';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
+import { formatUrltoDriveType } from './../common/common';
 
 import axios from 'axios';
+import { DriveType } from 'src/stores/files';
 
 export async function resourceAction(
 	url: string,
 	method: string,
 	content?: any
 ) {
-	url = removePrefix(url);
+	const newUrl = removePrefix(url);
+
 	const opts: any = { method };
 
 	if (content) {
@@ -23,7 +26,7 @@ export async function resourceAction(
 	}
 
 	let res = null;
-	if (checkAppData(url)) {
+	if (formatUrltoDriveType(url) === DriveType.Cache) {
 		const { path, node } = getAppDataPath(url);
 		if (node) {
 			opts.headers = {
@@ -32,8 +35,11 @@ export async function resourceAction(
 			};
 			res = await fetchURL(`/api/resources/AppData${path}`, opts);
 		}
+	} else if (formatUrltoDriveType(url) === DriveType.Data) {
+		const url1 = url.replace('/Data', '/Application');
+		res = await fetchURL(`/api/resources${url1}`, opts);
 	} else {
-		res = await fetchURL(`/api/resources${url}`, opts);
+		res = await fetchURL(`/api/resources${newUrl}`, opts);
 	}
 	return res;
 }
@@ -41,28 +47,32 @@ export async function resourceAction(
 export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 	const opts: any = {};
 	const dataAPI = dataAPIs();
-
 	let res: any;
-	if (checkAppData(fromUrl)) {
+	if (formatUrltoDriveType(fromUrl) === DriveType.Cache) {
 		const { path, node } = getAppDataPath(fromUrl);
 
 		if (node) {
-			opts.headers = {
-				...opts.headers,
-				'X-Terminus-Node': node,
-				timeout: 600000
+			const headers = {
+				auth: true,
+				'X-Terminus-Node': node
 			};
-			res = await dataAPI.commonAxios.patch(`/api/paste/AppData${path}`, opts);
+
+			const options = { headers: headers };
+
+			res = await dataAPI.commonAxios.patch(
+				`/api/paste/AppData${path}`,
+				{},
+				options
+			);
 		}
 	} else {
 		if (terminusNode) {
 			opts.headers = {
-				...opts.headers,
-				'X-Terminus-Node': terminusNode,
-				timeout: 600000
+				'X-Terminus-Node': terminusNode
 			};
 		}
-		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, opts);
+
+		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, {}, opts);
 	}
 
 	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {
@@ -193,7 +203,7 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 		let to = encodeURIComponent(item.to);
 		let terminusNode = '';
 
-		if (checkAppData(item.to)) {
+		if (formatUrltoDriveType(item.to) === DriveType.Cache) {
 			const { path, node } = getAppDataPath(item.to);
 			to = encodeURIComponent(`/AppData${path}`);
 			terminusNode = node;
@@ -204,6 +214,8 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 		}&destination=${to}&override=${overwrite}&rename=${rename}&src_type=${
 			item.src_drive_type
 		}&dst_type=${item.dst_drive_type}`;
+
+		console.log('urlurlurlurlurl', url);
 
 		promises.push(pasteAction(url, terminusNode));
 	}
@@ -268,16 +280,15 @@ export async function errorRetry(
 	onupload,
 	timer
 ) {
-	timer = timer - 1;
-	const dataAPI = dataAPIs();
+	console.log('errorRetry--->', url);
+	console.log('errorRetry timer--->', timer);
+	console.log('errorRetry file--->', content);
 
-	await (dataAPI as DriveDataAPI).fetchUploader(
-		url,
-		content,
-		overwrite,
-		onupload,
-		timer
-	);
+	timer = timer - 1;
+
+	const dataAPI = dataAPIs(formatUrltoDriveType(url));
+
+	await dataAPI.fetchUploader(url, content, overwrite, onupload, timer);
 }
 
 export async function uploadChunks(
@@ -302,31 +313,31 @@ export async function uploadChunks(
 		headers['X-Terminus-Node'] = node;
 	}
 
-	try {
-		const response = await dataAPI.commonAxios.patch(
-			`${baseURL}/upload/${fileInfo.id}`,
-			formData,
-			{
-				...headers,
-				onUploadProgress: (progressEvent) => {
-					const event = {
-						loaded: progressEvent.loaded,
-						total: progressEvent.total,
-						lengthComputable: progressEvent.lengthComputable
-					};
-					if (progressEvent.lengthComputable) {
-						event.loaded += offset;
-						event.total = fileInfo.file_size;
-						exportProgress(event);
-					}
+	const response = await dataAPI.commonAxios.patch(
+		`${baseURL}/upload/${fileInfo.id}`,
+		formData,
+		{
+			...headers,
+			onUploadProgress: (progressEvent) => {
+				const event = {
+					loaded: progressEvent.loaded,
+					total: progressEvent.total,
+					lengthComputable: progressEvent.lengthComputable
+				};
+				if (progressEvent.lengthComputable) {
+					event.loaded += offset;
+					event.total = fileInfo.file_size;
+					exportProgress(event);
 				}
 			}
-		);
+		}
+	);
 
-		console.log(response.data);
-	} catch (error) {
-		console.error(error);
+	console.log('uploadChunks', response);
+	if (!response.data) {
+		throw 'error0';
 	}
+	console.log(response.data);
 }
 
 export async function createFileChunk(fileInfo: { offset: any }, file: any) {
@@ -335,7 +346,9 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 	const fileChunkList: { file: string }[] = [];
 	let cur = fileInfo.offset;
 	while (cur < file.size) {
-		fileChunkList.push({ file: file.slice(cur, cur + size) });
+		fileChunkList.push({
+			file: file.slice(cur, cur + size >= file.size ? file.size : cur + size)
+		});
 		cur += size;
 	}
 
@@ -343,9 +356,14 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 }
 
 export async function getUploadInfo(url: string, prefix: string, content: any) {
+	console.log('urlurl', url);
+
 	const store = useDataStore();
 	const baseURL = store.baseURL();
 	const appendUrl = splitUrl(url, content);
+
+	console.log('appendUrl', appendUrl);
+
 	const params = new FormData();
 	params.append('storage_path', `${prefix}${appendUrl.storage_path}`);
 	params.append('file_relative_path', appendUrl.file_relative_path);

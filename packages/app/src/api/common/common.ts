@@ -4,17 +4,16 @@ import { ActiveMenuType } from './../../stores/files-menu';
 import { getParams } from './../../utils/utils';
 import { Data as DriveDataAPI } from '../drive/data';
 
-export async function formatUrltoDriveType(href: string): Promise<DriveType> {
-	if (href.indexOf('/Files/Home') > -1) {
+export function formatUrltoDriveType(href: string): DriveType {
+	// console.log('hrefhref', href);
+	// console.log('hrefhref', href.startsWith('/Files'));
+	if (href.startsWith('/Files')) {
 		return DriveType.Drive;
-	} else if (
-		href.indexOf('/Files/Seahub') > -1 ||
-		href.indexOf('/repo/') > -1
-	) {
+	} else if (href.startsWith('/Seahub') || href.startsWith('/repo')) {
 		return DriveType.Sync;
-	} else if (href.indexOf('/Files/Application') > -1) {
+	} else if (href.startsWith('/Data')) {
 		return DriveType.Data;
-	} else if (href.indexOf('/Files/AppData') > -1) {
+	} else if (href.startsWith('/Cache')) {
 		return DriveType.Cache;
 	} else {
 		return DriveType.Drive;
@@ -24,10 +23,9 @@ export async function formatUrltoDriveType(href: string): Promise<DriveType> {
 export async function formatUrltoActiveMenu(
 	href: string
 ): Promise<ActiveMenuType> {
-	console.log('formatUrltoActiveMenu ===>');
-	console.log(href);
-
-	if (href.indexOf('/Files/Home') > -1) {
+	// console.log('hrefhref', href);
+	// console.log('hrefhref', href.startsWith('/Files'));
+	if (href.startsWith('/Files')) {
 		const label = decodeURIComponent(href).split('/')[3] || MenuItem.HOME;
 		const driveApi = new DriveDataAPI();
 		const menus = await driveApi.fetchMenuRepo();
@@ -37,39 +35,31 @@ export async function formatUrltoActiveMenu(
 			id: isHome ? MenuItem.HOME : label,
 			driveType: DriveType.Drive
 		};
-	} else if (href.indexOf('/Files/Seahub') > -1) {
-		const label = decodeURIComponent(href).split('/')[3];
+	} else if (href.startsWith('/Seahub')) {
+		const label = decodeURIComponent(href).split('/')[2];
 		const splitUrl = href.split('?');
-		console.log('splitUrl ===>');
-		console.log(href);
-
 		const repo_id = getParams(splitUrl.length > 1 ? splitUrl[1] : href, 'id');
-		console.log('repo_id ===>', repo_id);
 
 		return {
 			label: label,
 			id: repo_id,
 			driveType: DriveType.Sync
 		};
-	} else if (href.indexOf('/Files/Application') > -1) {
-		// const label = decodeURIComponent(href).split('/')[2] || MenuItem.DATA;
+	} else if (href.startsWith('/Data')) {
 		// console.log(label);
 		return {
 			label: MenuItem.DATA,
 			id: MenuItem.DATA,
-			driveType: DriveType.Drive
+			driveType: DriveType.Data
 		};
-	} else if (href.indexOf('/Files/AppData') > -1) {
-		// const label = decodeURIComponent(href).split('/')[2];
-		// label: MenuItem.DATA,
-		// 					key: MenuItem.DATA,
+	} else if (href.startsWith('/Cache')) {
 		return {
 			label: MenuItem.CACHE,
 			id: MenuItem.CACHE,
-			driveType: DriveType.Drive
+			driveType: DriveType.Cache
 		};
 	} else {
-		const label = decodeURIComponent(href).split('/')[3];
+		const label = decodeURIComponent(href).split('/')[2];
 		return {
 			label: label,
 			id: label,
@@ -80,10 +70,12 @@ export async function formatUrltoActiveMenu(
 
 export function filterPcvPath(path: string): string {
 	const splitPath = path.split('/');
-	if (splitPath[1] && splitPath[1].indexOf('pvc-') > -1) {
-		splitPath.splice(1, 1);
-		return splitPath.join('/');
-	} else {
-		return path;
+	const newPathArr: string[] = [];
+	for (let i = 0; i < splitPath.length; i++) {
+		const path_1 = splitPath[i];
+		if (path_1.indexOf('pvc-') <= -1) {
+			newPathArr.push(path_1);
+		}
 	}
+	return newPathArr.join('/');
 }

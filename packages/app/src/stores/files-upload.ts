@@ -1,6 +1,6 @@
 import { format } from 'quasar';
 import { defineStore } from 'pinia';
-import { dataAPIs, DriveDataAPI } from '../api';
+import { dataAPIs } from '../api';
 // import { files as api } from '../api';
 import throttle from 'lodash.throttle';
 import { DriveType, useFilesStore } from './files';
@@ -160,8 +160,12 @@ export const useFilesUploadStore = defineStore('upload', {
 			}
 			this.addJob(item);
 
-			if (type === DriveType.Drive) {
-				this.processUploads();
+			if (
+				type === DriveType.Drive ||
+				type === DriveType.Data ||
+				type === DriveType.Cache
+			) {
+				this.processUploads(type);
 			}
 		},
 
@@ -181,7 +185,8 @@ export const useFilesUploadStore = defineStore('upload', {
 
 			await this.removeJob(item.id);
 			if (type !== DriveType.Sync) {
-				await this.processUploads();
+				console.log('processUploadsprocessUploads', item);
+				await this.processUploads(item.driveType);
 			}
 
 			const splitUrl = window.location.href
@@ -199,8 +204,8 @@ export const useFilesUploadStore = defineStore('upload', {
 			);
 		},
 
-		async processUploads() {
-			const dataAPI = dataAPIs(DriveType.Drive);
+		async processUploads(type: DriveType) {
+			const dataAPI = dataAPIs(type);
 			const uploadsCount = Object.keys(this.uploads).length;
 
 			const isBellowLimit = uploadsCount < UPLOADS_LIMIT;
@@ -219,34 +224,33 @@ export const useFilesUploadStore = defineStore('upload', {
 				const item = this.queue[0];
 				this.moveJob();
 
+				console.log('itemitem', item);
+
 				if (item.file.isDir) {
-					await (dataAPI as DriveDataAPI).fetchUploader(
-						item.path,
-						'',
-						false,
-						0
-					);
-					this.finishUpload(item);
+					await dataAPI.fetchUploader(item.path, '', false, 0);
+					this.finishUpload(item, type);
 				} else {
 					const onUpload = throttle(
 						(event: any) => {
+							console.log('onUploadonUpload', item);
+							console.log('onUploadonUpload event', event.loaded);
 							this.setProgress({
 								id: item.id,
 								loaded: event.loaded
 							});
 
 							if (event.loaded >= event.total) {
-								this.finishUpload(item);
+								this.finishUpload(item, type);
 							}
 						},
 						100,
 						{ leading: true, trailing: false }
 					);
 
-					await (dataAPI as DriveDataAPI)
+					await dataAPI
 						.fetchUploader(item.path, item.file, item.overwrite, 0, onUpload)
 						.then(() => {
-							this.finishUpload(item);
+							this.finishUpload(item, type);
 						})
 						.catch(() => {
 							this.reStartUpload(item);

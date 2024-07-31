@@ -1,7 +1,6 @@
 import { fetchURL } from '../utils';
 // import { dataAPI } from './index';
 import { dataAPIs } from '..';
-import { useSeahubStore } from '../../stores/seahub';
 import { useDataStore } from '../../stores/data';
 import { axiosInstanceProxy } from '../../platform/httpProxy';
 
@@ -53,21 +52,6 @@ export const getFormData = (object) =>
 		return formData;
 	}, new FormData());
 
-export async function getRepoId(id) {
-	const seahubStore = useSeahubStore();
-
-	const dataAPI = dataAPIs();
-	const res2 = await dataAPI.commonAxios.get(
-		`seahub/api/v2.1/repos/${id}/`,
-		{}
-	);
-
-	console.log('getRepoIdgetRepoId', res2);
-
-	seahubStore.setRepoId({ id: res2.repo_id, name: res2.repo_name });
-	// return res2.data;
-}
-
 export async function createLibrary(name) {
 	const parmas = {
 		name: name,
@@ -101,13 +85,13 @@ export async function fileOperate(
 }
 
 export async function updateFile(item, content, isNative = false) {
-	const store = useDataStore();
-	const seahubStore = useSeahubStore();
+	const menuStore = useMenuStore();
 	const pathLen =
-		item.url.indexOf(store.currentItem) + store.currentItem.length;
+		item.url.indexOf(menuStore.activeMenu.label) +
+		menuStore.activeMenu.label.length;
 	const parent_dir = item.url.slice(pathLen);
 	const res = await fetchURL(
-		`seahub/api2/repos/${seahubStore.repo_id}/update-link/?p=/`,
+		`seahub/api2/repos/${menuStore.activeMenu.id}/update-link/?p=/`,
 		{}
 	);
 
@@ -145,16 +129,19 @@ export async function batchDeleteItem(data) {
 	return res;
 }
 
-export async function downloaFile(path) {
+export async function downloaFile(item: any) {
 	const store = useDataStore();
-	const seahubStore = useSeahubStore();
-	const currentItemLength = store.currentItem.length;
-	const startIndex = path.indexOf(store.currentItem) + currentItemLength;
-	const hasSeahub = path.slice(startIndex);
+	const menuStore = useMenuStore();
+	const currentItemLength = menuStore.activeMenu.label.length;
+	const startIndex =
+		item.path.indexOf(menuStore.activeMenu.label) + currentItemLength;
+	const endIndex = item.path.indexOf('?');
+
+	const hasSeahub = item.path.slice(startIndex, endIndex);
 
 	const baseURL = store.baseURL();
 
-	return `${baseURL}/seahub/lib/${seahubStore.repo_id}/file/${hasSeahub}?dl=1`;
+	return `${baseURL}/seahub/lib/${menuStore.activeMenu.id}/file${item.parentPath}${item.name}${hasSeahub}?dl=1`;
 }
 
 export async function batchMoveItem(data) {
@@ -201,9 +188,10 @@ export async function batchCopyItem(data) {
 }
 
 export const createThumbnail = async (path) => {
-	const seahubStore = useSeahubStore();
+	const menuStore = useMenuStore();
+
 	const res = await fetchURL(
-		`/seahub/thumbnail/${seahubStore.repo_id}/create/?path=${path}&size=48`,
+		`/seahub/thumbnail/${menuStore.activeMenu.id}/create/?path=${path}&size=48`,
 		{
 			headers: { 'X-Requested-With': 'XMLHttpRequest' }
 		}

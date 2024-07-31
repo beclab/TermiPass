@@ -28,8 +28,8 @@ import { useRoute } from 'vue-router';
 import Errors from '../../Files/Errors.vue';
 import ListingFiles from './ListingFiles.vue';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
-import DirOperationDialog from './DirOperationDialog.vue';
-import { useQuasar } from 'quasar';
+// import DirOperationDialog from './DirOperationDialog.vue';
+// import { useQuasar } from 'quasar';
 import { useFilesStore } from '../../../stores/files';
 import { seahub } from './../../../api';
 import { MenuItem } from '../../../utils/contact';
@@ -39,7 +39,7 @@ const store = useDataStore();
 const filesStore = useFilesStore();
 const error = ref<any>(null);
 const route = useRoute();
-const $q = useQuasar();
+// const $q = useQuasar();
 
 const title = ref(route.query.name);
 
@@ -48,10 +48,10 @@ const rightIcon = ref('sym_r_more_horiz');
 const isDark = ref(false);
 
 const showOperation = () => {
-	$q.dialog({
-		component: DirOperationDialog,
-		componentProps: {}
-	});
+	// $q.dialog({
+	// 	component: DirOperationDialog,
+	// 	componentProps: {}
+	// });
 };
 
 onMounted(async () => {

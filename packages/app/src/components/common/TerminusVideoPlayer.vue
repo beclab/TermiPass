@@ -14,8 +14,8 @@ import videojs from 'video.js';
 import Player from 'video.js/dist/types/player';
 import 'video.js/dist/video-js.css';
 import './../../css/video/city.video.css';
-import SettingsPlugin from '../video_plugins/SettingsPlugin';
-import QualityPlugin from '../video_plugins/QualityPlugin';
+// import SettingsPlugin from '../video_plugins/SettingsPlugin';
+// import QualityPlugin from '../video_plugins/QualityPlugin';
 import { useUserStore } from '../../stores/user';
 
 const overrideNative = ref(true);
@@ -170,11 +170,11 @@ onMounted(() => {
 		console.log('player ===>');
 		console.log(player);
 
-		videojs.registerPlugin('settingsPlugin', SettingsPlugin);
-		videojs.registerPlugin('qualityPlugin', QualityPlugin);
+		// videojs.registerPlugin('settingsPlugin', SettingsPlugin);
+		// videojs.registerPlugin('qualityPlugin', QualityPlugin);
 
-		(player as any).settingsPlugin();
-		(player as any).qualityPlugin();
+		// (player as any).settingsPlugin();
+		// (player as any).qualityPlugin();
 	} catch (error) {
 		console.log('catch', error);
 	}

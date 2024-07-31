@@ -86,7 +86,7 @@ const raw = computed(function () {
 
 	if (
 		filesStore.previewItem.type === 'pdf' &&
-		filesStore.previewItem.origin === DriveType.Sync
+		filesStore.previewItem.driveType === DriveType.Sync
 	) {
 		return filesStore.previewItem.url;
 	}

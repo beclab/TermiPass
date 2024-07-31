@@ -31,6 +31,7 @@ import { useMonitorStore } from './monitor';
 import { seafileAPI } from 'src/api/sync/seafileAPI';
 import { useDataStore } from './data';
 import { unlockUserFirstBusiness } from 'src/utils/BindTerminusBusiness';
+import { useIntegrationStore } from './integration';
 
 type UserStorageSaveType =
 	| 'locale'
@@ -525,6 +526,9 @@ export const useUserStore = defineStore('user', {
 			const store = useDataStore();
 			const baseURL = store.baseURL();
 			seafileAPI.init({ server: baseURL });
+
+			const integrationStore = useIntegrationStore();
+			integrationStore.accounts = [];
 		},
 
 		async backupCurrentUser() {

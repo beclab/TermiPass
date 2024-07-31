@@ -68,8 +68,6 @@ const submit = async () => {
 	notifyWaitingShow('Deleting, Please wait...');
 
 	try {
-		console.log('currentFileListcurrentFileList', filesStore.currentFileList);
-		console.log('filesStoreselected', filesStore.selected);
 		const selectFiles = filesStore.currentFileList.filter((obj) =>
 			filesStore.selected.includes(obj.index)
 		);

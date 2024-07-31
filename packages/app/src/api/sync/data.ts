@@ -3,7 +3,7 @@ import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
 import { files, seahub } from './../index';
-import { useSeahubStore } from '../../stores/seahub';
+// import { useSeahubStore } from '../../stores/seahub';
 import {
 	notifyWaitingShow,
 	notifyHide,
@@ -25,12 +25,7 @@ import { useMenuStore } from './../../stores/files-menu';
 
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
-import {
-	FileItem,
-	FileResType,
-	DriveType,
-	FilePath
-} from './../../stores/files';
+import { FileItem, FileResType, DriveType } from './../../stores/files';
 import { fetchRepo } from './sync';
 
 import { CommonFetch } from '../fetch';
@@ -42,6 +37,8 @@ class Data extends Origin {
 		super();
 		this.commonAxios = CommonFetch;
 	}
+
+	breadcrumbsBase = '/Seahub';
 
 	async fetch(url: string): Promise<FileResType> {
 		console.log('sync fetch', url);
@@ -179,17 +176,15 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		console.log('sync download', path);
-
-		// const dataStore = useDataStore();
 		const fileStore = useFilesStore();
 		if (
 			fileStore.selectedCount === 1 &&
 			!fileStore.currentFileList[fileStore.selected[0]].isDir
 		) {
 			const url = await seahub.downloaFile(
-				fileStore.currentFileList[fileStore.selected[0]].path
+				fileStore.currentFileList[fileStore.selected[0]]
 			);
+
 			return { url: url, headers: {} };
 		}
 
@@ -213,6 +208,16 @@ class Data extends Origin {
 		}
 
 		return { url, headers };
+	}
+
+	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = fileUrl.url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
 	}
 
 	async copy(): Promise<CopyStoragesType[]> {
@@ -305,6 +310,8 @@ class Data extends Origin {
 			overwrite = true;
 			isMove = true;
 		}
+
+		console.log('itemsitems', items);
 		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
@@ -409,14 +416,16 @@ class Data extends Origin {
 
 	openLocalFolder(): string | undefined {
 		const filesStore = useFilesStore();
-		const seahubStore = useSeahubStore();
+		// const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const item = filesStore.currentFileList[filesStore.selected[0]];
 		if (!item.isDir) {
 			return undefined;
 		}
 		const itemUrl = decodeURIComponent(item.url);
 		const pathFromStart =
-			itemUrl.indexOf(seahubStore.repo_name) + seahubStore.repo_name.length;
+			itemUrl.indexOf(menuStore.activeMenu.label) +
+			menuStore.activeMenu.label.length;
 		const path = itemUrl.slice(pathFromStart, itemUrl.length - 1);
 		return path;
 	}
@@ -448,21 +457,23 @@ class Data extends Origin {
 
 	getDownloadURL(file: any, _inline: boolean, download?: boolean): string {
 		const store = useDataStore();
-		const startIndex =
-			file.path.indexOf(file.repo_name) + file.repo_name?.length;
-		const hasSeahub = file.path.slice(startIndex);
+		const repo_id = getParams(file.path, 'id');
+
 		if (['audio', 'video'].includes(file.type) && !download) {
 			return file.url;
 		} else {
-			return `${store.baseURL()}/seahub/lib/${
-				file.repo_id
-			}/file${hasSeahub}?dl=1`;
+			return `${store.baseURL()}/seahub/lib/${repo_id}/file${file.parentPath}${
+				file.name
+			}?dl=1`;
 		}
 	}
 
 	async formatFileContent(file: FileItem): Promise<FileItem> {
 		const store = useDataStore();
-		const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
+		// const seahubStore = useSeahubStore();
+
+		console.log('filefilefile', file);
 
 		if (
 			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
@@ -472,40 +483,36 @@ class Data extends Origin {
 			return file;
 		}
 
-		const currentItemLength = store.currentItem.length;
-		const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-		const hasSeahub = file.path.slice(startIndex);
-
 		const res = await this.commonAxios.get(
-			`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
+			`/seahub/lib/${menuStore.activeMenu.id}/file${file.parentPath}/${file.name}?dict=1`,
 			{}
 		);
 
 		if (['audio', 'video', 'pdf'].includes(file.type)) {
-			file.url = store.baseURL() + res.data.raw_path;
+			file.url = store.baseURL() + res.raw_path;
 		} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
-			file.content = res.data.file_content;
+			file.content = res.file_content;
 		}
 
 		return file;
 	}
 
 	async formatRepotoPath(item: any): Promise<string> {
-		return `/Files/Seahub/${item.label}/?id=${item.id}&type=${
+		return `/Seahub/${item.label}/?id=${item.id}&type=${
 			item.type || 'mine'
 		}&p=${item.permission ? item.permission.trim() : 'rw'}`;
 	}
 
-	async formatPathtoUrl(item: FilePath): Promise<string> {
-		const repo_id = getParams(item.param, 'id');
-		const pathList = item.path.split('/');
-		let path = '';
-		for (let i = 4; i < pathList.length; i++) {
+	async formatPathtoUrl(path: string, param: string): Promise<string> {
+		const repo_id = getParams(param, 'id');
+		const pathList = path.split('/');
+		let paths = '';
+		for (let i = 3; i < pathList.length; i++) {
 			const p = pathList[i];
-			path += `/${p}`;
+			paths += `/${p}`;
 		}
 
-		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${path}&with_thumbnail=true`;
+		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${paths}&with_thumbnail=true`;
 	}
 
 	async deleteItem(items: FileItem[]): Promise<void> {

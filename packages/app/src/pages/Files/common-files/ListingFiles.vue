@@ -190,10 +190,13 @@ watch(
 watch(
 	() => route.path,
 	() => {
+		console.log('pathpathpath', route.path);
 		menuVisible.value = false;
 		repoId.value = route.query.id;
 
 		const currentItem = menuStore.activeMenu.label;
+
+		console.log('currentItemcurrentItem', currentItem);
 
 		fileUploaderPath.value =
 			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
@@ -554,8 +557,6 @@ const fillWindow = (fit = false) => {
 };
 
 const rightClick = (e: any, item?: any) => {
-	console.log('currentFileList', filesStore.currentFileList);
-	console.log('rightClickrightClick', item);
 	if (!disabledClick(route.path)) {
 		return false;
 	}

@@ -25,6 +25,7 @@ import url from '../../../utils/url';
 import { useFilesUploadStore } from '../../../stores/files-upload';
 import { DriveType, useFilesStore } from '../../../stores/files';
 import { useMenuStore } from '../../../stores/files-menu';
+import { common } from './../../../api';
 
 const store = useDataStore();
 const route = useRoute();
@@ -86,12 +87,15 @@ async function handleFiles(files, base, overwrite = false) {
 			repo_name: menuStore.activeMenu.label,
 			repo_id: '',
 			overwrite,
+			driveType: common.formatUrltoDriveType(base),
 			...(!file.isDir && { type: detectType(file.type) })
 		};
 
+		console.log('itemitem', item);
+
 		await (function () {
 			return new Promise(async function (res) {
-				await upload.upload(item, DriveType.Drive);
+				await upload.upload(item, common.formatUrltoDriveType(base));
 				res(true);
 			});
 		})();

@@ -4,7 +4,13 @@ import { shareToUser } from '../api';
 import { MenuItem, SYNC_STATE } from '../utils/contact';
 import { busOn } from 'src/utils/bus';
 // import { dataAPI } from './../api';
-import { dataAPIs, SyncDataAPI, DriveDataAPI } from './../api';
+import {
+	dataAPIs,
+	SyncDataAPI,
+	DriveDataAPI,
+	DataDataAPI,
+	CacheDataAPI
+} from './../api';
 
 import { DriveType } from './files';
 import { SyncRepoMineType } from './../api/sync/type';
@@ -115,20 +121,7 @@ export const useMenuStore = defineStore('filesMenu', {
 					label: MenuItem.APPLICATION,
 					key: MenuItem.APPLICATION,
 					icon: '',
-					children: [
-						{
-							label: MenuItem.DATA,
-							key: MenuItem.DATA,
-							icon: 'sym_r_database',
-							driveType: DriveType.Data
-						},
-						{
-							label: MenuItem.CACHE,
-							key: MenuItem.CACHE,
-							icon: 'sym_r_analytics',
-							driveType: DriveType.Cache
-						}
-					]
+					children: []
 				}
 			],
 			userList: [],
@@ -348,18 +341,28 @@ export const useMenuStore = defineStore('filesMenu', {
 			const menuStore = useMenuStore();
 			const driveDataAPI = new DriveDataAPI();
 			const syncDataAPI = new SyncDataAPI();
+			const dataDataAPI = new DataDataAPI();
+			const cacheDataAPI = new CacheDataAPI();
 
 			this.menu[0].children = await driveDataAPI.fetchMenuRepo();
 			const syncMenus: SyncRepoMineType[] = await syncDataAPI.fetchMenuRepo();
 			this.menu[1].children = syncMenus;
+			this.menu[2].children = [
+				...(await dataDataAPI.fetchMenuRepo()),
+				...(await cacheDataAPI.fetchMenuRepo())
+			];
 
 			const syncIds: string[] = [];
 			for (let i = 0; i < syncMenus.length; i++) {
 				const selfMenu: SyncRepoMineType = syncMenus[i];
-				if (selfMenu.type === 'mine') {
+				// if (selfMenu.type === 'mine') {
+				if (selfMenu.id) {
 					syncIds.push(selfMenu.id);
 				}
+				// }
 			}
+
+			console.log('syncIds ===>', syncIds);
 
 			menuStore.addSyncUpdateRepos(syncIds);
 		},

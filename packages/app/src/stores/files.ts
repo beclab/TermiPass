@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { Origin } from '../api/origin';
-import { Data as DriveData } from '../api/drive/data';
-import { Data as SyncData } from '../api/sync/data';
+
+import { dataAPIs } from '../api';
+
 import { FilesSortType } from '../utils/contact';
 import { useMenuStore } from './files-menu';
 import { formatUrltoActiveMenu } from 'src/api/common/common';
@@ -98,15 +99,31 @@ export type FileState = {
 	};
 };
 
-const driveData = new DriveData();
-const syncData = new SyncData();
+// const driveData = new DriveDataAPI();
+// const syncData = new SyncDataAPI();
+// const dataData = new DataDataAPI();
+// const cacheData = new CacheDataAPI();
 
 function getAPI(driveType: DriveType): Origin {
-	if (driveType == DriveType.Sync) {
-		return syncData;
-	} else {
-		return driveData;
-	}
+	return dataAPIs(driveType);
+	// switch (driveType) {
+	// 	case DriveType.Sync:
+	// 		return syncData;
+	// 		break;
+	// 	case DriveType.Drive:
+	// 		return driveData;
+	// 		break;
+	// 	case DriveType.Data:
+	// 		return dataData;
+	// 		break;
+	// 	case DriveType.Cache:
+	// 		return cacheData;
+	// 		break;
+
+	// 	default:
+	// 		return driveData;
+	// 		break;
+	// }
 }
 
 export const useFilesStore = defineStore('files', {
@@ -213,17 +230,13 @@ export const useFilesStore = defineStore('files', {
 			});
 
 			const requestUrl = await this.formatPathtoUrl(path);
-			console.log('driveType', path.driveType);
-			console.log('requestUrl', requestUrl);
-			console.log('previousStack', this.previousStack);
-			console.log('hasBackPath', this.backStack);
+
+			console.log('requestUrlrequestUrl', requestUrl);
 
 			const menuStore = useMenuStore();
 			menuStore.activeMenu = await formatUrltoActiveMenu(
 				path.path + path.param
 			);
-
-			console.log('formatUrltoActiveMenu', menuStore.activeMenu.label);
 
 			getAPI(path.driveType)
 				.fetch(requestUrl)
@@ -357,10 +370,14 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		async formatPathtoUrl(value: FilePath) {
-			return await getAPI(value.driveType).formatPathtoUrl(value);
+			return await getAPI(value.driveType).formatPathtoUrl(
+				value.path,
+				value.param
+			);
 		},
 
 		async openPreviewDialog(path) {
+			this.previewItem = {};
 			if (this.selectedCount === 1) {
 				const item = this.currentFileList.find(
 					(item) => item.index === this.selected[0]
@@ -368,7 +385,9 @@ export const useFilesStore = defineStore('files', {
 
 				await getAPI(path.driveType)
 					.openPreview(item)
-					.then((res) => {
+					.then(async (res) => {
+						console.log('previewItempreviewItem', res);
+						res.path = await getAPI(path.driveType).formatPathtoUrl(res.path);
 						this.previewItem = res;
 					});
 			}

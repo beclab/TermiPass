@@ -17,11 +17,8 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 			scopes
 		});
 		await GoogleAuth.signOut();
-		console.log(1111);
 
 		const googleDriveSignInResponse = await GoogleAuth.signIn();
-		console.log(2222);
-
 		let response;
 
 		let clientId = '';
@@ -32,7 +29,7 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 			const form = new FormData();
 			form.append('code', googleDriveSignInResponse.serverAuthCode);
 			response = await axiosInstanceProxy({
-				baseURL: 'https://cloud-dev-api.jointerminus.com',
+				baseURL: 'https://cloud-api.jointerminus.com/',
 				timeout: 10000,
 				headers: {
 					'Content-Type': 'application/json'
@@ -70,9 +67,6 @@ export class GoogleAuthService extends OperateIntegrationAuth<GoogleIntegrationA
 				client_id: clientId
 			}
 		};
-
-		console.log(result);
-
 		return result;
 	}
 	async permissions() {

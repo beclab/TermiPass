@@ -76,6 +76,11 @@ const mobileCommon: RouteRecordRaw[] = [
 				component: () => import('pages/Mobile/file/FilesPage.vue')
 			},
 			{
+				path: 'Seahub/:path*',
+				name: 'Seahub',
+				component: () => import('pages/Mobile/file/FilesPage.vue')
+			},
+			{
 				path: 'file',
 				meta: {
 					tabIdentify: 'file'

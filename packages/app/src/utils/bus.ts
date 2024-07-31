@@ -72,6 +72,7 @@ export type BusEventName =
 	| 'orgSubscribe'
 
 	// others
-	| 'runTask';
+	| 'runTask'
+	| 'dialogDismiss';
 
 export type BroadcastToUIMethod = 'UNLOCKED_UPDATE';

@@ -4,11 +4,12 @@ import { getParams } from './../../utils/utils';
 import { getextension } from '../../utils/utils';
 
 export function formatSeahub(url: string, data: { dirent_list: any }) {
+	console.log('formatSeahub url', url);
 	const selUrl = url.split('/')[url.split('/').length - 2];
 	const dirent_lists = data.dirent_list;
 	const hasDirLen = dirent_lists.filter((item) => item.type === 'dir').length;
 	const hasFileLen = dirent_lists.filter((item) => item.type === 'file').length;
-	const repo_name = decodeURIComponent(window.location.href.split('/')[5]);
+	const repo_name = decodeURIComponent(window.location.href.split('/')[4]);
 	const repo_id = getParams(window.location.href, 'id');
 	const type = getParams(window.location.href, 'type');
 	const p = getParams(window.location.href, 'p');
@@ -38,7 +39,7 @@ export function formatSeahub(url: string, data: { dirent_list: any }) {
 	dirent_lists.forEach((el, index) => {
 		const extension = getextension(el.name);
 		const fileTypeName = el.type === 'dir' ? 'folder' : getFileType(el.name);
-		const itemPath = `/Files/Seahub/${repo_name}${
+		const itemPath = `/Seahub/${repo_name}${
 			el.path || ''
 		}/?id=${repo_id}&type=${type}&p=${p}`;
 
@@ -102,7 +103,7 @@ export function formatSeahubRepos(name, datas) {
 	};
 
 	dirent_lists.forEach((el, index) => {
-		const itemPath = `/Files/Seahub/${el.repo_name}${el.path || ''}/?id=${
+		const itemPath = `/Seahub/${el.repo_name}${el.path || ''}/?id=${
 			el.repo_id
 		}&type=${el.type}&p=${el.permission}`;
 

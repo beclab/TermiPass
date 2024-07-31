@@ -789,8 +789,14 @@ export class CapacitorPlatform
 				return;
 			}
 		}
-		this.router?.back();
+
 		const filesStore = useFilesStore();
+		if (filesStore.isInPreview) {
+			busEmit('dialogDismiss');
+			filesStore.isInPreview = false;
+			return;
+		}
 		filesStore.back();
+		this.router?.back();
 	}
 }

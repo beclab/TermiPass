@@ -97,8 +97,6 @@ const show = ref(true);
 const store = useDataStore();
 const filesStore = useFilesStore();
 
-console.log('currentFileListcurrentFileList', filesStore.currentFileList);
-
 const humanSize = computed(function () {
 	if (fileType.value === 'folder') {
 		return '-';
@@ -180,6 +178,10 @@ const onCancel = () => {
 					text-overflow: ellipsis;
 					white-space: nowrap;
 					overflow: hidden;
+				}
+
+				.title {
+					text-align: left;
 				}
 			}
 
