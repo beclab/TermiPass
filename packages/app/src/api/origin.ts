@@ -18,6 +18,11 @@ export abstract class Origin {
 	public SIZE = 8 * 1024 * 1024;
 
 	/**
+	 * Breadcrumbs base
+	 */
+	abstract breadcrumbsBase: string;
+
+	/**
 	 * This function retrieves the data from all files in the specified directory.
 	 */
 	abstract fetch(url: string): Promise<FileResType>;
@@ -124,7 +129,7 @@ export abstract class Origin {
 	/**
 	 * format path to url
 	 */
-	abstract formatPathtoUrl(item: any): Promise<string>;
+	abstract formatPathtoUrl(path: string, param?: string): Promise<string>;
 
 	/**
 	 * Handle Delete Item
@@ -149,6 +154,6 @@ export abstract class Origin {
 	// 	content: string,
 	// 	overwrite: boolean,
 	// 	timer: number,
-	// 	callback: () => Promise<void>
+	// 	callback?: () => Promise<void>
 	// ): Promise<any>;
 }

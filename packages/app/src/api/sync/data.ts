@@ -25,12 +25,7 @@ import { useMenuStore } from './../../stores/files-menu';
 
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
-import {
-	FileItem,
-	FileResType,
-	DriveType,
-	FilePath
-} from './../../stores/files';
+import { FileItem, FileResType, DriveType } from './../../stores/files';
 import { fetchRepo } from './sync';
 
 import { CommonFetch } from '../fetch';
@@ -42,6 +37,8 @@ class Data extends Origin {
 		super();
 		this.commonAxios = CommonFetch;
 	}
+
+	breadcrumbsBase = '/Seahub';
 
 	async fetch(url: string): Promise<FileResType> {
 		console.log('sync fetch', url);
@@ -510,16 +507,16 @@ class Data extends Origin {
 		}&p=${item.permission ? item.permission.trim() : 'rw'}`;
 	}
 
-	async formatPathtoUrl(item: FilePath): Promise<string> {
-		const repo_id = getParams(item.param, 'id');
-		const pathList = item.path.split('/');
-		let path = '';
+	async formatPathtoUrl(path: string, param: string): Promise<string> {
+		const repo_id = getParams(param, 'id');
+		const pathList = path.split('/');
+		let paths = '';
 		for (let i = 3; i < pathList.length; i++) {
 			const p = pathList[i];
-			path += `/${p}`;
+			paths += `/${p}`;
 		}
 
-		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${path}&with_thumbnail=true`;
+		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${paths}&with_thumbnail=true`;
 	}
 
 	async deleteItem(items: FileItem[]): Promise<void> {

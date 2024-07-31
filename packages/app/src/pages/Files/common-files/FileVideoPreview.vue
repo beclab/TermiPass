@@ -1,5 +1,6 @@
 <template>
 	<div class="preview bg-black">
+		{{ filesStore.previewItem.path }}
 		<terminus-video-player
 			v-if="filesStore.previewItem.path"
 			:req="filesStore.previewItem"

@@ -557,8 +557,6 @@ const fillWindow = (fit = false) => {
 };
 
 const rightClick = (e: any, item?: any) => {
-	console.log('currentFileList', filesStore.currentFileList);
-	console.log('rightClickrightClick', item);
 	if (!disabledClick(route.path)) {
 		return false;
 	}

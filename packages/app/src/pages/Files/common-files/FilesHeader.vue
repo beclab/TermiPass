@@ -7,7 +7,7 @@
 		>
 			<div class="row items-center justify-start ellipsis" style="flex: 1">
 				<NavigationComponent />
-				<BreadcrumbsComponent base="/Files" />
+				<BreadcrumbsComponent />
 			</div>
 
 			<div

@@ -15,12 +15,7 @@ import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 import { formatUrltoDriveType } from './../common/common';
 
-import {
-	FileItem,
-	FileResType,
-	DriveType,
-	FilePath
-} from './../../stores/files';
+import { FileItem, FileResType, DriveType } from './../../stores/files';
 import { DriveMenuType } from './type';
 
 class Data extends Origin {
@@ -30,6 +25,8 @@ class Data extends Origin {
 		super();
 		this.commonAxios = CommonFetch;
 	}
+
+	breadcrumbsBase = '/Files';
 
 	async fetch(url: string): Promise<FileResType> {
 		console.log('urlrrr', url);
@@ -456,8 +453,8 @@ class Data extends Origin {
 		);
 	}
 
-	async formatPathtoUrl(item: FilePath): Promise<string> {
-		return item.path;
+	async formatPathtoUrl(path: string): Promise<string> {
+		return path;
 	}
 
 	async deleteItem(items: FileItem[]): Promise<void> {
@@ -482,11 +479,15 @@ class Data extends Origin {
 	}
 
 	async createDir(dirName: string, path: string): Promise<void> {
+		console.log('dirName', dirName);
+		console.log('path', path);
+
 		const filesStore = useFilesStore();
 		const newName = await checkSameName(dirName, filesStore.currentFileList);
 
 		let url = path + '/' + encodeURIComponent(newName) + '/';
 		url = url.replace('//', '/');
+		console.log('url', url);
 
 		await files.resourceAction(url, 'post');
 	}
