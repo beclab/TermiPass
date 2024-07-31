@@ -65,7 +65,7 @@
 						icon="sym_r_edit_square"
 						:label="t('buttons.rename')"
 						:action="
-							isSyncAndRepo ? OPERATE_ACTION.REPO_RENAME : OPERATE_ACTION.DELETE
+							isSyncAndRepo ? OPERATE_ACTION.REPO_RENAME : OPERATE_ACTION.RENAME
 						"
 					/>
 					<file-operation-item

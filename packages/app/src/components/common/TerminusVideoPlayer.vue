@@ -1,6 +1,5 @@
 <template>
 	<div v-bind="$attrs" class="videoPlayer">
-		{{ src }}
 		<video
 			class="video-js vjs-theme-city"
 			:id="id"
