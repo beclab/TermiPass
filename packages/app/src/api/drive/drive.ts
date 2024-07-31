@@ -1,5 +1,5 @@
 import { createURL, fetchURL, removePrefix } from '../utils';
-import { dataAPIs, DriveDataAPI } from '../index';
+import { dataAPIs } from '../index';
 import { useDataStore } from '../../stores/data';
 import { checkAppData, getAppDataPath } from '../../utils/file';
 // import { seahubGetRepos } from './syncMenu';
@@ -281,16 +281,15 @@ export async function errorRetry(
 	onupload,
 	timer
 ) {
-	timer = timer - 1;
-	const dataAPI = dataAPIs();
+	console.log('errorRetry--->', url);
+	console.log('errorRetry timer--->', timer);
+	console.log('errorRetry file--->', content);
 
-	await (dataAPI as DriveDataAPI).fetchUploader(
-		url,
-		content,
-		overwrite,
-		onupload,
-		timer
-	);
+	timer = timer - 1;
+
+	const dataAPI = dataAPIs(formatUrltoDriveType(url));
+
+	await dataAPI.fetchUploader(url, content, overwrite, onupload, timer);
 }
 
 export async function uploadChunks(
@@ -348,7 +347,9 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 	const fileChunkList: { file: string }[] = [];
 	let cur = fileInfo.offset;
 	while (cur < file.size) {
-		fileChunkList.push({ file: file.slice(cur, cur + size) });
+		fileChunkList.push({
+			file: file.slice(cur, cur + size >= file.size ? cur + size : file.size)
+		});
 		cur += size;
 	}
 
