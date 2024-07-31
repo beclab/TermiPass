@@ -103,7 +103,7 @@ export function formatSeahubRepos(name, datas) {
 	};
 
 	dirent_lists.forEach((el, index) => {
-		const itemPath = `/Files/Seahub/${el.repo_name}${el.path || ''}/?id=${
+		const itemPath = `/Seahub/${el.repo_name}${el.path || ''}/?id=${
 			el.repo_id
 		}&type=${el.type}&p=${el.permission}`;
 

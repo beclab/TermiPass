@@ -12,7 +12,6 @@
 				:title="title"
 				:is-dark="isDark"
 				:right-icon="rightIcon"
-				:rightSecondIcon="rightIcon"
 				:hook-back-action="true"
 				@on-return-action="showOperation"
 			/>
@@ -37,7 +36,7 @@ import FileMediumPreview from './FileMediumPreview.vue';
 import FilePDFPreview from './FilePDFPreview.vue';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
 import { useDataStore } from '../../../stores/data';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { computed } from 'vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 import {
@@ -45,6 +44,8 @@ import {
 	OrientationLockType
 } from '@capacitor/screen-orientation';
 import { useFilesStore } from '../../../stores/files';
+import { busOn } from '../../../utils/bus';
+import { busOff } from '../../../utils/bus';
 
 const title = ref('');
 
@@ -143,12 +144,23 @@ watch(
 	},
 	{ deep: true }
 );
+
+onMounted(() => {
+	busOn('dialogDismiss', () => {
+		onDialogCancel();
+	});
+});
+
+onUnmounted(() => {
+	busOff('dialogDismiss');
+});
 </script>
 
 <style scoped lang="scss">
 .preview-list-root {
 	width: 100%;
 	height: 100%;
+	background-color: $background-1;
 
 	.content {
 		width: 100%;

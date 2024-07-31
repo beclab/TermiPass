@@ -181,6 +181,10 @@ const onCancel = () => {
 					white-space: nowrap;
 					overflow: hidden;
 				}
+
+				.title {
+					text-align: left;
+				}
 			}
 
 			.info-module {

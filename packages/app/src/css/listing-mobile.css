@@ -178,7 +178,7 @@ body.rtl #listing {
 }
 
 #listing.list .mobile-item {
-	width: 100%;
+	width: calc(100vw - 24px);
 	margin: 0;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	/* padding: 1em; */
