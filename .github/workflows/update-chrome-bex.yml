@@ -4,8 +4,6 @@ on:
     workflow_dispatch:
 
     push:
-        branches:
-            - "feat/rebase_v1.7"
         tags:
           - 'v*'
 
