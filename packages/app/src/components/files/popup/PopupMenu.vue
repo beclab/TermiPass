@@ -29,6 +29,7 @@ import { useFilesStore, DriveType } from '../../../stores/files';
 
 import { useOperateinStore } from './../../../stores/operation';
 import ReName from './ReName.vue';
+import SelectLocal from './SelectLocal.vue';
 import DeleteRepo from './DeleteRepo.vue';
 import SyncInfo from './SyncInfo.vue';
 import { BtDialog } from '@bytetrade/ui';
@@ -192,9 +193,10 @@ const handleEvent = async (action: OPERATE_ACTION, e: any) => {
 			}
 			break;
 		case OPERATE_ACTION.SYNCHRONIZE_TO_LOCAL:
-			filesStore.resetSelected();
-			filesStore.addSelected(props.item);
-			dataStore.showHover('sync-select-save-path');
+			showSelectLocal(e);
+			// filesStore.resetSelected();
+			// filesStore.addSelected(props.item);
+			// dataStore.showHover('sync-select-save-path');
 			break;
 		case OPERATE_ACTION.UNSYNCHRONIZE:
 			if ($q.platform.is.electron && props.item) {
@@ -228,6 +230,16 @@ const handleEvent = async (action: OPERATE_ACTION, e: any) => {
 		default:
 			break;
 	}
+};
+
+const showSelectLocal = (e: any) => {
+	const jsonItem = JSON.parse(JSON.stringify(props.item));
+	$q.dialog({
+		component: SelectLocal,
+		componentProps: {
+			item: jsonItem
+		}
+	});
 };
 
 const showRename = (e: any) => {
