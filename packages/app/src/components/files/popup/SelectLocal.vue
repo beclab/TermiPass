@@ -36,7 +36,7 @@ import { onMounted, ref } from 'vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 import { useDataStore } from '../../../stores/data';
 import { useFilesStore } from '../../../stores/files';
-import { useMenuStore } from '../../../stores/files-menu';
+import { getParams } from '../../../utils/utils';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -53,7 +53,6 @@ const props = defineProps({
 
 const store = useDataStore();
 const filesStore = useFilesStore();
-const menuStore = useMenuStore();
 const savePath = ref<string>('');
 const show = ref(true);
 const loading = ref(false);
@@ -66,10 +65,11 @@ filesStore.resetSelected();
 
 const submit = async () => {
 	if ($q.platform.is.electron) {
+		const repo_id = getParams(props.item?.path, 'id');
 		window.electron.api.files.repoAddSync({
 			worktree: savePath.value,
-			repo_id: menuStore.activeMenu.id,
-			name: menuStore.activeMenu.label,
+			repo_id: repo_id,
+			name: props.item?.name,
 			password: '',
 			readonly: props.item?.permission == 'r'
 		});
