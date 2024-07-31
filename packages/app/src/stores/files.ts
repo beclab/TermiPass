@@ -377,6 +377,7 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		async openPreviewDialog(path) {
+			this.previewItem = {};
 			if (this.selectedCount === 1) {
 				const item = this.currentFileList.find(
 					(item) => item.index === this.selected[0]

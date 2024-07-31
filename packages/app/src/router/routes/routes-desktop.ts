@@ -68,6 +68,11 @@ const desktop: RouteRecordRaw[] = [
 				component: () => import('pages/Files/FilesPage.vue')
 			},
 			{
+				path: 'Seahub/:path*',
+				name: 'Seahub',
+				component: () => import('pages/Files/FilesPage.vue')
+			},
+			{
 				path: 'items/',
 				component: () => import('pages/Items/ItemsPage.vue')
 			},
