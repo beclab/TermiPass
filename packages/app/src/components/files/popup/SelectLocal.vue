@@ -34,15 +34,13 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
-import { useDataStore } from '../../../stores/data';
 import { useFilesStore } from '../../../stores/files';
-import { getParams } from '../../../utils/utils';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 import { useI18n } from 'vue-i18n';
 
-const { dialogRef } = useDialogPluginComponent();
+const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
 
 const props = defineProps({
 	item: {
@@ -51,7 +49,6 @@ const props = defineProps({
 	}
 });
 
-const store = useDataStore();
 const filesStore = useFilesStore();
 const savePath = ref<string>('');
 const show = ref(true);
@@ -65,15 +62,15 @@ filesStore.resetSelected();
 
 const submit = async () => {
 	if ($q.platform.is.electron) {
-		const repo_id = getParams(props.item?.path, 'id');
 		window.electron.api.files.repoAddSync({
 			worktree: savePath.value,
-			repo_id: repo_id,
+			repo_id: props.item?.repo_id,
 			name: props.item?.name,
 			password: '',
 			readonly: props.item?.permission == 'r'
 		});
 	}
+	onDialogOK();
 };
 
 const selectSyncPath = async () => {
@@ -83,7 +80,7 @@ const selectSyncPath = async () => {
 };
 
 const close = () => {
-	store.closeHovers();
+	onDialogCancel();
 };
 
 onMounted(async () => {
@@ -99,16 +96,34 @@ onMounted(async () => {
 		width: 400px;
 		border-radius: 12px;
 
-		.dialog-desc {
-			padding-left: 20px;
-			padding-right: 20px;
-		}
-		.input {
-			border-radius: 5px;
-			border: 1px solid $input-stroke;
-			background-color: transparent;
-			&:focus {
-				border: 1px solid $yellow-disabled;
+		.card-content {
+			padding: 0 20px;
+
+			.input {
+				border-radius: 5px;
+
+				&:focus {
+					border: 1px solid $blue;
+				}
+			}
+
+			.viewBtn {
+				background: $yellow-1;
+				border-radius: 8px;
+				width: 76px;
+				height: 32px;
+				line-height: 32px;
+
+				text-align: center;
+				margin-left: 20px;
+				cursor: pointer;
+				color: $title;
+
+				border: 1px solid $yellow;
+
+				&:hover {
+					background: $yellow-13;
+				}
 			}
 		}
 	}
