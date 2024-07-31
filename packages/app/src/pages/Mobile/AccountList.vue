@@ -19,7 +19,7 @@
 							user.id === userStore.current_id || user.id === approvalUserIdRef
 						"
 					>
-						<div
+						<!-- <div
 							v-if="
 								user.id === userStore.current_id &&
 								user.id !== approvalUserIdRef
@@ -33,7 +33,12 @@
 							class="request-user text-body3"
 						>
 							{{ t('request_user') }}
-						</div>
+						</div> -->
+						<q-icon
+							name="sym_r_check_circle"
+							size="24px"
+							color="light-blue-default"
+						/>
 					</template>
 				</terminus-account-item>
 
