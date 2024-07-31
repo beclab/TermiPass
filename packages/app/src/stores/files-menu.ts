@@ -356,10 +356,14 @@ export const useMenuStore = defineStore('filesMenu', {
 			const syncIds: string[] = [];
 			for (let i = 0; i < syncMenus.length; i++) {
 				const selfMenu: SyncRepoMineType = syncMenus[i];
-				if (selfMenu.type === 'mine') {
+				// if (selfMenu.type === 'mine') {
+				if (selfMenu.id) {
 					syncIds.push(selfMenu.id);
 				}
+				// }
 			}
+
+			console.log('syncIds ===>', syncIds);
 
 			menuStore.addSyncUpdateRepos(syncIds);
 		},
