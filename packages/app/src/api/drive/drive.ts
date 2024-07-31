@@ -348,7 +348,7 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 	let cur = fileInfo.offset;
 	while (cur < file.size) {
 		fileChunkList.push({
-			file: file.slice(cur, cur + size >= file.size ? cur + size : file.size)
+			file: file.slice(cur, cur + size >= file.size ? file.size : cur + size)
 		});
 		cur += size;
 	}
