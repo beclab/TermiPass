@@ -483,19 +483,15 @@ class Data extends Origin {
 			return file;
 		}
 
-		// const currentItemLength = store.currentItem.length;
-		// const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-		// const hasSeahub = file.path.slice(startIndex);
-
 		const res = await this.commonAxios.get(
-			`/seafhttp/lib/${menuStore.activeMenu.id}/file${file.parentPath}?dict=1`,
+			`/seahub/lib/${menuStore.activeMenu.id}/file${file.parentPath}/${file.name}?dict=1`,
 			{}
 		);
 
 		if (['audio', 'video', 'pdf'].includes(file.type)) {
-			file.url = store.baseURL() + res.data.raw_path;
+			file.url = store.baseURL() + res.raw_path;
 		} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
-			file.content = res.data.file_content;
+			file.content = res.file_content;
 		}
 
 		return file;

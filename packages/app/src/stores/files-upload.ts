@@ -232,6 +232,8 @@ export const useFilesUploadStore = defineStore('upload', {
 				} else {
 					const onUpload = throttle(
 						(event: any) => {
+							console.log('onUploadonUpload', item);
+							console.log('onUploadonUpload event', event.loaded);
 							this.setProgress({
 								id: item.id,
 								loaded: event.loaded

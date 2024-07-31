@@ -36,7 +36,6 @@ const QualityPlugin = function (this: any) {
 			let isDescendant = false;
 			for (let i = 0; i < popup.length; i++) {
 				if (popup[i].contains(event.target)) {
-					alert(isDescendant);
 					isDescendant = true;
 					break;
 				}

@@ -27,7 +27,6 @@ export async function resourceAction(
 
 	let res = null;
 	if (formatUrltoDriveType(url) === DriveType.Cache) {
-		alert(1);
 		const { path, node } = getAppDataPath(url);
 		if (node) {
 			opts.headers = {
