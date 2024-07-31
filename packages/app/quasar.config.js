@@ -51,7 +51,7 @@ module.exports = configure(function (ctx) {
 		css: [
 			'app.scss',
 			!ctx.dev && ['FILES', 'WEB'].includes(process.env.PLATFORM)
-				? 'font.pro.scss'
+				? 'font.dev.scss'
 				: 'font.dev.scss'
 		],
 
