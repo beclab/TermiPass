@@ -4,6 +4,8 @@ import { MenuItem } from './../../utils/contact';
 import { formatData } from './filesFormat';
 import { FileResType, DriveType } from './../../stores/files';
 import { DriveMenuType } from './type';
+import { OPERATE_ACTION } from './../../utils/contact';
+import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
 class Data extends DriveDataAPI {
 	breadcrumbsBase = '/Data';
@@ -54,6 +56,52 @@ class Data extends DriveDataAPI {
 				driveType: DriveType.Data
 			}
 		];
+	}
+
+	async paste(
+		path: string,
+		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
+	): Promise<void> {
+		const operateinStore = useOperateinStore();
+		const items: CopyStoragesType[] = [];
+
+		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
+			const element: any = operateinStore.copyFiles[i];
+			let lastPathIndex = await this.formatPathtoUrl(path);
+
+			lastPathIndex = lastPathIndex.endsWith('/')
+				? lastPathIndex
+				: lastPathIndex + '/';
+
+			const to = lastPathIndex + decodeURIComponent(element.name);
+			items.push({
+				from: element.from,
+				to: to,
+				name: element.name,
+				src_drive_type: element.src_drive_type,
+				dst_drive_type: DriveType.Drive
+			});
+			if (path + decodeURIComponent(element.name) === element.from) {
+				this.action(false, true, items, path, false, callback);
+				return;
+			}
+		}
+
+		let overwrite = false;
+		const rename = true;
+		let isMove = false;
+
+		if (
+			operateinStore.copyFiles[0] &&
+			operateinStore.copyFiles[0].key === 'x'
+		) {
+			overwrite = true;
+			isMove = true;
+		}
+
+		console.log('operateinStoreoperateinStore', items);
+
+		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
 	async formatRepotoPath(item: any): Promise<string> {
