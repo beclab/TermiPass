@@ -3,7 +3,7 @@ import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
 import { files, seahub } from './../index';
-import { useSeahubStore } from '../../stores/seahub';
+// import { useSeahubStore } from '../../stores/seahub';
 import {
 	notifyWaitingShow,
 	notifyHide,
@@ -179,17 +179,15 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		console.log('sync download', path);
-
-		// const dataStore = useDataStore();
 		const fileStore = useFilesStore();
 		if (
 			fileStore.selectedCount === 1 &&
 			!fileStore.currentFileList[fileStore.selected[0]].isDir
 		) {
 			const url = await seahub.downloaFile(
-				fileStore.currentFileList[fileStore.selected[0]].path
+				fileStore.currentFileList[fileStore.selected[0]]
 			);
+
 			return { url: url, headers: {} };
 		}
 
@@ -213,6 +211,16 @@ class Data extends Origin {
 		}
 
 		return { url, headers };
+	}
+
+	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = fileUrl.url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
 	}
 
 	async copy(): Promise<CopyStoragesType[]> {
@@ -305,6 +313,8 @@ class Data extends Origin {
 			overwrite = true;
 			isMove = true;
 		}
+
+		console.log('itemsitems', items);
 		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
@@ -409,14 +419,16 @@ class Data extends Origin {
 
 	openLocalFolder(): string | undefined {
 		const filesStore = useFilesStore();
-		const seahubStore = useSeahubStore();
+		// const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const item = filesStore.currentFileList[filesStore.selected[0]];
 		if (!item.isDir) {
 			return undefined;
 		}
 		const itemUrl = decodeURIComponent(item.url);
 		const pathFromStart =
-			itemUrl.indexOf(seahubStore.repo_name) + seahubStore.repo_name.length;
+			itemUrl.indexOf(menuStore.activeMenu.label) +
+			menuStore.activeMenu.label.length;
 		const path = itemUrl.slice(pathFromStart, itemUrl.length - 1);
 		return path;
 	}
@@ -448,21 +460,23 @@ class Data extends Origin {
 
 	getDownloadURL(file: any, _inline: boolean, download?: boolean): string {
 		const store = useDataStore();
-		const startIndex =
-			file.path.indexOf(file.repo_name) + file.repo_name?.length;
-		const hasSeahub = file.path.slice(startIndex);
+		const repo_id = getParams(file.path, 'id');
+
 		if (['audio', 'video'].includes(file.type) && !download) {
 			return file.url;
 		} else {
-			return `${store.baseURL()}/seahub/lib/${
-				file.repo_id
-			}/file${hasSeahub}?dl=1`;
+			return `${store.baseURL()}/seahub/lib/${repo_id}/file${file.parentPath}${
+				file.name
+			}?dl=1`;
 		}
 	}
 
 	async formatFileContent(file: FileItem): Promise<FileItem> {
 		const store = useDataStore();
-		const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
+		// const seahubStore = useSeahubStore();
+
+		console.log('filefilefile', file);
 
 		if (
 			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
@@ -472,12 +486,12 @@ class Data extends Origin {
 			return file;
 		}
 
-		const currentItemLength = store.currentItem.length;
-		const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
-		const hasSeahub = file.path.slice(startIndex);
+		// const currentItemLength = store.currentItem.length;
+		// const startIndex = file.path.indexOf(store.currentItem) + currentItemLength;
+		// const hasSeahub = file.path.slice(startIndex);
 
 		const res = await this.commonAxios.get(
-			`/seahub/lib/${seahubStore.repo_id}/file${hasSeahub}?dict=1`,
+			`/seafhttp/lib/${menuStore.activeMenu.id}/file${file.parentPath}?dict=1`,
 			{}
 		);
 
@@ -491,7 +505,7 @@ class Data extends Origin {
 	}
 
 	async formatRepotoPath(item: any): Promise<string> {
-		return `/Files/Seahub/${item.label}/?id=${item.id}&type=${
+		return `/Seahub/${item.label}/?id=${item.id}&type=${
 			item.type || 'mine'
 		}&p=${item.permission ? item.permission.trim() : 'rw'}`;
 	}
@@ -500,7 +514,7 @@ class Data extends Origin {
 		const repo_id = getParams(item.param, 'id');
 		const pathList = item.path.split('/');
 		let path = '';
-		for (let i = 4; i < pathList.length; i++) {
+		for (let i = 3; i < pathList.length; i++) {
 			const p = pathList[i];
 			path += `/${p}`;
 		}

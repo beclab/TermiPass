@@ -30,9 +30,14 @@ export abstract class Origin {
 	): Promise<DriveMenuType[] | SyncRepoMineType[]>;
 
 	/**
-	 * Retrieves this menu from the Sync
+	 * get download files url info
 	 */
 	abstract download(path: string): Promise<{ url: string; headers: any }>;
+
+	/**
+	 * download file
+	 */
+	abstract downloadFile(fileUrl: any, filename: string): Promise<void>;
 
 	/**
 	 * This function handles the copying of files or directories in an event
@@ -114,7 +119,7 @@ export abstract class Origin {
 	/**
 	 * format Repo to Path
 	 */
-	abstract formatRepotoPath(item: any): Promise<string>;
+	abstract formatRepotoPath(item?: any): Promise<string>;
 
 	/**
 	 * format path to url

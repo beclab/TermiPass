@@ -4,8 +4,10 @@ import { useDataStore } from '../../stores/data';
 import { checkAppData, getAppDataPath } from '../../utils/file';
 // import { seahubGetRepos } from './syncMenu';
 import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
+import { formatUrltoDriveType } from './../common/common';
 
 import axios from 'axios';
+import { DriveType } from 'src/stores/files';
 
 export async function resourceAction(
 	url: string,
@@ -41,28 +43,36 @@ export async function resourceAction(
 export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 	const opts: any = {};
 	const dataAPI = dataAPIs();
-
 	let res: any;
-	if (checkAppData(fromUrl)) {
+
+	console.log('fromUrlfromUrl', fromUrl);
+	console.log('formatUrltoDriveType', formatUrltoDriveType(fromUrl));
+
+	if (formatUrltoDriveType(fromUrl) === DriveType.Cache) {
 		const { path, node } = getAppDataPath(fromUrl);
 
 		if (node) {
-			opts.headers = {
-				...opts.headers,
-				'X-Terminus-Node': node,
-				timeout: 600000
+			const headers = {
+				auth: true,
+				'X-Terminus-Node': node
 			};
-			res = await dataAPI.commonAxios.patch(`/api/paste/AppData${path}`, opts);
+
+			const options = { headers: headers };
+
+			res = await dataAPI.commonAxios.patch(
+				`/api/paste/AppData${path}`,
+				{},
+				options
+			);
 		}
 	} else {
 		if (terminusNode) {
 			opts.headers = {
-				...opts.headers,
-				'X-Terminus-Node': terminusNode,
-				timeout: 600000
+				'X-Terminus-Node': terminusNode
 			};
 		}
-		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, opts);
+
+		res = await dataAPI.commonAxios.patch(`/api/paste${fromUrl}`, {}, opts);
 	}
 
 	if (res?.data?.split('\n')[1] === '413 Request Entity Too Large') {
@@ -193,7 +203,7 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 		let to = encodeURIComponent(item.to);
 		let terminusNode = '';
 
-		if (checkAppData(item.to)) {
+		if (formatUrltoDriveType(item.to) === DriveType.Cache) {
 			const { path, node } = getAppDataPath(item.to);
 			to = encodeURIComponent(`/AppData${path}`);
 			terminusNode = node;
@@ -204,6 +214,8 @@ function moveCopy(items, copy = false, overwrite = false, rename = false) {
 		}&destination=${to}&override=${overwrite}&rename=${rename}&src_type=${
 			item.src_drive_type
 		}&dst_type=${item.dst_drive_type}`;
+
+		console.log('urlurlurlurlurl', url);
 
 		promises.push(pasteAction(url, terminusNode));
 	}
@@ -343,9 +355,14 @@ export async function createFileChunk(fileInfo: { offset: any }, file: any) {
 }
 
 export async function getUploadInfo(url: string, prefix: string, content: any) {
+	console.log('urlurl', url);
+
 	const store = useDataStore();
 	const baseURL = store.baseURL();
 	const appendUrl = splitUrl(url, content);
+
+	console.log('appendUrl', appendUrl);
+
 	const params = new FormData();
 	params.append('storage_path', `${prefix}${appendUrl.storage_path}`);
 	params.append('file_relative_path', appendUrl.file_relative_path);

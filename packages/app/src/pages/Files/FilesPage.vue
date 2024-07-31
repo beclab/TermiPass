@@ -102,7 +102,7 @@ onMounted(async () => {
 	let url = route.fullPath;
 	const driveType = await common.formatUrltoDriveType(url);
 
-	filesStore.setBrowserUrl(url, driveType, true);
+	filesStore.setBrowserUrl(url, driveType);
 
 	window.addEventListener('keydown', keyEvent);
 });

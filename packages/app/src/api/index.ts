@@ -11,19 +11,33 @@ import commands from './commands';
 
 import { Data as DriveDataAPI } from './drive/data';
 import { Data as SyncDataAPI } from './sync/data';
+import { Data as DataDataAPI } from './data/data';
+import { Data as CacheDataAPI } from './cache/data';
 
-import { getParams } from '../utils/utils';
 import { DriveType } from './../stores/files';
 
-function dataAPIs(origin?: DriveType): SyncDataAPI | DriveDataAPI {
-	const query = getParams(window.location.href, 'id');
+function dataAPIs(
+	origin?: DriveType
+): SyncDataAPI | DriveDataAPI | DataDataAPI | CacheDataAPI {
+	const driveType = common.formatUrltoDriveType(window.location.pathname);
 	if (origin === DriveType.Sync) {
 		return new SyncDataAPI();
 	} else if (origin === DriveType.Drive) {
 		return new DriveDataAPI();
+	} else if (origin === DriveType.Data) {
+		return new DataDataAPI();
+	} else if (origin === DriveType.Cache) {
+		return new CacheDataAPI();
 	}
-	if (query) {
+
+	if (driveType === DriveType.Sync) {
 		return new SyncDataAPI();
+	} else if (driveType === DriveType.Drive) {
+		return new DriveDataAPI();
+	} else if (driveType === DriveType.Data) {
+		return new DataDataAPI();
+	} else if (driveType === DriveType.Cache) {
+		return new CacheDataAPI();
 	} else {
 		return new DriveDataAPI();
 	}
@@ -45,7 +59,9 @@ export {
 	common,
 	dataAPIs,
 	DriveDataAPI,
-	SyncDataAPI
+	SyncDataAPI,
+	DataDataAPI,
+	CacheDataAPI
 	// driveAPI,
 	// syncAPI,
 };

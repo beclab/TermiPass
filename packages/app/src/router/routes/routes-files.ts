@@ -15,33 +15,30 @@ export default [
 		},
 		children: [
 			{
-				path: 'Files/Home/:path*',
+				path: 'Files/:path*',
 				name: 'Files',
-				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}
 			},
 			{
-				path: 'Files/Application/:path*',
-				name: 'Application',
-				component: () => import('pages/Files/FilesPage.vue'),
+				path: 'Data/:path*',
+				name: 'Data',
 				meta: {
 					requiresAuth: true
 				}
 			},
 			{
-				path: 'Files/AppData/:path*',
-				name: 'AppData',
-				component: () => import('pages/Files/FilesPage.vue'),
+				path: 'Cache/:path*',
+				name: 'Cache',
 				meta: {
 					requiresAuth: true
 				}
 			},
+
 			{
-				path: 'Files/Seahub/:path*',
+				path: 'Seahub/:path*',
 				name: 'Seahub',
-				component: () => import('pages/Files/FilesPage.vue'),
 				meta: {
 					requiresAuth: true
 				}

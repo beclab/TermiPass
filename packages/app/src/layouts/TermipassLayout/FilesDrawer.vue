@@ -132,7 +132,6 @@ const selectHandler = async (value) => {
 	// 	label: value.item.label,
 	// 	id: value.item.key
 	// };
-	console.log('valueitemvalueitemvalueitem', value.item);
 	const path = await filesStore.formatRepotoPath(value.item);
 
 	console.log('pathpathpath', path);

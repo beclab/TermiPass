@@ -6,6 +6,7 @@ on:
     push:
         branches:
           - "main"
+          - "feat/rebase_v1.7"
         tags:
           - 'v*'
 
