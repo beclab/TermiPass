@@ -18,7 +18,7 @@ import { DriveType } from './../stores/files';
 
 function dataAPIs(
 	origin?: DriveType
-): SyncDataAPI | DriveDataAPI | DataDataAPI | CacheDataAPI {
+): SyncDataAPI | DriveDataAPI | DataDataAPI | CacheDataAPI | any {
 	const driveType = common.formatUrltoDriveType(window.location.pathname);
 	if (origin === DriveType.Sync) {
 		return new SyncDataAPI();

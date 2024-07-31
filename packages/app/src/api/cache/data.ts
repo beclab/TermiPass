@@ -10,7 +10,7 @@ import { CommonFetch } from '../fetch';
 import { useFilesStore } from './../../stores/files';
 import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
 
-import { FileResType, DriveType, FilePath } from './../../stores/files';
+import { FileResType, DriveType } from './../../stores/files';
 import { DriveMenuType } from './type';
 import { useDataStore } from 'src/stores/data';
 
@@ -21,6 +21,8 @@ class Data extends DriveDataAPI {
 		super();
 		this.commonAxios = CommonFetch;
 	}
+
+	breadcrumbsBase = '/Cache';
 
 	async fetch(url: string): Promise<FileResType> {
 		console.log('urlurl', url);
@@ -89,22 +91,6 @@ class Data extends DriveDataAPI {
 		];
 	}
 
-	// async formatRepotoPath(item: any): Promise<string> {
-	// 	console.log('formatRepotoPath - itemitem', item);
-	// 	if (item.label === 'Data') return '/Data/';
-	// 	return '/Data/' + item.label;
-	// }
-
-	// async formatPathtoUrl(item: FilePath): Promise<string> {
-	// 	if (item.path.endsWith('/Data/')) {
-	// 		return '/Application';
-	// 	}
-
-	// 	const purePath = item.path.replace('/Data', '/Application');
-	// 	console.log('purePath', purePath);
-	// 	return purePath;
-	// }
-
 	async formatRepotoPath(item: any): Promise<string> {
 		console.log('formatRepotoPath - itemitem', item);
 
@@ -113,21 +99,14 @@ class Data extends DriveDataAPI {
 		return '/Cache/' + item.label;
 	}
 
-	async formatPathtoUrl(item: FilePath): Promise<string> {
-		console.log('formatPathtoUrl - itemitem', item);
+	async formatPathtoUrl(path: string): Promise<string> {
+		console.log('formatPathtoUrl - itemitem', path);
 
-		if (item.path.endsWith('/Cache/')) {
+		if (path.endsWith('/Cache/')) {
 			return '/AppData';
 		}
 
-		const purePath = item.path.replace('/Cache', '/AppData');
-		console.log('purePath', purePath);
-
-		// const hasAli = purePath.indexOf('ali-');
-		// if (hasAli > -1) {
-		// 	purePath = purePath.replace(/\/?ali-[^\/]*\//, '/');
-		// }
-
+		const purePath = path.replace('/Cache', '/AppData');
 		console.log('purePath', purePath);
 
 		return purePath;
@@ -239,10 +218,6 @@ class Data extends DriveDataAPI {
 		const filesStore = useFilesStore();
 		const store = useDataStore();
 		const baseURL = store.baseURL();
-
-		console.log('download path', path);
-		console.log('currentFileList', filesStore.currentFileList);
-		console.log('selected', filesStore.selected);
 
 		const nodes = path.split('/')[2];
 		console.log('nodes', nodes);

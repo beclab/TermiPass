@@ -29,8 +29,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useFilesStore } from '../../stores/files';
+import { dataAPIs } from './../../api';
 import { formatUrltoDriveType } from './../../api/common/common';
 
 const props = defineProps({
@@ -47,10 +48,12 @@ const props = defineProps({
 });
 
 const route = useRoute();
-const router = useRouter();
 const filesStore = useFilesStore();
 
 const items = computed(function () {
+	const dataAPI = dataAPIs();
+	console.log('dataAPIbreadcrumbsBase', dataAPI.breadcrumbsBase);
+
 	const relativePath = route.path;
 	const relativequery =
 		route.fullPath.indexOf('?') > -1
@@ -59,35 +62,55 @@ const items = computed(function () {
 
 	let parts = relativePath.split('/');
 
+	console.log('parts0', parts);
+
 	if (parts[0] === '') {
 		parts.shift();
 	}
+	console.log('parts1', parts);
 
-	if (parts[0] === 'Files') {
+	if (
+		parts[0] === 'Files' ||
+		parts[0] === 'Seahub' ||
+		parts[0] === 'Data' ||
+		parts[0] === 'Cache'
+	) {
 		parts.shift();
 	}
+	console.log('parts2', parts);
 
 	if (parts[parts.length - 1] === '') {
 		parts.pop();
 	}
+	console.log('parts3', parts);
 
 	let breadcrumbs: any[] = [];
 
-	for (let i = 0; i < parts.length; i++) {
-		if (i === 0) {
-			breadcrumbs.push({
-				name: decodeURIComponent(parts[i]),
-				url: props.base + '/' + parts[i] + '/',
-				query: relativequery
-			});
-		} else {
-			breadcrumbs.push({
-				name: decodeURIComponent(parts[i]),
-				url: breadcrumbs[i - 1].url + parts[i] + '/',
-				query: relativequery
-			});
+	if (parts.length === 0) {
+		breadcrumbs.push({
+			name: dataAPI.breadcrumbsBase.slice(1),
+			url: dataAPI.breadcrumbsBase + '/',
+			query: relativequery
+		});
+	} else {
+		for (let i = 0; i < parts.length; i++) {
+			if (i === 0) {
+				breadcrumbs.push({
+					name: decodeURIComponent(parts[i]),
+					url: dataAPI.breadcrumbsBase + '/' + parts[i] + '/',
+					query: relativequery
+				});
+			} else {
+				breadcrumbs.push({
+					name: decodeURIComponent(parts[i]),
+					url: breadcrumbs[i - 1].url + parts[i] + '/',
+					query: relativequery
+				});
+			}
 		}
 	}
+
+	console.log('breadcrumbs', breadcrumbs);
 
 	if (breadcrumbs.length > 3) {
 		while (breadcrumbs.length !== 4) {
@@ -101,6 +124,7 @@ const items = computed(function () {
 });
 
 const go = async (url: string, query: any) => {
+	console.log('gogourl', url);
 	const driveType = await formatUrltoDriveType(url);
 	filesStore.setBrowserUrl(url + query, driveType);
 };

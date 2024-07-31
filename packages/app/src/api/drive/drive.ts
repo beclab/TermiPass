@@ -14,7 +14,8 @@ export async function resourceAction(
 	method: string,
 	content?: any
 ) {
-	url = removePrefix(url);
+	const newUrl = removePrefix(url);
+
 	const opts: any = { method };
 
 	if (content) {
@@ -25,7 +26,8 @@ export async function resourceAction(
 	}
 
 	let res = null;
-	if (checkAppData(url)) {
+	if (formatUrltoDriveType(url) === DriveType.Cache) {
+		alert(1);
 		const { path, node } = getAppDataPath(url);
 		if (node) {
 			opts.headers = {
@@ -34,8 +36,11 @@ export async function resourceAction(
 			};
 			res = await fetchURL(`/api/resources/AppData${path}`, opts);
 		}
+	} else if (formatUrltoDriveType(url) === DriveType.Data) {
+		const url1 = url.replace('/Data', '/Application');
+		res = await fetchURL(`/api/resources${url1}`, opts);
 	} else {
-		res = await fetchURL(`/api/resources${url}`, opts);
+		res = await fetchURL(`/api/resources${newUrl}`, opts);
 	}
 	return res;
 }
@@ -44,10 +49,6 @@ export async function pasteAction(fromUrl, terminusNode): Promise<any> {
 	const opts: any = {};
 	const dataAPI = dataAPIs();
 	let res: any;
-
-	console.log('fromUrlfromUrl', fromUrl);
-	console.log('formatUrltoDriveType', formatUrltoDriveType(fromUrl));
-
 	if (formatUrltoDriveType(fromUrl) === DriveType.Cache) {
 		const { path, node } = getAppDataPath(fromUrl);
 

@@ -370,7 +370,10 @@ export const useFilesStore = defineStore('files', {
 		},
 
 		async formatPathtoUrl(value: FilePath) {
-			return await getAPI(value.driveType).formatPathtoUrl(value);
+			return await getAPI(value.driveType).formatPathtoUrl(
+				value.path,
+				value.param
+			);
 		},
 
 		async openPreviewDialog(path) {
@@ -381,7 +384,9 @@ export const useFilesStore = defineStore('files', {
 
 				await getAPI(path.driveType)
 					.openPreview(item)
-					.then((res) => {
+					.then(async (res) => {
+						console.log('previewItempreviewItem', res);
+						res.path = await getAPI(path.driveType).formatPathtoUrl(res.path);
 						this.previewItem = res;
 					});
 			}
