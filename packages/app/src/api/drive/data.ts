@@ -370,6 +370,7 @@ class Data extends Origin {
 		const fileChunkList = await files.createFileChunk(fileInfo, content);
 
 		console.log('fileChunkList', fileChunkList);
+		console.log('fileChunkList url', url);
 
 		const exportProgress = (e) => {
 			if (typeof callback === 'function') {
@@ -388,6 +389,7 @@ class Data extends Origin {
 					appNode
 				);
 			} catch (error) {
+				console.log('load timer', timer);
 				if (timer === 1) {
 					exportProgress({
 						loaded: -1,
@@ -396,6 +398,7 @@ class Data extends Origin {
 					});
 				}
 				await files.errorRetry(url, content, overwrite, callback, timer);
+				break;
 			}
 		}
 	}
@@ -479,15 +482,11 @@ class Data extends Origin {
 	}
 
 	async createDir(dirName: string, path: string): Promise<void> {
-		console.log('dirName', dirName);
-		console.log('path', path);
-
 		const filesStore = useFilesStore();
 		const newName = await checkSameName(dirName, filesStore.currentFileList);
 
 		let url = path + '/' + encodeURIComponent(newName) + '/';
 		url = url.replace('//', '/');
-		console.log('url', url);
 
 		await files.resourceAction(url, 'post');
 	}
