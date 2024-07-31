@@ -314,31 +314,31 @@ export async function uploadChunks(
 		headers['X-Terminus-Node'] = node;
 	}
 
-	try {
-		const response = await dataAPI.commonAxios.patch(
-			`${baseURL}/upload/${fileInfo.id}`,
-			formData,
-			{
-				...headers,
-				onUploadProgress: (progressEvent) => {
-					const event = {
-						loaded: progressEvent.loaded,
-						total: progressEvent.total,
-						lengthComputable: progressEvent.lengthComputable
-					};
-					if (progressEvent.lengthComputable) {
-						event.loaded += offset;
-						event.total = fileInfo.file_size;
-						exportProgress(event);
-					}
+	const response = await dataAPI.commonAxios.patch(
+		`${baseURL}/upload/${fileInfo.id}`,
+		formData,
+		{
+			...headers,
+			onUploadProgress: (progressEvent) => {
+				const event = {
+					loaded: progressEvent.loaded,
+					total: progressEvent.total,
+					lengthComputable: progressEvent.lengthComputable
+				};
+				if (progressEvent.lengthComputable) {
+					event.loaded += offset;
+					event.total = fileInfo.file_size;
+					exportProgress(event);
 				}
 			}
-		);
+		}
+	);
 
-		console.log(response.data);
-	} catch (error) {
-		console.error(error);
+	console.log('uploadChunks', response);
+	if (!response.data) {
+		throw 'error0';
 	}
+	console.log(response.data);
 }
 
 export async function createFileChunk(fileInfo: { offset: any }, file: any) {
