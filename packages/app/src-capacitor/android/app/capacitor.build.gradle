@@ -21,7 +21,7 @@ dependencies {
     implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-screen-orientation')
     implementation project(':capacitor-status-bar')
-    implementation project(':capgo-capacitor-native-biometric')
+    implementation project(':bytetrade-capacitor-native-biometric')
     implementation project(':codetrix-studio-capacitor-google-auth')
 
 }

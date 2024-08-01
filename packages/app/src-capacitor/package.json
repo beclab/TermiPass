@@ -1,6 +1,6 @@
 {
   "name": "@didvault/app",
-  "version": "1.2.16",
+  "version": "1.2.17",
   "description": "DID APP",
   "author": "TermiPass <billpengpeng@gmail.com>",
   "private": true,
@@ -20,8 +20,8 @@
     "@capacitor/push-notifications": "^6.0.1",
     "@capacitor/screen-orientation": "^6.0.1",
     "@capacitor/status-bar": "^6.0.0",
-    "@capgo/capacitor-native-biometric": "^6.0.1",
+    "@bytetrade/capacitor-native-biometric": "^6.0.3",
     "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4"
   },
-  "versionCode": "27"
+  "versionCode": "28"
 }

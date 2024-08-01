@@ -1,7 +1,7 @@
 import {
 	BiometricOptions,
 	BiometryType
-} from '@capgo/capacitor-native-biometric';
+} from '@bytetrade/capacitor-native-biometric';
 import { i18n } from '../boot/i18n';
 
 const BIOMETRIC_TYPE_OPTION_RECORD: Record<BiometryType, BiometricOptions> = {
