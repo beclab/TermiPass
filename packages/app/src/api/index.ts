@@ -13,6 +13,8 @@ import { Data as DriveDataAPI } from './drive/data';
 import { Data as SyncDataAPI } from './sync/data';
 import { Data as DataDataAPI } from './data/data';
 import { Data as CacheDataAPI } from './cache/data';
+import { Data as GoogleDataAPI } from './google/data';
+import { Data as DropboxDataAPI } from './dropbox/data';
 
 import { DriveType } from './../stores/files';
 
@@ -28,6 +30,10 @@ function dataAPIs(
 		return new DataDataAPI();
 	} else if (origin === DriveType.Cache) {
 		return new CacheDataAPI();
+	} else if (origin === DriveType.GoogleDrive) {
+		return new GoogleDataAPI();
+	} else if (origin === DriveType.Dropbox) {
+		return new DropboxDataAPI();
 	}
 
 	if (driveType === DriveType.Sync) {
@@ -38,6 +44,10 @@ function dataAPIs(
 		return new DataDataAPI();
 	} else if (driveType === DriveType.Cache) {
 		return new CacheDataAPI();
+	} else if (driveType === DriveType.GoogleDrive) {
+		return new GoogleDataAPI();
+	} else if (driveType === DriveType.Dropbox) {
+		return new DropboxDataAPI();
 	} else {
 		return new DriveDataAPI();
 	}
@@ -61,7 +71,9 @@ export {
 	DriveDataAPI,
 	SyncDataAPI,
 	DataDataAPI,
-	CacheDataAPI
+	CacheDataAPI,
+	GoogleDataAPI,
+	DropboxDataAPI
 	// driveAPI,
 	// syncAPI,
 };

@@ -695,6 +695,11 @@ module.exports = configure(function (ctx) {
 					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
 					changeOrigin: true,
 					secure: false
+				},
+
+				'/drive': {
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
+					changeOrigin: true
 				}
 			}
 		},

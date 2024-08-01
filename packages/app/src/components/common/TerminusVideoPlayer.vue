@@ -114,7 +114,7 @@ function options() {
 			]
 		},
 		preload: 'auto',
-		fluid: true,
+		fluid: false,
 		notSupportedMessage:
 			'This video cannot be played temporarily, please try again later.',
 		playbackRates: [0.5, 1, 1.5, 2],
