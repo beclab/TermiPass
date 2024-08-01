@@ -8,9 +8,6 @@
 	>
 		<router-view />
 	</div>
-	<ShadowRoot v-else-if="isBex" id="webos-content-root">
-		<router-view />
-	</ShadowRoot>
 	<router-view v-else />
 </template>
 
@@ -22,7 +19,6 @@ import { useQuasar } from 'quasar';
 import { getAppPlatform } from './platform/appPlatform';
 import { getNativeAppPlatform } from './platform/capacitor/capacitorPlatform';
 import { useUserStore } from './stores/user';
-import { ShadowRoot } from 'vue-shadow-dom';
 
 import { login } from './utils/auth';
 import { ref } from 'vue';
@@ -37,9 +33,6 @@ const searchParamsObj = urlUtils.getSearchParamsObj();
 
 export default defineComponent({
 	name: 'App',
-	components: {
-		ShadowRoot
-	},
 	async preFetch({ redirect, currentRoute }) {
 		if (process.env.PLATFORM !== 'FILES') {
 			await getAppPlatform().appRedirectUrl(redirect, currentRoute);

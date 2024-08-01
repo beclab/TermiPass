@@ -2,7 +2,7 @@
 	<q-layout
 		view="lHh Lpr ffr"
 		class="plugin-layout"
-		style="width: 450px; height: 100vh"
+		style="height: 100vh"
 		container
 	>
 		<plugin-drawer />

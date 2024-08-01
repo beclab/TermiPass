@@ -3,6 +3,9 @@
 
 // Represents if importAllScripts has been run
 // eslint-disable-next-line
+chrome.runtime.onInstalled.addListener(() => {
+	chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+});
 let scriptsLoadInitiated = false;
 
 const loadTimeLogs = [];

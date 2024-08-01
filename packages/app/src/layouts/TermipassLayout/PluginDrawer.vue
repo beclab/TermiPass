@@ -1,62 +1,66 @@
 <template>
-	<q-drawer
-		show-if-above
-		behavior="desktop"
-		height="100%"
-		:width="72"
-		side="right"
-		style="background: transparent"
-	>
-		<q-scroll-area
-			style="height: 100%; width: 100%"
-			:thumb-style="scrollBarStyle.thumbStyle"
+	<div class="drawer-wrapper">
+		<q-drawer
+			show-if-above
+			behavior="desktop"
+			height="100%"
+			:width="72"
+			side="right"
+			style="background: transparent"
 		>
-			<q-list class="pluginDrawer column items-center justify-center">
-				<div clickable class="menu-scale">
-					<q-icon
-						name="sym_r_right_panel_close"
-						size="20px"
-						@click="toggleBex"
-					/>
-				</div>
-
-				<template v-for="(menu, index) in menus" :key="index">
-					<div
-						clickable
-						class="column items-center justify-center menu-item"
-						:class="menu.label === activeItem ? 'active-item' : ''"
-						@click="handleItem(menu.label)"
-					>
-						<div class="icon-wrap row items-center justify-center">
-							<img :src="showMenuIcon(menu.label)" />
-						</div>
-						<div
-							class="item-text q-mt-sm text-body3"
-							:class="menu.label == activeItem ? 'text-grey-10' : 'text-grey-6'"
-						>
-							{{ menu.label }}
-						</div>
+			<q-scroll-area
+				style="height: 100%; width: 100%"
+				:thumb-style="scrollBarStyle.thumbStyle"
+			>
+				<q-list class="pluginDrawer column items-center justify-center">
+					<div clickable class="menu-scale">
+						<q-icon
+							name="sym_r_right_panel_close"
+							size="20px"
+							@click="toggleBex"
+						/>
 					</div>
-				</template>
 
-				<div class="menu-footer column items-center justify-center">
-					<!-- <q-icon
+					<template v-for="(menu, index) in menus" :key="index">
+						<div
+							clickable
+							class="column items-center justify-center menu-item"
+							:class="menu.label === activeItem ? 'active-item' : ''"
+							@click="handleItem(menu.label)"
+						>
+							<div class="icon-wrap row items-center justify-center">
+								<img :src="showMenuIcon(menu.label)" />
+							</div>
+							<div
+								class="item-text q-mt-sm text-body3"
+								:class="
+									menu.label == activeItem ? 'text-grey-10' : 'text-grey-6'
+								"
+							>
+								{{ menu.label }}
+							</div>
+						</div>
+					</template>
+
+					<div class="menu-footer column items-center justify-center">
+						<!-- <q-icon
 						name="sym_o_settings"
 						size="24px"
 						class="cursor-pointer settings"
 						@click="showSettings"
 					/> -->
 
-					<TerminusAvatar
-						class="avatar-circle"
-						:info="userStore.terminusInfo()"
-						:size="28"
-						@click="showSettings"
-					/>
-				</div>
-			</q-list>
-		</q-scroll-area>
-	</q-drawer>
+						<TerminusAvatar
+							class="avatar-circle"
+							:info="userStore.terminusInfo()"
+							:size="28"
+							@click="showSettings"
+						/>
+					</div>
+				</q-list>
+			</q-scroll-area>
+		</q-drawer>
+	</div>
 </template>
 
 <script lang="ts" setup>
@@ -210,6 +214,11 @@ const toggleBex = () => {
 
 	.settings {
 		margin-bottom: 20px;
+	}
+}
+.drawer-wrapper {
+	& ::v-deep(.q-drawer) {
+		background: transparent;
 	}
 }
 </style>
