@@ -12,8 +12,8 @@
 				/>
 			</div>
 
-			<div class="text-grey-8 text-h6">{{ t('security_verification') }}</div>
-			<div class="text-grey-8 text-h7 q-mb-md">
+			<div class="text-ink-1 text-h6">{{ t('security_verification') }}</div>
+			<div class="text-ink-1 text-h7 q-mb-md">
 				{{
 					t('to_secure_your_account_please_complete_the_following_verification')
 				}}

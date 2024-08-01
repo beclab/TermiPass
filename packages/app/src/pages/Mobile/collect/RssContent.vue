@@ -34,7 +34,7 @@
 							v-if="item.status === RssStatus.none"
 							name="sym_r_bookmark_add"
 							size="20px"
-							class="text-grey-8"
+							class="text-ink-1"
 							@click="onSaveFeed(item)"
 						/>
 						<q-icon

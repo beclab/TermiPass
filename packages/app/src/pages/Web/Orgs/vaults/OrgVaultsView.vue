@@ -137,7 +137,7 @@
 										<div class="text-body1 text-weight-bold">
 											{{ member.did }}
 										</div>
-										<div class="text-caption text-grey-8">
+										<div class="text-caption text-ink-1">
 											{{ userStore.getCurrentDomain() }}
 										</div>
 									</div>

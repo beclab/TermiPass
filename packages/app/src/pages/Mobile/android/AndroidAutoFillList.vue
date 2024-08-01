@@ -42,7 +42,7 @@
 								size="24px"
 							/>
 							<div class="item-name q-ml-sm">
-								<div class="label text-body3 text-grey-8">
+								<div class="label text-body3 text-ink-1">
 									{{ item.vault.name }}
 								</div>
 								<div class="name text-subtitle2">
@@ -166,7 +166,7 @@
 
 		<div class="auto-fill-empty column justify-center items-center" v-else>
 			<img src="../../../assets/layout/nodata.svg" />
-			<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+			<span class="q-mb-md text-ink-1" style="margin-top: 32px">
 				{{ t('vault_t.no_matching_vault') }}
 			</span>
 		</div>

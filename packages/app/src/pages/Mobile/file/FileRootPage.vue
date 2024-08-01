@@ -84,24 +84,34 @@
 import TerminusUserHeader from '../../../components/common/TerminusUserHeader.vue';
 import TerminusItem from '../../../components/common/TerminusItem.vue';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { MenuItem } from '../../../utils/contact';
 import { useDataStore } from '../../../stores/data';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import BindTerminusName from '../../../components/common/BindTerminusName.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 // import { useUserStore } from '../../../stores/user';
-import { UserStatusActive } from '../../../utils/checkTerminusState';
-import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
+// import { UserStatusActive } from '../../../utils/checkTerminusState';
+// import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { useTermipassStore } from '../../../stores/termipass';
+import { useMenuStore } from '../../../stores/files-menu';
+import { DriveType, useFilesStore } from '../../../stores/files';
+import { DriveDataAPI, seahub } from './../../../api';
+import { formatSeahubRepos } from './../../../api/sync/filesFormat';
+import { route } from 'quasar/wrappers';
 
 const { t } = useI18n();
 
 const dataStore = useDataStore();
+const menuStore = useMenuStore();
+const fileStore = useFilesStore();
 
 const Router = useRouter();
+const Route = useRoute();
 // const userStore = useUserStore();
 const termipassStore = useTermipassStore();
+
+const driveList = ref();
 
 const driveMenus = ref([
 	{
@@ -133,17 +143,17 @@ const driveMenus = ref([
 
 const seahubAtion = (menu: MenuItem, name?: string) => {
 	// const userStore = useUserStore();
-	const termipassStore = useTermipassStore();
-	if (termipassStore.totalStatus?.isError != UserStatusActive.active) {
-		notifyFailed(
-			t('the_current_status_this_module_cannot_be_accessed', {
-				status: termipassStore.totalStatus?.title
-			})
-		);
-		return;
-	}
+	// const termipassStore = useTermipassStore();
+	// if (termipassStore.totalStatus?.isError != UserStatusActive.active) {
+	// 	notifyFailed(
+	// 		t('the_current_status_this_module_cannot_be_accessed', {
+	// 			status: termipassStore.totalStatus?.title
+	// 		})
+	// 	);
+	// 	return;
+	// }
 
-	dataStore.updateActiveMenu(menu);
+	// dataStore.updateActiveMenu(menu);
 
 	const query = {
 		name: name ? name : menu
@@ -154,30 +164,57 @@ const seahubAtion = (menu: MenuItem, name?: string) => {
 			Router.push({
 				path: '/Files/Application/'
 			});
+
+			// menuStore.activeMenu = {
+			// 	driveType: DriveType.Drive,
+			// 	label: menu,
+			// 	id: menu
+			// };
+
 			break;
 
 		case MenuItem.CACHE:
 			Router.push({
 				path: '/Files/AppData'
 			});
+
+			// menuStore.activeMenu = {
+			// 	driveType: DriveType.Cache,
+			// 	label: menu,
+			// 	id: menu
+			// };
+
 			break;
 
 		case MenuItem.MYLIBRARIES:
 		case MenuItem.SHAREDWITH:
 			Router.push({
-				path: '/Files/Seahub/',
+				path: `/repo/${menu}`,
 				query
 			});
+			// openSyncFolder(menu, query);
 			break;
 
 		default:
-			Router.push({
-				path:
-					'/Files/Home/' + (menu && menu != MenuItem.HOME ? menu + '/' : ''),
-				query
-			});
+			if (menu === MenuItem.HOME) {
+				const url = `/Files/Home`;
+				openDriveFolder(menu, url);
+			} else {
+				const url = `/Files/Home/${menu}/`;
+				openDriveFolder(menu, url);
+			}
+
+			// menuStore.activeMenu = {
+			// 	driveType: DriveType.Drive,
+			// 	label: menu,
+			// 	id: menu
+			// };
 			break;
 	}
+};
+
+const openDriveFolder = (menu: string, url: string) => {
+	fileStore.setBrowserUrl(url, DriveType.Drive);
 };
 
 const syncMenus = ref([
@@ -192,6 +229,13 @@ const syncMenus = ref([
 		menu: MenuItem.SHAREDWITH
 	}
 ]);
+
+onMounted(async () => {
+	const driveDataApi = new DriveDataAPI();
+
+	const data = await driveDataApi.fetch('/Files/Home/');
+	driveList.value = data.items;
+});
 </script>
 
 <style scoped lang="scss">

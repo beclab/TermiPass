@@ -14,6 +14,7 @@ export enum TerminusStatus {
 export type MonitorStoreState = {
 	usages: Usage[] | undefined;
 	background: string[];
+	dark_background: string[];
 	net: Net | undefined;
 	status: TerminusStatus;
 };
@@ -25,9 +26,14 @@ export const useMonitorStore = defineStore('monitor', {
 			net: undefined,
 			status: TerminusStatus.UNKNOWN,
 			background: [
-				'linear-gradient(127.05deg,#fffef3 4.41%,#f9fec7 49.41%,#f3fec2 84.8%)',
-				'linear-gradient(121.71deg, #FFFEF7 4.54%, rgba(223, 255, 208, 0.5) 51.95%, rgba(210, 255, 188, 0.5) 89.25%);',
-				'linear-gradient(127.31deg, #F7FEFF 4.44%, rgba(199, 251, 254, 0.5) 49.68%, rgba(170, 240, 255, 0.5) 85.27%);'
+				'linear-gradient(127.05deg, #FFFFFF 4.41%, #FFFCE0 84.8%)',
+				'linear-gradient(121.71deg, #FFFFFF 4.54%, #E5FFEE 89.25%)',
+				'linear-gradient(127.31deg, #FFFFFF 4.44%, #EBF5FF 85.27%)'
+			],
+			dark_background: [
+				'linear-gradient(127.05deg, #1F1F1F 4.41%, #41381A 84.8%)',
+				'linear-gradient(121.71deg, #1F1F1F 4.54%, #20331F 89.25%)',
+				'linear-gradient(127.31deg, #1F1F1F 4.44%, #262E37 85.27%)'
 			]
 		} as MonitorStoreState;
 	},

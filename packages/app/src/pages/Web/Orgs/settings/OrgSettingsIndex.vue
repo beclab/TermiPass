@@ -4,7 +4,7 @@
 			<div class="row items-center q-pl-md q-mt-sm">
 				<q-icon :name="heading.icon" size="24px" />
 				<div class="column q-pl-md">
-					<div class="text-grey-8 text-caption">
+					<div class="text-ink-1 text-caption">
 						{{ org?.name }}
 					</div>
 					<div class="text-body1 text-weight-bold">

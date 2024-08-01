@@ -29,7 +29,7 @@
 							:class="
 								!$q.dark.isActive
 									? 'accountCentent__action_offline'
-									: 'bg-background-1'
+									: 'accountCentent__action_offline_dark'
 							"
 						>
 							<div class="row items-center justify-between">
@@ -56,7 +56,7 @@
 							:class="
 								!$q.dark.isActive
 									? 'accountCentent__action_vpn'
-									: 'bg-background-1'
+									: 'accountCentent__action_vpn_dark'
 							"
 						>
 							<div class="row items-center justify-between">
@@ -104,7 +104,9 @@
 					<div
 						class="accountCentent__backup-mneminic q-mt-lg q-pl-lg q-py-lg row items-center justify-between"
 						:class="
-							!$q.dark.isActive ? 'backup-mnemonic-bg' : 'bg-background-1'
+							!$q.dark.isActive
+								? 'backup-mnemonic-bg'
+								: 'backup-mnemonic-bg-dark'
 						"
 						v-else
 					>
@@ -132,6 +134,7 @@
 						img-bg-classes="bg-yellow"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
+						icon-color="grey-10"
 						:whole-picture-size="48"
 						class="q-mt-lg"
 						@click="enterVCManagement"
@@ -149,6 +152,7 @@
 						v-if="showCheckHistory"
 						:show-board="true"
 						img-bg-classes="bg-yellow"
+						icon-color="grey-10"
 						:item-height="88"
 						icon-name="sym_r_fact_check"
 						:whole-picture-size="48"
@@ -165,6 +169,7 @@
 						v-if="!userStore.current_user?.cloud_id"
 						:show-board="true"
 						img-bg-classes="bg-yellow"
+						icon-color="grey-10"
 						:item-height="88"
 						icon-name="sym_r_badge"
 						:whole-picture-size="48"
@@ -331,8 +336,8 @@ const onLoginCloud = () => {
 			height: 32px;
 			overflow: hidden;
 			border-radius: 16px;
-			background-color: $background-3;
-			color: $ink-2;
+			background-color: $background-2;
+			color: $ink-3;
 		}
 
 		.title {
@@ -349,6 +354,10 @@ const onLoginCloud = () => {
 		);
 	}
 
+	&__action_offline_dark {
+		background: linear-gradient(127.05deg, #4f462f 4.41%, #2e311f 84.8%);
+	}
+
 	&__action_vpn {
 		background: linear-gradient(
 			125.16deg,
@@ -356,6 +365,9 @@ const onLoginCloud = () => {
 			rgba(216, 255, 222, 0.5) 51.18%,
 			rgba(226, 255, 219, 0.5) 87.85%
 		);
+	}
+	&__action_vpn_dark {
+		background: linear-gradient(125.16deg, #243f2d 4.57%, #172814 87.85%);
 	}
 
 	&__backup-mneminic {
@@ -408,6 +420,9 @@ const onLoginCloud = () => {
 			rgba(249, 254, 199, 0.5) 49.41%,
 			rgba(243, 254, 194, 0.5) 84.8%
 		);
+	}
+	.backup-mnemonic-bg-dark {
+		background: linear-gradient(127.05deg, #4f462f 4.41%, #2e311f 84.8%);
 	}
 }
 </style>

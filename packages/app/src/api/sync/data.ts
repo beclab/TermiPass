@@ -1,20 +1,32 @@
 import { Origin } from './../origin';
-import { removePrefix } from '../utils';
-import { OriginType, DriveResType, CopyStoragesType } from '../common/encoding';
-import { formatSeahub } from '../../utils/seahub';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
 import { useDataStore } from './../../stores/data';
 import { files, seahub } from './../index';
-import { useSeahubStore } from '../../stores/seahub';
-import { checkConflict } from '../../utils/upload';
-import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
+// import { useSeahubStore } from '../../stores/seahub';
+import {
+	notifyWaitingShow,
+	notifyHide,
+	notifySuccess,
+	notifyFailed
+} from '../../utils/notifyRedefinedUtil';
 
 import {
-	SyncRepoItemType,
-	SyncRepoSharedItemType,
-	ShareInfoResType
-} from './../common/encoding';
+	ShareInfoResType,
+	SyncRepoSharedType,
+	SyncRepoMineType,
+	SyncRepoItemType
+} from './type';
+
+import { formatSeahub } from './filesFormat';
+import { getParams } from './../../utils/utils';
+import { useFilesStore } from './../../stores/files';
+import { useMenuStore } from './../../stores/files-menu';
+
+import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
+
+import { FileItem, FileResType, DriveType } from './../../stores/files';
+import { fetchRepo } from './sync';
 
 import { CommonFetch } from '../fetch';
 
@@ -26,19 +38,26 @@ class Data extends Origin {
 		this.commonAxios = CommonFetch;
 	}
 
-	async fetch(url: string): Promise<DriveResType> {
-		url = decodeURIComponent(removePrefix(url));
-		const res: DriveResType = await this.fetchSync(url);
+	breadcrumbsBase = '/Seahub';
+
+	async fetch(url: string): Promise<FileResType> {
+		console.log('sync fetch', url);
+
+		url = decodeURIComponent(url);
+		const res: FileResType = await this.fetchSync(url);
 		res.url = `/Files${url}`;
 		if (res.isDir) {
 			if (!res.url.endsWith('/')) res.url += '/';
 			res.items = res.items.map((item, index) => {
 				item.index = index;
-				item.url = `${res.url}${encodeURIComponent(item.name)}`;
-				if (item.isDir) {
-					item.url += '/';
-				}
-
+				item.url =
+					url.split('p=/')[0] +
+					'p=/' +
+					encodeURIComponent(item.name) +
+					url.split('p=/')[1];
+				// if (item.isDir) {
+				// 	item.url += '/';
+				// }
 				return item;
 			});
 		}
@@ -46,17 +65,10 @@ class Data extends Origin {
 		return res;
 	}
 
-	async fetchSync(url: string): Promise<DriveResType> {
-		const seahubStore = useSeahubStore();
-		const currentItem = seahubStore.repo_name;
-		const pathLen = url.indexOf(currentItem) + currentItem.length;
-		const path = url.slice(pathLen);
-		const res = await this.commonAxios.get(
-			`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
-			{}
-		);
+	async fetchSync(url: string): Promise<FileResType> {
+		const res = await this.commonAxios.get(url, {});
 
-		const data: DriveResType = formatSeahub(
+		const data: FileResType = formatSeahub(
 			url,
 			JSON.parse(JSON.stringify(res))
 		);
@@ -64,36 +76,95 @@ class Data extends Origin {
 		return data;
 	}
 
-	async fetchSyncRepo(
-		menu: string
-	): Promise<SyncRepoItemType[] | SyncRepoSharedItemType[][] | undefined> {
-		if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
-			return undefined;
+	async fetchMenuRepo(): Promise<SyncRepoMineType[]> {
+		const [res2, res3]: any = await fetchRepo(MenuItem.SHAREDWITH);
+		const shareChildren: SyncRepoSharedType[] = [];
+		for (let i = 0; i < res2.length; i++) {
+			const el = res2[i];
+			const hsaShareRepo = shareChildren.find((item) => item.id === el.repo_id);
+			if (hsaShareRepo) {
+				continue;
+			}
+
+			shareChildren.push({
+				label: el.repo_name,
+				key: el.repo_id,
+				icon: 'sym_r_folder_shared',
+				id: el.repo_id,
+				defaultHide: true,
+				driveType: DriveType.Sync,
+				...el
+			});
 		}
 
-		if (menu == MenuItem.MYLIBRARIES) {
-			const res: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/repos/?type=mine',
-				{}
-			);
-
-			const repos: SyncRepoItemType[] = res.repos;
-			return repos;
-		} else {
-			const res2: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/shared-repos/',
-				{}
-			);
-			const res3: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/repos/?type=shared',
-				{}
-			);
-
-			const repos2: SyncRepoSharedItemType[] = res2;
-			const repos3: SyncRepoSharedItemType[] = res3.repos;
-
-			return [repos2, repos3];
+		const sharedme: SyncRepoSharedType[] = [];
+		for (let i = 0; i < res3.length; i++) {
+			const el = res3[i];
+			sharedme.push({
+				label: el.repo_name,
+				key: el.repo_id,
+				name: el.repo_name,
+				icon: 'sym_r_folder_supervised',
+				id: el.repo_id,
+				defaultHide: true,
+				driveType: DriveType.Sync,
+				...el
+			});
 		}
+
+		const res1: any = await fetchRepo(MenuItem.MYLIBRARIES);
+		const mineChildren: SyncRepoMineType[] = [];
+		for (let i = 0; i < res1.length; i++) {
+			const el = res1[i];
+
+			const hasShareWith = shareChildren.find(
+				(item) => item.repo_id === el.repo_id
+			);
+			const hasShareMe = sharedme.find((item) => item.repo_id === el.repo_id);
+			const hasShare = hasShareWith || hasShareMe;
+
+			mineChildren.push({
+				label: el.repo_name,
+				key: el.repo_id,
+				icon: 'sym_r_folder',
+				id: el.repo_id,
+				name: el.repo_name,
+				shard_user_hide_flag: hasShare ? false : true,
+				share_type: hasShare ? hasShare.share_type : undefined,
+				user_email: hasShare ? hasShare.user_email : undefined,
+				defaultHide: true,
+				driveType: DriveType.Sync,
+				...el
+			});
+		}
+
+		const myLibraries = {
+			label: MenuItem.MYLIBRARIES,
+			key: 'MyLibraries',
+			icon: '',
+			expationFlag: true,
+			muted: true,
+			disableClickable: true,
+			driveType: DriveType.Sync
+		};
+		const shardWith = {
+			label: MenuItem.SHAREDWITH,
+			key: 'SharedLibraries',
+			icon: '',
+			expationFlag: false,
+			muted: true,
+			disableClickable: true,
+			driveType: DriveType.Sync
+		};
+
+		let shardArr: any = [];
+		if (shareChildren.length > 0 || sharedme.length > 0) {
+			shardArr = [shardWith, ...shareChildren, ...sharedme];
+		}
+
+		const syncMenu = [myLibraries, ...mineChildren, ...shardArr];
+
+		return syncMenu;
 	}
 
 	async fetchShareInfo(repo_id: string): Promise<ShareInfoResType> {
@@ -105,22 +176,23 @@ class Data extends Origin {
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		const dataStore = useDataStore();
+		const fileStore = useFilesStore();
 		if (
-			dataStore.selectedCount === 1 &&
-			!dataStore.req.items[dataStore.selected[0]].isDir
+			fileStore.selectedCount === 1 &&
+			!fileStore.currentFileList[fileStore.selected[0]].isDir
 		) {
 			const url = await seahub.downloaFile(
-				dataStore.req.items[dataStore.selected[0]].path
+				fileStore.currentFileList[fileStore.selected[0]]
 			);
+
 			return { url: url, headers: {} };
 		}
 
 		const filesDownload: any[] = [];
 
-		if (dataStore.selectedCount > 0) {
-			for (const i of dataStore.selected) {
-				filesDownload.push(dataStore.req.items[i].url);
+		if (fileStore.selectedCount > 0) {
+			for (const i of fileStore.selected) {
+				filesDownload.push(fileStore.currentFileList[i].url);
 			}
 		} else {
 			filesDownload.push(path);
@@ -129,7 +201,6 @@ class Data extends Origin {
 		const { url, node } = files.download('zip', ...filesDownload);
 
 		const headers = {
-			...dataStore.req.headers,
 			'Content-Type': 'application/octet-stream'
 		};
 		if (node) {
@@ -139,115 +210,108 @@ class Data extends Origin {
 		return { url, headers };
 	}
 
-	async copy(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
-		console.log('into copy');
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = fileUrl.url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+	}
+
+	async copy(): Promise<CopyStoragesType[]> {
+		const fileStore = useFilesStore();
 		const copyStorages: CopyStoragesType[] = [];
-		for (const item of dataStore.selected) {
-			const el = dataStore.req.items[item];
-			const pathFromStart =
-				decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
-			const pathFromEnd = decodeURIComponent(el.url).indexOf(el.name) - 1;
-			const from =
-				'/' +
-				seahubStore.repo_id +
-				'/' +
-				decodeURIComponent(el.url).slice(pathFromStart, pathFromEnd) +
-				el.name;
+		for (const item of fileStore.selected) {
+			const el = fileStore.currentFileList[item];
+
+			const repo_id = getParams(el.path, 'id');
+
+			const from = '/' + repo_id + el.parentPath + el.name;
+
+			console.log('fromfromfrom', from);
+
 			copyStorages.push({
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined
+				src_drive_type: DriveType.Sync
 			});
 		}
 
 		console.log('sync-copyStorages', copyStorages);
 
-		return {
-			items: copyStorages,
-			from: OriginType.SYNC
-		};
+		return copyStorages;
 	}
 
-	async cut(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+	async cut(): Promise<CopyStoragesType[]> {
+		const fileStore = useFilesStore();
 		const copyStorages: CopyStoragesType[] = [];
-		for (const item of dataStore.selected) {
-			const el = dataStore.req.items[item];
-			const pathFromStart =
-				decodeURIComponent(el.url).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
-			const pathFromEnd = decodeURIComponent(el.url).indexOf(el.name) - 1;
-			const from =
-				'/' +
-				seahubStore.repo_id +
-				'/' +
-				decodeURIComponent(el.url).slice(pathFromStart, pathFromEnd) +
-				el.name;
+
+		for (const item of fileStore.selected) {
+			const el = fileStore.currentFileList[item];
+			const repo_id = getParams(el.path, 'id');
+			const from = '/' + repo_id + el.parentPath + el.name;
+
 			copyStorages.push({
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined,
+				src_drive_type: DriveType.Sync,
 				key: 'x'
 			});
 		}
 
-		return {
-			items: copyStorages,
-			from: OriginType.SYNC
-		};
+		return copyStorages;
 	}
 
 	async paste(
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+		const operateinStore = useOperateinStore();
+		const menuStore = useMenuStore();
 		const items: CopyStoragesType[] = [];
+		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
+			const el: any = operateinStore.copyFiles[i];
 
-		for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
-			const element: any = dataStore.copyFiles.items[i];
+			const repo_id = getParams(path, 'id');
 			const pathFromStart =
-				decodeURIComponent(path).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
+				decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+			const pathFromEnd = decodeURIComponent(path).indexOf('?');
+
 			const to =
 				'/' +
-				(seahubStore.repo_id || '') +
-				decodeURIComponent(path).slice(pathFromStart) +
-				decodeURIComponent(element.name);
+				repo_id +
+				decodeURIComponent(path).slice(pathFromStart, pathFromEnd) +
+				el.name;
 			items.push({
-				from: element.from,
+				from: el.from,
 				to: to,
-				name: element.name,
-				src_repo_id: element.src_repo_id || undefined
+				name: el.name,
+				src_drive_type: el.src_drive_type,
+				dst_drive_type: DriveType.Sync
 			});
-			if (path + decodeURIComponent(element.name) === element.from) {
+			if (path + decodeURIComponent(el.name) === el.from) {
 				this.action(false, true, items, path, false, callback);
-				// dataStore.resetCopyFiles();
 				return;
 			}
 		}
-		const dstItems = (await dataStore.fetchList(path))!.items;
-		const conflict = checkConflict(items, dstItems);
 		let overwrite = false;
-		let rename = true;
+		const rename = true;
 		let isMove = false;
 
-		console.log('sync-dataStorecopyFiles-items', items);
-
-		if (dataStore.copyFiles.items[0].key === 'x') {
+		if (
+			operateinStore.copyFiles[0] &&
+			operateinStore.copyFiles[0].key === 'x'
+		) {
 			overwrite = true;
 			isMove = true;
 		}
-		if (conflict) {
-			rename = true;
-		}
+
+		console.log('itemsitems', items);
 		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
@@ -255,33 +319,44 @@ class Data extends Origin {
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+		console.log('move path', path);
+		// const dataStore = useDataStore();
+		const filesStore = useFilesStore();
+		// const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
 		const items: CopyStoragesType[] = [];
-		for (const i of dataStore.selected) {
-			const element: any = dataStore.req.items[i];
-			const fromStart =
-				decodeURIComponent(element.url).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
-			const formEnd = decodeURIComponent(element.url).indexOf(element.name);
+		for (const i of filesStore.selected) {
+			const el: any = filesStore.currentFileList[i];
+
+			const pathFromStart =
+				decodeURIComponent(el.path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+
+			const pathFromEnd = decodeURIComponent(el.path).indexOf('?');
+			const repo_id = getParams(el.path, 'id');
+
 			const from =
 				'/' +
-				seahubStore.repo_id +
-				decodeURIComponent(element.url).slice(fromStart, formEnd) +
-				element.name;
+				repo_id +
+				decodeURIComponent(el.path).slice(pathFromStart, pathFromEnd) +
+				el.name;
+
 			const toStart =
-				decodeURIComponent(path).indexOf(seahubStore.repo_name) +
-				seahubStore.repo_name.length;
+				decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +
+				menuStore.activeMenu.label.length;
+			const toEnd = decodeURIComponent(path).indexOf('?');
 			const to =
 				'/' +
-				seahubStore.repo_id +
-				decodeURIComponent(path).slice(toStart) +
-				element.name;
+				repo_id +
+				decodeURIComponent(path).slice(toStart, toEnd) +
+				el.name;
+
 			items.push({
 				from: from,
 				to: to,
-				name: element.name,
-				src_repo_id: seahubStore.repo_id
+				name: el.name,
+				src_drive_type: el.driveType,
+				dst_drive_type: DriveType.Sync
 			});
 		}
 		const overwrite = true;
@@ -296,7 +371,6 @@ class Data extends Origin {
 		isMove: boolean | undefined,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
 		const dest = path;
 
 		notifyWaitingShow('Pasting, Please wait...');
@@ -307,7 +381,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.MOVE, dest);
 					notifyHide();
-					dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -318,7 +391,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.PASTE, dest);
 					notifyHide();
-					dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -343,61 +415,177 @@ class Data extends Origin {
 	}
 
 	openLocalFolder(): string | undefined {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
-		const item = dataStore.req.items[dataStore.selected[0]];
+		const filesStore = useFilesStore();
+		// const seahubStore = useSeahubStore();
+		const menuStore = useMenuStore();
+		const item = filesStore.currentFileList[filesStore.selected[0]];
 		if (!item.isDir) {
 			return undefined;
 		}
 		const itemUrl = decodeURIComponent(item.url);
 		const pathFromStart =
-			itemUrl.indexOf(seahubStore.repo_name) + seahubStore.repo_name.length;
+			itemUrl.indexOf(menuStore.activeMenu.label) +
+			menuStore.activeMenu.label.length;
 		const path = itemUrl.slice(pathFromStart, itemUrl.length - 1);
 		return path;
 	}
 
-	async openPreview(item: any): Promise<void> {
-		console.log('into sync');
-
-		console.log('item start', item);
-		const dataStore = useDataStore();
+	async openPreview(item: any): Promise<FileResType> {
+		console.log('openPreview', item);
 		item.url = item.path;
-		// item.path = item.path.slice(6) + item.name + '/';
-		item = await seahub.formatFileContent(item);
-		console.log('item end', item);
+		item = await this.formatFileContent(item);
 
-		dataStore.updateRequest(item);
+		console.log('openPreview sync', item);
+		item.driveType = DriveType.Sync;
+
+		return item;
+		// dataStore.updateRequest(item);
 	}
 
 	getPreviewURL(file: any, thumb: string): string {
 		const dataStore = useDataStore();
-		const startIndex =
-			file.path.indexOf(file.repo_name) + file.repo_name?.length;
-
-		const hasSeahub = file.path.slice(startIndex);
-
+		const repo_id = getParams(file.path, 'id');
 		let seflSize = '1080';
 		if (thumb === 'thumb') {
 			seflSize = '48';
 		}
 
-		return `${dataStore.baseURL()}/seahub/thumbnail/${
-			file.repo_id
-		}/${seflSize}${hasSeahub}`;
+		return `${dataStore.baseURL()}/seahub/thumbnail/${repo_id}/${seflSize}/${
+			file.name
+		}`;
 	}
 
-	getDownloadURL(file: any, download?: boolean): string {
+	getDownloadURL(file: any, _inline: boolean, download?: boolean): string {
 		const store = useDataStore();
-		const startIndex =
-			file.path.indexOf(file.repo_name) + file.repo_name?.length;
-		const hasSeahub = file.path.slice(startIndex);
+		const repo_id = getParams(file.path, 'id');
+
 		if (['audio', 'video'].includes(file.type) && !download) {
 			return file.url;
 		} else {
-			return `${store.baseURL()}/seahub/lib/${
-				file.repo_id
-			}/file${hasSeahub}?dl=1`;
+			return `${store.baseURL()}/seahub/lib/${repo_id}/file${file.parentPath}${
+				file.name
+			}?dl=1`;
 		}
+	}
+
+	async formatFileContent(file: FileItem): Promise<FileItem> {
+		const store = useDataStore();
+		const menuStore = useMenuStore();
+		// const seahubStore = useSeahubStore();
+
+		console.log('filefilefile', file);
+
+		if (
+			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
+				file.type
+			)
+		) {
+			return file;
+		}
+
+		const res = await this.commonAxios.get(
+			`/seahub/lib/${menuStore.activeMenu.id}/file${file.parentPath}/${file.name}?dict=1`,
+			{}
+		);
+
+		if (['audio', 'video', 'pdf'].includes(file.type)) {
+			file.url = store.baseURL() + res.raw_path;
+		} else if (['text', 'txt', 'textImmutable'].includes(file.type)) {
+			file.content = res.file_content;
+		}
+
+		return file;
+	}
+
+	async formatRepotoPath(item: any): Promise<string> {
+		return `/Seahub/${item.label}/?id=${item.id}&type=${
+			item.type || 'mine'
+		}&p=${item.permission ? item.permission.trim() : 'rw'}`;
+	}
+
+	async formatPathtoUrl(path: string, param: string): Promise<string> {
+		const repo_id = getParams(param, 'id');
+		const pathList = path.split('/');
+		let paths = '';
+		for (let i = 3; i < pathList.length; i++) {
+			const p = pathList[i];
+			paths += `/${p}`;
+		}
+
+		return `/seahub/api/v2.1/repos/${repo_id}/dir/?p=${paths}&with_thumbnail=true`;
+	}
+
+	async deleteItem(items: FileItem[]): Promise<void> {
+		const menuStore = useMenuStore();
+		const dirents: string[] = [];
+
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			dirents.push(item.name);
+		}
+
+		const parmas = {
+			dirents: dirents,
+			parent_dir: items[0].parentPath,
+			repo_id: menuStore.activeMenu.id
+		};
+
+		await seahub.batchDeleteItem(parmas);
+	}
+
+	async renameItem(item: FileItem, newName: string): Promise<void> {
+		const p = item.parentPath + item.name;
+		const parmas = {
+			operation: 'rename',
+			newname: newName
+		};
+		const url = 'api/v2.1/repos';
+		await seahub.fileOperate(p, url, parmas, item.isDir ? 'dir' : 'file');
+	}
+
+	async createDir(dirName: string, path: string): Promise<void> {
+		const menuStore = useMenuStore();
+		console.log('dirname ====>', dirName);
+		console.log('path ====>', path);
+		console.log(menuStore.activeMenu.label);
+
+		const pathlen =
+			decodeURIComponent(path).indexOf(menuStore.activeMenu.label) +
+			menuStore.activeMenu.label.length;
+		const p = `${decodeURIComponent(path).slice(pathlen)}${dirName}`;
+
+		const parmas = {
+			operation: 'mkdir'
+		};
+		const url = 'api2/repos';
+		await seahub.fileOperate(p, url, parmas, 'dir');
+	}
+
+	async deleteRepo(item: SyncRepoItemType): Promise<void> {
+		notifyWaitingShow('Deleting, Please wait...');
+		const path = `seahub/api/v2.1/repos/${item.repo_id}/`;
+		try {
+			await seahub.deleteRepo(path);
+			notifySuccess('Successful!');
+		} catch (error) {
+			notifyFailed('Failed!');
+		}
+		notifyHide();
+	}
+
+	async renameRepo(item: SyncRepoItemType, newName: string): Promise<void> {
+		notifyWaitingShow('Renaming, Please wait...');
+		const url = `seahub/api2/repos/${item.repo_id}/?op=rename`;
+		const data = {
+			repo_name: newName
+		};
+		try {
+			await seahub.reRepoName(url, data);
+			notifySuccess('Successful!');
+		} catch (error) {
+			notifyFailed('Failed!');
+		}
+		notifyHide();
 	}
 }
 

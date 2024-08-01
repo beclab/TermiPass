@@ -193,10 +193,15 @@ export const useCloudStore = defineStore('cloud', {
 			}
 		},
 		async getDomainRule(domain: string): Promise<DomainRule> {
+			const userStore = useUserStore();
+
+			await this.autoLogin();
 			const response: any = await axios.post(
 				this.url + '/v1/domain/get_domain_rule',
 				{
-					domain: domain
+					domain: domain,
+					userid: userStore.current_user?.cloud_id,
+					token: userStore.current_user?.cloud_token
 				}
 			);
 			if (response.code != 200 && response.code != 0) {

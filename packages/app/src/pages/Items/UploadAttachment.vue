@@ -58,7 +58,7 @@
 					clickable
 					unelevated
 					no-caps
-					class="but-cancel-web text-body3 row justify-center items-center q-mr-sm text-grey-8"
+					class="but-cancel-web text-body3 row justify-center items-center q-mr-sm text-ink-1"
 					@click="onDialogCancel"
 				>
 					{{ t('vault_t.discard') }}
@@ -68,7 +68,7 @@
 					unelevated
 					no-caps
 					:loading="loading"
-					class="but-creat-web text-body3 row justify-center items-center q-mr-sm text-grey-8"
+					class="but-creat-web text-body3 row justify-center items-center q-mr-sm text-ink-1"
 					@click="onOKClick"
 				>
 					{{ t('vault_t.upload') }}

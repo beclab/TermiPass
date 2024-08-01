@@ -9,7 +9,7 @@
 		</div>
 		<div>
 			<div class="text-grey-10 text-h6">AI Search</div>
-			<div class="text-grey-8 text-body3">Smarter and save your time</div>
+			<div class="text-ink-1 text-body3">Smarter and save your time</div>
 		</div>
 	</div> -->
 
@@ -17,7 +17,7 @@
 		<div class="upload column items-center justify-center">
 			<img :src="getPluginImageUrl('upload.svg')" />
 			<div class="text-grey-10 text-h6 q-mt-md q-mb-xs">Upload</div>
-			<div class="text-grey-8 text-body3 text-center">
+			<div class="text-ink-1 text-body3 text-center">
 				Click to add here<br />
 				to chat
 			</div>

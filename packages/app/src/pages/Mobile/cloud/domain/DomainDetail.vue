@@ -49,7 +49,7 @@
 							unelevated
 							dense
 							menu-self="top left"
-							class="binding-rule-select q-mt-xs text-grey-5"
+							class="binding-rule-select q-mt-xs text-ink-2"
 						>
 							<template v-slot:label>
 								<div
@@ -313,6 +313,8 @@ async function requestVC() {
 		await cloudStore.getDomains();
 		domain.value = await cloudStore.selectDomain(domainName.value);
 	} catch (error) {
+		console.log(error);
+
 		notifyFailed(error.message);
 	} finally {
 		$q.loading.hide();

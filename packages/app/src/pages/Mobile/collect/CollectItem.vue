@@ -6,10 +6,10 @@
 			</q-item-section>
 
 			<q-item-section style="max-width: 200px">
-				<q-item-label lines="1" class="text-subtitle3 text-grey-10">{{
+				<q-item-label lines="1" class="text-subtitle3 text-ink-1">{{
 					item.title
 				}}</q-item-label>
-				<q-item-label lines="1" class="text-overline text-grey-5">{{
+				<q-item-label lines="1" class="text-overline text-ink-2">{{
 					item.detail
 				}}</q-item-label>
 			</q-item-section>

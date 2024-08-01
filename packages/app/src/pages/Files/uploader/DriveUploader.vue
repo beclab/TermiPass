@@ -23,11 +23,15 @@ import { checkConflict, createCopiedFile } from '../../../utils/upload';
 import { detectType } from '../../../utils/utils';
 import url from '../../../utils/url';
 import { useFilesUploadStore } from '../../../stores/files-upload';
-import { OriginType } from '../../../api/common/encoding';
+import { DriveType, useFilesStore } from '../../../stores/files';
+import { useMenuStore } from '../../../stores/files-menu';
+import { common } from './../../../api';
 
 const store = useDataStore();
 const route = useRoute();
 const upload = useFilesUploadStore();
+const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 
 const uploadInput = async (event: any) => {
 	store.closeHovers();
@@ -49,10 +53,10 @@ const uploadInput = async (event: any) => {
 	let path = route.path.endsWith('/')
 		? decodeURIComponent(route.path)
 		: decodeURIComponent(route.path) + '/';
-	let conflict = checkConflict(files, store.req.items);
+	let conflict = checkConflict(files, filesStore.currentFileList);
 
 	if (conflict) {
-		const newfile = await createCopiedFile(files, store.req.items);
+		const newfile = await createCopiedFile(files, filesStore.currentFileList);
 		handleFiles(newfile, path, true);
 		return;
 	}
@@ -80,15 +84,18 @@ async function handleFiles(files, base, overwrite = false) {
 			id,
 			path,
 			file,
-			repo_name: store.currentItem,
+			repo_name: menuStore.activeMenu.label,
 			repo_id: '',
 			overwrite,
+			driveType: common.formatUrltoDriveType(base),
 			...(!file.isDir && { type: detectType(file.type) })
 		};
 
+		console.log('itemitem', item);
+
 		await (function () {
 			return new Promise(async function (res) {
-				await upload.upload(item, OriginType.DRIVE);
+				await upload.upload(item, common.formatUrltoDriveType(base));
 				res(true);
 			});
 		})();

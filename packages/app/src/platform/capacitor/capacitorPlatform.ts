@@ -22,7 +22,7 @@ import {
 	BIND_STATUS
 } from '../../utils/terminusBindUtils';
 import { AppPlatform } from '../appPlatform';
-import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+import { BarcodeScanner } from '@bytetrade/barcode-scanner';
 import { Device } from '@capacitor/device';
 import { appleDeviceNames } from '../apple-device-names';
 import { Clipboard } from '@capacitor/clipboard';
@@ -63,6 +63,7 @@ import {
 	registerNativeScanQRProtocols,
 	NativeScanQRProtocol
 } from './scanQRProtocols';
+import { useFilesStore } from 'src/stores/files';
 
 declare let cordova: any;
 declare let plugins: any;
@@ -788,6 +789,14 @@ export class CapacitorPlatform
 				return;
 			}
 		}
+
+		const filesStore = useFilesStore();
+		if (filesStore.isInPreview) {
+			busEmit('dialogDismiss');
+			filesStore.isInPreview = false;
+			return;
+		}
+		filesStore.back();
 		this.router?.back();
 	}
 }

@@ -4,8 +4,6 @@ on:
     workflow_dispatch:
 
     push:
-        branches:
-            - "build/release"
         tags:
           - 'v*'
 
@@ -47,19 +45,28 @@ jobs:
             - run: npm install
 
             - name: Build
-              run: cd packages/app/;PLATFORM=BEX quasar build -m bex
+              run: |
+                cd packages/app/;
+                PLATFORM=BEX quasar build -m bex;
+                cd dist/bex;
+                cp -r UnPackaged vault/;
+                zip -r vault.zip ./vault/
+                rm -rf vault/
+
+
+            
 
             - name: Show path
-              run: ls -a packages/app/dist/bex/Packaged/chrome/
+              run: ls -a packages/app/dist/bex/
 
             - name: Release Chrome extension app
               uses: djnicholson/release-action@v2.11
               with:
                 token: ${{ secrets.GITHUB_TOKEN }}
-                release-name: TermiPass(chrome).zip Release
+                release-name: TermiPass(chrome)-test.zip Release
                 tag-name: ${{ steps.get-latest-tag.outputs.tag }}
                 asset-name: TermiPass(chrome).zip
-                file: packages/app/dist/bex/Packaged/chrome/vault.zip
+                file: packages/app/dist/bex/vault.zip
 
 #            - name: Release firefox extension app
 #              uses: djnicholson/release-action@v2.11

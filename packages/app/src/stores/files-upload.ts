@@ -1,10 +1,11 @@
 import { format } from 'quasar';
 import { defineStore } from 'pinia';
-import { dataAPIs, DriveDataAPI } from '../api';
+import { dataAPIs } from '../api';
 // import { files as api } from '../api';
 import throttle from 'lodash.throttle';
-import { useDataStore } from './data';
-import { OriginType } from '../api/common/encoding';
+import { DriveType, useFilesStore } from './files';
+import { useMenuStore } from './files-menu';
+
 const { humanStorageSize } = format;
 
 const UPLOADS_LIMIT = 5;
@@ -142,28 +143,35 @@ export const useFilesUploadStore = defineStore('upload', {
 			delete this.uploads[id];
 		},
 
-		async upload(item: any, type: OriginType) {
+		async upload(item: any, type: DriveType) {
 			const uploadsCount = Object.keys(this.uploads).length;
 			const isQueueEmpty = this.queue.length == 0;
 			const isUploadsEmpty = uploadsCount == 0;
 			if (isQueueEmpty && isUploadsEmpty) {
 				window.addEventListener('beforeunload', beforeUnload);
 			}
+
+			if (this.uploadQueue.find((fil) => fil.file.name === item.file.name)) {
+				return false;
+			}
+
 			if (!item.file.isDir) {
 				this.uploadQueue.unshift(item);
 			}
 			this.addJob(item);
 
-			if (type === OriginType.DRIVE) {
-				this.processUploads();
+			if (
+				type === DriveType.Drive ||
+				type === DriveType.Data ||
+				type === DriveType.Cache
+			) {
+				this.processUploads(type);
 			}
 		},
 
-		async finishUpload(item: any, type?: OriginType) {
-			const store = useDataStore();
-			// if (!from) {
-			// 	store.setReload(true);
-			// }
+		async finishUpload(item: any, type?: DriveType) {
+			const filesStore = useFilesStore();
+			const menuStore = useMenuStore();
 			this.setProgress({ id: item.id, loaded: item.file.size });
 			for (let i = 0; i < this.uploadQueue.length; i++) {
 				const el = this.uploadQueue[i];
@@ -176,14 +184,28 @@ export const useFilesUploadStore = defineStore('upload', {
 			}
 
 			await this.removeJob(item.id);
-			if (type !== OriginType.SYNC) {
-				await this.processUploads();
+			if (type !== DriveType.Sync) {
+				console.log('processUploadsprocessUploads', item);
+				await this.processUploads(item.driveType);
 			}
-			store.setReload(true);
+
+			const splitUrl = window.location.href
+				.slice(window.location.origin.length)
+				.split('?');
+			await filesStore.setFilePath(
+				{
+					path: splitUrl[0],
+					isDir: true,
+					driveType: menuStore.activeMenu.driveType,
+					param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+				},
+				false,
+				false
+			);
 		},
 
-		async processUploads() {
-			const dataAPI = dataAPIs(OriginType.DRIVE);
+		async processUploads(type: DriveType) {
+			const dataAPI = dataAPIs(type);
 			const uploadsCount = Object.keys(this.uploads).length;
 
 			const isBellowLimit = uploadsCount < UPLOADS_LIMIT;
@@ -202,34 +224,33 @@ export const useFilesUploadStore = defineStore('upload', {
 				const item = this.queue[0];
 				this.moveJob();
 
+				console.log('itemitem', item);
+
 				if (item.file.isDir) {
-					await (dataAPI as DriveDataAPI).fetchUploader(
-						item.path,
-						'',
-						false,
-						0
-					);
-					this.finishUpload(item);
+					await dataAPI.fetchUploader(item.path, '', false, 0);
+					this.finishUpload(item, type);
 				} else {
 					const onUpload = throttle(
 						(event: any) => {
+							console.log('onUploadonUpload', item);
+							console.log('onUploadonUpload event', event.loaded);
 							this.setProgress({
 								id: item.id,
 								loaded: event.loaded
 							});
 
 							if (event.loaded >= event.total) {
-								this.finishUpload(item);
+								this.finishUpload(item, type);
 							}
 						},
 						100,
 						{ leading: true, trailing: false }
 					);
 
-					await (dataAPI as DriveDataAPI)
+					await dataAPI
 						.fetchUploader(item.path, item.file, item.overwrite, 0, onUpload)
 						.then(() => {
-							this.finishUpload(item);
+							this.finishUpload(item, type);
 						})
 						.catch(() => {
 							this.reStartUpload(item);
@@ -254,17 +275,23 @@ export const useFilesUploadStore = defineStore('upload', {
 		async processSyncUploads(uploadFileList: any) {
 			for (let i = 0; i < uploadFileList.length; i++) {
 				const file = uploadFileList[i];
+
 				const curFile = this.uploadQueue.find(
-					(fil) => fil.file.name === file.fileName
+					(fil) => fil.file.name === file.file.name
 				);
 
 				if (curFile) {
-					const queueHasFile = this.queue.find(
-						(item) => item.file.name === curFile.file.name
-					);
-					if (queueHasFile) {
-						this.moveJob();
+					const newQueue: any[] = [];
+					for (let i = 0; i < this.queue.length; i++) {
+						const el = this.queue[i];
+						const hasQueue = this.uploadQueue.find(
+							(item) => item.file.name === el.file.name
+						);
+						if (!hasQueue) {
+							newQueue.push(el);
+						}
 					}
+					this.queue = newQueue;
 
 					const onUpload = throttle(
 						() => {
@@ -276,7 +303,7 @@ export const useFilesUploadStore = defineStore('upload', {
 							this.uploads[curFile.id] = curFile;
 
 							if (file.progress() * 100 >= 100) {
-								this.finishUpload(curFile, OriginType.SYNC);
+								this.finishUpload(curFile, DriveType.Sync);
 							}
 						},
 						100,

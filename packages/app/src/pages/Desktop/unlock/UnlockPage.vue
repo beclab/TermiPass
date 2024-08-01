@@ -2,7 +2,13 @@
 	<div class="terminus-unlock-page column justify-center items-center">
 		<q-img
 			class="terminus-unlock-page__brand"
-			:src="getRequireImage('login/termipass_brand_desktop.svg')"
+			:src="
+				getRequireImage(
+					$q.dark.isActive
+						? 'login/Termipasstermipass_brand_desktop_dark.svg'
+						: 'login/Termipasstermipass_brand_desktop_light.svg'
+				)
+			"
 		/>
 		<div class="terminus-unlock-box column justify-start items-center">
 			<span class="terminus-unlock-box__desc login-sub-title">{{
@@ -72,11 +78,13 @@ const loginByPassword = async (password: string) => {
 .terminus-unlock-page {
 	width: 100%;
 	height: 100%;
-	background: $desktop-background;
+	// background: $background-3;
+	// padding-top: 40px;
+	// padding-bottom: 40px;
 
 	&__brand {
 		width: 225px;
-		height: 48px;
+		// height: 62px;
 	}
 
 	.terminus-unlock-box {
@@ -84,6 +92,7 @@ const loginByPassword = async (password: string) => {
 		margin-top: 32px;
 		border-radius: 12px;
 		padding: 20px;
+		background: $background-1;
 		border: 1px solid $separator;
 
 		&__desc {

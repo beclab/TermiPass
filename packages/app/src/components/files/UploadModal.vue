@@ -100,7 +100,7 @@
 
 				<template v-else>
 					<div class="row items-center justify-center" v-if="!item.progress">
-						<span class="text-grey-8"> {{ t('pending') }} </span>
+						<span class="text-ink-1"> {{ t('pending') }} </span>
 					</div>
 					<div v-else class="row items-center justify-center">
 						<span> {{ item.progress }}% </span>
@@ -127,8 +127,7 @@ import { scrollBarStyle } from '../../utils/contact';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { dataAPIs } from '../../api';
-import { OriginType } from '../../api/common/encoding';
-import { checkSeahub } from '../../utils/file';
+import { common } from './../../api';
 
 export default defineComponent({
 	name: 'UploadModal',
@@ -164,13 +163,8 @@ export default defineComponent({
 		});
 
 		const forWord = async (item: any) => {
-			let dataAPI: any;
-			if (checkSeahub(item.path)) {
-				dataAPI = dataAPIs(OriginType.SYNC);
-			} else {
-				dataAPI = dataAPIs(OriginType.DRIVE);
-			}
-
+			const driveType = await common.formatUrltoDriveType(item.path);
+			let dataAPI = dataAPIs(driveType);
 			dataAPI.openPreview(item, Router);
 		};
 

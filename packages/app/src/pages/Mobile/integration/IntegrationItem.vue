@@ -134,9 +134,9 @@ const emit = defineEmits(['accountClick']);
 	.account-title {
 		color: $ink-1;
 		max-width: calc(100% - 60px);
-		overflow: hidden; //超出的文本隐藏
-		text-overflow: ellipsis; //溢出用省略号显示
-		white-space: nowrap; //溢出不换行
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 }
 </style>

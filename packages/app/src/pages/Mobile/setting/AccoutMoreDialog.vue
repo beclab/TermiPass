@@ -88,15 +88,16 @@ const deleteAction = () => {
 };
 
 const deleteAccount = async () => {
-	if (await userStore.unlockFirst()) {
+	if (!(await userStore.unlockFirst())) {
 		return;
 	}
 	userStore.userUpdating = true;
 
 	if ($q.platform.is.electron) {
 		window.electron.api.files.removeCurrentAccount({
-			url: userStore.getModuleSever('seafile'),
-			username: app.account?.name + '@seafile.com'
+			url: userStore.getModuleSever('seafile') + '/' + 'seahub',
+			username: app.account?.name + '@seafile.com',
+			authToken: ''
 		});
 	}
 

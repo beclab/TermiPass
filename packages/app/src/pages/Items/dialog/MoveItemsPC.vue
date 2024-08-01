@@ -38,7 +38,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-cancel-web text-body3 row justify-center items-center q-px-md q-mr-lg text-grey-8"
+					class="but-cancel-web text-body3 row justify-center items-center q-px-md q-mr-lg text-ink-1"
 					@click="onDialogCancel"
 				>
 					{{ t('cancel') }}
@@ -46,7 +46,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-creat-web text-body3 row justify-center items-center q-px-md q-mr-sm text-grey-8"
+					class="but-creat-web text-body3 row justify-center items-center q-px-md q-mr-sm text-ink-1"
 					@click="handleOk"
 				>
 					{{ t('create') }}

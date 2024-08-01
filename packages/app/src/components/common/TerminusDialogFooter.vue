@@ -1,61 +1,59 @@
 <template>
-	<div ref="containerRef">
-		<div v-if="isMobile" class="card-action row justify-between items-center">
-			<confirm-button
-				v-if="showCancel"
-				class="cancel-button"
-				btn-title="cancel"
-				bg-classes="bg-background-1"
-				textClasses="text-ink-2"
-				@onConfirm="mobileCancel()"
-			/>
-			<confirm-button
-				class="confirm-button"
-				btn-title="confirm"
-				@onConfirm="onOK"
-				:style="{ width: showCancel ? '48%' : '100%' }"
-				v-if="!loading"
-			/>
-			<confirm-button
-				class="confirm-button"
-				btn-title="Loading"
-				:style="{ width: showCancel ? '48%' : '100%' }"
-				v-else
-			/>
-		</div>
-
-		<q-card-actions v-else class="row justify-end items-center q-mt-md q-mb-sm">
-			<q-item
-				v-if="showCancel"
-				clickable
-				dense
-				class="but-cancel text-body3 ink-2 row justify-center items-center q-px-md q-mr-md"
-				@click="onCancel"
-			>
-				{{ cancelText }}
-			</q-item>
-			<q-item
-				clickable
-				dense
-				class="but-creat text-body3 yellow-default ink-on-brand-black row justify-center items-center q-px-md q-mr-sm"
-				@click="onOK"
-				v-if="!loading"
-			>
-				{{ okText }}
-			</q-item>
-			<q-item
-				v-else
-				dense
-				class="but-creat text-body3 yellow-default ink-on-brand-black row justify-center items-center q-px-md q-mr-sm"
-			>
-				Loading
-			</q-item>
-		</q-card-actions>
+	<div v-if="isMobile" class="card-action row justify-between items-center">
+		<confirm-button
+			v-if="showCancel"
+			class="cancel-button"
+			btn-title="cancel"
+			bg-classes="bg-background-1"
+			textClasses="text-ink-2"
+			@onConfirm="mobileCancel()"
+		/>
+		<confirm-button
+			class="confirm-button"
+			btn-title="confirm"
+			@onConfirm="onOK"
+			:style="{ width: showCancel ? '48%' : '100%' }"
+			v-if="!loading"
+		/>
+		<confirm-button
+			class="confirm-button"
+			btn-title="Loading"
+			:style="{ width: showCancel ? '48%' : '100%' }"
+			v-else
+		/>
 	</div>
+
+	<q-card-actions v-else class="row justify-end items-center q-mt-md q-mb-sm">
+		<q-item
+			v-if="showCancel"
+			clickable
+			dense
+			class="but-cancel text-body3 ink-2 row justify-center items-center q-px-md q-mr-md"
+			@click="onCancel"
+		>
+			{{ cancelText }}
+		</q-item>
+		<q-item
+			clickable
+			dense
+			class="but-creat text-body3 yellow-default ink-on-brand-black row justify-center items-center q-px-md q-mr-sm"
+			@click="onOK"
+			v-if="!loading"
+		>
+			{{ okText }}
+		</q-item>
+		<q-item
+			v-else
+			dense
+			class="but-creat text-body3 yellow-default ink-on-brand-black row justify-center items-center q-px-md q-mr-sm"
+		>
+			Loading
+		</q-item>
+	</q-card-actions>
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeMount } from 'vue';
+import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 
 import ConfirmButton from './ConfirmButton.vue';
@@ -101,24 +99,6 @@ const mobileCancel = () => {
 	store.closeHovers();
 	emit('close');
 };
-
-const keydownHandler = (event: KeyboardEvent) => {
-	if (event.key === 'Enter') {
-		onOK(event);
-	}
-
-	if (event.key === 'Escape') {
-		emit('close');
-	}
-};
-
-onMounted(() => {
-	window.addEventListener('keydown', keydownHandler);
-});
-
-onBeforeMount(() => {
-	window.removeEventListener('keydown', keydownHandler);
-});
 </script>
 
 <style scoped lang="scss">

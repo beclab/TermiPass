@@ -58,7 +58,9 @@ export enum OPERATE_ACTION {
 	UNSYNCHRONIZE,
 	SYNC_IMMEDIATELY,
 	SHARE_WITH,
-	EXIT_SHARING
+	EXIT_SHARING,
+	REPO_DELETE,
+	REPO_RENAME
 }
 
 type PopupItem = {
@@ -131,43 +133,6 @@ export interface SyncItem {
 	label: string;
 	icon: string;
 	children?: SyncItem[];
-}
-
-export interface MenuItemType {
-	label: string;
-	key: string | number;
-	icon: string;
-	expationFlag?: boolean;
-	children?: MenuItemType[];
-}
-
-export interface userInfoType {
-	avatar_url: string;
-	contact_email: string;
-	name: string;
-	nickname: string;
-}
-
-export interface SharedItemsType {
-	is_admin: boolean;
-	permission: string;
-	share_type: string;
-	user_info: userInfoType;
-}
-
-export interface DataState {
-	menu: MenuItemType[];
-	showShareUser: boolean;
-	shareRepoInfo: any;
-	userList: any;
-	sharedItems: SharedItemsType[] | any;
-	syncReposLastStatusMap: object;
-	syncRepoIdsList: string[];
-	syncRepoIdsUpdating: boolean;
-	avtiveItem: any;
-	syncStatus: boolean;
-	canForward: boolean;
-	activeMenu: string;
 }
 
 export enum SYNC_STATE {

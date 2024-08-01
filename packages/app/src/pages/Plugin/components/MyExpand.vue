@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div @click="isExpanded = !isExpanded" class="cursor-pointer">
-			<span class="text-body3 text-grey-5">{{
+			<span class="text-body3 text-ink-2">{{
 				isExpanded ? 'Click to collapse' : 'Click to expand'
 			}}</span>
 			<q-icon

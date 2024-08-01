@@ -10,13 +10,23 @@ import Alamofire
 import HandyJSON
 
 @objc(TailScalePlugin)
-public class TailScalePlugin: CAPPlugin {
+public class TailScalePlugin: CAPPlugin, CAPBridgedPlugin {
+    
+    public let identifier = "TailScalePlugin"
+    public let jsName = "TailScalePlugin"
+    
+    public var pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "open", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "close", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "status", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "currentNodeId", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "peersState", returnType: CAPPluginReturnPromise)
+        
+    ]
     
     @objc func open(_ call: CAPPluginCall) {
         let authKey = call.getString("authKey") ?? ""
         let server = call.getString("server") ?? ""
-        print("server ==>\(server)")
-        print("authKey ==>\(authKey)")
         
         var cookies = "" //CapacitorCookieManager(self.bridge?.config).getCookies()
         
@@ -24,9 +34,7 @@ public class TailScalePlugin: CAPPlugin {
             if let cookiesList = HTTPCookieStorage.shared.cookies(for: url) {
                 cookies = cookiesList.map({"\($0.name)=\($0.value)"}).joined(separator: "; ")
             }
-            print("cookies===>:\(cookies)")
         }
-        print("authKey ==>\(authKey)")
         
         if (TermiPassVpnManager.shared.status == .off) {
             TermiPassVpnManager.shared.openVpn(server, authKey, cookies)

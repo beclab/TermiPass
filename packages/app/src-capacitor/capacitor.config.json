@@ -1,32 +1,35 @@
 {
-  "appId": "com.terminus.planeta",
-  "appName": "TermiPass",
-  "bundledWebRuntime": false,
-  "npmClient": "yarn",
-  "webDir": "www",
-  "plugins": {
-    "PushNotifications": {
-      "presentationOptions": [
-        "badge",
-        "sound"
-      ]
-    },
-    "GoogleAuth": {
-      "scopes": [
-        "email"
-      ],
-      "serverClientId": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
-      "forceCodeForRefreshToken": true
-    },
-    "GoogleAuthPlugin": {
-      "scopes": [
-        "email"
-      ],
-      "serverClientId": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
-      "forceCodeForRefreshToken": true
-    },
-    "CapacitorCookies": {
-      "enabled": true
-    }
-  }
+	"appId": "com.terminus.planeta",
+	"appName": "TermiPass",
+	"bundledWebRuntime": false,
+	"npmClient": "yarn",
+	"webDir": "www",
+	"plugins": {
+		"PushNotifications": {
+			"presentationOptions": [
+				"badge",
+				"sound"
+			]
+		},
+		"GoogleAuth": {
+			"scopes": [
+				"email"
+			],
+			"serverClientId": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
+			"forceCodeForRefreshToken": true
+		},
+		"GoogleAuthPlugin": {
+			"scopes": [
+				"email"
+			],
+			"serverClientId": "343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com",
+			"forceCodeForRefreshToken": true
+		},
+		"CapacitorCookies": {
+			"enabled": true
+		}
+	},
+	"server": {
+		"androidScheme": "http"
+	}
 }

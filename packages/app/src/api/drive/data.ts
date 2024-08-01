@@ -1,27 +1,22 @@
-import { Router } from 'vue-router';
 import { Origin } from './../origin';
 import { removePrefix, createURL } from '../utils';
-import {
-	checkOrigin,
-	OriginType,
-	DriveResType,
-	CopyStoragesType,
-	SyncRepoSharedItemType,
-	SyncRepoItemType
-} from '../common/encoding';
-import { getAppDataPath, isAppData } from '../../utils/file';
-import { formatAppDataNode } from '../../utils/appdata';
+import { formatDrive } from './filesFormat';
+import { getAppDataPath } from '../../utils/file';
 import { MenuItem } from './../../utils/contact';
 import { OPERATE_ACTION } from './../../utils/contact';
-import { useDataStore } from './../../stores/data';
 import { files } from './../index';
 import { useSeahubStore } from '../../stores/seahub';
-import { formatSeahub } from '../../utils/seahub';
-import { checkAppData } from '../../utils/file';
-import { checkConflict } from '../../utils/upload';
 import { notifyWaitingShow, notifyHide } from '../../utils/notifyRedefinedUtil';
 
+import { checkSameName } from './../../utils/file';
+import url from '../../utils/url';
 import { CommonFetch } from '../fetch';
+import { useFilesStore } from './../../stores/files';
+import { useOperateinStore, CopyStoragesType } from 'src/stores/operation';
+import { formatUrltoDriveType } from './../common/common';
+
+import { FileItem, FileResType, DriveType } from './../../stores/files';
+import { DriveMenuType } from './type';
 
 class Data extends Origin {
 	public commonAxios: any;
@@ -31,21 +26,17 @@ class Data extends Origin {
 		this.commonAxios = CommonFetch;
 	}
 
-	async fetch(url: string): Promise<DriveResType> {
-		url = decodeURIComponent(removePrefix(url));
-		let res: DriveResType | any;
+	breadcrumbsBase = '/Files';
 
-		switch (checkOrigin(url)) {
-			case OriginType.DRIVE:
-				res = await this.fetchDrive(url);
-				break;
+	async fetch(url: string): Promise<FileResType> {
+		console.log('urlrrr', url);
+		const pureUrl = decodeURIComponent(removePrefix(url));
+		console.log('pureUrlpureUrl', pureUrl);
 
-			case OriginType.CACHE:
-				res = await this.fetchCache(url);
-				break;
-		}
+		const res: FileResType = await this.fetchDrive(pureUrl);
+		console.log('res', res);
 
-		res.url = `/Files${url}`;
+		res.url = `/Files${pureUrl}`;
 
 		if (res.isDir) {
 			if (!res.url.endsWith('/')) res.url += '/';
@@ -63,94 +54,67 @@ class Data extends Origin {
 		return res;
 	}
 
-	async fetchSync(url: string): Promise<DriveResType> {
-		const seahubStore = useSeahubStore();
-		const currentItem = seahubStore.repo_name;
-		const pathLen = url.indexOf(currentItem) + currentItem.length;
-		const path = url.slice(pathLen);
+	async fetchDrive(url: string): Promise<FileResType> {
 		const res = await this.commonAxios.get(
-			`seahub/api/v2.1/repos/${seahubStore.repo_id}/dir/?p=${path}&with_thumbnail=true`,
+			`/api/resources${encodeURIComponent(url)}`,
 			{}
 		);
 
-		const data: DriveResType = formatSeahub(
-			url,
+		const data: FileResType = await formatDrive(
 			JSON.parse(JSON.stringify(res))
 		);
 
 		return data;
 	}
 
-	async fetchDrive(url: string): Promise<DriveResType> {
-		let res: DriveResType;
-		res = await this.commonAxios.get(`/api/resources${url}`, {});
-
-		if (isAppData(url)) {
-			res = formatAppDataNode(url, JSON.parse(JSON.stringify(res)));
-		}
-		return res;
-	}
-
-	async fetchCache(url: string): Promise<DriveResType> {
-		const { path, node } = getAppDataPath(url);
-		const res: DriveResType = await this.commonAxios.get(
-			`/api/resources/AppData${path}`,
-			{},
-			{ auth: true, node }
-		);
-
-		return res;
-	}
-
-	async fetchSyncRepo(
-		menu: string
-	): Promise<SyncRepoItemType[] | SyncRepoSharedItemType[][] | undefined> {
-		if (menu != MenuItem.SHAREDWITH && menu != MenuItem.MYLIBRARIES) {
-			return undefined;
-		}
-
-		if (menu == MenuItem.MYLIBRARIES) {
-			const res: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/repos/?type=mine',
-				{}
-			);
-
-			const repos: SyncRepoItemType[] = res.repos;
-			return repos;
-		} else {
-			const res2: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/shared-repos/',
-				{}
-			);
-			const res3: any = await this.commonAxios.get(
-				'/seahub/api/v2.1/repos/?type=shared',
-				{}
-			);
-
-			const repos2: SyncRepoSharedItemType[] = res2;
-			const repos3: SyncRepoSharedItemType[] = res3.repos;
-
-			return [repos2, repos3];
-		}
+	async fetchMenuRepo(): Promise<DriveMenuType[]> {
+		return [
+			{
+				label: MenuItem.HOME,
+				key: MenuItem.HOME,
+				icon: 'sym_r_other_houses',
+				driveType: DriveType.Drive
+			},
+			{
+				label: MenuItem.DOCUMENTS,
+				key: MenuItem.DOCUMENTS,
+				icon: 'sym_r_news',
+				driveType: DriveType.Drive
+			},
+			{
+				label: MenuItem.PICTURES,
+				key: MenuItem.PICTURES,
+				icon: 'sym_r_art_track',
+				driveType: DriveType.Drive
+			},
+			{
+				label: MenuItem.MOVIES,
+				key: MenuItem.MOVIES,
+				icon: 'sym_r_smart_display',
+				driveType: DriveType.Drive
+			},
+			{
+				label: MenuItem.DOWNLOADS,
+				key: MenuItem.DOWNLOADS,
+				icon: 'sym_r_browser_updated',
+				driveType: DriveType.Drive
+			}
+		];
 	}
 
 	async download(path: string): Promise<{ url: string; headers: any }> {
-		console.log(path);
-
-		const dataStore = useDataStore();
-		console.log('pathpath', path);
+		const filesStore = useFilesStore();
 
 		if (
-			dataStore.selectedCount === 1 &&
-			!dataStore.req.items[dataStore.selected[0]].isDir
+			filesStore.selectedCount === 1 &&
+			!filesStore.currentFileList[filesStore.selected[0]].isDir
 		) {
 			const { url, node } = await files.download(
 				null,
-				dataStore.req.items[dataStore.selected[0]].url
+				filesStore.currentFileList[filesStore.selected[0]].url
 			);
 
 			const headers = {
-				...dataStore.req.headers,
 				'Content-Type': 'application/octet-stream'
 			};
 			if (node) {
@@ -162,9 +126,9 @@ class Data extends Origin {
 
 		const filesDownload: any[] = [];
 
-		if (dataStore.selectedCount > 0) {
-			for (const i of dataStore.selected) {
-				filesDownload.push(dataStore.req.items[i].url);
+		if (filesStore.selectedCount > 0) {
+			for (const i of filesStore.selected) {
+				filesDownload.push(filesStore.currentFileList[i].url);
 			}
 		} else {
 			filesDownload.push(path);
@@ -173,7 +137,6 @@ class Data extends Origin {
 		const { url, node } = files.download('zip', ...filesDownload);
 
 		const headers = {
-			...dataStore.req.headers,
 			'Content-Type': 'application/octet-stream'
 		};
 		if (node) {
@@ -183,100 +146,100 @@ class Data extends Origin {
 		return { url, headers };
 	}
 
-	async copy(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+	async downloadFile(fileUrl: any, filename = ''): Promise<void> {
+		const a = document.createElement('a');
+		a.style.display = 'none';
+		a.href = fileUrl.url;
+		a.download = filename;
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
+	}
+
+	async copy(): Promise<CopyStoragesType[]> {
+		const filesStore = useFilesStore();
 		const copyStorages: CopyStoragesType[] = [];
-		for (const item of dataStore.selected) {
-			const el = dataStore.req.items[item];
-			let from = decodeURIComponent(el.url).slice(6);
-			if (checkAppData(el.url)) {
-				from = decodeURIComponent(el.url);
-			}
+		for (const item of filesStore.selected) {
+			const el = filesStore.currentFileList[item];
+			const from = decodeURIComponent(el.url).slice(6);
 			copyStorages.push({
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined
+				src_drive_type: DriveType.Drive
 			});
 		}
 
 		console.log('copyStorages', copyStorages);
 
-		return {
-			items: copyStorages,
-			from: OriginType.DRIVE
-		};
+		return copyStorages;
 	}
 
-	async cut(): Promise<{ items: CopyStoragesType[]; from: OriginType }> {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+	async cut(): Promise<CopyStoragesType[]> {
+		const filesStore = useFilesStore();
+
 		const copyStorages: CopyStoragesType[] = [];
-		for (const item of dataStore.selected) {
-			const el = dataStore.req.items[item];
-			let from = decodeURIComponent(el.url).slice(6);
-			if (checkAppData(el.url)) {
-				from = decodeURIComponent(el.url);
-			}
+		for (const item of filesStore.selected) {
+			const el = filesStore.currentFileList[item];
+			const from = decodeURIComponent(el.url).slice(6);
 			copyStorages.push({
 				from: from,
 				to: '',
 				name: el.name,
-				src_repo_id: seahubStore.repo_id || undefined,
+				src_drive_type: DriveType.Drive,
 				key: 'x'
 			});
 		}
 
-		return {
-			items: copyStorages,
-			from: OriginType.DRIVE
-		};
+		return copyStorages;
 	}
 
 	async paste(
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
+		const operateinStore = useOperateinStore();
 		const items: CopyStoragesType[] = [];
 
-		console.log('dataStorecopyFiles', dataStore.copyFiles);
+		for (let i = 0; i < operateinStore.copyFiles.length; i++) {
+			const element: any = operateinStore.copyFiles[i];
+			let lastPathIndex =
+				path.indexOf('?') > -1
+					? decodeURIComponent(path).slice(6, path.indexOf('?'))
+					: decodeURIComponent(path).slice(6);
 
-		for (let i = 0; i < dataStore.copyFiles.items.length; i++) {
-			const element: any = dataStore.copyFiles.items[i];
-			let to =
-				decodeURIComponent(path).slice(6) + decodeURIComponent(element.name);
+			lastPathIndex = lastPathIndex.endsWith('/')
+				? lastPathIndex
+				: lastPathIndex + '/';
 
-			if (checkAppData(path)) {
-				to = decodeURIComponent(path) + decodeURIComponent(element.name);
-			}
+			const to = lastPathIndex + decodeURIComponent(element.name);
 			items.push({
 				from: element.from,
 				to: to,
 				name: element.name,
-				src_repo_id: element.src_repo_id || undefined
+				src_drive_type: element.src_drive_type,
+				dst_drive_type: DriveType.Drive
 			});
 			if (path + decodeURIComponent(element.name) === element.from) {
 				this.action(false, true, items, path, false, callback);
-				// dataStore.resetCopyFiles();
 				return;
 			}
 		}
-		const dstItems = (await dataStore.fetchList(path))!.items;
-		const conflict = checkConflict(items, dstItems);
+
 		let overwrite = false;
-		let rename = true;
+		const rename = true;
 		let isMove = false;
 
-		console.log('dataStorecopyFiles-items', items);
-		if (dataStore.copyFiles.items[0].key === 'x') {
+		if (
+			operateinStore.copyFiles[0] &&
+			operateinStore.copyFiles[0].key === 'x'
+		) {
 			overwrite = true;
 			isMove = true;
 		}
-		if (conflict) {
-			rename = true;
-		}
+
+		console.log('operateinStoreoperateinStore', items);
+
 		this.action(overwrite, rename, items, path, isMove, callback);
 	}
 
@@ -284,22 +247,19 @@ class Data extends Origin {
 		path: string,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
-		const seahubStore = useSeahubStore();
+		const filesStore = useFilesStore();
 		const items: CopyStoragesType[] = [];
-		for (const i of dataStore.selected) {
-			const element: any = dataStore.req.items[i];
-			let from = decodeURIComponent(element.url).slice(6);
-			let to = decodeURIComponent(path + element.name).slice(6);
-			if (checkAppData(element.url)) {
-				from = decodeURIComponent(element.url);
-				to = decodeURIComponent(path + element.name);
-			}
+		for (const i of filesStore.selected) {
+			const element: any = filesStore.currentFileList[i];
+
+			const from = decodeURIComponent(element.url).slice(6);
+			const to = decodeURIComponent(path + '/' + element.name).slice(6);
 			items.push({
 				from: from,
 				to: to,
 				name: element.name,
-				src_repo_id: seahubStore.repo_id
+				src_drive_type: element.driveType,
+				dst_drive_type: DriveType.Drive
 			});
 		}
 		const overwrite = true;
@@ -314,7 +274,6 @@ class Data extends Origin {
 		isMove: boolean | undefined,
 		callback: (action: OPERATE_ACTION, data: any) => Promise<void>
 	): Promise<void> {
-		const dataStore = useDataStore();
 		const dest = path;
 
 		notifyWaitingShow('Pasting, Please wait...');
@@ -325,7 +284,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.MOVE, dest);
 					notifyHide();
-					dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -336,7 +294,6 @@ class Data extends Origin {
 				.then(() => {
 					callback(OPERATE_ACTION.PASTE, dest);
 					notifyHide();
-					dataStore.setReload(true);
 				})
 				.catch(() => {
 					notifyHide();
@@ -361,9 +318,9 @@ class Data extends Origin {
 	}
 
 	openLocalFolder(): string | undefined {
-		const dataStore = useDataStore();
+		const filesStore = useFilesStore();
 		const seahubStore = useSeahubStore();
-		const item = dataStore.req.items[dataStore.selected[0]];
+		const item = filesStore.currentFileList[filesStore.selected[0]];
 		if (!item.isDir) {
 			return undefined;
 		}
@@ -381,24 +338,39 @@ class Data extends Origin {
 		timer = this.RETRY_TIMER,
 		callback?: (event?: any) => void
 	): Promise<void> {
-		const newurl = removePrefix(decodeURIComponent(url));
+		let newurl = decodeURIComponent(url);
 
 		let fileInfo: any;
 		let appNode = '';
 
-		if (checkAppData(newurl)) {
+		if (formatUrltoDriveType(newurl) === DriveType.Cache) {
 			const { path, node } = getAppDataPath(newurl);
 			appNode = node;
+
+			console.log('pathpathpath', path);
+
 			if (node) {
 				fileInfo = await files.getUploadInfo(path, `/appdata`, content);
 			}
 		} else {
+			// Temporary code
+			if (formatUrltoDriveType(newurl) === DriveType.Data) {
+				newurl = newurl.replace('/Data', '/Application');
+			} else {
+				newurl = removePrefix(newurl);
+			}
+			console.log('pathpathpath', newurl);
+
 			fileInfo = await files.getUploadInfo(newurl, '/data', content);
 		}
 
-		console.log('fileInfo', fileInfo);
+		console.log('fileInfofileInfo', fileInfo);
+		console.log('contentcontent', content);
 
 		const fileChunkList = await files.createFileChunk(fileInfo, content);
+
+		console.log('fileChunkList', fileChunkList);
+		console.log('fileChunkList url', url);
 
 		const exportProgress = (e) => {
 			if (typeof callback === 'function') {
@@ -417,6 +389,7 @@ class Data extends Origin {
 					appNode
 				);
 			} catch (error) {
+				console.log('load timer', timer);
 				if (timer === 1) {
 					exportProgress({
 						loaded: -1,
@@ -425,24 +398,22 @@ class Data extends Origin {
 					});
 				}
 				await files.errorRetry(url, content, overwrite, callback, timer);
+				break;
 			}
 		}
 	}
 
-	openPreview(item: any, Router: Router): void {
-		console.log('into drive');
-		Router.push({
-			path: item.path,
-			query: {
-				type: 'preview'
-			}
-		});
+	async openPreview(item: any): Promise<FileResType> {
+		const res = await this.fetch(item.path);
+		console.log('resres', res);
+		res.driveType = DriveType.Drive;
+		return res;
 	}
 
 	getPreviewURL(file: any, thumb: string): string {
 		const params = {
 			inline: 'true',
-			key: Date.parse(file.modified)
+			key: file.modified
 		};
 
 		return createURL('api/preview/' + thumb + file.path, params);
@@ -454,6 +425,70 @@ class Data extends Origin {
 		};
 		const url = createURL('api/raw' + file.path, params);
 		return url;
+	}
+
+	async formatFileContent(file: FileItem): Promise<FileItem> {
+		if (
+			!['audio', 'video', 'text', 'txt', 'textImmutable', 'pdf'].includes(
+				file.type
+			)
+		) {
+			return file;
+		}
+
+		if (['text', 'txt', 'textImmutable'].includes(file.type)) {
+			try {
+				const url = decodeURIComponent(file.path);
+				const res = await this.commonAxios.get(`/api/resources${url}`, {});
+
+				file.content = res.data.content;
+			} catch (error) {
+				console.error(error.message);
+			}
+		}
+		return file;
+	}
+
+	async formatRepotoPath(item: any): Promise<string> {
+		return (
+			'/Files/Home/' +
+			(item.label && item.label != MenuItem.HOME ? item.label + '/' : '')
+		);
+	}
+
+	async formatPathtoUrl(path: string): Promise<string> {
+		return path;
+	}
+
+	async deleteItem(items: FileItem[]): Promise<void> {
+		// const filesStore = useFilesStore();
+
+		const promises: any = [];
+
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+			promises.push(files.remove(item.path));
+		}
+
+		await Promise.all(promises);
+	}
+
+	async renameItem(item: FileItem, newName: string): Promise<void> {
+		const oldLink = decodeURIComponent(item.path);
+		const newLink =
+			url.removeLastDir(oldLink) + '/' + encodeURIComponent(newName);
+
+		await files.rename(oldLink, newLink);
+	}
+
+	async createDir(dirName: string, path: string): Promise<void> {
+		const filesStore = useFilesStore();
+		const newName = await checkSameName(dirName, filesStore.currentFileList);
+
+		let url = path + '/' + encodeURIComponent(newName) + '/';
+		url = url.replace('//', '/');
+
+		await files.resourceAction(url, 'post');
 	}
 }
 

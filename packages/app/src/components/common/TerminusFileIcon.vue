@@ -1,8 +1,6 @@
 <template>
 	<div class="row items-center justify-center">
-		<template
-			v-if="readOnly == undefined && type === 'image' && isThumbsEnabled"
-		>
+		<template v-if="type === 'image' && isThumbsEnabled">
 			<img
 				style="border-radius: 4px"
 				:src="thumbnailUrl"
@@ -25,10 +23,9 @@
 
 <script lang="ts" setup>
 import { getFileType } from '../../utils/file';
-import { computed } from 'vue';
+import { computed, PropType } from 'vue';
 import { enableThumbs } from '../../utils/constants';
-import { common as api } from '../../api';
-import { useSeahubStore } from '../../stores/seahub';
+import { FileItem, DriveType, useFilesStore } from '../../stores/files';
 
 const props = defineProps({
 	name: {
@@ -41,14 +38,9 @@ const props = defineProps({
 		default: '',
 		required: true
 	},
-	readOnly: {
-		type: Boolean,
-		default: false,
-		required: false
-	},
 	modified: {
-		type: String,
-		default: '',
+		type: Number,
+		default: 0,
 		required: false
 	},
 	path: {
@@ -60,10 +52,15 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 		required: false
+	},
+	driveType: {
+		type: String as unknown as PropType<DriveType>,
+		default: DriveType.Drive,
+		required: false
 	}
 });
 
-const seahubStore = useSeahubStore();
+const filesStore = useFilesStore();
 
 const folderIcon = (name: any) => {
 	let src = '/img/folder-';
@@ -104,13 +101,25 @@ const isThumbsEnabled = computed(function () {
 });
 
 const thumbnailUrl = computed(function () {
-	const file = {
-		path: props.path,
+	const path = props.path.startsWith('/Files')
+		? props.path.slice(6)
+		: props.path;
+	const file: FileItem = {
+		extension: '',
+		isDir: false,
+		isSymlink: false,
+		mode: 0,
 		modified: props.modified,
-		repo_id: seahubStore.repo_id,
-		repo_name: seahubStore.repo_name
+		name: props.name,
+		path: path,
+		size: 0,
+		type: 'image',
+		driveType: props.driveType,
+		param: '',
+		index: 0,
+		url: ''
 	};
 
-	return api.getPreviewURL(file, 'thumb');
+	return filesStore.getPreviewURL(file, 'thumb');
 });
 </script>

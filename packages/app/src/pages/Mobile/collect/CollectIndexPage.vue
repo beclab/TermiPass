@@ -33,7 +33,7 @@
 				:key="item.identify"
 				:name="item.identify"
 			>
-				<div class="text-body2 text-grey-8">{{ item.moduleTitle }}</div>
+				<div class="text-body2 text-ink-1">{{ item.moduleTitle }}</div>
 				<page-content v-if="item.identify === 'page'" />
 				<rss-content v-if="item.identify === 'rss'" />
 				<pdf-content v-if="item.identify === 'pdf'" />

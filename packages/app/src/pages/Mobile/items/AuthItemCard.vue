@@ -1,6 +1,9 @@
 <template>
 	<div
 		class="authenticator-card row items-center justify-between"
+		:class="
+			$q.dark.isActive ? 'bg-yellow text-background-1' : 'bg-ink-1 text-white'
+		"
 		@click="onCardClick"
 	>
 		<div class="row items-center auth-code">
@@ -8,7 +11,11 @@
 				errorMessageRef
 			}}</span>
 
-			<span class="hideCode" v-if="isHideRef && !errorMessageRef">
+			<span
+				class="hideCode-common"
+				:class="$q.dark.isActive ? 'hideCode-dark' : 'hideCode-light'"
+				v-if="isHideRef && !errorMessageRef"
+			>
 				<i></i>
 				<i></i>
 				<i></i>
@@ -28,7 +35,7 @@
 			:value="ageRef"
 			size="24px"
 			:thickness="1"
-			color="white"
+			:color="$q.dark.isActive ? 'background-1' : 'white'"
 		/>
 	</div>
 </template>
@@ -120,7 +127,6 @@ onUnmounted(() => {
 	height: 60px;
 	border-radius: 20px;
 	padding: 18px 20px;
-	background: #1f1814;
 
 	.auth-code {
 		height: 28px;
@@ -129,22 +135,31 @@ onUnmounted(() => {
 	&__code {
 		display: flex;
 		align-items: center;
-		color: $ink-1;
 	}
 
-	.hideCode {
+	.hideCode-common {
 		font-size: 40px;
-		color: $white;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
 		i {
 			width: 8px;
 			height: 8px;
 			border-radius: 4px;
-			background: $white;
 			display: inline-block;
 			margin-right: 8px;
+		}
+	}
+
+	.hideCode-light {
+		i {
+			background: $white;
+		}
+	}
+	.hideCode-dark {
+		i {
+			background: $background-1;
 		}
 	}
 }

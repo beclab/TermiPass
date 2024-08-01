@@ -58,10 +58,10 @@
 						</div>
 					</div>
 				</div>
-				<div class="row items-center q-py-xs text-grey-8">
+				<div class="row items-center q-py-xs text-ink-1">
 					<q-btn
 						v-if="!isBex"
-						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+						class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_checklist"
 						text-color="ink-2"
 						@click="() => (filterShowing = 'checkbox')"
@@ -70,7 +70,7 @@
 					</q-btn>
 
 					<q-btn
-						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+						class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_add"
 						text-color="ink-2"
 						@click="onCreate"
@@ -79,7 +79,7 @@
 					</q-btn>
 
 					<q-btn
-						class="text-grey-8 btn-size-sm btn-no-text btn-no-border q-mr-md"
+						class="text-ink-1 btn-size-sm btn-no-text btn-no-border q-mr-md"
 						icon="sym_r_search"
 						text-color="ink-2"
 						@click="() => (filterShowing = 'search')"
@@ -98,7 +98,7 @@
 			>
 				<div class="row items-center q-pl-md">
 					<q-btn
-						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+						class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_chevron_left"
 						text-color="ink-2"
 						@click="() => (filterShowing = 'default')"
@@ -107,7 +107,7 @@
 					</q-btn>
 
 					<q-btn
-						class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+						class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 						icon="sym_r_done_all"
 						text-color="ink-2"
 						@click="toggleCheckbox"
@@ -126,7 +126,7 @@
 					<span class="q-mr-xs cursor-pointer checkOperate">
 						<q-btn
 							v-if="checkBoxArr.length > 0"
-							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+							class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_low_priority"
 							text-color="ink-2"
 							@click="moveItems"
@@ -148,7 +148,7 @@
 					<span class="q-mr-md cursor-pointer checkOperate">
 						<q-btn
 							v-if="checkBoxArr.length > 0"
-							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+							class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_delete"
 							text-color="ink-2"
 							@click="removeItem"
@@ -157,7 +157,7 @@
 						</q-btn>
 						<q-btn
 							v-else
-							class="text-grey-8 btn-size-sm btn-no-text btn-no-border"
+							class="text-ink-1 btn-size-sm btn-no-text btn-no-border"
 							icon="sym_r_delete"
 							text-color="ink-2"
 							disabled
@@ -573,13 +573,16 @@ export default defineComponent({
 					});
 				} else {
 					meunStore.isEdit = true;
-					addItem(
+					const item = await addItem(
 						'',
 						selectedTemplate.icon,
 						selectedTemplate.fields,
 						[],
 						vault
 					);
+					if (item) {
+						context.emit('toolabClick', item.id);
+					}
 				}
 			});
 		}

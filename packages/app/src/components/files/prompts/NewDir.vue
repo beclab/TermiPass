@@ -35,9 +35,9 @@
 import { ref, nextTick } from 'vue';
 import { useDataStore } from '../../../stores/data';
 import { useSeahubStore } from '../../../stores/seahub';
-import { files as api, seahub } from '../../../api';
-import url from '../../../utils/url';
-import { checkSeahub, checkSameName } from '../../../utils/file';
+import { dataAPIs } from '../../../api';
+import { useMenuStore } from '../../../stores/files-menu';
+import { useFilesStore } from '../../../stores/files';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -47,59 +47,38 @@ import { useI18n } from 'vue-i18n';
 
 const store = useDataStore();
 const seahubStore = useSeahubStore();
+const menuStore = useMenuStore();
+const filesStore = useFilesStore();
 const name = ref<string>('');
 const route = useRoute();
-// const router = useRouter();
 const inputRef = ref();
-const submitLoading = ref(false);
 const show = ref(true);
 const { t } = useI18n();
 const loading = ref(false);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const submit = async (_event: any) => {
-	// event.preventDefault();
 	if (name.value === '') return;
-	submitLoading.value = true;
+	const dataAPI = dataAPIs();
 	loading.value = true;
-	// Build the path of the new directory.
-	let uri = store.isFiles(route) ? route.path + '/' : '/';
-
-	if (!store.isListing(route)) {
-		uri = url.removeLastDir(uri) + '/';
-	}
-
-	if (checkSeahub(uri)) {
-		const pathlen =
-			decodeURIComponent(route.path).indexOf(seahubStore.repo_name) +
-			seahubStore.repo_name.length;
-		const p = `${decodeURIComponent(route.path).slice(pathlen)}${name.value}`;
-
-		const parmas = {
-			operation: 'mkdir'
-		};
-		const url = 'api2/repos';
-		await seahub.fileOperate(p, url, parmas, 'dir');
-		store.closeHovers();
-		store.setReload(true);
-		loading.value = false;
-		return false;
-	}
 
 	try {
-		const newName = await checkSameName(name.value, store.req.items);
-
-		uri += encodeURIComponent(newName) + '/';
-		uri = uri.replace('//', '/');
-
-		await api.resourceAction(uri, 'post');
-		store.setReload(true);
-	} catch (e) {
-		//this.$showError(e);
+		await dataAPI.createDir(name.value, route.path);
+		const splitUrl = route.fullPath.split('?');
+		await filesStore.setFilePath(
+			{
+				path: splitUrl[0],
+				isDir: true,
+				driveType: menuStore.activeMenu.driveType,
+				param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+			},
+			false,
+			false
+		);
+		loading.value = false;
+		store.closeHovers();
+	} catch (error) {
+		console.log(error);
 	}
-	loading.value = false;
-	store.closeHovers();
-	submitLoading.value = false;
 };
 
 nextTick(() => {

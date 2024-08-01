@@ -41,7 +41,7 @@
 					<slot name="title"></slot>
 				</div>
 
-				<div class="detail text-body3 text-ink-2" v-if="$slots.detail">
+				<div class="detail text-body2 text-ink-3" v-if="$slots.detail">
 					<slot name="detail"></slot>
 				</div>
 			</div>

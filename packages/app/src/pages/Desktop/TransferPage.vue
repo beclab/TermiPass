@@ -92,7 +92,7 @@
 								/s
 							</div>
 							<div
-								class="text-grey-5"
+								class="text-ink-2"
 								style="
 									width: 50%;
 									overflow: hidden;
@@ -128,7 +128,7 @@
 			</template>
 
 			<template v-slot:body-cell-actions="props">
-				<q-td :props="props" class="text-grey-8">
+				<q-td :props="props" class="text-ink-1">
 					<div v-if="transferStore.activeItem != MenuType.Complete">
 						<q-icon
 							:name="

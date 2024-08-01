@@ -81,7 +81,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-cancel-web text-body3 text-ink-2 row justify-center items-center q-px-md q-mr-lg text-grey-8"
+					class="but-cancel-web text-body3 text-ink-2 row justify-center items-center q-px-md q-mr-lg text-ink-1"
 					@click="onDialogCancel"
 				>
 					{{ t('cancel') }}
@@ -89,7 +89,7 @@
 				<q-item
 					clickable
 					dense
-					class="but-creat-web text-body3 text-ink-on-brand-black row justify-center items-center q-px-md q-mr-md text-grey-8"
+					class="but-creat-web text-body3 text-ink-on-brand-black row justify-center items-center q-px-md q-mr-md text-ink-1"
 					@click="onOKClick"
 				>
 					{{ t('create') }}
@@ -105,9 +105,7 @@
 			</q-card-section>
 
 			<q-card-section class="q-pt-none">
-				<div
-					class="text-left text-body2 q-mb-sm text-grey-8 text-weight-medium"
-				>
+				<div class="text-left text-body2 q-mb-sm text-ink-1 text-weight-medium">
 					{{ t('vault_t.select_vault') }}
 				</div>
 				<div class="row align-center justify-center">
@@ -132,7 +130,7 @@
 				</div>
 			</q-card-section>
 
-			<div class="text-caption text-grey-8 text-left q-pl-md q-mb-xs">
+			<div class="text-caption text-ink-1 text-left q-pl-md q-mb-xs">
 				{{ t('vault_t.what_kind_of_item_you_would_like_to_add') }}
 			</div>
 			<q-card-section class="row q-col-gutter-sm" style="padding-top: 0">

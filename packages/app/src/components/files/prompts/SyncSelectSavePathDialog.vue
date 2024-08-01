@@ -9,7 +9,7 @@
 			/>
 
 			<div class="card-content">
-				<div class="text-caption text-grey-8 q-mb-xs">
+				<div class="text-caption text-ink-1 q-mb-xs">
 					{{ t('download_location') }}
 				</div>
 				<div class="row items-center justify-center">
@@ -35,6 +35,8 @@
 import { onMounted, ref } from 'vue';
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 import { useDataStore } from '../../../stores/data';
+import { useFilesStore } from '../../../stores/files';
+import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -43,24 +45,26 @@ import { useI18n } from 'vue-i18n';
 const { dialogRef } = useDialogPluginComponent();
 
 const store = useDataStore();
+const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 const savePath = ref<string>('');
 const show = ref(true);
 const loading = ref(false);
-const item = ref(store.selected[0]);
+const item = ref(filesStore.selected[0]);
 
 const $q = useQuasar();
 
 const { t } = useI18n();
 
-store.resetSelected();
+filesStore.resetSelected();
 
 const submit = async () => {
 	store.closeHovers();
 	if ($q.platform.is.electron) {
 		window.electron.api.files.repoAddSync({
 			worktree: savePath.value,
-			repo_id: item.value.repo_id,
-			name: item.value.repo_name,
+			repo_id: menuStore.activeMenu.id,
+			name: menuStore.activeMenu.label,
 			password: '',
 			readonly: item.value.permission == 'r'
 		});

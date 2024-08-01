@@ -12,17 +12,17 @@ import { AWSS3AuthService } from './awss3';
 class IntegrationService implements IntegrationServiceInterface {
 	supportAuthList = [
 		{
-			type: AccountType.Dropbox,
-			detail: {
-				name: 'Dropbox',
-				icon: 'dropbox.svg'
-			}
-		},
-		{
 			type: AccountType.Space,
 			detail: {
 				name: 'Space',
 				icon: 'space.svg'
+			}
+		},
+		{
+			type: AccountType.Dropbox,
+			detail: {
+				name: 'Dropbox',
+				icon: 'dropbox.svg'
 			}
 		},
 		{

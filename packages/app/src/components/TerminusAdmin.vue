@@ -8,7 +8,7 @@
 
 			<div class="info q-mt-sm">
 				<span class="text-h6">{{ current_user?.local_name }}</span>
-				<span class="text-body3 text-grey-8 q-mt-xs">{{
+				<span class="text-body3 text-ink-1 q-mt-xs">{{
 					'@' + current_user?.domain_name
 				}}</span>
 			</div>
@@ -25,7 +25,7 @@
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_sensors_off" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
+					<span class="text-body2 text-ink-1 q-ml-xs">{{
 						t('user_current_status.offline_mode.title')
 					}}</span>
 				</div>
@@ -43,7 +43,7 @@
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_sync_lock" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
+					<span class="text-body2 text-ink-1 q-ml-xs">{{
 						t('encrypted_connection')
 					}}</span>
 				</div>
@@ -63,7 +63,7 @@
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_account_circle" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
+					<span class="text-body2 text-ink-1 q-ml-xs">{{
 						t('user_management_center')
 					}}</span>
 				</div>
@@ -77,7 +77,7 @@
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_swap_horizontal_circle" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
+					<span class="text-body2 text-ink-1 q-ml-xs">{{
 						t('switch_accounts')
 					}}</span>
 				</div>
@@ -91,7 +91,7 @@
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_settings" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{
+					<span class="text-body2 text-ink-1 q-ml-xs">{{
 						t('settings.settings')
 					}}</span>
 				</div>
@@ -105,7 +105,7 @@
 			>
 				<div class="row items-center justify-start">
 					<q-icon name="sym_r_lock" size="20px" />
-					<span class="text-body2 text-grey-8 q-ml-xs">{{ t('lock') }}</span>
+					<span class="text-body2 text-ink-1 q-ml-xs">{{ t('lock') }}</span>
 				</div>
 			</q-item> -->
 		</q-list>

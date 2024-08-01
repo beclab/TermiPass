@@ -21,24 +21,6 @@ export interface AutofilliOSPlugin {
 	}): Promise<void>;
 }
 
-export interface SeafilePlugin {
-	setUser(options: {
-		server: string;
-		name: string;
-		email: string;
-		token: string;
-	}): Promise<void>;
-
-	downloadFile(options: {
-		repoId: string;
-		repoName: string;
-		dirPath: string;
-		fileName: string;
-	}): Promise<void>;
-
-	enterDownloadVC(): Promise<void>;
-}
-
 export interface AppSettingsPlugin {
 	showAllowCrossSiteTracking(): Promise<{
 		value: boolean;
@@ -62,6 +44,6 @@ export default {
 	iOSStoragePlugin,
 	iOSStorageUserPlugin,
 	iOSExtensionWebviewPlugin,
-	iOSAutofillPlugin, // iOSSeafilePlugin
+	iOSAutofillPlugin,
 	iOSAppSettingsPlugin
 };

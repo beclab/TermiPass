@@ -32,7 +32,11 @@
 							>
 								<div
 									class="info-item column items-center justify-top q-pt-md"
-									:style="`background:${monitorStore.background[index]}`"
+									:style="`background:${
+										$q.dark.isActive
+											? monitorStore.dark_background[index]
+											: monitorStore.background[index]
+									}`"
 									v-for="(item, index) in monitorStore.usages"
 									:key="`d` + index"
 								>
@@ -168,13 +172,13 @@ const monitorStore = useMonitorStore();
 
 const settingsMenus = [...settingMenu];
 
-if ($q.platform.is.mobile) {
-	settingsMenus.push({
-		label: t('Display'),
-		icon: 'sym_r_arming_countdown',
-		path: '/setting/display'
-	});
-}
+// if ($q.platform.is.mobile) {
+settingsMenus.push({
+	label: t('settings.themes.title'),
+	icon: 'sym_r_light_mode',
+	path: '/setting/display'
+});
+// }
 
 if ($q.platform.is.nativeMobile) {
 	settingsMenus.splice(1, 0, {

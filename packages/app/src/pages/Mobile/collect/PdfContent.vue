@@ -19,7 +19,7 @@
 							v-if="item.status === PDFStatus.none"
 							name="sym_r_add_box"
 							size="20px"
-							class="text-grey-8 cursor-pointer"
+							class="text-ink-1 cursor-pointer"
 							@click="onDownloadPdf(item)"
 						/>
 						<q-knob

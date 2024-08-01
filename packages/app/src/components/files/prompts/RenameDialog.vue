@@ -35,133 +35,78 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
 import { useDialogPluginComponent } from 'quasar';
-import { useRouter } from 'vue-router';
-import { files as api, seahub } from '../../../api';
-import url from '../../../utils/url';
+import { useRouter, useRoute } from 'vue-router';
 import { useDataStore } from '../../../stores/data';
-import { checkSeahub } from '../../../utils/file';
 import { useI18n } from 'vue-i18n';
 import { useSeahubStore } from '../../../stores/seahub';
+import { useFilesStore } from '../../../stores/files';
 import {
 	notifyHide,
 	notifyWaitingShow
 } from '../../../utils/notifyRedefinedUtil';
+import { dataAPIs } from '../../../api';
+import { useMenuStore } from '../../../stores/files-menu';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
 const name = ref();
 const store = useDataStore();
-const Router = useRouter();
+const router = useRouter();
+const route = useRoute();
 const repo = useSeahubStore();
+const filesStore = useFilesStore();
+const menuStore = useMenuStore();
 const { t } = useI18n();
 const show = ref(true);
 const loading = ref(false);
 
-const { dialogRef, onDialogCancel } = useDialogPluginComponent();
+const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
 
 onMounted(() => {
+	console.log('fileStorecurrentFileList', filesStore.currentFileList);
 	name.value = oldName();
 });
 
 const oldName = () => {
-	if (!store.isListing) {
-		return store.req.name;
-	}
-
-	if (store.req && store.req.items) {
-		return store.req.items[store.selected[0]].name;
-	} else {
-		return store.req.name;
-	}
+	return filesStore.currentFileList[filesStore.selected[0]].name;
 };
 
-// let notif: any = null;
-
 const submit = async () => {
-	let oldLink = '';
-	let newLink = '';
-	let isPreview = false;
+	const dataAPI = dataAPIs();
 
-	let isDir = false;
-
-	if (name.value.length == 0) {
-		return;
-	}
-
-	if (!store.isListing) {
-		oldLink = store.req.url;
-	} else {
-		if (store.req && store.req.items) {
-			oldLink = store.req.items[store.selected[0]].url;
-			isDir = store.req.items[store.selected[0]].isDir;
-		} else {
-			oldLink = store.req.url;
-			isPreview = true;
-		}
-	}
-
-	newLink = url.removeLastDir(oldLink) + '/' + encodeURIComponent(name.value);
-
-	// notif && notif();
-	notifyHide();
 	notifyWaitingShow('Renaming...');
 	loading.value = true;
 
-	if (checkSeahub(newLink)) {
-		if (!repo.repo_id) {
-			const id = store.req.items[store.selected[0]].id;
-			const url = `seahub/api2/repos/${id}/?op=rename`;
-			const data = {
-				repo_name: name.value
-			};
-			await seahub.reRepoName(url, data);
-			store.setReload(true);
-			notifyHide();
-			return false;
-		}
-
-		const pathLen =
-			oldLink.indexOf(store.currentItem) + store.currentItem.length;
-
-		const p = oldLink.slice(pathLen);
-
-		const parmas = {
-			operation: 'rename',
-			newname: name.value
-		};
-
-		const url = 'api/v2.1/repos';
-		await seahub.fileOperate(p, url, parmas, isDir ? 'dir' : 'file');
-		store.setReload(true);
-		notifyHide();
-		loading.value = false;
-		return false;
-	}
-
 	try {
-		await api.rename(oldLink, newLink);
-		if (!store.isListing || isPreview) {
-			Router.push({ path: newLink });
-			return;
-		}
-		store.setReload(true);
-		notifyHide();
-		loading.value = false;
-	} catch (e) {
-		store.showError();
-		notifyHide();
-		loading.value = false;
-	}
-	notifyHide();
-	loading.value = false;
+		await dataAPI.renameItem(
+			filesStore.currentFileList[filesStore.selected[0]],
+			name.value
+		);
 
-	store.closeHovers();
+		onDialogOK();
+		loading.value = false;
+		filesStore.resetSelected();
+		const splitUrl = route.fullPath.split('?');
+		await filesStore.setFilePath(
+			{
+				path: splitUrl[0],
+				isDir: true,
+				driveType: menuStore.activeMenu.driveType,
+				param: splitUrl[1] ? `?${splitUrl[1]}` : ''
+			},
+			false,
+			false
+		);
+		notifyHide();
+	} catch (error) {
+		loading.value = false;
+		notifyHide();
+	}
 };
 
 const onCancel = () => {
 	onDialogCancel();
-	store.selected = [];
 	store.closeHovers();
 };
 </script>

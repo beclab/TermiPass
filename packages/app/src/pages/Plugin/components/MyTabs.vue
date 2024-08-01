@@ -19,7 +19,7 @@
 					spinner-size="xs"
 					class="img"
 				/>
-				<div class="label text-body3 text-grey-8">{{ item.label }}</div>
+				<div class="label text-body3 text-ink-1">{{ item.label }}</div>
 			</div>
 		</div>
 	</div>

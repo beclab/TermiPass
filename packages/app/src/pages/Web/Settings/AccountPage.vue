@@ -76,7 +76,7 @@
 			@click="logOut"
 		/>
 		<q-btn
-			class="web-bg-white text-grey-5 deleteAccount but"
+			class="web-bg-white text-ink-2 deleteAccount but"
 			:label="t('delete_account')"
 			type="reset"
 			@click="deleteAccount"

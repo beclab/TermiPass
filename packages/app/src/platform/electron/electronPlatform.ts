@@ -1,4 +1,3 @@
-import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { TerminusCommonPlatform } from '../terminusCommon/terminalCommonPlatform';
 import { useUserStore } from '../../stores/user';
 import { useTransferStore } from 'src/stores/transfer';
@@ -10,14 +9,6 @@ import { AppState } from '@didvault/sdk/src/core/app';
 export class ElectronPlatform extends TerminusCommonPlatform {
 	async appLoadPrepare(data: any): Promise<void> {
 		await super.appLoadPrepare(data);
-		if (data.quasar) {
-			GoogleAuth.initialize({
-				clientId:
-					'343424174381-cprm1j3a6da1bbprra97oc34lap3j0mp.apps.googleusercontent.com',
-				grantOfflineAccess: true,
-				scopes: ['profile', 'email']
-			});
-		}
 
 		const transferStore = useTransferStore();
 
@@ -38,8 +29,9 @@ export class ElectronPlatform extends TerminusCommonPlatform {
 			}
 
 			const currentAccount = {
-				url: userStore.getModuleSever('seafile'),
-				username: app.account?.name + '@seafile.com'
+				url: userStore.getModuleSever('files') + '/' + 'seahub',
+				username: app.account?.name + '@seafile.com',
+				authToken: userStore.current_user.access_token
 			};
 
 			if (forceReload) {

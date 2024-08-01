@@ -10,7 +10,6 @@
 			flat
 			padding="0px"
 			@click="confirmAction()"
-			@keydown.enter="confirmAction()"
 			:disable="btnStatus === ConfirmButtonStatus.disable"
 			no-caps
 			class="row items-center justify-center"
@@ -50,12 +49,12 @@ const props = defineProps({
 	bgClasses: {
 		type: String,
 		required: false,
-		default: 'bg-yellow'
+		default: 'bg-yellow-default'
 	},
 	bgDisabledClasses: {
 		type: String,
 		required: false,
-		default: 'bg-yellow-2'
+		default: 'bg-yellow-disabled'
 	},
 	textClasses: {
 		type: String,

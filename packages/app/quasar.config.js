@@ -56,7 +56,12 @@ module.exports = configure(function (ctx) {
 		],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: ['material-icons', 'bootstrap-icons'],
+		extras: [
+			'material-icons',
+			'bootstrap-icons',
+			'roboto-font',
+			ctx.modeName === 'bex' ? 'material-symbols-rounded' : undefined
+		],
 
 		vendor: {
 			remove: ['moment', '@bytetrade/ui', 'video.js']
@@ -671,6 +676,12 @@ module.exports = configure(function (ctx) {
 					pathRewrite: {
 						'^/settingsApi': ''
 					}
+				},
+
+				'/videos': {
+					target: `https://files.${process.env.SERVER_PROXY_NNME}.myterminus.com`,
+					changeOrigin: true,
+					secure: false
 				}
 			}
 		},
@@ -679,7 +690,7 @@ module.exports = configure(function (ctx) {
 		framework: {
 			config: {
 				// dark: false, // 或者Boolean true/false
-				dark: false, //ctx.modeName === 'capacitor' ? true : 'auto',
+				dark: true, //ctx.modeName === 'capacitor' ? true : 'auto',
 				capacitor: {
 					backButton: false
 				}

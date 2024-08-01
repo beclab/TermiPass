@@ -51,7 +51,7 @@ const itemClick = () => {
 
 <style scoped lang="scss">
 .error-content {
-	background: $red-1;
+	background: $red-alpha;
 	width: 100%;
 	color: $red;
 }

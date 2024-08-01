@@ -15,7 +15,7 @@
 						class="column q-pl-md"
 						v-if="platform !== 'MOBILE' && platform !== 'BEX'"
 					>
-						<div class="text-grey-8 text-caption text-left">
+						<div class="text-ink-1 text-caption text-left">
 							{{ org?.name }}
 						</div>
 						<div class="text-body2 text-weight-bold text-left">
@@ -28,7 +28,7 @@
 					class="column q-pl-md"
 					v-if="platform === 'MOBILE' || platform === 'BEX'"
 				>
-					<div class="text-grey-8 text-caption text-center">
+					<div class="text-ink-1 text-caption text-center">
 						{{ org?.name }}
 					</div>
 					<div class="text-body2 text-weight-bold text-center">
@@ -89,7 +89,7 @@
 										class="q-mt-sm"
 										src="../../../../assets/layout/nodata.svg"
 									/>
-									<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+									<span class="q-mb-md text-ink-1" style="margin-top: 32px">
 										{{ t('no_data') }}
 									</span>
 								</div>
@@ -142,7 +142,7 @@
 										class="q-mt-sm"
 										src="../../../../assets/layout/nodata.svg"
 									/>
-									<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+									<span class="q-mb-md text-ink-1" style="margin-top: 32px">
 										{{ t('no_data') }}
 									</span>
 								</div>
@@ -167,7 +167,7 @@
 												{{ member.did }}
 											</div>
 											<div class="q-mt-xs">
-												<span class="text-grey-8">{{ member.name }}</span>
+												<span class="text-ink-1">{{ member.name }}</span>
 												<span
 													class="tag owner text-subtitle3"
 													v-if="member.role === OrgRole.Owner"
@@ -241,7 +241,7 @@
 										class="q-mt-sm"
 										src="../../../../assets/layout/nodata.svg"
 									/>
-									<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+									<span class="q-mb-md text-ink-1" style="margin-top: 32px">
 										{{ t('this_organization_does_not_have_any_vaults_yet') }}
 									</span>
 								</div>

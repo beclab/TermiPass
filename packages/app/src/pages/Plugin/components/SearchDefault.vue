@@ -1,5 +1,5 @@
 <template>
-	<div class="text-body2 text-grey-8 search-default-container">
+	<div class="text-body2 text-ink-1 search-default-container">
 		<MarkDownPreview
 			:text="text"
 			loading-hidden

@@ -11,11 +11,11 @@
 	<template v-else>
 		<div class="preview">
 			<ExtendedImage
-				v-if="store.req.type == 'image'"
+				v-if="filesStore.previewItem.type == 'image'"
 				:src="raw"
 			></ExtendedImage>
 			<div
-				v-else-if="store.req.type == 'audio'"
+				v-else-if="filesStore.previewItem.type == 'audio'"
 				class="audio-container column justify-between items-center q-pb-lg q-px-md"
 			>
 				<div class="audio-info column items-center justify-center">
@@ -25,7 +25,7 @@
 						height="96"
 					/>
 					<div class="audio-name text-body3 q-mt-md text-color-title">
-						{{ store.req.name }}
+						{{ filesStore.previewItem.name }}
 					</div>
 				</div>
 				<audio
@@ -36,40 +36,38 @@
 					@play="autoPlay = true"
 				></audio>
 			</div>
-			<!-- <vue3-video-player
-				v-else-if="store.req.type == 'video'"
-				@play="autoPlay = true"
-				:src="raw"
-			/> -->
+
 			<terminus-video-player
 				v-else-if="store.req.type == 'video'"
-				:raw="store.req.path"
 				:req="store.req"
+				id="videoPlayer"
+				:src="`/videos/play?PlayPath=${store.req.path}`"
 			/>
 
 			<object
-				v-else-if="store.req?.extension?.toLowerCase() == '.pdf'"
+				v-else-if="filesStore.previewItem?.extension?.toLowerCase() == '.pdf'"
 				class="pdf"
 				:data="raw"
 			></object>
 			<vue-office-docx
-				v-else-if="store.req?.extension?.toLowerCase() == '.doc'"
+				v-else-if="filesStore.previewItem?.extension?.toLowerCase() == '.doc'"
 				:src="raw"
 			/>
 			<vue-office-excel
-				v-else-if="store.req?.extension?.toLowerCase() == '.xlsx'"
+				v-else-if="filesStore.previewItem?.extension?.toLowerCase() == '.xlsx'"
 				:src="raw"
 			/>
 		</div>
 	</template>
 </template>
 
-<script lang="ts">
-import { defineComponent, computed } from 'vue';
-import { common as api } from '../../../api';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { useDataStore } from '../../../stores/data';
 import ExtendedImage from '../../../components/files/ExtendedImage.vue';
 import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.vue';
+import { DriveType } from '../../../stores/files';
+import { useFilesStore } from './../../../stores/files';
 // import VueOfficeDocx from '@vue-office/docx';
 // import VueOfficeExcel from '@vue-office/excel';
 
@@ -78,39 +76,27 @@ import TerminusVideoPlayer from '../../../components/common/TerminusVideoPlayer.
 
 import { shallowRef } from 'vue';
 
-export default defineComponent({
-	name: 'FilePreview',
-	components: {
-		ExtendedImage,
-		// VueOfficeDocx,
-		// VueOfficeExcel,
-		TerminusVideoPlayer
-	},
-	setup() {
-		const store = useDataStore();
+const store = useDataStore();
+const filesStore = useFilesStore();
 
-		const raw = computed(function () {
-			if (store.req.type === 'image' && !store.preview.fullSize) {
-				return api.getPreviewURL(store.req, 'big');
-			}
-
-			if (store.req.type === 'pdf' && store.req.checkSeahub) {
-				return store.req.url;
-			}
-
-			return api.getDownloadURL(store.req, true);
-		});
-		const autoPlay = shallowRef(true);
-		return {
-			store,
-			raw,
-			autoPlay
-		};
+const raw = computed(function () {
+	if (filesStore.previewItem.type === 'image' && !store.preview.fullSize) {
+		return filesStore.getPreviewURL(filesStore.previewItem, 'big');
 	}
+
+	if (
+		filesStore.previewItem.type === 'pdf' &&
+		filesStore.previewItem.driveType === DriveType.Sync
+	) {
+		return filesStore.previewItem.url;
+	}
+
+	return filesStore.getDownloadURL(filesStore.previewItem, true);
 });
+const autoPlay = shallowRef(true);
 </script>
 
-<style language="scss" scoped>
+<style lang="scss" scoped>
 .audio-container {
 	width: 100%;
 	height: 100%;

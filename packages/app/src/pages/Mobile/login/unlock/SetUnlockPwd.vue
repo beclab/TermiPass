@@ -107,6 +107,7 @@ const verifyPassword = async () => {
 	loading.value = true;
 	await savePassword(password, {
 		async onSuccess() {
+			loading.value = false;
 			const jumpToRegisterDid = () => {
 				if (process.env.IS_BEX) {
 					$router.replace({ path: '/import_mnemonic' });
@@ -130,8 +131,8 @@ const verifyPassword = async () => {
 					.onOk(async () => {
 						const result = await getNativeAppPlatform().openBiometric();
 						if (!result.status) {
-							notifyFailed(t('errors.set_biometry_failure'));
-							return;
+							notifyFailed(result.message);
+							// return;
 						}
 						jumpToRegisterDid();
 					})
@@ -144,6 +145,7 @@ const verifyPassword = async () => {
 			jumpToRegisterDid();
 		},
 		onFailure(message: string) {
+			loading.value = false;
 			notifyFailed(message);
 		}
 	});

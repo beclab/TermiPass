@@ -45,7 +45,7 @@
 						>
 							{{ t('mnemonic_backup') }}
 						</q-item-label>
-						<q-item-label class="text-grey-8 q-pl-sm q-ml-xs">
+						<q-item-label class="text-ink-1 q-pl-sm q-ml-xs">
 							<div class="q-mb-xs text-grey-7">{{ t('mnemonics') }}</div>
 							<div class="mnemonics_wrap">
 								<terminus-mnemonics-component
@@ -165,8 +165,9 @@ export default defineComponent({
 
 			if ($q.platform.is.electron) {
 				window.electron.api.files.removeCurrentAccount({
-					url: userStore.getModuleSever('seafile'),
-					username: app.account?.name + '@seafile.com'
+					url: userStore.getModuleSever('seafile') + '/' + 'seahub',
+					username: app.account?.name + '@seafile.com',
+					authToken: ''
 				});
 			}
 

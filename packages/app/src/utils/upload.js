@@ -1,4 +1,5 @@
 import { useFilesUploadStore } from '../stores/files-upload';
+import url from '../utils/url';
 
 export function checkConflict(files, items) {
 	if (typeof items === 'undefined' || items === null) {
@@ -141,4 +142,47 @@ export function scanFiles(dt) {
 			});
 		}
 	});
+}
+
+function detectType(mimetype) {
+	if (mimetype.startsWith('video')) return 'video';
+	if (mimetype.startsWith('audio')) return 'audio';
+	if (mimetype.startsWith('image')) return 'image';
+	if (mimetype.startsWith('pdf')) return 'pdf';
+	if (mimetype.startsWith('text')) return 'text';
+	return 'blob';
+}
+
+export async function handleFiles(files, base, overwrite = false) {
+	const upload = useFilesUploadStore();
+	for (let i = 0; i < files.length; i++) {
+		let id = upload.id;
+		let path = base;
+		let file = files[i];
+
+		if (file.fullPath !== undefined) {
+			path += url.encodePath(file.fullPath);
+		} else {
+			path += url.encodeRFC5987ValueChars(file.name);
+		}
+
+		if (file.isDir) {
+			path += '/';
+		}
+
+		const item = {
+			id,
+			path,
+			file,
+			overwrite,
+			...(!file.isDir && { type: detectType(file.type) })
+		};
+
+		await (function () {
+			return new Promise(async function (res) {
+				await upload.upload(item);
+				res();
+			});
+		})();
+	}
 }

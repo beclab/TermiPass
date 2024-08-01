@@ -1,7 +1,6 @@
 <template>
 	<div
-		class="account-operation-root row justify-between items-center"
-		:class="$q.dark.isActive ? 'dark-bg' : 'light-bg '"
+		class="account-operation-root row justify-between items-center bg-yellow-alpha"
 	>
 		<div class="row justify-start items-center">
 			<div class="account-operation-root__img row justify-center items-center">
@@ -50,13 +49,5 @@ defineProps({
 		margin-left: 12px;
 		color: $ink-1;
 	}
-}
-
-.light-bg {
-	background: linear-gradient(0deg, $yellow-1, $yellow-1);
-}
-
-.dark-bg {
-	background: $background-3;
 }
 </style>

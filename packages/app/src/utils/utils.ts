@@ -334,10 +334,16 @@ export const detectType = (mimetype: string) => {
 // Determine if two object arrays contain the same value
 export function containsSameValue<T>(
 	arr1: T[],
-	arr2: T[],
+	arr2: string[],
 	key: string
 ): boolean {
-	return arr1?.some(
-		(item1) => arr2.find((item2) => item1[key] === item2) !== undefined
-	);
+	return arr1
+		? arr1.some(
+				(item1) => arr2.find((item2) => item1[key] === item2) !== undefined
+		  )
+		: false;
 }
+
+export const getextension = (name: string) => {
+	return name.indexOf('.') > -1 ? name.substring(name.lastIndexOf('.')) : '';
+};

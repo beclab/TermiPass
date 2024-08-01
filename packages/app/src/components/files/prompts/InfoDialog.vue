@@ -17,7 +17,6 @@
 						class="q-mr-md"
 						:name="name"
 						:type="fileType"
-						:read-only="readOnly"
 						:is-dir="isDir"
 						style=""
 					/>
@@ -76,10 +75,11 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 import { format, useDialogPluginComponent, useQuasar } from 'quasar';
-import { useDataStore } from 'src/stores/data';
+import { useDataStore } from '../../../stores/data';
 import TerminusFileIcon from '../../common/TerminusFileIcon.vue';
-import { formatFileModified } from 'src/utils/file';
+import { formatFileModified } from '../../../utils/file';
 import { useI18n } from 'vue-i18n';
+import { useFilesStore } from '../../../stores/files';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 // import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -95,20 +95,17 @@ const { t } = useI18n();
 const show = ref(true);
 
 const store = useDataStore();
+const filesStore = useFilesStore();
 
 const humanSize = computed(function () {
 	if (fileType.value === 'folder') {
 		return '-';
 	}
 
-	if (store.selectedCount === 0) {
-		return humanStorageSize(store.req.size);
-	}
-
 	let sum = 0;
 
-	for (let selected of store.selected) {
-		sum += store.req.items[selected].size;
+	for (let selected of filesStore.selected) {
+		sum += filesStore.currentFileList[selected].size;
 	}
 
 	return humanStorageSize(sum);
@@ -127,46 +124,27 @@ const humanNumber = computed(function () {
 });
 
 const name = computed(function () {
-	return store.selectedCount === 0
-		? store.req.name
-		: store.req.items[store.selected[0]].name;
+	return filesStore.currentFileList[filesStore.selected[0]].name;
 });
 
 const modified = computed(function () {
 	return formatFileModified(
-		store.selectedCount === 0
-			? store.req.modified
-			: store.req.items[store.selected[0]].modified
+		filesStore.currentFileList[filesStore.selected[0]].modified
 	);
 });
 
 const fileType = computed(function () {
-	return store.selectedCount === 0
-		? store.req.isDir
-			? 'folder'
-			: store.req.type
-		: store.req.items[store.selected[0]].isDir
+	return filesStore.currentFileList[filesStore.selected[0]].isDir
 		? 'folder'
-		: store.req.items[store.selected[0]].type;
+		: filesStore.currentFileList[filesStore.selected[0]].type;
 });
 
 const isDir = computed(function () {
-	return store.selectedCount === 0
-		? (store.req.isDir as boolean)
-		: (store.req.items[store.selected[0]].isDir as boolean);
-});
-
-const readOnly = computed(function () {
-	return store.selectedCount === 0
-		? store.req.readOnly
-		: store.req.items[store.selected[0]].readOnly;
+	return filesStore.currentFileList[filesStore.selected[0]].isDir;
 });
 
 const path = computed(function () {
-	const path =
-		store.selectedCount === 0
-			? store.req.path
-			: store.req.items[store.selected[0]].path;
+	const path = filesStore.currentFileList[filesStore.selected[0]].path;
 
 	if (path.startsWith('/Seahub')) {
 		return path.slice(7);
@@ -200,6 +178,10 @@ const onCancel = () => {
 					text-overflow: ellipsis;
 					white-space: nowrap;
 					overflow: hidden;
+				}
+
+				.title {
+					text-align: left;
 				}
 			}
 

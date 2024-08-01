@@ -18,7 +18,7 @@
 				/>
 			</div>
 
-			<span class="text-body3 text-grey-5 q-ml-xs">{{ data.title }}</span>
+			<span class="text-body3 text-ink-2 q-ml-xs">{{ data.title }}</span>
 		</div>
 	</q-card>
 </template>

@@ -35,10 +35,13 @@
 <script lang="ts" setup>
 import { useDialogPluginComponent, useQuasar } from 'quasar';
 import { ref } from 'vue';
+import { dataAPIs } from '../../../api';
+import { DriveType } from '../../../stores/files';
+import { useMenuStore } from '../../../stores/files-menu';
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
 
-defineProps({
+const props = defineProps({
 	item: {
 		type: Object,
 		required: false
@@ -52,17 +55,27 @@ defineProps({
 const { dialogRef, onDialogCancel, onDialogOK } = useDialogPluginComponent();
 
 const $q = useQuasar();
+const menuStore = useMenuStore();
 
 const isMobile = ref(process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile);
 const showDialog = ref(true);
 const submitLoading = ref(false);
+const dataAPI = dataAPIs(DriveType.Sync);
 
 const onCancel = () => {
 	onDialogCancel();
 };
 
 const submit = async () => {
-	onDialogOK();
+	submitLoading.value = true;
+	try {
+		await dataAPI.deleteRepo(props.item);
+		submitLoading.value = false;
+		await menuStore.getSyncMenu();
+		onDialogOK();
+	} catch (error) {
+		submitLoading.value = false;
+	}
 };
 </script>
 

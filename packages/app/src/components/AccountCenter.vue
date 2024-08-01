@@ -39,7 +39,7 @@
 								class="text-left text-body1 full-width text-weight-bold"
 								>{{ user.name }}</q-item-label
 							>
-							<q-item-label class="text-left text-grey-8 full-width did">
+							<q-item-label class="text-left text-ink-1 full-width did">
 								{{ user.id }}</q-item-label
 							>
 						</q-item-section>

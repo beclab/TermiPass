@@ -24,7 +24,7 @@
 				v-else
 				class="biometric-unlock-dialog__group row justify-between items-center"
 			>
-				<slit name="buttons" />
+				<slot name="buttons" />
 			</div>
 		</div>
 	</q-card>

@@ -29,10 +29,14 @@
 				:input-style="{
 					color: inputColor,
 					fontWeight: `${
-						inputTypeRef === 'password' && !isMobile ? '800' : '400'
+						inputTypeRef === 'password' && !$q.platform.is.ios ? '800' : '400'
 					}`,
 					fontSize: `${
-						inputTypeRef === 'password' && !isMobile ? '22px' : '12px'
+						inputTypeRef === 'password' && $q.platform.is.ios
+							? '7px'
+							: inputTypeRef === 'password' && !isMobile
+							? '22px'
+							: '12px'
 					}`
 				}"
 				:readonly="isReadOnly"

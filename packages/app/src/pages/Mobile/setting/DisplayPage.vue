@@ -1,9 +1,9 @@
 <template>
-	<terminus-title-bar :title="t('display')" />
+	<terminus-title-bar :title="t('settings.themes.title')" />
 	<div class="display-root">
 		<q-list class="q-mt-lg">
-			<q-item dense>
-				<!-- <q-item-section>
+			<!-- <q-item dense> -->
+			<!-- <q-item-section>
 					<div class="module-sub-title text-body3">
 						{{ t('language') }}
 					</div>
@@ -24,78 +24,74 @@
 						/>
 					</div>
 				</q-item-section> -->
-				<q-item class="q-mt-md item-centent">
-					<q-item-section class="q-pa-md">
-						<div class="row items-center justify-between text-ink-1 text-h6">
-							{{ t('settings.themes.title') }}
+			<q-item>
+				<q-item-section>
+					<terminus-item :clickable="false">
+						<template v-slot:title>
+							<div class="text-subtitle2 security-root__title">
+								{{ t('settings.themes.follow_system_theme') }}
+							</div>
+						</template>
+						<template v-slot:side>
+							<q-toggle
+								color="light-blue-default"
+								size="xs"
+								v-model="isThemeAuto"
+								val="battery"
+								@update:model-value="changeAutoTheme"
+							/>
+						</template>
+					</terminus-item>
+					<div class="q-mt-sm text-ink-3">
+						After being selected, TermiPass will follow the device's system
+						settings to switch theme modes
+					</div>
+					<div
+						class="q-mt-md row items-center justify-between theme-select"
+						:style="isThemeAuto ? 'opacity: 0.4' : ''"
+					>
+						<div
+							class="theme-item-common"
+							@click="updateTheme(ThemeDefinedMode.LIGHT)"
+						>
+							<q-img
+								src="../../../assets/setting/mobile-theme-light.svg"
+								class="image"
+								:class="isThemeLight ? 'theme-item-select' : ''"
+							/>
+							<div class="content row items-center justify-center q-pl-md">
+								<q-radio
+									dense
+									v-model="deviceStore.theme"
+									:val="ThemeDefinedMode.LIGHT"
+									label="Light"
+									color="yellow-default"
+									@update:model-value="updateTheme(ThemeDefinedMode.LIGHT)"
+								/>
+							</div>
 						</div>
 						<div
-							class="checkbox-content row items-center q-mt-md"
-							@click="updateTheme(ThemeDefinedMode.AUTO)"
+							class="theme-item-common"
+							@click="updateTheme(ThemeDefinedMode.DARK)"
 						>
-							<div
-								class="checkbox-common row items-center justify-center"
-								:class="
-									isThemeAuto ? 'checkbox-selected-yellow' : 'checkbox-unselect'
-								"
-							>
-								<q-icon
-									class="text-ink-on-brand"
-									size="12px"
-									v-if="isThemeAuto"
-									name="sym_r_check"
-								/>
-							</div>
-							<div class="text-body2 text-ink-2">Follow system theme</div>
-						</div>
-						<div class="q-mt-md">
-							After being selected, TermiPass will follow the device's system
-							settings to switch theme modes
-						</div>
-						<div class="q-mt-md row items-center justify-between theme-select">
-							<div
-								class="theme-item-common"
-								:class="isThemeLight ? 'theme-item-select' : ''"
-								@click="updateTheme(ThemeDefinedMode.LIGHT)"
-							>
-								<q-img
-									src="../../../assets/setting/theme-light.svg"
-									class="image"
-								/>
-								<div class="content row items-center q-pl-md">
-									<q-radio
-										dense
-										v-model="deviceStore.theme"
-										:val="ThemeDefinedMode.LIGHT"
-										label="Light"
-										color="yellow-default"
-										@update:model-value="updateTheme(ThemeDefinedMode.LIGHT)"
-									/>
-								</div>
-							</div>
-							<div
-								class="theme-item-common"
+							<q-img
+								src="../../../assets/setting/mobile-theme-dark.svg"
+								class="image"
 								:class="isThemeDark ? 'theme-item-select' : ''"
-								@click="updateTheme(ThemeDefinedMode.DARK)"
-							>
-								<q-img
-									src="../../../assets/setting/theme-dark.svg"
-									class="image"
+							/>
+							<div class="content row items-center justify-center q-pl-md">
+								<q-radio
+									v-model="deviceStore.theme"
+									:val="ThemeDefinedMode.DARK"
+									label="Dark"
+									color="yellow-default"
+									dense
+									@update:model-value="updateTheme(ThemeDefinedMode.DARK)"
 								/>
-								<div class="content row items-center q-pl-md">
-									<q-radio
-										v-model="deviceStore.theme"
-										:val="ThemeDefinedMode.DARK"
-										label="Dark"
-										color="yellow-default"
-										dense
-										@update:model-value="updateTheme(ThemeDefinedMode.DARK)"
-									/>
-								</div>
 							</div>
 						</div>
-					</q-item-section>
-				</q-item>
+					</div>
+				</q-item-section>
 			</q-item>
 		</q-list>
 		<q-item v-if="isBex">
@@ -165,6 +161,7 @@ import TerminusSettingsModuleItem from '../../../components/common/TerminusSetti
 import { computed } from 'vue';
 import { ThemeDefinedMode } from '@bytetrade/ui';
 import { useDeviceStore } from '../../../stores/device';
+import TerminusItem from '../../../components/common/TerminusItem.vue';
 
 const { t } = useI18n();
 // const userStore = useUserStore();
@@ -211,9 +208,19 @@ onMounted(async () => {
 	}
 });
 
-const isThemeAuto = computed(function () {
-	return deviceStore.theme == ThemeDefinedMode.AUTO;
-});
+// const isThemeAuto = computed(function () {
+// 	return deviceStore.theme == ThemeDefinedMode.AUTO;
+// });
+
+const isThemeAuto = ref(deviceStore.theme == ThemeDefinedMode.AUTO);
+
+const changeAutoTheme = (value: boolean) => {
+	if (value) {
+		updateTheme(ThemeDefinedMode.AUTO);
+	} else {
+		updateTheme(ThemeDefinedMode.LIGHT);
+	}
+};
 
 const isThemeDark = computed(function () {
 	return deviceStore.theme == ThemeDefinedMode.DARK;
@@ -223,6 +230,9 @@ const isThemeLight = computed(function () {
 	return deviceStore.theme == ThemeDefinedMode.LIGHT;
 });
 const updateTheme = (theme: ThemeDefinedMode) => {
+	if (theme != ThemeDefinedMode.AUTO) {
+		isThemeAuto.value = false;
+	}
 	deviceStore.setTheme(theme);
 };
 </script>
@@ -292,21 +302,22 @@ const updateTheme = (theme: ThemeDefinedMode) => {
 		.theme-item-common {
 			// height: 144px;
 			width: calc(50% - 10px);
-			border: 1px solid $separator;
-			border-radius: 12px;
+
 			overflow: hidden;
 			.image {
+				border: 2px solid transparent;
+				border-radius: 12px;
 				width: 100%;
-				height: 100px;
+				// height: 100px;
 			}
-			.content {
-				width: 100%;
-				height: 44px;
+			.theme-item-select {
+				border: 2px solid $yellow-default;
+				border-radius: 16px;
 			}
 		}
-
-		.theme-item-select {
-			border: 1px solid $yellow-default;
+		.content {
+			width: 100%;
+			height: 44px;
 		}
 	}
 }

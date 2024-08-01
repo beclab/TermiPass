@@ -10,7 +10,6 @@
 				:icon="item.icon"
 				:label="item.name"
 				:action="item.action"
-				@on-item-click="onItemClick"
 				@hide-menu="hideMenu"
 			/>
 		</template>
@@ -19,15 +18,17 @@
 
 <script setup lang="ts">
 import { defineEmits, defineProps, ref, watch, computed, reactive } from 'vue';
-import { useRoute } from 'vue-router';
-import { useDataStore } from '../../../stores/data';
+import { useRoute, useRouter } from 'vue-router';
+// import { useDataStore } from '../../../stores/data';
 import { useQuasar } from 'quasar';
 import { useMenuStore } from '../../../stores/files-menu';
-import { SYNC_STATE, OPERATE_ACTION } from '../../../utils/contact';
+import { SYNC_STATE } from '../../../utils/contact';
 import { containsSameValue } from '../../../utils/utils';
-import { EventType, OriginType } from '../../../api/common/encoding';
 import { useOperateinStore } from './../../../stores/operation';
 import FileOperationItem from './FileOperationItem.vue';
+
+import { useFilesStore, DriveType } from '../../../stores/files';
+import { EventType } from '../../../stores/operation';
 
 const props = defineProps({
 	clientX: Number,
@@ -43,9 +44,11 @@ const props = defineProps({
 });
 
 const Route = useRoute();
-const dataStore = useDataStore();
+const Router = useRouter();
+// const dataStore = useDataStore();
 const menuStore = useMenuStore();
 const operateinStore = useOperateinStore();
+const filesStore = useFilesStore();
 
 const emit = defineEmits(['changeVisible']);
 
@@ -87,24 +90,28 @@ watch(
 );
 
 watch(
-	() => dataStore.copyFiles.items,
+	() => operateinStore.copyFiles,
 	(newVaule) => {
+		console.log('copyFilescopyFiles', newVaule);
 		if (newVaule && newVaule.length > 0) {
 			eventType.hasCopied = true;
 		} else {
 			eventType.hasCopied = false;
 		}
+	},
+	{
+		deep: true
 	}
 );
 
 const filterItem = (item: any) => {
-	if (dataStore.selectedCount > 1) {
+	if (filesStore.selectedCount > 1) {
 		eventType.showRename = false;
 	} else {
 		eventType.showRename = true;
 	}
 
-	if (item.type === OriginType.SYNC) {
+	if (item.type === DriveType.Sync) {
 		const repo_id = Route.query.id?.toString();
 		if (repo_id) {
 			const status = menuStore.syncReposLastStatusMap[repo_id]
@@ -113,8 +120,8 @@ const filterItem = (item: any) => {
 
 			let statusFalg =
 				status > SYNC_STATE.DISABLE && status != SYNC_STATE.UNKNOWN;
-			if (dataStore.selectedCount === 1 && statusFalg) {
-				eventType.type = OriginType.SYNC;
+			if (filesStore.selectedCount === 1 && statusFalg) {
+				eventType.type = DriveType.Sync;
 			} else {
 				eventType.type = undefined;
 			}
@@ -123,12 +130,10 @@ const filterItem = (item: any) => {
 		}
 	}
 
-	const hasSelected =
-		dataStore?.req?.items &&
-		dataStore?.req?.items.length > 0 &&
-		dataStore.req.items.filter((_, index) =>
-			dataStore.selected.includes(index)
-		);
+	const hasSelected = filesStore.currentFileList?.filter((_, index) => {
+		return filesStore.selected.includes(index);
+	});
+
 	const hasSameValue = containsSameValue(
 		hasSelected,
 		operateinStore.disableMenuItem,
@@ -173,18 +178,6 @@ watch(
 
 const hideMenu = () => {
 	emit('changeVisible');
-};
-
-const onItemClick = async (action: any, data: any) => {
-	if (action == OPERATE_ACTION.PASTE) {
-		dataStore.resetCopyFiles();
-	} else if (action == OPERATE_ACTION.OPEN_LOCAL_SYNC_FOLDER) {
-		const repo_id = Route.query.id as string;
-		const isElectron = $q.platform.is.electron;
-		if (isElectron) {
-			window.electron.api.files.openLocalRepo(repo_id, data);
-		}
-	}
 };
 </script>
 

@@ -34,7 +34,7 @@
 		>
 			<div
 				class="paste-parent q-mt-lg row justify-center items-center"
-				:class="isPaste ? 'text-blue-4' : 'text-grey-8'"
+				:class="isPaste ? 'text-blue-4' : 'text-ink-1'"
 				@click="pasteFunc"
 			>
 				<q-icon size="16px" name="sym_r_content_copy" v-if="isCopy" />

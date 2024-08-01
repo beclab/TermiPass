@@ -75,7 +75,7 @@
 				v-else
 			>
 				<img src="../../../../assets/layout/nodata.svg" />
-				<span class="text-grey-8" style="margin-top: 32px; margin-bottom: 70px">
+				<span class="text-ink-1" style="margin-top: 32px; margin-bottom: 70px">
 					{{ t('not_have_any_members_yet') }}
 				</span>
 			</div>

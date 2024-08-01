@@ -6,7 +6,11 @@
 	>
 		<div
 			class="empty column items-center justify-center full-height"
-			v-if="store.req.numDirs + store.req.numFiles == 0"
+			v-if="
+				filesStore.currentDirItems?.length +
+					filesStore.currentFileItems?.length ==
+				0
+			"
 		>
 			<img src="../../../assets/images/empty.png" alt="empty" />
 			<span class="text-body2 text-ink-1">{{ $t('files.lonely') }}</span>
@@ -79,18 +83,9 @@
 
 				<div class="common-div" style="padding: 0 34px 40px">
 					<ListingItem
-						v-for="item in dirs"
+						v-for="item in filesStore.currentDirItems"
 						:key="base64(item.name)"
-						v-bind:index="item.index"
-						v-bind:name="item.name"
-						v-bind:isDir="item.isDir"
-						v-bind:url="item.url"
-						v-bind:modified="item.modified"
-						v-bind:type="item.type"
-						v-bind:size="item.size"
-						v-bind:fileSize="item.fileSize"
-						v-bind:path="item.path"
-						v-bind:extension="item.extension"
+						:item="item"
 						v-bind:viewMode="store.user.viewMode"
 						@contextmenu.stop="rightClick($event, item)"
 						@closeMenu="changeVisible"
@@ -99,37 +94,15 @@
 					</ListingItem>
 
 					<ListingItem
-						v-for="item in files"
+						v-for="item in filesStore.currentFileItems"
 						:key="base64(item.name)"
-						v-bind:index="item.index"
-						v-bind:name="item.name"
-						v-bind:isDir="item.isDir"
-						v-bind:url="item.url"
-						v-bind:modified="item.modified"
-						v-bind:type="item.type"
-						v-bind:size="item.size"
-						v-bind:fileSize="item.fileSize"
-						v-bind:path="item.path"
-						v-bind:extension="item.extension"
+						:item="item"
 						v-bind:viewMode="store.user.viewMode"
 						@contextmenu.stop="rightClick($event, item)"
 						@closeMenu="changeVisible"
 						@resetOpacity="resetOpacity"
 					>
 					</ListingItem>
-				</div>
-				<div :class="{ active: store.multiple }" id="multiple-selection">
-					<p>{{ $t('files.multipleSelectionEnabled') }}</p>
-					<div
-						@click="store.setMultiple(false)"
-						tabindex="0"
-						role="button"
-						:title="$t('files.clear')"
-						:aria-label="$t('files.clear')"
-						class="action"
-					>
-						<i class="material-icons">clear</i>
-					</div>
 				</div>
 			</BtScrollArea>
 		</div>
@@ -153,15 +126,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-	defineComponent,
-	ref,
-	onMounted,
-	onUnmounted,
-	computed,
-	watch,
-	nextTick
-} from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 // import { format } from 'quasar';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';
@@ -183,6 +148,9 @@ import { useOperateinStore } from './../../../stores/operation';
 
 import IndexUploader from './../uploader/IndexUploader.vue';
 
+import { useFilesStore } from './../../../stores/files';
+import { useMenuStore } from './../../../stores/files-menu';
+
 const store = useDataStore();
 const route = useRoute();
 const operateinStore = useOperateinStore();
@@ -201,8 +169,11 @@ let showLimit = 50;
 const repoId = ref();
 const fileUploaderPath = ref();
 
+const filesStore = useFilesStore();
+const menuStore = useMenuStore();
+
 watch(
-	() => store.req,
+	() => filesStore.currentFileList,
 	(newVal) => {
 		showLimit = 50;
 
@@ -210,80 +181,55 @@ watch(
 			setItemWeight();
 			fillWindow(true);
 		});
+	},
+	{
+		deep: true
 	}
 );
 
 watch(
 	() => route.path,
 	() => {
+		console.log('pathpathpath', route.path);
 		menuVisible.value = false;
 		repoId.value = route.query.id;
 
-		const currentItem = store.currentItem;
+		const currentItem = menuStore.activeMenu.label;
+
+		console.log('currentItemcurrentItem', currentItem);
 
 		fileUploaderPath.value =
 			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
 			'/';
-
-		console.log('fileUploaderPathfileUploaderPath', fileUploaderPath.value);
-
-		if (route.query.id) {
-			store.hideSyncUploadModal = false;
-		} else {
-			if (store.isUploadProgressDialogShow) {
-				store.hideSyncUploadModal = true;
-			}
-		}
+	},
+	{
+		immediate: true
 	}
 );
 
 const nameSorted = computed(function () {
 	// return store.req.sorting.by === 'name';
-	return store.activeSort.by === 1;
+	return filesStore.activeSort.by === 1;
 });
 
 const sizeSorted = computed(function () {
 	// return store.req.sorting.by === 'size';
-	return store.activeSort.by === 2;
+	return filesStore.activeSort.by === 2;
 });
 
 const typeSorted = computed(function () {
 	// return store.req.sorting.by === 'type';
-	return store.activeSort.by === 3;
+	return filesStore.activeSort.by === 3;
 });
 
 const modifiedSorted = computed(function () {
 	// return store.req.sorting.by === 'modified';
-	return store.activeSort.by === 4;
+	return filesStore.activeSort.by === 4;
 });
 
 const ascOrdered = computed(function () {
 	// return store.req.sorting.asc;
-	return store.activeSort.asc;
-});
-
-const items = computed(function () {
-	const dirs: any = [];
-	const files: any = [];
-
-	store.req.items &&
-		store.req.items.forEach((item: any) => {
-			if (item.isDir) {
-				dirs.push(item);
-			} else {
-				files.push(item);
-			}
-		});
-
-	return { dirs, files };
-});
-
-const dirs = computed(function () {
-	return items.value.dirs;
-});
-
-const files = computed(function () {
-	return items.value.files;
+	return filesStore.activeSort.asc;
 });
 
 const nameIcon = computed(function () {
@@ -312,22 +258,6 @@ const typeIcon = computed(function () {
 		return 'arrow_upward';
 	}
 	return 'arrow_downward';
-});
-
-const headerButtons = computed(function () {
-	return {
-		upload: store.user?.perm?.create,
-		download: store.user?.perm?.download,
-		delete: store.selectedCount > 0 && store.user?.perm?.delete,
-		rename: store.selectedCount === 1 && store.user?.perm?.rename,
-		share: store.selectedCount === 1 && store.user?.perm?.share,
-		move: store.selectedCount > 0 && store.user?.perm?.rename,
-		copy: store.selectedCount > 0 && store.user?.perm?.create
-	};
-});
-
-const isMobile = computed(function () {
-	return width.value <= 736;
 });
 
 onMounted(() => {
@@ -375,12 +305,12 @@ const keyEvent = (event: any) => {
 	// Esc!
 	if (event.keyCode === 27) {
 		// Reset files selection.
-		store.resetSelected();
+		filesStore.resetSelected();
 	}
 
 	// Del!
 	if (event.keyCode === 46) {
-		if (!store.user.perm.delete || store.selectedCount == 0) return;
+		if (!store.user.perm.delete || filesStore.selectedCount == 0) return;
 
 		// Show delete prompt.
 		store.showHover('delete');
@@ -388,7 +318,7 @@ const keyEvent = (event: any) => {
 
 	// F2!
 	if (event.keyCode === 113) {
-		if (!store.user.perm.rename || store.selectedCount !== 1) return;
+		if (!store.user.perm.rename || filesStore.selectedCount !== 1) return;
 
 		// Show rename prompt.
 		store.showHover('rename');
@@ -417,14 +347,14 @@ const keyEvent = (event: any) => {
 			break;
 		case 'a':
 			event.preventDefault();
-			for (let file of items.value.files) {
-				if (store.selected.indexOf(file.index) === -1) {
-					store.addSelected(file.index);
+			for (let file of filesStore.currentFileItems) {
+				if (filesStore.selected.indexOf(file.index) === -1) {
+					filesStore.addSelected(file.index);
 				}
 			}
-			for (let dir of items.value.dirs) {
-				if (store.selected.indexOf(dir.index) === -1) {
-					store.addSelected(dir.index);
+			for (let dir of filesStore.currentDirItems) {
+				if (filesStore.selected.indexOf(dir.index) === -1) {
+					filesStore.addSelected(dir.index);
 				}
 			}
 			break;
@@ -445,7 +375,8 @@ const optionAction = (event: any, type: OPERATE_ACTION) => {
 };
 
 const scrollEvent = throttle(() => {
-	const totalItems = store.req.numDirs + store.req.numFiles;
+	const totalItems =
+		filesStore.currentDirItems?.length + filesStore.currentFileItems?.length;
 
 	// All items are displayed
 	if (showLimit >= totalItems) return;
@@ -525,62 +456,11 @@ const drop = async (event: any) => {
 	if (conflict) {
 		const newfile = await createCopiedFile(files, items);
 		handleFiles(newfile, path, true);
-		// store.showHover({
-		// 	prompt: 'replace',
-		// 	confirm: (event: any) => {
-		// 		event.preventDefault();
-		// 		store.closeHovers();
-		// 		handleFiles(files, path, true);
-		// 	}
-		// });
-
 		return;
 	}
 
 	await handleFiles(files, path);
 };
-
-// const uploadInput = async (event: any) => {
-// 	store.closeHovers();
-// 	if (!store.showUploadModal) {
-// 		store.changeUploadModal(true);
-// 	}
-// 	let files = event.currentTarget.files;
-// 	let folder_upload =
-// 		files[0].webkitRelativePath !== undefined &&
-// 		files[0].webkitRelativePath !== '';
-
-// 	if (folder_upload) {
-// 		for (let i = 0; i < files.length; i++) {
-// 			let file = files[i];
-// 			files[i].fullPath = file.webkitRelativePath;
-// 		}
-// 	}
-
-// 	let path = route.path.endsWith('/')
-// 		? decodeURIComponent(route.path)
-// 		: decodeURIComponent(route.path) + '/';
-// 	let conflict = checkConflict(files, store.req.items);
-
-// 	if (conflict) {
-// 		const newfile = await createCopiedFile(files, store.req.items);
-// 		handleFiles(newfile, path, true);
-
-// 		// store.showHover({
-// 		// 	prompt: 'replace',
-// 		// 	confirm: async (event: any) => {
-// 		// 		event.preventDefault();
-// 		// 		store.closeHovers();
-// 		//     const newfile =  await createCopiedFile(files, store.req.items)
-// 		// 		handleFiles(newfile, path, true);
-// 		// 	}
-// 		// });
-
-// 		return;
-// 	}
-
-// 	handleFiles(files, path);
-// };
 
 const resetOpacity = () => {
 	let items = document.getElementsByClassName('item');
@@ -616,7 +496,7 @@ const sort = async (by: string) => {
 		}
 	}
 
-	store.updateActiveSort(selfBy, asc);
+	filesStore.updateActiveSort(selfBy, asc);
 
 	// try {
 	// 	await users.update(
@@ -628,15 +508,6 @@ const sort = async (by: string) => {
 	// }
 
 	// store.setReload(true);
-};
-
-const openSearch = () => {
-	store.showHover('search');
-};
-
-const toggleMultipleSelection = () => {
-	store.setMultiple(!store.multiple);
-	store.closeHovers();
 };
 
 const windowsResize = throttle(() => {
@@ -652,48 +523,12 @@ const windowsResize = throttle(() => {
 	fillWindow();
 }, 100);
 
-const download = () => {
-	if (store.selectedCount === 1 && !store.req.items[store.selected[0]].isDir) {
-		api.download(null, undefined, store.req.items[store.selected[0]].url);
-		return;
-	}
-
-	store.showHover({
-		prompt: 'download',
-		confirm: (format: any) => {
-			store.closeHovers();
-
-			let files: any = [];
-
-			if (store.selectedCount > 0) {
-				for (let i of store.selected) {
-					files.push(store.req.items[i].url);
-				}
-			} else {
-				files.push(route.path);
-			}
-
-			api.download(format, undefined, ...files);
-		}
-	});
-};
-
-const upload = () => {
-	if (
-		typeof window.DataTransferItem !== 'undefined' &&
-		typeof DataTransferItem.prototype.webkitGetAsEntry !== 'undefined'
-	) {
-		store.showHover('upload');
-	} else {
-		document.getElementById('upload-input')?.click();
-	}
-};
-
 const setItemWeight = () => {
 	// Listing element is not displayed
 	if (listing.value == null) return;
 
-	let itemQuantity = store.req.numDirs + store.req.numFiles;
+	let itemQuantity =
+		filesStore.currentDirItems?.length + filesStore.currentFileItems?.length;
 	if (itemQuantity > showLimit) itemQuantity = showLimit;
 
 	// How much every listing item affects the window height
@@ -701,7 +536,8 @@ const setItemWeight = () => {
 };
 
 const fillWindow = (fit = false) => {
-	const totalItems = store.req.numDirs + store.req.numFiles;
+	const totalItems =
+		filesStore.currentDirItems?.length + filesStore.currentFileItems?.length;
 
 	// More items are displayed than the total
 	if (showLimit >= totalItems && !fit) return;
@@ -745,13 +581,13 @@ const rightClick = (e: any, item?: any) => {
 	menuList.value = item;
 	menuVisible.value = true;
 	stopScrollMove(e);
-	if (store.selectedCount === 0) {
-		item && store.addSelected(item.index);
+	if (filesStore.selected.length === 0) {
+		item && filesStore.addSelected(item.index);
 		return;
 	}
-	if (store.selected.indexOf(item.index) === -1) {
-		store.resetSelected();
-		store.addSelected(item.index);
+	if (item && filesStore.selected.indexOf(item.index) === -1) {
+		filesStore.resetSelected();
+		filesStore.addSelected(item.index);
 	}
 };
 
@@ -760,7 +596,7 @@ const leftClick = (e: any) => {
 		menuVisible.value = false;
 		startScrollMove(e);
 	}
-	store.resetSelected();
+	filesStore.resetSelected();
 };
 
 const changeVisible = (e: any) => {

@@ -452,6 +452,8 @@ export class TermiPassState {
 					? userStore.pingTerminusInfo
 					: this.currentUser.terminus_url;
 
+				// const baseUrl = this.currentUser.terminus_url;
+
 				const instance = axiosInstanceProxy({
 					baseURL: baseUrl,
 					headers: {

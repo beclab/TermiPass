@@ -20,11 +20,6 @@
 				>
 					<div
 						class="text-subtitle2"
-						:style="
-							user.name && user.id == userStore.current_user?.id
-								? 'max-width: 40%'
-								: 'max-width: 100%'
-						"
 						style="text-align: left"
 						:class="{
 							'text-ink-1': user.name,
@@ -34,18 +29,17 @@
 					>
 						{{ user.name ? user.local_name : t('terminus_name_not_created') }}
 					</div>
-					<div
+					<!-- <div
 						style="max-width: 60%"
 						v-if="user.name && user.id == userStore.current_user?.id"
 					>
 						<terminus-user-status class="q-ml-sm" />
-					</div>
+					</div> -->
 				</div>
 
 				<div
-					class="text-body3 terminus-account-root__right__text__detail"
+					class="text-body3 terminus-account-root__right__text__detail text-ink-3"
 					style="text-align: left"
-					:class="user.name ? 'text-ink-2' : 'text-ink-3'"
 				>
 					{{ subInfo }}
 				</div>
@@ -65,7 +59,6 @@ import { UserItem } from '@didvault/sdk/src/core';
 import { generateStringEllipsis } from '../../utils/utils';
 import { useI18n } from 'vue-i18n';
 import { useUserStore } from '../../stores/user';
-import TerminusUserStatus from './TerminusUserStatus.vue';
 
 const { t } = useI18n();
 const userStore = useUserStore();
@@ -99,8 +92,8 @@ onMounted(() => {
 .terminus-account-root {
 	width: 100%;
 	padding: 12px;
-	height: 64px;
-	border-radius: 8px;
+	// height: 64px;
+	border-radius: 12px;
 	border: 1px solid $separator;
 
 	&__img {
@@ -117,12 +110,13 @@ onMounted(() => {
 
 		&__text {
 			height: 100%;
-			width: calc(100% - 75px);
+			width: calc(100% - 40px);
+			// background-color: red;
 			&__detail {
 				width: calc(100% - 5px);
-				overflow: hidden; //超出的文本隐藏
-				text-overflow: ellipsis; //溢出用省略号显示
-				white-space: nowrap; //溢出不换行
+				word-wrap: break-word; /* 强制换行 */
+				overflow-wrap: break-word; /* 兼容性 */
+				white-space: normal; /* 允许换行 */
 			}
 		}
 	}

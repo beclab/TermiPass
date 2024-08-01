@@ -34,7 +34,7 @@
 						src="../../../assets/layout/nodata.svg"
 						style="margin-top: 180px"
 					/>
-					<span class="q-mb-md text-grey-8" style="margin-top: 32px">
+					<span class="q-mb-md text-ink-1" style="margin-top: 32px">
 						{{ t('there_is_nothing_for_now') }}
 					</span>
 				</div>

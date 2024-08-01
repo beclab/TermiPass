@@ -5,11 +5,6 @@ import { InOfflineMode } from '../utils/checkTerminusState';
 
 import { useDataStore } from '../stores/data';
 
-interface OptType {
-	auth: boolean;
-	node: string;
-}
-
 const defaultConfig: AxiosRequestConfig = {
 	baseURL: '',
 	timeout: 600000,
@@ -76,22 +71,9 @@ class Fetch {
 
 	public async get<T = any>(
 		url: string,
-		config?: AxiosRequestConfig,
-		opt?: OptType
+		config?: AxiosRequestConfig
 	): Promise<T> {
-		try {
-			if (opt?.node) {
-				config!.headers = {
-					'X-Terminus-Node': opt.node,
-					...config!.headers
-				};
-			}
-		} catch (e) {
-			console.error(e);
-		}
-
 		const response: AxiosResponse<T> = await this.instance.get(url, config);
-
 		return response.data;
 	}
 
