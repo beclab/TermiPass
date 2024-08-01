@@ -40,7 +40,7 @@
     "@capacitor/push-notifications": "^6.0.1",
     "@capacitor/screen-orientation": "^6.0.1",
     "@capacitor/status-bar": "^6.0.0",
-    "@bytetrade/capacitor-native-biometric": "^6.0.3",
+    "@bytetrade/capacitor-native-biometric": "^6.0.4",
     "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
     "@didvault/locale": "../locale",
     "@didvault/sdk": "../sdk",
