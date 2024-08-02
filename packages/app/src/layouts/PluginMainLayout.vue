@@ -8,13 +8,13 @@
 		<plugin-drawer />
 
 		<q-page-container>
-			<div class="plugin-page-wrapper">
+			<q-page class="plugin-page-wrapper">
 				<div class="plugin-page-content">
 					<q-page class="row items-center justify-start plugin-page">
 						<router-view />
 					</q-page>
 				</div>
-			</div>
+			</q-page>
 		</q-page-container>
 	</q-layout>
 </template>
@@ -119,12 +119,11 @@ const getFileTitle = (path: string) => {
 	.plugin-page-wrapper {
 		position: relative;
 		padding: 12px 0 12px 12px;
-		height: 100vh;
 		.plugin-page-content {
 			position: absolute;
 			top: 12px;
 			left: 12px;
-			right: 0;
+			right: 12px;
 			bottom: 12px;
 		}
 	}

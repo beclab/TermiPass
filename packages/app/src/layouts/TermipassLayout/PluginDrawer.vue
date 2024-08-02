@@ -1,65 +1,46 @@
 <template>
 	<div class="drawer-wrapper">
-		<q-drawer
-			show-if-above
-			behavior="desktop"
-			height="100%"
-			:width="72"
-			side="right"
-			style="background: transparent"
-		>
-			<q-scroll-area
-				style="height: 100%; width: 100%"
-				:thumb-style="scrollBarStyle.thumbStyle"
-			>
-				<q-list class="pluginDrawer column items-center justify-center">
-					<div clickable class="menu-scale">
-						<q-icon
-							name="sym_r_right_panel_close"
-							size="20px"
-							@click="toggleBex"
-						/>
-					</div>
-
-					<template v-for="(menu, index) in menus" :key="index">
-						<div
-							clickable
-							class="column items-center justify-center menu-item"
-							:class="menu.label === activeItem ? 'active-item' : ''"
-							@click="handleItem(menu.label)"
-						>
-							<div class="icon-wrap row items-center justify-center">
-								<img :src="showMenuIcon(menu.label)" />
-							</div>
-							<div
-								class="item-text q-mt-sm text-body3"
-								:class="
-									menu.label == activeItem ? 'text-grey-10' : 'text-grey-6'
-								"
-							>
-								{{ menu.label }}
-							</div>
+		<q-footer class="bg-white">
+			<q-list class="pluginDrawer row items-center justify-around">
+				<template v-for="(menu, index) in menus" :key="index">
+					<div
+						clickable
+						class="column items-center justify-center menu-item"
+						:class="menu.label === activeItem ? 'active-item' : ''"
+						@click="handleItem(menu.label)"
+					>
+						<div class="icon-wrap row items-center justify-center">
+							<img :src="showMenuIcon(menu.label)" />
 						</div>
-					</template>
+						<div
+							class="item-text text-body3"
+							:class="menu.label == activeItem ? 'text-grey-10' : 'text-grey-6'"
+						>
+							{{ menu.label }}
+						</div>
+					</div>
+				</template>
 
-					<div class="menu-footer column items-center justify-center">
-						<!-- <q-icon
+				<div class="column items-center justify-center menu-item">
+					<!-- <q-icon
 						name="sym_o_settings"
 						size="24px"
 						class="cursor-pointer settings"
 						@click="showSettings"
 					/> -->
 
+					<div class="icon-wrap row items-center justify-center">
 						<TerminusAvatar
 							class="avatar-circle"
 							:info="userStore.terminusInfo()"
-							:size="28"
+							:size="20"
 							@click="showSettings"
 						/>
 					</div>
-				</q-list>
-			</q-scroll-area>
-		</q-drawer>
+					<div class="item-text text-body3 text-grey-6">User</div>
+				</div>
+			</q-list>
+		</q-footer>
 	</div>
 </template>
 
@@ -179,7 +160,6 @@ const toggleBex = () => {
 .menu-item {
 	width: 56px;
 	height: 64px;
-	margin-top: 28px;
 	cursor: pointer;
 
 	.icon-wrap {
@@ -205,12 +185,13 @@ const toggleBex = () => {
 }
 
 .pluginDrawer {
-	padding: 12px 0;
+	padding: 6px 0;
 }
 
 .menu-footer {
-	position: absolute;
-	bottom: 32px;
+	// position: absolute;
+	// bottom: 32px;
+	border: 1px solid red;
 
 	.settings {
 		margin-bottom: 20px;
