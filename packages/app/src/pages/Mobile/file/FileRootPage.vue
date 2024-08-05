@@ -248,7 +248,7 @@ onMounted(async () => {
 	.flur1 {
 		width: 135px;
 		height: 135px;
-		background: rgba(133, 211, 255, 0.7);
+		background: rgba(133, 211, 255, 0.5);
 		filter: blur(70px);
 		position: absolute;
 		right: 10vw;
@@ -259,7 +259,7 @@ onMounted(async () => {
 	.flur2 {
 		width: 110px;
 		height: 110px;
-		background: rgba(217, 255, 109, 0.6);
+		background: rgba(217, 255, 109, 0.4);
 		filter: blur(70px);
 		position: absolute;
 		left: 10vw;
