@@ -9,7 +9,9 @@ import {
 	MnemonicItem,
 	MnemonicItemCollection,
 	Vault,
-	VaultItem
+	VaultItem,
+	UserItem,
+	UserItemCollection
 } from '@didvault/sdk/src/core';
 import { AppState } from '@didvault/sdk/src/core/app';
 import { Menus } from 'webextension-polyfill-ts';
@@ -23,9 +25,16 @@ export class DataCenter {
 	private _password: string | undefined = undefined;
 	//data
 	private _mnemonicItems: MnemonicItemCollection | undefined = undefined;
+	private _userItems: UserItemCollection | undefined = undefined;
+
 	private _currentItem: MnemonicItem | undefined = undefined;
+	private _currentUser: UserItem | undefined = undefined;
 
 	private _appState: AppState | undefined = undefined;
+
+	constructor() {
+		console.log('DataCenter init');
+	}
 
 	isLocked() {
 		return this._appState === undefined || this._appState.locked;
@@ -54,7 +63,7 @@ export class DataCenter {
 
 	async getCurrentName() {
 		return !this.isLocked() && (await this.hasUser())
-			? this._currentItem?.id
+			? this._currentUser?.name
 			: '';
 	}
 
@@ -111,6 +120,7 @@ export class DataCenter {
 		this._appState = undefined;
 		this._mnemonicItems = undefined;
 		this._currentItem = undefined;
+		this._currentUser = undefined;
 
 		this._password = undefined;
 		bgBusEmit('BROADCAST_TO_UI', {
@@ -139,19 +149,35 @@ export class DataCenter {
 		}
 	}
 
-	async decryptUserItems(data: string, accountId: string) {
-		if (!data) {
+	async decryptUserItems(
+		accountData: string,
+		mnemonicData: string,
+		accountId: string
+	) {
+		if (!accountData) {
+			this._userItems = undefined;
+			return;
+		}
+
+		if (!mnemonicData) {
 			this._mnemonicItems = undefined;
 			return;
 		}
-		this._mnemonicItems = new MnemonicItemCollection().fromBytes(
-			base64ToBytes(data)
+
+		this._userItems = new UserItemCollection().fromBytes(
+			base64ToBytes(accountData)
 		);
+
+		this._mnemonicItems = new MnemonicItemCollection().fromBytes(
+			base64ToBytes(mnemonicData)
+		);
+
 		if (!accountId) {
 			this._currentItem = undefined;
 			return;
 		}
 		this._currentItem = this._mnemonicItems.get(accountId)!;
+		this._currentUser = this._userItems.get(accountId)!;
 
 		await this._unlockAppState();
 	}
@@ -167,7 +193,6 @@ export class DataCenter {
 			return;
 		}
 		await this._appState!.account?.unlock(this._currentItem.mnemonic);
-
 		if (this._appState.vaults && this._appState.vaults.length > 0) {
 			for (let index = 0; index < this._appState.vaults.length; index++) {
 				const vault = this._appState.vaults[index];
@@ -245,5 +270,7 @@ export class DataCenter {
 		this._appState = undefined;
 		this._mnemonicItems = undefined;
 		this._currentItem = undefined;
+		this._currentUser = undefined;
+		this._userItems = undefined;
 	}
 }

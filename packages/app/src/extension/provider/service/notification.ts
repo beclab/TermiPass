@@ -99,22 +99,31 @@ class NotificationService extends Events {
 	};
 
 	rejectApproval = async (err?: string, isInternal = false) => {
+		console.log(1);
+
 		if (isInternal) {
+			console.log(2);
 			this.currentApproval?.reject &&
 				this.currentApproval?.reject(new Error('internal error'));
 		} else {
+			console.log(3);
 			this.currentApproval?.reject &&
 				this.currentApproval?.reject(new Error('user Rejected Request'));
 		}
-
+		console.log(4);
 		const approval = this.currentApproval;
-
+		console.log(5);
 		if (approval && this.approvals.length > 1) {
+			console.log(6);
 			this.deleteApproval(approval);
 			this.currentApproval = this.approvals[0];
 		} else {
+			console.log(7);
 			await this.clear();
 		}
+		console.log(8);
+		console.log(this.approvals.length);
+
 		this.emit('reject', err);
 	};
 

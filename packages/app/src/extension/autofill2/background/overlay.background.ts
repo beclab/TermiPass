@@ -27,6 +27,9 @@ import {
 } from '../utils/autofill-overlay.enum';
 import { AuthenticationStatus } from 'src/extension/utils/enums';
 import { AuthService } from 'src/extension/services/auth.service';
+import provider from 'src/extension/provider/provider';
+import { getOriginFromUrl } from 'src/extension/provider/utils';
+import { sessionService } from '../../provider/service';
 
 class OverlayBackground implements OverlayBackgroundInterface {
 	private overlayLoginVault: Map<string, VaultItem> = new Map();
@@ -524,11 +527,21 @@ class OverlayBackground implements OverlayBackgroundInterface {
 		if (!currentTab?.id) {
 			return;
 		}
-		browser.tabs.sendMessage(currentTab.id!, {
-			url: currentTab.url,
-			type: 'toggle-slider',
-			show: true
+		const sessionId = port.sender?.tab?.id;
+		if (sessionId === undefined || !port.sender?.url) {
+			return;
+		}
+		const origin = getOriginFromUrl(port.sender!.url!);
+		const session = sessionService.getOrCreateSession(sessionId, origin);
+
+		await provider({
+			data: {
+				method: 'getUserInfo',
+				from: 'bg'
+			},
+			session
 		});
+		// this.updateOverlayCiphers();
 	}
 
 	private async viewSelectedCipher(

@@ -13,6 +13,7 @@
 		:biometry-auto-unlock="true"
 		class="bg-white"
 	/>
+	<router-view></router-view>
 </template>
 
 <script lang="ts" setup>

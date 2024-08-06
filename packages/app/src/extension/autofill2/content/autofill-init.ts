@@ -107,9 +107,6 @@ class AutofillInit implements AutofillInitInterface {
 		message: AutofillExtensionMessage,
 		sendDetailsInResponse = false
 	): Promise<AutofillPageDetails | void> {
-		console.log('collectPageDetailsImmediately ===>');
-		console.log(sendDetailsInResponse);
-
 		const pageDetails: AutofillPageDetails =
 			await this.collectAutofillContentService.getPageDetails();
 

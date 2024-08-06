@@ -27,19 +27,6 @@ export enum RssStatus {
 export interface RssInfo extends BaseCollectInfo {
 	status: RssStatus;
 }
-
-export enum PDFStatus {
-	none,
-	loading,
-	error,
-	success
-}
-
-export interface PDFInfo extends BaseCollectInfo {
-	status: PDFStatus;
-	progress?: DownloadProgress; // 0-1
-}
-
 export interface DownloadProgress {
 	id: string;
 	url: string;
@@ -51,10 +38,11 @@ export interface DownloadProgress {
 	isLoading: boolean;
 }
 
-export enum DOWNLOAD_STATUS {
-	SUCCESS = 'success',
-	FAILED = 'failed',
-	DOWNLOADING = 'downloading',
-	//font
-	UNKNOWN = 'unknown'
+export enum FILE_TYPE {
+	ARTICLE = 'article',
+	VIDEO = 'video',
+	AUDIO = 'audio',
+	PDF = 'pdf',
+	EBOOK = 'ebook',
+	GENERAL = 'general'
 }

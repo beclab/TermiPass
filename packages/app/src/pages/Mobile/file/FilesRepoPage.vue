@@ -1,11 +1,8 @@
 <template>
 	<div class="files-list-root">
-		<terminus-title-bar
-			:title="title"
-			:is-dark="isDark"
-			:right-icon="rightIcon"
-			@on-right-click="showOperation"
-		/>
+		<terminus-title-bar :title="title" :is-dark="isDark" />
+		<!-- :right-icon="rightIcon"
+			@on-right-click="showOperation" -->
 		<div class="content">
 			<div
 				v-if="store.loading"

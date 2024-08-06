@@ -28,6 +28,9 @@ import { AuthenticationStatus } from 'src/extension/utils/enums';
 import { FieldType } from '@didvault/sdk/src/core';
 import { Utils } from 'src/extension/utils';
 import { OverlayBackgroundExtensionMessage } from './abstractions/overlay.background';
+import provider from 'src/extension/provider/provider';
+import { getOriginFromUrl } from 'src/extension/provider/utils';
+import { sessionService } from 'src/extension/provider/service';
 
 export default class NotificationBackground {
 	private notificationQueue: NotificationQueueMessageItem[] = [];
@@ -348,7 +351,21 @@ export default class NotificationBackground {
 		if (
 			(await this.authService.getAuthStatus()) < AuthenticationStatus.Unlocked
 		) {
-			return;
+			const sessionId = sender.tab.id;
+			if (sessionId === undefined || !sender?.url) {
+				return;
+			}
+			const origin = getOriginFromUrl(sender!.url!);
+			const session = sessionService.getOrCreateSession(sessionId, origin);
+
+			await provider({
+				data: {
+					method: 'getUserInfo',
+					from: 'bg'
+				},
+				session
+			});
+			// return;
 		}
 		await this.saveOrUpdateCredentials(
 			sender.tab,
@@ -379,20 +396,42 @@ export default class NotificationBackground {
 			}
 			this.notificationQueue.splice(i, 1);
 			try {
-				await browser.tabs.sendMessage(tab.id, {
-					type: 'frontAddNewVaultItem',
-					url: queueMessage.uri,
-					password: queueMessage.password,
-					username: queueMessage.username,
-					direct: true
+				console.log('frontAddNewVaultItem ===>');
+				console.log(queueMessage.uri);
+				console.log(queueMessage.password);
+				console.log(queueMessage.username);
+
+				const sessionId = tab.id;
+				if (sessionId === undefined || !tab.url) {
+					return;
+				}
+				const origin = getOriginFromUrl(tab!.url!);
+				const session = sessionService.getOrCreateSession(sessionId, origin);
+				const center = getExtensionBackgroundPlatform().dataCenter;
+				await provider({
+					data: {
+						method: 'addVault',
+						from: 'bg',
+						params: {
+							url: queueMessage.uri,
+							username: queueMessage.username,
+							didKey: await center.getCurrentDidKey(),
+							password: queueMessage.password
+						}
+					},
+					session
 				});
+
 				await browser.tabs.sendMessage(tab.id, {
 					command: 'saveCipherAttemptCompleted'
 				});
 			} catch (error) {
-				// await browser.tabs.sendMessage(tab.id, {
-				// 	command: 'saveCipherAttemptCompleted'
-				// });
+				console.log(error);
+
+				await browser.tabs.sendMessage(tab.id, {
+					command: 'saveCipherAttemptCompleted',
+					error: error
+				});
 			}
 		}
 	}

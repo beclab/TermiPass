@@ -48,10 +48,18 @@ const flowContext = flow
 	.use(async (ctx: any, next: any) => {
 		const {
 			request: {
-				session: { origin, name, icon }
+				session: { origin, name, icon },
+				data
 			}
 		} = ctx;
 		//check permission
+		console.log('ctx ===>');
+		console.log(ctx);
+
+		if (data.from && data.from == 'bg') {
+			next();
+			return;
+		}
 		if (!permissionService.hasPermission(origin)) {
 			if (connectOrigins.has(origin)) {
 				throw Error('Already processing connect. Please wait.');
@@ -82,7 +90,6 @@ const flowContext = flow
 				data: { method, params }
 			}
 		} = ctx;
-		//check request didKey
 		if (!Reflect.getMetadata('SAFE', providerController, method)) {
 			const center = getExtensionBackgroundPlatform().dataCenter;
 			const { didKey: requestDidKey } = params;
@@ -164,7 +171,7 @@ export default async (request: any) => {
 	return flowContext(ctx).finally(() => {
 		if (ctx.request.requestedApproval) {
 			flow.requestedApproval = false;
-			notificationService.unLock();
 		}
+		notificationService.unLock();
 	});
 };

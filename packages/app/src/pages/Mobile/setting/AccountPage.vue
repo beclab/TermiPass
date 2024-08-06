@@ -152,7 +152,7 @@
 						</template>
 					</terminus-item>
 
-					<terminus-item
+					<!-- <terminus-item
 						v-if="!userStore.current_user?.cloud_id"
 						:show-board="true"
 						img-bg-classes="bg-yellow"
@@ -173,7 +173,7 @@
 								<q-icon name="sym_r_keyboard_arrow_right" />
 							</div>
 						</template>
-					</terminus-item>
+					</terminus-item> -->
 				</q-list>
 			</template>
 		</terminus-scroll-area>
@@ -185,7 +185,7 @@ import { ref } from 'vue';
 import { useUserStore } from '../../../stores/user';
 import { useQuasar } from 'quasar';
 import TerminusTitleBar from '../../../components/common/TerminusTitleBar.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 import TerminusUserStatus from '../../../components/common/TerminusUserStatus.vue';
 import TerminusItem from '../../../components/common/TerminusItem.vue';
@@ -199,6 +199,7 @@ const $router = useRouter();
 const userStore = useUserStore();
 const $q = useQuasar();
 const scaleStore = useScaleStore();
+const route = useRoute();
 
 const isBex = ref(process.env.IS_BEX);
 
@@ -208,11 +209,19 @@ const startBackUp = async () => {
 	if (!(await userStore.unlockFirst())) {
 		return;
 	}
-	$router.push({ path: '/backup_mnemonics' });
+	// $router.push({ path: '/backup_mnemonics' });
+	$router.push({
+		path: isBex.value
+			? `${route.meta.root}/backup_mnemonics`
+			: '/backup_mnemonics'
+	});
 };
 
 const enterVCManagement = () => {
-	$router.push({ path: '/vc_manage' });
+	// $router.push({ path: '/vc_manage' });
+	$router.push({
+		path: isBex.value ? `${route.meta.root}/vc_manage` : '/vc_manage'
+	});
 };
 
 const offLineModeRef = ref(userStore.current_user?.offline_mode || false);
@@ -247,12 +256,14 @@ watch(
 );
 
 const enterCheckHistory = () => {
-	$router.push({ path: '/checkHistory' });
+	$router.push({
+		path: isBex.value ? `${route.meta.root}/checkHistory` : '/checkHistory'
+	});
 };
 
-const onLoginCloud = () => {
-	$router.push({ path: '/space_management' });
-};
+// const onLoginCloud = () => {
+// 	$router.push({ path: '/space_management' });
+// };
 </script>
 
 <style scoped lang="scss">

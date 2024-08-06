@@ -7,24 +7,27 @@
 			:action="t('requesting_call_termiPass')"
 			:showDappInfo="true"
 		/>
-		<div class="text-color-title text-h6">
+		<div class="text-ink-1 text-h6 q-ml-md">
 			{{ approvalTypeRef }}
 		</div>
 		<q-scroll-area class="scroll-area">
-			<div class="text-color-title text-body2 params">
-				{{ paramsRef }}
-			</div>
+			<div class="text-ink-2 text-body2 params" v-html="displayRef"></div>
 		</q-scroll-area>
 		<div
 			class="row justify-between items-center"
-			style="margin-top: 20px; width: 100%"
+			style="
+				margin-top: 40px;
+				width: 100%;
+				padding-left: 20px;
+				padding-right: 20px;
+			"
 		>
 			<confirm-button
 				style="width: 45%"
-				text-classes="text-color-title"
-				bg-classes="bg-color-white"
+				bg-classes="bg-white"
 				:btn-title="t('reject')"
 				@onConfirm="rejectAction"
+				class="button-cancel"
 			/>
 			<confirm-button
 				style="width: 45%"
@@ -44,6 +47,7 @@ import { ref } from 'vue';
 import { useApproval } from './approval';
 import { APPROVAL_TYPE } from '../../../extension/provider/utils';
 import { useI18n } from 'vue-i18n';
+import { updateUIToAddWeb } from '../../../platform/addItem';
 
 const $router = useRouter();
 const store = useBexStore();
@@ -53,6 +57,7 @@ const dappLogo = ref('');
 const dappUrl = ref('');
 const approvalTypeRef = ref();
 const paramsRef = ref();
+const displayRef = ref();
 
 store.controller.getApproval().then((approval) => {
 	if (approval) {
@@ -66,6 +71,12 @@ store.controller.getApproval().then((approval) => {
 		}
 		approvalTypeRef.value = approval.data.approvalType;
 		paramsRef.value = approval.data.params;
+		if (approvalTypeRef.value == APPROVAL_TYPE.ADD_VAULT_ITEM) {
+			displayRef.value = `URL: ${approval.data.params.url}<br>Username:${approval.data.params.username}\
+			<br>Password:${approval.data.params.password}`;
+		} else {
+			displayRef.value = paramsRef.value;
+		}
 	}
 });
 
@@ -78,7 +89,14 @@ const approveAction = async () => {
 	const { resolveApproval } = useApproval($router);
 	if (approvalTypeRef.value === APPROVAL_TYPE.SIGN_PRESENTATION) {
 		await resolveApproval({ routerPath: '/VC_card_list' });
-	} else {
+	} else if (approvalTypeRef.value == APPROVAL_TYPE.ADD_VAULT_ITEM) {
+		await updateUIToAddWeb(
+			paramsRef.value.url,
+			$router,
+			paramsRef.value.username,
+			paramsRef.value.password,
+			true
+		);
 		await resolveApproval();
 	}
 };
@@ -90,14 +108,20 @@ const approveAction = async () => {
 	height: 100%;
 
 	.scroll-area {
-		width: 100%;
+		width: calc(100% - 40px);
 		height: 300px;
+		margin-left: 20px;
 
 		.params {
-			margin-top: 10px;
+			margin-top: 30px;
 			margin-bottom: 10px;
-			margin-left: 20px;
+			// margin-left: 20px;
+			text-overflow: ellipsis;
+			word-break: break-word;
 		}
+	}
+	.button-cancel {
+		border: 1px solid $grey-2;
 	}
 }
 </style>

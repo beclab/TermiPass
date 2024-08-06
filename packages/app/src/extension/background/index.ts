@@ -2,7 +2,7 @@ import { walletService } from '../../wallet';
 import { AjaxSender } from '@didvault/sdk/src/ajax';
 import { setPlatform } from '@didvault/sdk/src/core';
 import { App } from '@didvault/sdk/src/core/app';
-import { debounce, getActiveTab } from '../utils';
+import { debounce } from '../utils';
 
 import { ExtensionBackgroundPlatform } from './extensionBackgroundPlatform';
 import { browser } from 'webextension-polyfill-ts';
@@ -106,16 +106,16 @@ export class ExtensionBackground {
 			});
 		});
 
-		browser.action.onClicked.addListener(async () => {
-			const activeTab = await getActiveTab();
-			if (!activeTab) {
-				return;
-			}
-			browser.tabs.sendMessage(activeTab.id!, {
-				url: activeTab.url,
-				type: 'toggle-slider'
-			});
-		});
+		// browser.action.onClicked.addListener(async () => {
+		// 	const activeTab = await getActiveTab();
+		// 	if (!activeTab) {
+		// 		return;
+		// 	}
+		// 	browser.tabs.sendMessage(activeTab.id!, {
+		// 		url: activeTab.url,
+		// 		type: 'toggle-slider'
+		// 	});
+		// });
 
 		// browser.windows.onFocusChanged()
 

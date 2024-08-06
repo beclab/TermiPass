@@ -75,4 +75,7 @@ export type BusEventName =
 	| 'runTask'
 	| 'dialogDismiss';
 
-export type BroadcastToUIMethod = 'UNLOCKED_UPDATE';
+export type BroadcastToUIMethod =
+	| 'UNLOCKED_UPDATE'
+	| 'VAULT_TAB_UPDATE'
+	| 'COLLECTION_TAB_UPDATE';
