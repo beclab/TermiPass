@@ -4,7 +4,7 @@ import { ActiveMenuType } from './../../stores/files-menu';
 import { getParams } from './../../utils/utils';
 import { Data as DriveDataAPI } from '../drive/data';
 
-export function formatUrltoDriveType(href: string): DriveType {
+export function formatUrltoDriveType(href: string): DriveType | undefined {
 	// console.log('hrefhref', href);
 	// console.log('hrefhref', href.startsWith('/Files'));
 	if (href.startsWith('/Files')) {
@@ -16,7 +16,7 @@ export function formatUrltoDriveType(href: string): DriveType {
 	} else if (href.startsWith('/Cache')) {
 		return DriveType.Cache;
 	} else {
-		return DriveType.Drive;
+		return undefined;
 	}
 }
 

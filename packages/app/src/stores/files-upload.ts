@@ -227,7 +227,7 @@ export const useFilesUploadStore = defineStore('upload', {
 				console.log('itemitem', item);
 
 				if (item.file.isDir) {
-					await dataAPI.fetchUploader(item.path, '', false, 0);
+					await dataAPI.fetchUploader(item.path, '', false, 3);
 					this.finishUpload(item, type);
 				} else {
 					const onUpload = throttle(
@@ -248,7 +248,7 @@ export const useFilesUploadStore = defineStore('upload', {
 					);
 
 					await dataAPI
-						.fetchUploader(item.path, item.file, item.overwrite, 0, onUpload)
+						.fetchUploader(item.path, item.file, item.overwrite, 3, onUpload)
 						.then(() => {
 							this.finishUpload(item, type);
 						})

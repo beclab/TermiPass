@@ -171,6 +171,7 @@ class Data extends DriveDataAPI {
 					});
 				}
 				await files.errorRetry(url, content, overwrite, callback, timer);
+				break;
 			}
 		}
 	}
