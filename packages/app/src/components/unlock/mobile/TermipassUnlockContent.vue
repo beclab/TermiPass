@@ -65,7 +65,7 @@ import { getNativeAppPlatform } from '../../../platform/capacitor/capacitorPlatf
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { unlockByPwd } from '../../../pages/Mobile/login/unlock/UnlockBusiness';
 import { useUserStore } from '../../../stores/user';
-import { BiometryType } from '@capgo/capacitor-native-biometric';
+import { BiometryType } from '@bytetrade/capacitor-native-biometric';
 import { onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import MonitorKeyboard from '../../../utils/monitorKeyboard';
