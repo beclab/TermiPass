@@ -101,6 +101,7 @@ const getFileTitle = (path: string) => {
 <style lang="scss">
 .plugin-layout {
 	padding: 12px;
+	overflow: hidden;
 	background: linear-gradient(
 			180deg,
 			rgba(254, 255, 228, 0.3) 1.14%,
@@ -115,16 +116,26 @@ const getFileTitle = (path: string) => {
 			rgba(255, 255, 243, 0.9) 90.98%
 		);
 	backdrop-filter: blur(50px);
-
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border: 1px solid $background-5;
+		z-index: 999999999;
+		border-radius: 16px;
+		pointer-events: none;
+	}
 	.plugin-page-wrapper {
 		position: relative;
-		padding: 12px 0 12px 12px;
 		.plugin-page-content {
 			position: absolute;
-			top: 12px;
-			left: 12px;
-			right: 12px;
-			bottom: 12px;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
 		}
 	}
 
@@ -132,7 +143,6 @@ const getFileTitle = (path: string) => {
 		min-height: auto !important;
 		width: calc(100%);
 		height: calc(100%);
-		border-radius: 12px;
 		background-color: white;
 	}
 }

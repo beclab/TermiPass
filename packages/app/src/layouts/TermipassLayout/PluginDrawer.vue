@@ -1,6 +1,26 @@
 <template>
+	<q-header
+		class="plugin-header-container q-pa-lg row justify-between items-center"
+	>
+		<div class="avatar-container row items-center">
+			<TerminusAvatar
+				class="avatar-circle"
+				:info="userStore.terminusInfo()"
+				:size="40"
+				@click="showSettings"
+			/>
+			<div class="text-h5 text-ink-1 q-ml-md">{{ activeItem }}</div>
+		</div>
+		<div class="setting-icon-container" @click="showAcounts">
+			<q-img
+				src="../../assets/tabs/tab_setting_normal2.svg"
+				:ratio="1"
+				width="20px"
+			/>
+		</div>
+	</q-header>
 	<div class="drawer-wrapper">
-		<q-footer class="bg-white">
+		<q-footer class="drawer-footer-wrapper">
 			<q-list class="pluginDrawer row items-center justify-around">
 				<template v-for="(menu, index) in menus" :key="index">
 					<div
@@ -9,36 +29,17 @@
 						:class="menu.label === activeItem ? 'active-item' : ''"
 						@click="handleItem(menu.label)"
 					>
-						<div class="icon-wrap row items-center justify-center">
+						<div class="icon-wrap q-mb-xs row items-center justify-center">
 							<img :src="showMenuIcon(menu.label)" />
 						</div>
 						<div
-							class="item-text text-body3"
-							:class="menu.label == activeItem ? 'text-grey-10' : 'text-grey-6'"
+							class="item-text text-body3 q-mb-md"
+							:class="menu.label == activeItem ? 'text-ink-1' : 'text-ink-3'"
 						>
 							{{ menu.label }}
 						</div>
 					</div>
 				</template>
-
-				<div class="column items-center justify-center menu-item">
-					<!-- <q-icon
-						name="sym_o_settings"
-						size="24px"
-						class="cursor-pointer settings"
-						@click="showSettings"
-					/> -->
-
-					<div class="icon-wrap row items-center justify-center">
-						<TerminusAvatar
-							class="avatar-circle"
-							:info="userStore.terminusInfo()"
-							:size="20"
-							@click="showSettings"
-						/>
-					</div>
-					<div class="item-text text-body3 text-grey-6">User</div>
-				</div>
 			</q-list>
 		</q-footer>
 	</div>
@@ -140,9 +141,14 @@ watch(
 
 const showSettings = () => {
 	router.push({
-		path: '/setting'
+		path: `${route.meta.root}/setting`
 	});
-	activeItem.value = null;
+};
+
+const showAcounts = () => {
+	router.push({
+		path: `${route.meta.root}/accounts`
+	});
 };
 
 const toggleBex = () => {
@@ -157,14 +163,41 @@ const toggleBex = () => {
 </style>
 
 <style lang="scss" scoped>
-.menu-item {
-	width: 56px;
-	height: 64px;
+.plugin-header-container {
+	background: linear-gradient(
+			180deg,
+			rgba(255, 249, 199, 0.3) 1.14%,
+			rgba(255, 215, 73, 0.3) 99.98%
+		),
+		linear-gradient(
+			220deg,
+			rgba(255, 255, 243, 0.9) 0%,
+			rgba(255, 233, 115, 0.9) 20.35%,
+			rgba(251, 251, 233, 0.9) 51.21%,
+			rgba(255, 255, 255, 0.9) 81.4%,
+			rgba(254, 251, 228, 0.9) 101.75%
+		);
+	backdrop-filter: blur(50px);
+	.avatar-container {
+		cursor: pointer;
+	}
+}
+.setting-icon-container {
 	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.6);
+	border-radius: 50%;
+}
+.menu-item {
+	cursor: pointer;
+	color: $ink-3;
 
 	.icon-wrap {
-		width: 40px;
-		height: 40px;
+		width: 20px;
+		height: 20px;
 		border-radius: 8px;
 
 		img {
@@ -180,7 +213,7 @@ const toggleBex = () => {
 	}
 
 	.item-text {
-		color: rgba(143, 143, 143, 1);
+		color: $ink-1;
 	}
 }
 
@@ -191,11 +224,15 @@ const toggleBex = () => {
 .menu-footer {
 	// position: absolute;
 	// bottom: 32px;
-	border: 1px solid red;
 
 	.settings {
 		margin-bottom: 20px;
 	}
+}
+.drawer-footer-wrapper {
+	border-top: 1px solid $background-5;
+	background-color: white;
+	// backdrop-filter: blur(27.182817459106445px);
 }
 .drawer-wrapper {
 	& ::v-deep(.q-drawer) {

@@ -39,6 +39,7 @@
 				<rss-content v-if="item.identify === 'rss'" />
 			</q-tab-panel>
 		</q-tab-panels>
+		<router-view></router-view>
 	</div>
 </template>
 
