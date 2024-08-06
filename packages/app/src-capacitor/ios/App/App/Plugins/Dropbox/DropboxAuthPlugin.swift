@@ -18,7 +18,7 @@ public class DropboxAuthPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "DropboxAuthPlugin"
     
     public var pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise)
     ]
     

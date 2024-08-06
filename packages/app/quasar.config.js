@@ -135,28 +135,28 @@ module.exports = configure(function (ctx) {
 						const clientEntry = path.resolve(__dirname, customEntryPath);
 						cfg.entry.app = clientEntry;
 					}
+					cfg.module.rules.push({
+						test: /wallet-core\.js$/,
+						use: [
+							{
+								loader: 'string-replace-loader',
+								options: {
+									search: 'fetch\\(G,',
+									replace: `fetch('/www/js/wallet-core.wasm',`,
+									flags: 'g'
+								}
+							},
+							{
+								loader: 'string-replace-loader',
+								options: {
+									search: 'fetch\\(G,',
+									replace: `fetch('/www/wallet-core.wasm',`,
+									flags: 'g'
+								}
+							}
+						]
+					});
 				}
-				cfg.module.rules.push({
-					test: /wallet-core\.js$/,
-					use: [
-						{
-							loader: 'string-replace-loader',
-							options: {
-								search: 'fetch\\(G,',
-								replace: `fetch('/www/js/wallet-core.wasm',`,
-								flags: 'g'
-							}
-						},
-						{
-							loader: 'string-replace-loader',
-							options: {
-								search: 'fetch\\(G,',
-								replace: `fetch('/www/wallet-core.wasm',`,
-								flags: 'g'
-							}
-						}
-					]
-				});
 			},
 
 			// https://v2.quasar.dev/quasar-cli-webpack/handling-webpack
