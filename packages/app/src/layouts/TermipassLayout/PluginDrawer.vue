@@ -7,11 +7,11 @@
 				class="avatar-circle"
 				:info="userStore.terminusInfo()"
 				:size="40"
-				@click="showSettings"
+				@click="showAcounts"
 			/>
 			<div class="text-h5 text-ink-1 q-ml-md">{{ activeItem }}</div>
 		</div>
-		<div class="setting-icon-container" @click="showAcounts">
+		<div class="setting-icon-container" @click="showSettings">
 			<q-img
 				src="../../assets/tabs/tab_setting_normal2.svg"
 				:ratio="1"

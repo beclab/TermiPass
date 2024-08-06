@@ -15,7 +15,7 @@
 					/>
 				</QBtnToggleStyle>
 			</div>
-			<div class="relative-position my-bottom-sheet-content q-pa-md">
+			<div class="relative-position my-bottom-sheet-content">
 				<slot></slot>
 			</div>
 		</div>
@@ -45,18 +45,23 @@ const closeHanlder = () => {
 	bottom: 0;
 	z-index: 99999999999;
 	background: rgba(31, 24, 20, 0.4);
+	border: 1px solid var(---5, #dbdbdb);
+
 	.my-bottom-sheet-wrapper {
 		position: absolute;
-		top: 44px;
+		top: 0px;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		border-radius: 20px 20px 0 0;
+		// border: 1px solid var(---, #ebebeb);
+
 		.my-bottom-sheet-header {
 			padding: 14px 20px;
+			border-bottom: 1px solid var(---5, #dbdbdb);
 		}
 		.my-bottom-sheet-content {
-			height: 100%;
+			height: calc(100% - 50px);
 		}
 	}
 }

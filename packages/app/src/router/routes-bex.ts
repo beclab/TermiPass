@@ -64,6 +64,13 @@ import ConnectPage from 'src/pages/Mobile/wallet/ConnectPage.vue';
 import SubmitPage from 'src/pages/Mobile/wallet/SubmitVCInfoPage.vue';
 import CollectPage from 'src/pages/Mobile/collect/CollectIndexPage.vue';
 
+// {
+// 	path: '/backup_mnemonics',
+// 	name: 'backupMnemonics',
+// 	component: () =>
+// 		import('src/pages/Mobile/setting/BackupMnemonicsPage.vue')
+// },
+
 const mobile: RouteRecordRaw[] = [
 	{
 		path: '/',
@@ -372,13 +379,25 @@ const settingRoutes = (meta) => {
 		},
 		{
 			path: `${meta.root}/vc_manage`,
-			name: 'vcManage',
+			// name: 'vcManage',
 			meta,
 			component: VCManagePage
 		},
 		{
 			path: `${meta.root}/backup_mnemonics`,
-			name: 'backupMnemonics',
+			// name: 'backupMnemonics',
+			meta,
+			component: BackupMnemonicsPage
+		},
+		{
+			path: `${meta.root}/change_pwd`,
+			// name: 'changePwd',
+			meta,
+			component: ChangePwdPage
+		},
+		{
+			path: `${meta.root}/backup_mnemonics`,
+			// name: 'backupMnemonics',
 			meta,
 			component: BackupMnemonicsPage
 		}
@@ -403,7 +422,8 @@ export const bex: RouteRecordRaw[] = [
 				path: '/home',
 				meta: {
 					tabIdentify: 'home',
-					root: '/home'
+					root: '/home',
+					roots: '/home'
 				},
 				component: PluginIndexPage,
 				children: settingRoutes({ root: '/home', title: 'settings' })
@@ -412,21 +432,23 @@ export const bex: RouteRecordRaw[] = [
 				path: '/items',
 				meta: {
 					tabIdentify: 'vault',
-					root: '/items'
+					root: '/items1',
+					roots: '/items'
 				},
 				component: PluginItemIndex,
-				children: settingRoutes({ root: '/items', title: 'vault' })
+				children: settingRoutes({ root: '/items1', title: 'vault' })
 			},
 			{
 				path: '/items/:itemid',
 				component: PluginItemView,
-				children: settingRoutes({ root: '/items', title: 'vault' })
+				children: settingRoutes({ root: '/items1', title: 'vault' })
 			},
 			{
 				path: '/collect',
 				meta: {
 					tabIdentify: 'collect',
-					root: '/collect'
+					root: '/collect',
+					roots: '/collect'
 				},
 				component: CollectPage,
 				children: settingRoutes({ root: '/collect', title: 'fffff' })

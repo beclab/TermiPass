@@ -1,45 +1,45 @@
 <template>
-	<div class="collect-root q-px-lg">
-		<div class="collect-root__header text-h4 text-grey-10 row items-center">
-			Collect
-		</div>
-		<div
-			class="collect-root__slider bg-grey-1 q-mt-md row items-center"
-			v-if="items.length > 0"
-		>
+	<div class="collect-root">
+		<TerminusUserHeaderReminder />
+		<div class="q-px-lg">
 			<div
-				v-for="(item, index) in items.filter((data) => data.show)"
-				:key="item.identify"
-				class="slider-item row items-center justify-center text-body2 text-grey-6"
-				:class="
-					item.identify === activeItem
-						? 'slider-item-select text-subtitle2 text-grey-10'
-						: ''
-				"
-				:style="`width:calc((100% - ${(items.length - 1) * 4}px)/${
-					items.length
-				}); margin-right: ${index === items.length - 1 ? '0px' : '4px'}`"
-				@click="activeItem = item.identify"
+				class="collect-root__slider bg-grey-1 q-mt-md row items-center"
+				v-if="items.length > 0"
 			>
-				<q-icon :name="item.icon" size="20px" class="q-mr-xs" />
-				<div>{{ item.name }}</div>
+				<div
+					v-for="(item, index) in items.filter((data) => data.show)"
+					:key="item.identify"
+					class="slider-item row items-center justify-center text-body2 text-grey-6"
+					:class="
+						item.identify === activeItem
+							? 'slider-item-select text-subtitle2 text-grey-10'
+							: ''
+					"
+					:style="`width:calc((100% - ${(items.length - 1) * 4}px)/${
+						items.length
+					}); margin-right: ${index === items.length - 1 ? '0px' : '4px'}`"
+					@click="activeItem = item.identify"
+				>
+					<q-icon :name="item.icon" size="20px" class="q-mr-xs" />
+					<div>{{ item.name }}</div>
+				</div>
 			</div>
-		</div>
 
-		<q-tab-panels v-model="activeItem" animated class="q-mt-lg">
-			<q-tab-panel
-				class="tab-common"
-				v-for="item in items.filter((data) => data.show)"
-				:key="item.identify"
-				:name="item.identify"
-			>
-				<div class="text-body2 text-grey-8">{{ item.moduleTitle }}</div>
-				<page-content v-if="item.identify === 'page'" />
-				<download-content v-if="item.identify === 'download'" />
-				<rss-content v-if="item.identify === 'rss'" />
-			</q-tab-panel>
-		</q-tab-panels>
-		<router-view></router-view>
+			<q-tab-panels v-model="activeItem" animated class="q-mt-lg">
+				<q-tab-panel
+					class="tab-common"
+					v-for="item in items.filter((data) => data.show)"
+					:key="item.identify"
+					:name="item.identify"
+				>
+					<div class="text-body2 text-grey-8">{{ item.moduleTitle }}</div>
+					<page-content v-if="item.identify === 'page'" />
+					<download-content v-if="item.identify === 'download'" />
+					<rss-content v-if="item.identify === 'rss'" />
+				</q-tab-panel>
+			</q-tab-panels>
+			<router-view></router-view>
+		</div>
 	</div>
 </template>
 
@@ -56,6 +56,7 @@ import { onMounted } from 'vue';
 import { bexFrontBusOff, bexFrontBusOn } from '../../../platform/bex/utils';
 import { onUnmounted } from 'vue';
 import { queryDownloadFile } from '../../../extension/rss/utils/pdf';
+import TerminusUserHeaderReminder from '../../../components/common/TerminusUserHeaderReminder.vue';
 
 const items = ref([
 	{
@@ -158,12 +159,12 @@ onUnmounted(() => {
 .collect-root {
 	width: 100%;
 	height: 100%;
-	background-color: #fff;
+	// background-color: #fff;
 
-	&__header {
-		width: 100%;
-		height: 56px;
-	}
+	// &__header {
+	// 	width: 100%;
+	// 	height: 56px;
+	// }
 
 	&__slider {
 		width: 100%;

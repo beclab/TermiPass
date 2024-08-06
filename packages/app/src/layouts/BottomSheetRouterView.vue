@@ -12,7 +12,7 @@ const router = useRouter();
 const routeMeta = route.meta as Record<string, string>;
 const closeHandler = () => {
 	router.replace({
-		path: routeMeta.root
+		path: routeMeta.roots
 	});
 };
 </script>

@@ -493,9 +493,7 @@ export default defineComponent({
 		const termipassStore = useTermipassStore();
 		const current_user = ref(userStore.current_user);
 		const isMobile = ref(
-			process.env.PLATFORM == 'MOBILE' ||
-				process.env.PLATFORM == 'BEX' ||
-				$q.platform.is.mobile
+			process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile
 		);
 		const platform = ref(process.env.PLATFORM);
 
