@@ -31,7 +31,7 @@ def capacitor_pods
   pod 'CapacitorPushNotifications', :path => '../../node_modules/@capacitor/push-notifications'
   pod 'CapacitorScreenOrientation', :path => '../../node_modules/@capacitor/screen-orientation'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
-  pod 'CapgoCapacitorNativeBiometric', :path => '../../node_modules/@capgo/capacitor-native-biometric'
+  pod 'BytetradeCapacitorNativeBiometric', :path => '../../node_modules/@bytetrade/capacitor-native-biometric'
   pod 'CodetrixStudioCapacitorGoogleAuth', :path => '../../node_modules/@codetrix-studio/capacitor-google-auth'
 end
 

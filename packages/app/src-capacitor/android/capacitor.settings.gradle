@@ -38,8 +38,8 @@ project(':capacitor-screen-orientation').projectDir = new File('../node_modules/
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/@capacitor/status-bar/android')
 
-include ':capgo-capacitor-native-biometric'
-project(':capgo-capacitor-native-biometric').projectDir = new File('../../node_modules/@capgo/capacitor-native-biometric/android')
+include ':bytetrade-capacitor-native-biometric'
+project(':bytetrade-capacitor-native-biometric').projectDir = new File('../../node_modules/@bytetrade/capacitor-native-biometric/android')
 
 include ':codetrix-studio-capacitor-google-auth'
 project(':codetrix-studio-capacitor-google-auth').projectDir = new File('../node_modules/@codetrix-studio/capacitor-google-auth/android')
