@@ -24,6 +24,8 @@ PODS:
   - BEMCheckBox (1.4.1)
   - BytetradeBarcodeScanner (6.0.2):
     - Capacitor
+  - BytetradeCapacitorNativeBiometric (6.0.4):
+    - Capacitor
   - Capacitor (6.1.0):
     - CapacitorCordova
   - CapacitorApp (6.0.0):
@@ -51,8 +53,6 @@ PODS:
   - CapacitorScreenOrientation (6.0.1):
     - Capacitor
   - CapacitorStatusBar (6.0.0):
-    - Capacitor
-  - CapgoCapacitorNativeBiometric (0.0.1):
     - Capacitor
   - CodetrixStudioCapacitorGoogleAuth (0.0.1):
     - Capacitor
@@ -150,6 +150,7 @@ DEPENDENCIES:
   - Alamofire
   - BEMCheckBox
   - "BytetradeBarcodeScanner (from `../../node_modules/@bytetrade/barcode-scanner`)"
+  - "BytetradeCapacitorNativeBiometric (from `../../node_modules/@bytetrade/capacitor-native-biometric`)"
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
   - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
@@ -163,7 +164,6 @@ DEPENDENCIES:
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
   - "CapacitorScreenOrientation (from `../../node_modules/@capacitor/screen-orientation`)"
   - "CapacitorStatusBar (from `../../node_modules/@capacitor/status-bar`)"
-  - "CapgoCapacitorNativeBiometric (from `../../node_modules/@capgo/capacitor-native-biometric`)"
   - "CodetrixStudioCapacitorGoogleAuth (from `../../node_modules/@codetrix-studio/capacitor-google-auth`)"
   - CryptoSwift (~> 1.6.0)
   - DTTextField
@@ -209,6 +209,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   BytetradeBarcodeScanner:
     :path: "../../node_modules/@bytetrade/barcode-scanner"
+  BytetradeCapacitorNativeBiometric:
+    :path: "../../node_modules/@bytetrade/capacitor-native-biometric"
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
   CapacitorApp:
@@ -235,8 +237,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/screen-orientation"
   CapacitorStatusBar:
     :path: "../../node_modules/@capacitor/status-bar"
-  CapgoCapacitorNativeBiometric:
-    :path: "../../node_modules/@capgo/capacitor-native-biometric"
   CodetrixStudioCapacitorGoogleAuth:
     :path: "../../node_modules/@codetrix-studio/capacitor-google-auth"
   HandyJSON:
@@ -253,6 +253,7 @@ SPEC CHECKSUMS:
   AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   BEMCheckBox: 5ba6e37ade3d3657b36caecc35c8b75c6c2b1a4e
   BytetradeBarcodeScanner: 14e30232637e8435baceb4a6397a811a90e1dd38
+  BytetradeCapacitorNativeBiometric: 46ee6a5a44eef425121b964471137510588611fb
   Capacitor: 187bd7847b6f71467015a20200a1a071be3e5f14
   CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
   CapacitorCamera: 3b77b3e8311b98220de65e63445c0e4d0b30ce3a
@@ -266,7 +267,6 @@ SPEC CHECKSUMS:
   CapacitorPushNotifications: 293fabe42c7229756078e81f2d3a60394ba4e5d8
   CapacitorScreenOrientation: 3d4965dcbda5d901b6a48350a5d270ad7d404e05
   CapacitorStatusBar: 2e4369f99166125435641b1908d05f561eaba6f6
-  CapgoCapacitorNativeBiometric: 44b0bb31118f6ed5171087a77a856a80a0cfa250
   CodetrixStudioCapacitorGoogleAuth: fcce058390347c1ce5d8ac4764bdf1f5c1ee233b
   CryptoSwift: 562f8eceb40e80796fffc668b0cad9313284cfa6
   DTTextField: 768d5991211599145f289971e5936f8bb29990bb
@@ -294,6 +294,6 @@ SPEC CHECKSUMS:
   SwiftyDropbox: bd1e6f84cf36fa8d1440d4b54421d297e292dcd5
   SwiftyRSA: 8c6dd1ea7db1b8dc4fb517a202f88bb1354bc2c6
 
-PODFILE CHECKSUM: abdd957fcb35a3d0cc37dbfa0027da12512f36d3
+PODFILE CHECKSUM: 338eec7a7a37e10324152e19fb5ce846a5bf36fc
 
 COCOAPODS: 1.15.2
