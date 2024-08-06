@@ -443,6 +443,7 @@ import { useTermipassStore } from '../../stores/termipass';
 import { addItem } from '../../platform/addItem';
 import { getAppPlatform } from '../../platform/appPlatform';
 import { autofillById } from '../../utils/bexFront';
+import { bexFrontBusOn, bexFrontBusOff } from '../../platform/bex/utils';
 
 function filterByString(fs: string, rec: VaultItem) {
 	if (!fs) {
@@ -756,9 +757,16 @@ export default defineComponent({
 			meunStore.$subscribe(() => {
 				updateItems();
 			});
+
+			if (isBex.value) {
+				bexFrontBusOn('VAULT_TAB_UPDATE', stateUpdate);
+			}
 		});
 		onUnmounted(() => {
 			busOff('appSubscribe', stateUpdate);
+			if (isBex.value) {
+				bexFrontBusOff('VAULT_TAB_UPDATE', stateUpdate);
+			}
 		});
 		let itemList = ref<ListItem[]>([]);
 		stateUpdate();

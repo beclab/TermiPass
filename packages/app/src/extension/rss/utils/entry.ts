@@ -1,6 +1,7 @@
 import { CreateEntry } from '../model/type';
 import { useCollectStore } from '../../../stores/collect';
 import axios from 'axios';
+import { FILE_TYPE } from 'src/pages/Mobile/collect/utils';
 
 export async function queryEntry(url: string) {
 	const collectStore = useCollectStore();
@@ -12,7 +13,11 @@ export async function queryEntry(url: string) {
 				source: 'library'
 			}
 		);
-		return !!(response && response.count > 0);
+		return !!(
+			response &&
+			response.count > 0 &&
+			response.find((e) => e.file_type == FILE_TYPE.ARTICLE)
+		);
 	} catch (e) {
 		return false;
 	}

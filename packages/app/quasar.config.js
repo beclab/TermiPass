@@ -492,13 +492,27 @@ module.exports = configure(function (ctx) {
 				}
 				const filePath = path.resolve(
 					__dirname,
-					'./dist/bex/UnPackaged/www/index.html'
+					// './dist/bex/UnPackaged/www/index.html',
+					'./dist/bex/UnPackaged/www/notification.html'
 				);
 
 				try {
 					let data = fs.readFileSync(filePath, 'utf8');
 					const updatedData = data.replace(/q-app/g, 'terminus-app-root');
 					fs.writeFileSync(filePath, updatedData, 'utf8');
+				} catch (err) {
+					console.error(err);
+				}
+				const filePath1 = path.resolve(
+					__dirname,
+					'./dist/bex/UnPackaged/www/index.html'
+					// './dist/bex/UnPackaged/www/notification.html'
+				);
+
+				try {
+					let data = fs.readFileSync(filePath1, 'utf8');
+					const updatedData = data.replace(/q-app/g, 'terminus-app-root');
+					fs.writeFileSync(filePath1, updatedData, 'utf8');
 				} catch (err) {
 					console.error(err);
 				}

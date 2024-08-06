@@ -17,6 +17,7 @@ import { getExtensionBackgroundPlatform } from '../../background/extensionBackgr
 import { BrowserInterface } from '../../interface/browserInterface';
 import OnRemovedRemoveInfoType = Tabs.OnRemovedRemoveInfoType;
 import { ExtensionMessageMode } from '../../interface/message';
+import { bgBusEmit } from 'src/extension/utils/bus';
 
 export class ProviderBackground
 	implements UpdateBadgeInterface, BrowserInterface
@@ -91,9 +92,19 @@ export class ProviderBackground
 		//Do Nothing
 	}
 
-	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {}
+	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {
+		bgBusEmit('BROADCAST_TO_UI', {
+			method: 'VAULT_TAB_UPDATE',
+			params: {}
+		});
+	}
 
-	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {}
+	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {
+		bgBusEmit('BROADCAST_TO_UI', {
+			method: 'VAULT_TAB_UPDATE',
+			params: {}
+		});
+	}
 }
 
 export default new ProviderBackground();

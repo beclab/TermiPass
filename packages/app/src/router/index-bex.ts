@@ -45,6 +45,9 @@ export default route(function (/* { store, ssrContext } */) {
 		if (getUiType().isNotification) {
 			const store = useBexStore();
 			const approval = await store.controller.getApproval();
+			console.log('approval ===>');
+			console.log(approval);
+
 			if (
 				approval &&
 				approval.data.routerPath &&

@@ -72,6 +72,7 @@ import MonitorKeyboard from '../../../utils/monitorKeyboard';
 import { watch } from 'vue';
 import { app } from '../../../globals';
 import { formatMinutesTime } from '../../../utils/utils';
+import { sendUnlock } from '../../../utils/bexFront';
 
 const props = defineProps({
 	detailText: {
@@ -191,6 +192,7 @@ const unlockByBiometric = async () => {
 const loginByPassword = async (password: string) => {
 	await unlockByPwd(password, {
 		async onSuccess(data: any) {
+			sendUnlock();
 			emit('unlockSuccess', data);
 		},
 		onFailure(message: string) {
