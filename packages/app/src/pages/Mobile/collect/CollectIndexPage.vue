@@ -39,6 +39,7 @@
 				<pdf-content v-if="item.identify === 'pdf'" />
 			</q-tab-panel>
 		</q-tab-panels>
+		<router-view></router-view>
 	</div>
 </template>
 
