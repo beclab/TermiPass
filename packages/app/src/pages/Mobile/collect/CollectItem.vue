@@ -23,11 +23,11 @@
 
 <script setup lang="ts">
 import { PropType } from 'vue';
-import { CollectBaseInfo } from './utils';
+import { BaseCollectInfo } from './utils';
 
 defineProps({
 	item: {
-		type: Object as PropType<CollectBaseInfo>,
+		type: Object as PropType<BaseCollectInfo>,
 		required: true
 	}
 });

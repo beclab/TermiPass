@@ -135,7 +135,6 @@ module.exports = configure(function (ctx) {
 						const clientEntry = path.resolve(__dirname, customEntryPath);
 						cfg.entry.app = clientEntry;
 					}
-
 					cfg.module.rules.push({
 						test: /wallet-core\.js$/,
 						use: [
@@ -143,7 +142,7 @@ module.exports = configure(function (ctx) {
 								loader: 'string-replace-loader',
 								options: {
 									search: 'fetch\\(G,',
-									replace: `fetch(globalThis.extensionPlaceholder ? '/www/js/wallet-core.wasm' : 'chrome-extension://'+globalThis.${extensionPlaceholder}+'/www/js/wallet-core.wasm',`,
+									replace: `fetch('/www/js/wallet-core.wasm',`,
 									flags: 'g'
 								}
 							},
@@ -151,7 +150,7 @@ module.exports = configure(function (ctx) {
 								loader: 'string-replace-loader',
 								options: {
 									search: 'fetch\\(G,',
-									replace: `fetch(globalThis.extensionPlaceholder ? '/www/wallet-core.wasm' : 'chrome-extension://'+globalThis.${extensionPlaceholder}+'/www/wallet-core.wasm',`,
+									replace: `fetch('/www/wallet-core.wasm',`,
 									flags: 'g'
 								}
 							}
@@ -493,6 +492,7 @@ module.exports = configure(function (ctx) {
 				}
 				const filePath = path.resolve(
 					__dirname,
+					// './dist/bex/UnPackaged/www/index.html',
 					'./dist/bex/UnPackaged/www/notification.html'
 				);
 
@@ -500,6 +500,19 @@ module.exports = configure(function (ctx) {
 					let data = fs.readFileSync(filePath, 'utf8');
 					const updatedData = data.replace(/q-app/g, 'terminus-app-root');
 					fs.writeFileSync(filePath, updatedData, 'utf8');
+				} catch (err) {
+					console.error(err);
+				}
+				const filePath1 = path.resolve(
+					__dirname,
+					'./dist/bex/UnPackaged/www/index.html'
+					// './dist/bex/UnPackaged/www/notification.html'
+				);
+
+				try {
+					let data = fs.readFileSync(filePath1, 'utf8');
+					const updatedData = data.replace(/q-app/g, 'terminus-app-root');
+					fs.writeFileSync(filePath1, updatedData, 'utf8');
 				} catch (err) {
 					console.error(err);
 				}

@@ -9,6 +9,7 @@ import { getActiveTab } from '../../utils';
 import { getExtensionBackgroundPlatform } from '../../background/extensionBackgroundPlatform';
 import { BrowserInterface } from '../../interface/browserInterface';
 import { ExtensionMessageMode } from '../../interface/message';
+import { bgBusEmit } from 'src/extension/utils/bus';
 
 export class RssBackground implements UpdateBadgeInterface, BrowserInterface {
 	messageModule: ExtensionMessageMode = 'rss';
@@ -95,7 +96,12 @@ export class RssBackground implements UpdateBadgeInterface, BrowserInterface {
 		}
 	};
 
-	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {}
+	tabsOnUpdated(_tabId: number, _updateInfo: Tabs.OnUpdatedChangeInfoType) {
+		bgBusEmit('BROADCAST_TO_UI', {
+			method: 'COLLECTION_TAB_UPDATE',
+			params: {}
+		});
+	}
 
 	contextMenusOnClicked(_info: Menus.OnClickData, _tab: Tabs.Tab | undefined) {
 		//DoNothing
@@ -124,7 +130,12 @@ export class RssBackground implements UpdateBadgeInterface, BrowserInterface {
 		RssService.removeRSS(tabId);
 	}
 
-	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {}
+	tabsOnActivated(_activeInfo: Tabs.OnActivatedActiveInfoType) {
+		bgBusEmit('BROADCAST_TO_UI', {
+			method: 'COLLECTION_TAB_UPDATE',
+			params: {}
+		});
+	}
 }
 
 export default new RssBackground();

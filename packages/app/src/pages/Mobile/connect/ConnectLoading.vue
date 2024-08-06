@@ -62,11 +62,7 @@ onMounted(async () => {
 				router.replace({ path: '/Activate' });
 			} else {
 				const info: TerminusInfo | null = await getTerminusInfo(user); //terminus_name
-				if (
-					info &&
-					(info.wizardStatus == 'completed' ||
-						info.wizardStatus == 'wait_reset_password')
-				) {
+				if (info && info.wizardStatus == 'completed') {
 					router.replace({ path: '/ConnectTerminus' });
 				} else {
 					if (process.env.PLATFORM != 'MOBILE') {

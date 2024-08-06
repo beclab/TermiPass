@@ -92,6 +92,11 @@ class ProviderController {
 		return result;
 	};
 
+	@Reflect.metadata('APPROVAL', [APPROVAL_TYPE.ADD_VAULT_ITEM, true])
+	addVault = async (): Promise<boolean> => {
+		return true;
+	};
+
 	@Reflect.metadata('APPROVAL', [APPROVAL_TYPE.SIGN_JWT_PAYLOAD, true])
 	signJwtPayload = async (info: any): Promise<string> => {
 		const {

@@ -42,6 +42,7 @@ import '../../../css/terminus.scss';
 import { useI18n } from 'vue-i18n';
 import { unlockByPwd } from '../../../pages/Mobile/login/unlock/UnlockBusiness';
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
+import { sendUnlock } from '../../../utils/bexFront';
 
 defineProps({
 	detailText: {
@@ -80,6 +81,7 @@ function onTextChange() {
 const loginByPassword = async (password: string) => {
 	await unlockByPwd(password, {
 		async onSuccess(data: any) {
+			sendUnlock();
 			emit('unlockSuccess', data);
 		},
 		onFailure(message: string) {

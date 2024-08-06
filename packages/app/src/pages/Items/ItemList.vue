@@ -443,6 +443,7 @@ import { useTermipassStore } from '../../stores/termipass';
 import { addItem } from '../../platform/addItem';
 import { getAppPlatform } from '../../platform/appPlatform';
 import { autofillById } from '../../utils/bexFront';
+import { bexFrontBusOn, bexFrontBusOff } from '../../platform/bex/utils';
 
 function filterByString(fs: string, rec: VaultItem) {
 	if (!fs) {
@@ -492,9 +493,7 @@ export default defineComponent({
 		const termipassStore = useTermipassStore();
 		const current_user = ref(userStore.current_user);
 		const isMobile = ref(
-			process.env.PLATFORM == 'MOBILE' ||
-				process.env.PLATFORM == 'BEX' ||
-				$q.platform.is.mobile
+			process.env.PLATFORM == 'MOBILE' || $q.platform.is.mobile
 		);
 		const platform = ref(process.env.PLATFORM);
 
@@ -756,9 +755,16 @@ export default defineComponent({
 			meunStore.$subscribe(() => {
 				updateItems();
 			});
+
+			if (isBex.value) {
+				bexFrontBusOn('VAULT_TAB_UPDATE', stateUpdate);
+			}
 		});
 		onUnmounted(() => {
 			busOff('appSubscribe', stateUpdate);
+			if (isBex.value) {
+				bexFrontBusOff('VAULT_TAB_UPDATE', stateUpdate);
+			}
 		});
 		let itemList = ref<ListItem[]>([]);
 		stateUpdate();

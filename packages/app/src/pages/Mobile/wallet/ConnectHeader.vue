@@ -1,7 +1,7 @@
 <template>
 	<div class="web3-common-header">
 		<div class="notification-title-class row justify-center items-center">
-			<div class="text-yellow text-subtitle2">{{ title }}</div>
+			<div class="text-ink-1 text-subtitle1">{{ title }}</div>
 		</div>
 		<div v-show="showDappInfo" class="dapp-info fit column items-center">
 			<q-img :src="getRequireImage(dappLogo)" height="44px" width="44px" />
