@@ -53,7 +53,7 @@ import {
 import {
 	AvailableResult,
 	NativeBiometric
-} from '@capgo/capacitor-native-biometric';
+} from '@bytetrade/capacitor-native-biometric';
 import { BiometricTypeInfo } from 'src/utils/biometricUtil';
 import { useSocketStore } from '../../stores/websocketStore';
 import { useDeviceStore } from 'src/stores/device';

@@ -2,6 +2,7 @@
 	<div class="item-view-root">
 		<ItemView :itemID="itemID" :isNew="menuStore.isEdit" />
 	</div>
+	<router-view></router-view>
 </template>
 
 <script lang="ts" setup>

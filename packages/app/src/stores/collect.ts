@@ -1,34 +1,36 @@
 import { defineStore } from 'pinia';
 import { useUserStore } from './user';
-import {
-	downloadPdf,
-	getDownloadPdfProgress,
-	queryPdfEntry
-} from '../extension/rss/utils/pdf';
-import { BtNotify, NotifyDefinedType } from '@bytetrade/ui';
+import { downloadFile, getDownloadHistory } from '../extension/rss/utils/pdf';
 import { i18n } from 'src/boot/i18n';
 import {
 	BaseCollectInfo,
-	DOWNLOAD_STATUS,
 	DownloadProgress,
-	PDFInfo,
-	PDFStatus,
 	RssInfo,
 	RssStatus
 } from '../pages/Mobile/collect/utils';
 import { saveFeed, queryFeed } from '../extension/rss/utils/feed';
 import { saveEntry, queryEntry } from '../extension/rss/utils/entry';
 import { notifyFailed, notifySuccess } from '../utils/notifyRedefinedUtil';
-import { rsshubDomain, rsshubReplaceDomain } from '../extension/rss/utils';
+import {
+	FileInfo,
+	rsshubDomain,
+	rsshubReplaceDomain,
+	DownloadRecord,
+	CompareDownloadRecord,
+	DOWNLOAD_RECORD_STATUS,
+	DownloadRecordRequest,
+	DownloadFileRecord
+} from '../extension/rss/utils';
+import { binaryInsert } from 'src/utils/utils';
 
 export type DataState = {
 	baseUrl: string;
 	pagesList: RssInfo[];
 	rssList: RssInfo[];
-	pdfList: PDFInfo[];
+	filesDownloadHistoryList: DownloadRecord[];
 	waitingQueue: DownloadProgress[];
-	downloadTasks: Record<string, DownloadProgress>;
-	timer: any;
+	queryTimer: any;
+	filesList: DownloadFileRecord[];
 };
 
 export const useCollectStore = defineStore('collect', {
@@ -37,10 +39,11 @@ export const useCollectStore = defineStore('collect', {
 			baseUrl: '',
 			pagesList: [],
 			rssList: [],
-			pdfList: [],
+			filesDownloadHistoryList: [],
 			waitingQueue: [],
 			downloadTasks: {},
-			timer: null
+			filesList: [],
+			queryTimer: null
 		} as DataState;
 	},
 	getters: {
@@ -54,34 +57,46 @@ export const useCollectStore = defineStore('collect', {
 		}
 	},
 	actions: {
-		async setRssList(pagesList: BaseCollectInfo[], rssList: BaseCollectInfo[]) {
+		async setRssList(
+			pagesList: BaseCollectInfo[],
+			filesList: FileInfo[],
+			rssList: BaseCollectInfo[]
+		) {
 			const userStore = useUserStore();
 			this.baseUrl = userStore.getModuleSever('wise');
 			const pageList: RssInfo[] = [];
-			const pdfList: PDFInfo[] = [];
+			// const pdfList: PDFInfo[] = [];
 			for (const page of pagesList) {
-				if (page.url.endsWith('.pdf')) {
-					const data = page as PDFInfo;
-					const result = await queryPdfEntry(data.url);
-					if (result) {
-						data.status = PDFStatus.success;
-					} else {
-						data.status = PDFStatus.none;
-					}
-					pdfList.push(data);
+				// if (page.url.endsWith('.pdf')) {
+				// 	const data = page as PDFInfo;
+				// 	const result = await queryPdfEntry(data.url);
+				// 	if (result) {
+				// 		data.status = PDFStatus.success;
+				// 	} else {
+				// 		data.status = PDFStatus.none;
+				// 	}
+				// 	pdfList.push(data);
+				// } else {
+				const data = page as RssInfo;
+				const result = await queryEntry(data.url);
+				if (result) {
+					data.status = RssStatus.added;
 				} else {
-					const data = page as RssInfo;
-					const result = await queryEntry(data.url);
-					if (result) {
-						data.status = RssStatus.added;
-					} else {
-						data.status = RssStatus.none;
-					}
-					pageList.push(data);
+					data.status = RssStatus.none;
 				}
+				pageList.push(data);
+				// }
 			}
 			this.pagesList = pageList;
-			this.pdfList = pdfList;
+			this.filesList = [];
+			for (const file of filesList) {
+				const record = this.getDownloadRecordByUrl(file.download_url);
+				this.filesList.push({
+					file,
+					record,
+					title: file.file
+				});
+			}
 			this.rssList = [];
 			for (const rss of rssList) {
 				const data = rss as RssInfo;
@@ -129,106 +144,109 @@ export const useCollectStore = defineStore('collect', {
 			}
 		},
 
-		async downloadPdf(url: string, fileName: string): Promise<string | null> {
-			const find = this.waitingQueue.some((entry) => entry.url === url);
-			if (find) {
-				console.log(`reject : ${fileName} is waiting download`);
-				return null;
-			}
-			for (const key in this.downloadTasks) {
-				const task = this.downloadTasks[key];
-				if (task.status === DOWNLOAD_STATUS.DOWNLOADING && task.url === url) {
-					console.log(`reject : ${fileName} is downloading`);
-					return null;
+		async addDownloadRecord(info: FileInfo) {
+			const record = await downloadFile(info);
+			if (record) {
+				const index = this.filesDownloadHistoryList.findIndex(
+					(l) => l.id == record.id
+				);
+				if (index >= 0) {
+					this.filesDownloadHistoryList.splice(index, 1, record);
+				} else {
+					binaryInsert<DownloadRecord>(
+						this.filesDownloadHistoryList,
+						record,
+						CompareDownloadRecord
+					);
 				}
+				const currentRecordIndex = this.filesList.findIndex(
+					(file) =>
+						(!file.record && file.file.download_url == record.url) ||
+						(file.record && file.record.id == record.id)
+				);
+				if (currentRecordIndex >= 0) {
+					this.filesList.splice(index, 1, {
+						...this.filesList[currentRecordIndex],
+						record
+					});
+				}
+				this.startInterval();
 			}
-			const entry = await downloadPdf(url, fileName);
-			if (entry) {
-				this.addTask(entry, fileName);
-				return entry._id;
-			} else {
-				BtNotify.show({
-					type: NotifyDefinedType.FAILED,
-					message: fileName + ' download start failed'
-				});
-				console.log(`reject : ${fileName} downloadPdf return error`);
-				return null;
-			}
+			return !!record;
 		},
 
-		addTask(entry: any, fileName: string) {
-			this.waitingQueue.push({
-				id: entry._id,
-				url: entry.url,
-				fileName: entry.title ? entry.title : fileName,
-				status: DOWNLOAD_STATUS.DOWNLOADING,
-				total: 100,
-				download: 0,
-				isLoading: false
-			});
-			this.startInterval();
-		},
 		startInterval() {
-			if (!this.timer) {
-				this.timer = setInterval(() => {
-					this.waitingQueue.forEach((progress) => {
-						this.downloadTasks[progress.id] = progress;
-					});
-
-					this.waitingQueue = [];
-
-					const queryList: DownloadProgress[] = [];
-					for (const key in this.downloadTasks) {
-						const task = this.downloadTasks[key];
-						if (task.status === DOWNLOAD_STATUS.DOWNLOADING) {
-							queryList.push(task);
-						}
-					}
-
-					console.log('do', queryList.length);
-
-					if (queryList.length == 0 && this.waitingQueue.length == 0) {
-						clearInterval(this.timer);
-						this.timer = null;
-						console.log('clear');
-						return;
-					}
-
-					queryList.forEach((task) => {
-						if (!task.isLoading) {
-							this.queryDownloadPdfProgress(task);
-						}
-					});
-				}, 1000);
+			if (this.queryTimer) {
+				return;
 			}
+			const needQuery = (list: DownloadRecord[]) => {
+				const downloading = list.filter(
+					(item) =>
+						item.status === DOWNLOAD_RECORD_STATUS.WAITING ||
+						item.status === DOWNLOAD_RECORD_STATUS.DOWNLOADING
+				);
+
+				return downloading.length !== 0;
+			};
+			if (!needQuery(this.filesDownloadHistoryList)) {
+				return;
+			}
+			this.queryTimer = setInterval(async () => {
+				const list = await this.getDownloadHistory(
+					0,
+					this.filesDownloadHistoryList.length
+				);
+				if (!needQuery(list)) {
+					clearInterval(this.queryTimer);
+					this.queryTimer = null;
+					console.log('clear');
+					return;
+				}
+			}, 5000);
 		},
-		async queryDownloadPdfProgress(task: DownloadProgress) {
-			this.downloadTasks[task.id].isLoading = true;
-			const progress = await getDownloadPdfProgress(task.id);
-			if (progress) {
-				this.downloadTasks[task.id].isLoading = false;
-				this.downloadTasks[task.id].status = progress.status;
-				this.downloadTasks[task.id].download = progress.download;
-				this.downloadTasks[task.id].total = progress.total;
+		async getDownloadHistory(offset: number, limit: number) {
+			const req = new DownloadRecordRequest(
+				undefined,
+				undefined,
+				undefined,
+				offset,
+				limit
+			);
+			const list = await getDownloadHistory(req);
+			if (list) {
+				list.forEach((record) => {
+					const index = this.filesDownloadHistoryList.findIndex(
+						(l) => l.id == record.id
+					);
 
-				const pdfInfo = this.pdfList.find((item) => item.id === progress.id);
-				if (pdfInfo) {
-					pdfInfo.progress = progress;
-					if (progress.status === DOWNLOAD_STATUS.SUCCESS) {
-						pdfInfo.status = PDFStatus.success;
+					if (index >= 0) {
+						this.filesDownloadHistoryList.splice(index, 1, record);
+					} else {
+						binaryInsert<DownloadRecord>(
+							this.filesDownloadHistoryList,
+							record,
+							CompareDownloadRecord
+						);
 					}
-					if (progress.status === DOWNLOAD_STATUS.FAILED) {
-						pdfInfo.status = PDFStatus.error;
-					}
-				}
 
-				if (progress.status === DOWNLOAD_STATUS.FAILED) {
-					BtNotify.show({
-						type: NotifyDefinedType.FAILED,
-						message: i18n.global.t('pdf.download_failed')
-					});
-				}
+					const currentRecordIndex = this.filesList.findIndex(
+						(file) =>
+							(!file.record && file.file.download_url == record.url) ||
+							(file.record && file.record.id == record.id)
+					);
+					if (currentRecordIndex >= 0) {
+						this.filesList.splice(index, 1, {
+							...this.filesList[currentRecordIndex],
+							record
+						});
+					}
+				});
 			}
+			return list ? list : [];
+		},
+		getDownloadRecordByUrl(url: string) {
+			const item = this.filesDownloadHistoryList.find((l) => l.url == url);
+			return item;
 		}
 	}
 });

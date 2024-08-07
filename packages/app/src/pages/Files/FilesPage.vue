@@ -33,7 +33,7 @@ import UploadModal from '../../components/files/UploadModal.vue';
 
 import { DriveType } from './../../stores/files';
 import { useMenuStore } from './../../stores/files-menu';
-import { common } from './../../api';
+// import { common } from './../../api';
 // import { formatUrltoActiveMenu } from './../../api/common/common';
 
 const store = useDataStore();
@@ -99,10 +99,11 @@ onBeforeRouteUpdate((_to, from, next) => {
 });
 
 onMounted(async () => {
-	let url = route.fullPath;
-	const driveType = await common.formatUrltoDriveType(url);
+	// let url = route.fullPath;
+	// alert(url);
 
-	filesStore.setBrowserUrl(url, driveType);
+	// const driveType = await common.formatUrltoDriveType(url);
+	// filesStore.setBrowserUrl(url, driveType);
 
 	window.addEventListener('keydown', keyEvent);
 });

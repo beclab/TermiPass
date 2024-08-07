@@ -131,7 +131,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { ref, onMounted, onUnmounted } from 'vue';
 import { useUserStore } from '../../../stores/user';
 import { UserItem, getPlatform } from '@didvault/sdk/src/core';
@@ -150,20 +150,23 @@ import { useTermipassStore } from '../../../stores/termipass';
 const { t } = useI18n();
 const isBex = ref(process.env.IS_BEX);
 
+const $router = useRouter();
+const route = useRoute();
+
 const settingMenu = [
 	{
 		label: t('account'),
 		icon: 'sym_r_account_circle',
-		path: '/setting/account'
+		path: `${route.meta.root}/setting/account`
 	},
 	{
 		label: t('Safety'),
 		icon: 'sym_r_arming_countdown',
-		path: '/setting/security'
+		path: isBex.value
+			? `${route.meta.root}/setting/security`
+			: '/setting/security'
 	}
 ];
-
-const $router = useRouter();
 const userStore = useUserStore();
 const termipassStore = useTermipassStore();
 const $q = useQuasar();

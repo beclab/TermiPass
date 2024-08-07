@@ -7,7 +7,10 @@
 		transition-hide="slide-down"
 		class="d-creatVault"
 	>
-		<q-card class="column root" :class="isDesktop ? 'q-dialog-plugin' : ''">
+		<q-card
+			class="column root"
+			:class="isDesktop ? 'q-dialog-plugin' : 'd-createVault-mobile'"
+		>
 			<DesktopTermipassUnlockContent
 				v-if="isDesktop"
 				@unlockSuccess="onDialogOK"
@@ -44,8 +47,8 @@ defineProps({
 		default: i18n.global.t('unlock.auth_popup_unlock_introduce')
 	}
 });
-const isDesktop = ref(process.env.PLATFORM == 'DESKTOP' || process.env.IS_BEX);
-const isMobile = ref(process.env.PLATFORM == 'MOBILE');
+const isDesktop = ref(process.env.PLATFORM == 'DESKTOP');
+const isMobile = ref(process.env.PLATFORM == 'MOBILE' || process.env.IS_BEX);
 </script>
 <style lang="scss" scoped>
 .d-creatVault {
@@ -53,6 +56,10 @@ const isMobile = ref(process.env.PLATFORM == 'MOBILE');
 		width: 800px;
 		height: 600px;
 		border-radius: 12px;
+	}
+	.d-createVault-mobile {
+		width: 100%;
+		height: 100%;
 	}
 }
 </style>

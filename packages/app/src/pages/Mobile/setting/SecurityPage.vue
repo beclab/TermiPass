@@ -116,7 +116,7 @@ import { getNativeAppPlatform } from '../../../platform/capacitor/capacitorPlatf
 
 import { useI18n } from 'vue-i18n';
 import TerminusItem from '../../../components/common/TerminusItem.vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 import TerminusSettingsModuleItem from '../../../components/common/TerminusSettingsModuleItem.vue';
 import { formatMinutesTime } from '../../../utils/utils';
@@ -125,7 +125,7 @@ import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 const userStore = useUserStore();
 const { t } = useI18n();
 const $router = useRouter();
-
+const route = useRoute();
 const isBex = ref(process.env.IS_BEX);
 
 const lockTime = ref(app.settings.autoLockDelay);
@@ -169,7 +169,10 @@ const changePwd = async () => {
 	if (!(await userStore.unlockFirst())) {
 		return;
 	}
-	$router.push({ path: '/change_pwd' });
+
+	$router.push({
+		path: isBex.value ? `${route.meta.root}/change_pwd` : '/change_pwd'
+	});
 };
 
 const selectionReport = ref([] as string[]);

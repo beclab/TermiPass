@@ -22,6 +22,8 @@ export class Controller {
 	resolveApproval = notificationService.resolveApproval;
 
 	rejectApproval = async (err?: string, isInternal = false) => {
+		console.log('controller rejectApproval');
+
 		return await notificationService.rejectApproval(err, isInternal);
 	};
 
@@ -60,12 +62,17 @@ export class Controller {
 	sendAppState = async (
 		appState: string,
 		accountsData: string,
+		mnemonicsData: string,
 		currentAccountId: string
 	) => {
 		const dataCenter = getExtensionBackgroundPlatform().dataCenter;
 		dataCenter.clearData();
 		await dataCenter.decryptAppState(appState);
-		await dataCenter.decryptUserItems(accountsData, currentAccountId);
+		await dataCenter.decryptUserItems(
+			accountsData,
+			mnemonicsData,
+			currentAccountId
+		);
 		await dataCenter.setUser(currentAccountId);
 		if (dataCenter.isLocked()) {
 			dataCenter.clearData();

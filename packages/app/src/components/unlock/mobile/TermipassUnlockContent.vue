@@ -65,13 +65,14 @@ import { getNativeAppPlatform } from '../../../platform/capacitor/capacitorPlatf
 import { notifyFailed } from '../../../utils/notifyRedefinedUtil';
 import { unlockByPwd } from '../../../pages/Mobile/login/unlock/UnlockBusiness';
 import { useUserStore } from '../../../stores/user';
-import { BiometryType } from '@capgo/capacitor-native-biometric';
+import { BiometryType } from '@bytetrade/capacitor-native-biometric';
 import { onMounted } from 'vue';
 import { useQuasar } from 'quasar';
 import MonitorKeyboard from '../../../utils/monitorKeyboard';
 import { watch } from 'vue';
 import { app } from '../../../globals';
 import { formatMinutesTime } from '../../../utils/utils';
+import { sendUnlock } from '../../../utils/bexFront';
 
 const props = defineProps({
 	detailText: {
@@ -191,6 +192,7 @@ const unlockByBiometric = async () => {
 const loginByPassword = async (password: string) => {
 	await unlockByPwd(password, {
 		async onSuccess(data: any) {
+			sendUnlock();
 			emit('unlockSuccess', data);
 		},
 		onFailure(message: string) {

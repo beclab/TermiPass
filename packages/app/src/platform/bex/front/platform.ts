@@ -88,6 +88,7 @@ export class ExtensionPlatform
 
 	async appRedirectUrl(redirect: any, currentRoute: any): Promise<void> {
 		const chromeExtensionDesign = currentRoute.path.split('/')[1];
+
 		await walletService.load();
 		const userStore = useUserStore();
 		if (chromeExtensionDesign === 'inject') {

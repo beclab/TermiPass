@@ -1,6 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import PluginRootLayout from 'layouts/PluginRootLayout.vue';
 import PluginMainLayout from 'layouts/PluginMainLayout.vue';
+import BottomSheetRouterView from 'layouts/BottomSheetRouterView.vue';
 import PluginIndexPage from 'pages/Plugin/indexPage.vue';
 import PluginItemIndex from 'src/pages/Mobile/vault/ItemIndex.vue';
 import PluginItemView from 'src/pages/Mobile/vault/ItemView.vue';
@@ -62,6 +63,13 @@ import AuthorizationPage from 'src/pages/Mobile/wallet/AuthorizationPage.vue';
 import ConnectPage from 'src/pages/Mobile/wallet/ConnectPage.vue';
 import SubmitPage from 'src/pages/Mobile/wallet/SubmitVCInfoPage.vue';
 import CollectPage from 'src/pages/Mobile/collect/CollectIndexPage.vue';
+
+// {
+// 	path: '/backup_mnemonics',
+// 	name: 'backupMnemonics',
+// 	component: () =>
+// 		import('src/pages/Mobile/setting/BackupMnemonicsPage.vue')
+// },
 
 const mobile: RouteRecordRaw[] = [
 	{
@@ -284,26 +292,6 @@ const mobileCommon: RouteRecordRaw[] = [
 				component: SelectTerminusName
 			},
 			{
-				path: '/setting/account',
-				component: AccountPage
-			},
-			{
-				path: '/setting/display',
-				component: DisplayPage
-			},
-			{
-				path: '/setting/security',
-				component: SecurityPage
-			},
-			{
-				path: '/setting/autofill',
-				component: AutoFillPage
-			},
-			{
-				path: '/setting/website',
-				component: WebsiteManagerPage
-			},
-			{
 				path: '/profile',
 				component: ProfilePage
 			},
@@ -335,7 +323,97 @@ const mobileCommon: RouteRecordRaw[] = [
 	}
 ];
 
-const bex: RouteRecordRaw[] = [
+const settingRoutes = (meta) => {
+	const childRoutes = (meta) => [
+		{
+			path: `${meta.root}/setting`,
+			component: PluginSettingIndex,
+			meta
+		},
+		{
+			path: `${meta.root}/setting/account`,
+			component: AccountPage,
+			meta
+		},
+		{
+			path: `${meta.root}/setting/display`,
+			component: DisplayPage,
+			meta
+		},
+		{
+			path: `${meta.root}/setting/security`,
+			component: SecurityPage,
+			meta
+		},
+		{
+			path: `${meta.root}/setting/autofill`,
+			component: AutoFillPage,
+			meta
+		},
+		{
+			path: `${meta.root}/setting/website`,
+			component: WebsiteManagerPage,
+			meta
+		},
+		{
+			path: `${meta.root}/accounts`,
+			meta,
+			component: AccountList
+		},
+		{
+			path: `${meta.root}/import_mnemonic`,
+			name: 'InputMnemonic',
+			meta,
+			component: InputMnemonic
+		},
+		{
+			path: `${meta.root}/setup/success`,
+			name: 'setupSuccess',
+			meta,
+			component: SetupAccount
+		},
+		{
+			path: `${meta.root}/ConnectTerminus`,
+			meta,
+			component: ConnectTerminus
+		},
+		{
+			path: `${meta.root}/vc_manage`,
+			// name: 'vcManage',
+			meta,
+			component: VCManagePage
+		},
+		{
+			path: `${meta.root}/backup_mnemonics`,
+			// name: 'backupMnemonics',
+			meta,
+			component: BackupMnemonicsPage
+		},
+		{
+			path: `${meta.root}/change_pwd`,
+			// name: 'changePwd',
+			meta,
+			component: ChangePwdPage
+		},
+		{
+			path: `${meta.root}/backup_mnemonics`,
+			// name: 'backupMnemonics',
+			meta,
+			component: BackupMnemonicsPage
+		}
+	];
+
+	return [
+		{
+			path: `${meta.root}/bottom-sheet`,
+			meta,
+			component: BottomSheetRouterView,
+			children: childRoutes(meta)
+		}
+	];
+};
+
+export const bex: RouteRecordRaw[] = [
 	{
 		path: '/',
 		component: PluginMainLayout,
@@ -343,31 +421,37 @@ const bex: RouteRecordRaw[] = [
 			{
 				path: '/home',
 				meta: {
-					tabIdentify: 'home'
+					tabIdentify: 'home',
+					root: '/home',
+					roots: '/home'
 				},
-				component: PluginIndexPage
+				component: PluginIndexPage,
+				children: settingRoutes({ root: '/home', title: 'settings' })
 			},
 			{
 				path: '/items',
 				meta: {
-					tabIdentify: 'vault'
+					tabIdentify: 'vault',
+					root: '/items1',
+					roots: '/items'
 				},
-				component: PluginItemIndex
+				component: PluginItemIndex,
+				children: settingRoutes({ root: '/items1', title: 'vault' })
 			},
 			{
 				path: '/items/:itemid',
-				component: PluginItemView
-			},
-			{
-				path: '/setting',
-				component: PluginSettingIndex
+				component: PluginItemView,
+				children: settingRoutes({ root: '/items1', title: 'vault' })
 			},
 			{
 				path: '/collect',
 				meta: {
-					tabIdentify: 'collect'
+					tabIdentify: 'collect',
+					root: '/collect',
+					roots: '/collect'
 				},
-				component: CollectPage
+				component: CollectPage,
+				children: settingRoutes({ root: '/collect', title: 'fffff' })
 			},
 			{
 				path: 'org/:org_mode',

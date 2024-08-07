@@ -9,6 +9,7 @@ export class ExtensionBackgroundPlatform extends StubPlatform {
 
 	constructor() {
 		super();
+
 		this.crypto = new WebCryptoProvider();
 	}
 

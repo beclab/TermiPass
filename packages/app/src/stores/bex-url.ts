@@ -12,5 +12,5 @@ export function getPluginImageUrl(path: string): string {
 	if (path.startsWith('http')) {
 		return path;
 	}
-	return assetsUrl.value + 'plugin/' + path;
+	return assetsUrl.value + 'www/plugin/' + path;
 }

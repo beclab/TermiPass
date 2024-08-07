@@ -14,8 +14,8 @@ public class GoogleAuthPlugin: CAPPlugin, CAPBridgedPlugin {
     public let jsName = "GoogleAuthPlugin"
     
     public var pluginMethods: [CAPPluginMethod] = [
-        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnNone),
-        CAPPluginMethod(name: "refresh", returnType: CAPPluginReturnNone),
+        CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "refresh", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "signOut", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "initialize", returnType: CAPPluginReturnPromise)        
     ]

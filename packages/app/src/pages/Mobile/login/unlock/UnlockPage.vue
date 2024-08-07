@@ -42,7 +42,7 @@ import { onBeforeMount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useQuasar } from 'quasar';
 import { useUserStore } from '../../../../stores/user';
-import { BiometryType } from '@capgo/capacitor-native-biometric';
+import { BiometryType } from '@bytetrade/capacitor-native-biometric';
 import { sendUnlock } from '../../../../utils/bexFront';
 import { ConfirmButtonStatus } from '../../../../utils/constants';
 import TerminusEdit from '../../../../components/common/TerminusEdit.vue';

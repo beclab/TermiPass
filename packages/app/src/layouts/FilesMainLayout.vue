@@ -26,17 +26,33 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref } from 'vue';
 import { useQuasar } from 'quasar';
+import { useRoute } from 'vue-router';
 import { bytetrade } from '@bytetrade/core';
 
 import FilesPage from '../pages/Files/FilesPage.vue';
 import PromptsComponent from '../components/files/prompts/PromptsComponent.vue';
 import FilesDrawer from './TermipassLayout/FilesDrawer.vue';
+import { common } from './../api';
+import { DriveType, useFilesStore } from './../stores/files';
 
 const $q = useQuasar();
+const route = useRoute();
+const filesStore = useFilesStore();
 
 const platform = ref(process.env.PLATFORM);
 
 onMounted(async () => {
+	let url = route.fullPath;
+
+	let driveType = await common.formatUrltoDriveType(url);
+
+	if (driveType === undefined) {
+		url = '/Files/Home/';
+		driveType = DriveType.Drive;
+	}
+
+	filesStore.setBrowserUrl(url, driveType);
+
 	nextTick(() => {
 		bytetrade.observeUrlChange.childPostMessage({
 			type: 'Files'

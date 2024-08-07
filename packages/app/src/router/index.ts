@@ -1,6 +1,5 @@
 import { route } from 'quasar/wrappers';
 import {
-	createMemoryHistory,
 	createRouter,
 	createWebHashHistory,
 	createWebHistory
@@ -20,9 +19,7 @@ import { useBexStore } from '../stores/bex';
 
 export default route(function (/* { store, ssrContext } */) {
 	const createHistory =
-		process.env.SERVER || process.env.IS_BEX
-			? createMemoryHistory
-			: process.env.VUE_ROUTER_MODE === 'history'
+		process.env.VUE_ROUTER_MODE === 'history'
 			? createWebHistory
 			: createWebHashHistory;
 

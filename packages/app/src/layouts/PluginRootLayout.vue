@@ -1,30 +1,5 @@
 <template>
-	<router-view v-if="isnotification"></router-view>
-	<template v-else>
-		<!-- <div class="webos-app-wrapper" style="margin-bottom: 16px" v-if="extraShow">
-			<PluginGoogleSearch></PluginGoogleSearch>
-			<PluginYoutebuSearch></PluginYoutebuSearch>
-		</div> -->
-		<div
-			class="webos-app-container"
-			style="position: fixed; top: 0; right: 0; bottom: 0"
-		>
-			<div
-				v-show="show"
-				style="position: relative; overflow-x: hidden; width: 450px"
-			>
-				<router-view></router-view>
-			</div>
-			<div class="aside-wrapper" @click="toggle" :style="asideStyle">
-				<img
-					class="aside-icon"
-					:style="asideIconStyle"
-					src="~assets/images/vault-plugin.svg"
-					alt=""
-				/>
-			</div>
-		</div>
-	</template>
+	<router-view></router-view>
 </template>
 
 <script setup lang="ts">

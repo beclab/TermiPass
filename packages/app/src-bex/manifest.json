@@ -1,7 +1,7 @@
 {
   "name": "TermiPass",
   "description": "DID APP",
-  "version": "1.2.16",
+  "version": "1.2.17",
   "manifest_version": 3,
   "icons": {
     "16": "icons/icon-16x16.png",
@@ -14,6 +14,9 @@
   "background": {
     "service_worker": "background.js",
     "mode": "module"
+  },
+  "side_panel": {
+    "default_path": "www/index.html"
   },
   "content_scripts": [
     {
@@ -67,7 +70,8 @@
     "contextMenus",
     "clipboardRead",
     "clipboardWrite",
-    "cookies"
+    "cookies",
+    "sidePanel"
   ],
   "host_permissions": [
     "<all_urls>"

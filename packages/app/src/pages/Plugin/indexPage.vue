@@ -2,6 +2,7 @@
 	<div class="container">
 		<comment-area />
 	</div>
+	<router-view></router-view>
 </template>
 
 <script lang="ts" setup>
@@ -12,7 +13,6 @@ import CommentArea from './CommentArea.vue';
 .container {
 	width: 100%;
 	height: 100%;
-	max-width: 500px;
 	position: absolute;
 	left: 0;
 	top: 0;
