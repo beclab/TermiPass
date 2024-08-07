@@ -9,7 +9,8 @@ import {
 	SyncDataAPI,
 	DriveDataAPI,
 	DataDataAPI,
-	CacheDataAPI
+	CacheDataAPI,
+	GoogleDataAPI
 } from './../api';
 
 import { DriveType } from './files';
@@ -343,14 +344,26 @@ export const useMenuStore = defineStore('filesMenu', {
 			const syncDataAPI = new SyncDataAPI();
 			const dataDataAPI = new DataDataAPI();
 			const cacheDataAPI = new CacheDataAPI();
+			const googleDataAPI = new GoogleDataAPI();
 
 			this.menu[0].children = await driveDataAPI.fetchMenuRepo();
-			const syncMenus: SyncRepoMineType[] = await syncDataAPI.fetchMenuRepo();
-			this.menu[1].children = syncMenus;
 			this.menu[2].children = [
 				...(await dataDataAPI.fetchMenuRepo()),
 				...(await cacheDataAPI.fetchMenuRepo())
 			];
+			const syncMenus: SyncRepoMineType[] = await syncDataAPI.fetchMenuRepo();
+			this.menu[1].children = syncMenus;
+
+			const googleRes = await googleDataAPI.fetchMenuRepo();
+
+			if (googleRes && googleRes.length > 0) {
+				this.menu[3] = {
+					label: 'Cloud Drive',
+					key: 'CloudDrive',
+					icon: '',
+					children: googleRes
+				};
+			}
 
 			const syncIds: string[] = [];
 			for (let i = 0; i < syncMenus.length; i++) {
