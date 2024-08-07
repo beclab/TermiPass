@@ -1,5 +1,7 @@
 package com.terminus.planeta.utils;
 
+import com.terminus.planeta.BuildConfig;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +37,9 @@ public class LoggerUtils {
     }
 
     private void log(String message) {
-        logger.log(colorLevel,"║ " +  message);
+        if (BuildConfig.DEBUG) {
+            logger.log(colorLevel, "║ " + message);
+        }
     }
 
     private static byte[] toByteArray(InputStream input) throws IOException {
@@ -52,15 +56,19 @@ public class LoggerUtils {
     }
 
     private void printLine(boolean isTop) {
-        if (isTop) {
-            logger.log(colorLevel,"╔═══════════════════════════════════════════════════════════════════════════════════════");
-        } else {
-            logger.log(colorLevel,"╚═══════════════════════════════════════════════════════════════════════════════════════");
+        if (BuildConfig.DEBUG) {
+            if (isTop) {
+                logger.log(colorLevel, "╔═══════════════════════════════════════════════════════════════════════════════════════");
+            } else {
+                logger.log(colorLevel, "╚═══════════════════════════════════════════════════════════════════════════════════════");
+            }
         }
     }
 
     private void printType(String type){
-        logger.log(colorLevel,"====> " +  type);
+        if (BuildConfig.DEBUG) {
+            logger.log(colorLevel, "====> " + type);
+        }
     }
 
     public void printJson(String type,String msg) {

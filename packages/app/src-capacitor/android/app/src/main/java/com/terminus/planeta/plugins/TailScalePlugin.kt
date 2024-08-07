@@ -29,17 +29,17 @@ import java.net.HttpCookie
  * </pre>
  */
 @CapacitorPlugin(name = "TailScalePlugin")
-class TailScalePlugin  : Plugin() {
+class TailScalePlugin : Plugin() {
 
     private var cookieManager: CapacitorCookieManager? = null
 
     override fun load() {
         super.load()
 
-        val statusListener : OnTailscaleStatusListener = object : OnTailscaleStatusListener{
+        val statusListener: OnTailscaleStatusListener = object : OnTailscaleStatusListener {
             override fun onStatusUpdate(status: String) {
                 notifyListeners("vpnStatusUpdate", JSObject().apply {
-                    this.put("status",status)
+                    this.put("status", status)
                 })
             }
         }
@@ -48,17 +48,17 @@ class TailScalePlugin  : Plugin() {
 
     @PluginMethod
     fun open(call: PluginCall) {
-        val key = call.getString("authKey","")
-        val server = call.getString("server","")
-        if (!key.isNullOrEmpty()){
+        val key = call.getString("authKey", "")
+        val server = call.getString("server", "")
+        if (!key.isNullOrEmpty()) {
             VaultApp.application?.authKey = key
-        }else{
+        } else {
             Log.i("TailScalePlugin", " key error -> $key")
             return
         }
-        if (!server.isNullOrEmpty()){
+        if (!server.isNullOrEmpty()) {
             VaultApp.application?.scaleServer = server
-        }else{
+        } else {
             Log.i("TailScalePlugin", " server error -> $server")
             return
         }
@@ -68,44 +68,45 @@ class TailScalePlugin  : Plugin() {
             Log.i("TailScalePlugin", "startActivityForResult")
             startActivityForResult(call, intent, "handlePrepareVpn")
         } else {
-					configCookie(call)
-					IPNApp.instance?.ipnStart()
-				}
+            configCookie(call)
+            IPNApp.instance?.ipnStart()
+        }
     }
 
-		fun configCookie(call: PluginCall) {
+    fun configCookie(call: PluginCall) {
 
-			val server = call.getString("server","")
-			var cookies = ""
+        val server = call.getString("server", "")
+        var cookies = ""
 
-			if (cookieManager == null) {
-				cookieManager =
-					CapacitorCookieManager(null, java.net.CookiePolicy.ACCEPT_ALL, this.bridge)
-			}
-			val cookieList = cookieManager?.getCookies(server)
-			if (cookieList != null && cookieList.isNotEmpty()) {
-				cookies = cookieList.map { httpCook: HttpCookie ->
-					"${httpCook.name}=${httpCook.value}"
-				}.joinToString(separator = ";")
-			}
+        if (cookieManager == null) {
+            cookieManager =
+                CapacitorCookieManager(null, java.net.CookiePolicy.ACCEPT_ALL, this.bridge)
+        }
+        val cookieList = cookieManager?.getCookies(server)
+        if (cookieList != null && cookieList.isNotEmpty()) {
+            cookies = cookieList.map { httpCook: HttpCookie ->
+                "${httpCook.name}=${httpCook.value}"
+            }.joinToString(separator = ";")
+        }
 
-			Log.i("TailScalePlugin", " cookies -> $cookies")
+        Log.i("TailScalePlugin", " cookies -> $cookies")
 
-			if (!cookies.isNullOrEmpty()) {
-				VaultApp.application?.cookies = cookies
-			} else {
-				Log.i("TailScalePlugin", " cookies error -> $cookies")
-			}
-		}
+        if (!cookies.isNullOrEmpty()) {
+            VaultApp.application?.cookies = cookies
+        } else {
+            Log.i("TailScalePlugin", " cookies error -> $cookies")
+        }
+    }
 
     @ActivityCallback
     fun handlePrepareVpn(call: PluginCall, result: ActivityResult) {
         Log.i("TailScalePlugin", " handlePrepareVpn error -> ${result.resultCode} ${result.data}")
-        if (result.resultCode == RESULT_OK){
-						configCookie(call)
+        if (result.resultCode == RESULT_OK) {
+            configCookie(call)
             IPNApp.instance?.ipnStart()
-        }else{
-            Toast.makeText(this.context,"result error ${result.resultCode}",Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this.context, "result error ${result.resultCode}", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -116,82 +117,85 @@ class TailScalePlugin  : Plugin() {
     }
 
     @PluginMethod
-    fun status(call: PluginCall){
+    fun status(call: PluginCall) {
         Log.i("TailScalePlugin", "status")
         val status = IPNApp.instance?.status()
         val jsObject = JSObject().apply {
-            this.put("status",status)
+            this.put("status", status)
         }
         call.resolve(jsObject)
     }
 
     @PluginMethod
     fun currentNodeId(call: PluginCall) {
-      Log.i("TailScalePlugin", "currentNodeId")
+        Log.i("TailScalePlugin", "currentNodeId")
 
-      val jsObject = JSObject().apply {
-        this.put("nodeId", "")
-      }
+        val jsObject = JSObject().apply {
+            this.put("nodeId", "")
+        }
 
-      val currentProfile =  IPNApp.instance?.exportEncryptedPrefsGetString("statestore-_current-profile")
+        val currentProfile =
+            IPNApp.instance?.exportEncryptedPrefsGetString("statestore-_current-profile")
 
-      if (currentProfile.isNullOrEmpty()) {
+        if (currentProfile.isNullOrEmpty()) {
+            call.resolve(jsObject)
+            return
+        }
+
+        var currentProfileStr = String(Base64.decode(currentProfile, Base64.DEFAULT))
+
+        var prefix = "profile-"
+
+        if (!currentProfileStr.startsWith(prefix)) {
+            call.resolve(jsObject)
+            return
+        }
+
+        currentProfileStr = currentProfileStr.substring(startIndex = prefix.length)
+
+        var stateStoreProfiles =
+            IPNApp.instance?.exportEncryptedPrefsGetString("statestore-_profiles")
+
+        if (stateStoreProfiles.isNullOrEmpty()) {
+            call.resolve(jsObject)
+            return
+        }
+
+        var stateStoreProfilesJsonString = String(Base64.decode(stateStoreProfiles, Base64.DEFAULT))
+
+        val jsonObject = JSONObject(stateStoreProfilesJsonString)
+
+        val currentProfileObject = jsonObject.optJSONObject(currentProfileStr)
+
+        if (currentProfileObject == null) {
+            call.resolve(jsObject)
+            return
+        }
+        var nodeId = currentProfileObject.optString("NodeID", "")
+        if (nodeId.isNullOrEmpty()) {
+            call.resolve(jsObject)
+            return
+        }
+        jsObject.put("nodeId", nodeId)
+
+        Log.i("TailScalePlugin", nodeId)
         call.resolve(jsObject)
-        return
-      }
-
-      var currentProfileStr = String(Base64.decode(currentProfile,Base64.DEFAULT))
-
-      var prefix = "profile-"
-
-      if (!currentProfileStr.startsWith(prefix)) {
-        call.resolve(jsObject)
-        return
-      }
-
-      currentProfileStr = currentProfileStr.substring(startIndex = prefix.length)
-
-      var stateStoreProfiles = IPNApp.instance?.exportEncryptedPrefsGetString("statestore-_profiles")
-
-      if (stateStoreProfiles.isNullOrEmpty()) {
-        call.resolve(jsObject)
-        return
-      }
-
-      var stateStoreProfilesJsonString = String(Base64.decode(stateStoreProfiles, Base64.DEFAULT))
-
-      val jsonObject = JSONObject(stateStoreProfilesJsonString)
-
-      val currentProfileObject = jsonObject.optJSONObject(currentProfileStr)
-
-      if (currentProfileObject == null) {
-        call.resolve(jsObject)
-        return
-      }
-      var nodeId = currentProfileObject.optString("NodeID", "")
-      if (nodeId.isNullOrEmpty()) {
-        call.resolve(jsObject)
-        return
-      }
-      jsObject.put("nodeId",nodeId)
-
-      Log.i("TailScalePlugin", nodeId)
-      call.resolve(jsObject)
     }
-		@PluginMethod
-		fun peersState(call: PluginCall) {
-			Log.i("TailScalePlugin", "peersState")
-			val status = IPNApp.instance?.status()
-			val jsObject = JSObject().apply {
-				this.put("isRunning",status == Constants.VPN_STATUS_RUNNING)
-			}
-			var state = ""
-			if (status == Constants.VPN_STATUS_RUNNING) {
-				IPNApp.instance?.peersState()?.let {
-					state = it
-				}
-			}
-			jsObject.put("state", state)
-			call.resolve(jsObject)
-		}
+
+    @PluginMethod
+    fun peersState(call: PluginCall) {
+        Log.i("TailScalePlugin", "peersState")
+        val status = IPNApp.instance?.status()
+        val jsObject = JSObject().apply {
+            this.put("isRunning", status == Constants.VPN_STATUS_RUNNING)
+        }
+        var state = ""
+        if (status == Constants.VPN_STATUS_RUNNING) {
+            IPNApp.instance?.peersState()?.let {
+                state = it
+            }
+        }
+        jsObject.put("state", state)
+        call.resolve(jsObject)
+    }
 }
