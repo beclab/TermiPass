@@ -153,7 +153,6 @@ export const useScaleStore = defineStore('scale', {
 					}, 30000);
 				}
 			} else {
-				notifyFailed('');
 				this.vpnStatus = TermiPassVpnStatus.off;
 			}
 		},
