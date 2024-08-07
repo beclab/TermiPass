@@ -456,7 +456,7 @@ class Data extends Origin {
 		);
 	}
 
-	async formatPathtoUrl(path: string): Promise<string> {
+	async formatPathtoUrl(path: string, _param: string): Promise<string> {
 		return path;
 	}
 

@@ -15,6 +15,10 @@ export function formatUrltoDriveType(href: string): DriveType | undefined {
 		return DriveType.Data;
 	} else if (href.startsWith('/Cache')) {
 		return DriveType.Cache;
+	} else if (href.startsWith('/GDrive')) {
+		return DriveType.GoogleDrive;
+	} else if (href.startsWith('/Dropbox')) {
+		return DriveType.Dropbox;
 	} else {
 		return undefined;
 	}
@@ -57,6 +61,20 @@ export async function formatUrltoActiveMenu(
 			label: MenuItem.CACHE,
 			id: MenuItem.CACHE,
 			driveType: DriveType.Cache
+		};
+	} else if (href.startsWith('/GDrive')) {
+		const label = getParams(href, 'name');
+		return {
+			label: label,
+			id: label,
+			driveType: DriveType.GoogleDrive
+		};
+	} else if (href.startsWith('/Dropbox')) {
+		const label = getParams(href, 'name');
+		return {
+			label: label,
+			id: label,
+			driveType: DriveType.GoogleDrive
 		};
 	} else {
 		const label = decodeURIComponent(href).split('/')[2];

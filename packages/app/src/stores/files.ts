@@ -11,7 +11,7 @@ export enum DriveType {
 	Sync = 'sync',
 	Data = 'data',
 	Cache = 'cache',
-	GoogleDrive = 'googleDrive',
+	GoogleDrive = 'google',
 	Dropbox = 'dropbox'
 }
 
@@ -99,31 +99,8 @@ export type FileState = {
 	};
 };
 
-// const driveData = new DriveDataAPI();
-// const syncData = new SyncDataAPI();
-// const dataData = new DataDataAPI();
-// const cacheData = new CacheDataAPI();
-
 function getAPI(driveType: DriveType): Origin {
 	return dataAPIs(driveType);
-	// switch (driveType) {
-	// 	case DriveType.Sync:
-	// 		return syncData;
-	// 		break;
-	// 	case DriveType.Drive:
-	// 		return driveData;
-	// 		break;
-	// 	case DriveType.Data:
-	// 		return dataData;
-	// 		break;
-	// 	case DriveType.Cache:
-	// 		return cacheData;
-	// 		break;
-
-	// 	default:
-	// 		return driveData;
-	// 		break;
-	// }
 }
 
 export const useFilesStore = defineStore('files', {
@@ -228,6 +205,8 @@ export const useFilesStore = defineStore('files', {
 				path: path.path,
 				query
 			});
+
+			console.log('request path', path);
 
 			const requestUrl = await this.formatPathtoUrl(path);
 
