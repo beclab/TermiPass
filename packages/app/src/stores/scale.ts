@@ -12,7 +12,6 @@ import {
 } from '../platform/terminusCommon/terminusCommonInterface';
 import { app } from '../globals';
 import { PreAuthKey } from '@didvault/sdk/src/core/api';
-import { notifyFailed } from 'src/utils/notifyRedefinedUtil';
 import { useTermipassStore } from './termipass';
 
 export type DataState = {
