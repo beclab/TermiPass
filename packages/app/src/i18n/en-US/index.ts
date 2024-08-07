@@ -52,7 +52,7 @@ export default {
 	contains_lowercase_letters: 'Contains lowercase letters',
 	contains_uppercase_letters: 'Contains uppercase letters',
 	contains_numbers: 'Contains numbers',
-	contains_symbols: 'Contains symbols',
+	contains_symbols: 'Contains symbols from @$!%*?&_.',
 	biometric_unlock: 'Biometric Unlock',
 	biometric_unlock_desc:
 		'Set up fingerprint unlock for a safer and faster way to unlock TermiPass.',

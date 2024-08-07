@@ -39,7 +39,7 @@ export const PASSWORD_RULE = {
 	LOWERCASE_RULE: '^(?=.*[a-z])',
 	UPPERCASE_RULE: '^(?=.*[A-Z])',
 	DIGIT_RULE: '^(?=.*[0-9])',
-	SYMBOL_RULE: '^(?=.*[@$!%*?&_.])',
+	SYMBOL_RULE: '^(?=.*[@$!%*?&_.])[A-Za-z0-9@$!%*?&_.]+$',
 	ALL_RULE:
 		'^(?=.*[@$!%*?&_.])(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])[A-Za-z0-9@$!%*?&_.]{8,32}$'
 };
