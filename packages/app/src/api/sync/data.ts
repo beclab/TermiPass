@@ -587,6 +587,10 @@ class Data extends Origin {
 		}
 		notifyHide();
 	}
+
+	getAttrPath(item: FileItem): string {
+		return item.path.slice(0, item.path.indexOf('?'));
+	}
 }
 
 export { Data };

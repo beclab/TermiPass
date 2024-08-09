@@ -11,6 +11,7 @@ export enum DriveType {
 	Sync = 'sync',
 	Data = 'data',
 	Cache = 'cache',
+	CloudDrive = 'cloudDrive',
 	GoogleDrive = 'google',
 	Dropbox = 'dropbox'
 }
@@ -200,6 +201,8 @@ export const useFilesStore = defineStore('files', {
 
 			const params = new URLSearchParams(path.param);
 			const query = Object.fromEntries(params);
+
+			console.log('pathpathpath1', path);
 
 			this.router.push({
 				path: path.path,

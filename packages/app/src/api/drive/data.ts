@@ -490,6 +490,10 @@ class Data extends Origin {
 
 		await files.resourceAction(url, 'post');
 	}
+
+	getAttrPath(item: FileItem): string {
+		return item.path.slice(0, item.path.indexOf(item.name));
+	}
 }
 
 export { Data };

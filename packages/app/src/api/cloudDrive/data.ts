@@ -2,7 +2,7 @@ import { Data as DriveDataAPI } from './../drive/data';
 
 import { formatGd } from './filesFormat';
 import { CommonFetch } from '../fetch';
-import { FileResType } from './../../stores/files';
+import { DriveType, FileResType } from './../../stores/files';
 import { fetchRepo } from './utils';
 import { DriveMenuType } from './type';
 import { getParams } from '../../utils/utils';
@@ -15,7 +15,7 @@ class Data extends DriveDataAPI {
 		this.commonAxios = CommonFetch;
 	}
 
-	breadcrumbsBase = '/Files';
+	breadcrumbsBase = '/Drive';
 
 	async fetch(url: string): Promise<FileResType> {
 		let pureUrl = decodeURIComponent(url);
@@ -59,6 +59,10 @@ class Data extends DriveDataAPI {
 
 	async fetchMenuRepo(): Promise<DriveMenuType[]> {
 		const res1: any = await fetchRepo();
+		const imgObj = {
+			dropbox: './img/dropbox.svg',
+			google: './img/google.svg'
+		};
 
 		const mineChildren: any[] = [];
 		for (let i = 0; i < res1.length; i++) {
@@ -68,8 +72,9 @@ class Data extends DriveDataAPI {
 				label: el.name,
 				key: el.name,
 				icon: '',
+				img: imgObj[el.type],
 				defaultHide: true,
-				driveType: el.type,
+				driveType: DriveType.CloudDrive,
 				...el
 			});
 		}
@@ -78,18 +83,29 @@ class Data extends DriveDataAPI {
 	}
 
 	async formatRepotoPath(item: any): Promise<string> {
-		const name =
-			item.key.indexOf('@') > -1
-				? item.key.slice(0, item.key.indexOf('@'))
-				: item.key;
+		// const name =
+		// 	item.key.indexOf('@') > -1
+		// 		? item.key.slice(0, item.key.indexOf('@'))
+		// 		: item.key;
 
-		return `/Dropbox/${name}?name=${item.name}&drive=${item.type}`;
+		sessionStorage.setItem('currentActiveDrive', JSON.stringify(item));
+		return `/Drive/${item.key}/`;
 	}
 
-	async formatPathtoUrl(path: string, param: string): Promise<string> {
-		const name = getParams(param, 'name');
-		const drive = getParams(param, 'drive');
+	async formatPathtoUrl(path: string): Promise<string> {
+		const currentActiveDrive = JSON.parse(
+			sessionStorage.getItem('currentActiveDrive') || ''
+		);
+
+		const name = currentActiveDrive.name;
+		const drive = currentActiveDrive.type;
+		// const pureName =
+		// 	name.indexOf('@') > -1 ? name.slice(0, name.indexOf('@')) : name;
+
 		const p = path.slice(path.indexOf(name) + name.length);
+
+		// p = p.startsWith('/') ? p.slice(1) : p;
+
 		return `/drive/ls?name=${name}&drive=${drive}&path=${p}`;
 	}
 }

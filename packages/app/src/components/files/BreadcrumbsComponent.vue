@@ -65,8 +65,7 @@ const items = computed(function () {
 		parts[0] === 'Seahub' ||
 		parts[0] === 'Data' ||
 		parts[0] === 'Cache' ||
-		parts[0] === 'GDrive' ||
-		parts[0] === 'Dropbox'
+		parts[0] === 'Drive'
 	) {
 		parts.shift();
 	}
@@ -145,7 +144,7 @@ const go = async (url: string, query: any) => {
 	.link-text {
 		cursor: pointer;
 		display: inline-block;
-		max-width: 200px;
+		max-width: 220px;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;

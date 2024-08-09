@@ -147,13 +147,7 @@ export abstract class Origin {
 	abstract createDir(dirName: string, path: string): Promise<void>;
 
 	/**
-	 * Upload fetch
+	 * Get Attr Path
 	 */
-	// abstract fetchUploader(
-	// 	url: string,
-	// 	content: string,
-	// 	overwrite: boolean,
-	// 	timer: number,
-	// 	callback?: () => Promise<void>
-	// ): Promise<any>;
+	abstract getAttrPath(item: FileItem): string;
 }

@@ -10,7 +10,7 @@ import {
 	DriveDataAPI,
 	DataDataAPI,
 	CacheDataAPI,
-	GoogleDataAPI
+	CloudDriveDataAPI
 } from './../api';
 
 import { DriveType } from './files';
@@ -344,7 +344,7 @@ export const useMenuStore = defineStore('filesMenu', {
 			const syncDataAPI = new SyncDataAPI();
 			const dataDataAPI = new DataDataAPI();
 			const cacheDataAPI = new CacheDataAPI();
-			const googleDataAPI = new GoogleDataAPI();
+			const cloudDriveDataAPI = new CloudDriveDataAPI();
 
 			this.menu[0].children = await driveDataAPI.fetchMenuRepo();
 			this.menu[2].children = [
@@ -354,7 +354,7 @@ export const useMenuStore = defineStore('filesMenu', {
 			const syncMenus: SyncRepoMineType[] = await syncDataAPI.fetchMenuRepo();
 			this.menu[1].children = syncMenus;
 
-			const googleRes = await googleDataAPI.fetchMenuRepo();
+			const googleRes = await cloudDriveDataAPI.fetchMenuRepo();
 
 			if (googleRes && googleRes.length > 0) {
 				this.menu[3] = {
