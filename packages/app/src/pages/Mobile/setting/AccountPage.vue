@@ -97,7 +97,11 @@
 							{{ t('view_your_mnemonic_phrase') }}
 						</template>
 						<template v-slot:side>
-							<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+							<q-icon
+								name="sym_r_keyboard_arrow_right"
+								size="20px"
+								color="ink-3"
+							/>
 						</template>
 					</terminus-item>
 
@@ -144,11 +148,15 @@
 							{{ t('bind_your_social_account') }}
 						</template>
 						<template v-slot:side>
-							<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+							<q-icon
+								name="sym_r_keyboard_arrow_right"
+								size="20px"
+								color="ink-3"
+							/>
 						</template>
 					</terminus-item>
 
-					<terminus-item
+					<!-- <terminus-item
 						v-if="showCheckHistory"
 						:show-board="true"
 						img-bg-classes="bg-yellow"
@@ -161,9 +169,13 @@
 					>
 						<template v-slot:title> CheckHistory </template>
 						<template v-slot:side>
-							<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+							<q-icon
+								name="sym_r_keyboard_arrow_right"
+								size="20px"
+								color="ink-3"
+							/>
 						</template>
-					</terminus-item>
+					</terminus-item> -->
 
 					<!-- <terminus-item
 						v-if="!userStore.current_user?.cloud_id"

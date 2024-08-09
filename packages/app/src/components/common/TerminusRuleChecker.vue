@@ -1,6 +1,14 @@
 <template>
 	<div class="rule-checker-root row justify-start items-center">
-		<q-img class="rule-checker-root__img" :src="imgRef" />
+		<!-- <q-img class="rule-checker-root__img" :src="imgRef" /> -->
+		<div
+			class="rule-checker-root__img"
+			:class="
+				!checkPass
+					? 'rule-checker-root__img_normal'
+					: 'rule-checker-root__img_selected'
+			"
+		></div>
 		<div class="rule-checker-root__label login-sub-title text-ink-2">
 			{{ label }}
 		</div>
@@ -9,7 +17,7 @@
 
 <script setup lang="ts">
 import { onMounted, watch, ref } from 'vue';
-import { getRequireImage } from '../../utils/imageUtils';
+// import { getRequireImage } from '../../utils/imageUtils';
 
 const props = defineProps({
 	label: {
@@ -36,7 +44,8 @@ const props = defineProps({
 const emit = defineEmits('update:result');
 
 let checkRule: RegExp;
-const imgRef = ref(getRequireImage('login/check_no_pass.svg'));
+// const imgRef = ref(getRequireImage('login/check_no_pass.svg'));
+const checkPass = ref(false);
 
 onMounted(() => {
 	if (props.pattern) {
@@ -49,14 +58,16 @@ watch(
 	(value) => {
 		if (value) {
 			const result = checkRule.test(value);
+			checkPass.value = result;
 			if (result) {
-				imgRef.value = getRequireImage('login/check_pass.svg');
+				// imgRef.value = getRequireImage('login/check_pass.svg');
 			} else {
-				imgRef.value = getRequireImage('login/check_no_pass.svg');
+				// imgRef.value = getRequireImage('login/check_no_pass.svg');
 			}
 			emit('update:result', result);
 		} else {
-			imgRef.value = getRequireImage('login/check_no_pass.svg');
+			checkPass.value = false;
+			// imgRef.value = getRequireImage('login/check_no_pass.svg');
 			emit('update:result', false);
 		}
 	}
@@ -72,6 +83,16 @@ watch(
 	&__img {
 		width: 16px;
 		height: 16px;
+		gap: 0px;
+		border-radius: 4px;
+	}
+	&__img_normal {
+		border: 1px solid $radio-stroke;
+		background: transparent;
+	}
+	&__img_selected {
+		border: 1px solid transparent;
+		background: $positive;
 	}
 
 	&__label {

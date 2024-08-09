@@ -8,7 +8,14 @@
 					class="scan-icon row items-center justify-center"
 					@click="scanQrCode"
 				>
-					<q-img src="../../../assets/common/scan_qr.svg" width="24px" />
+					<q-img
+						:src="
+							$q.dark.isActive
+								? getRequireImage('common/dark_scan_qr.svg')
+								: getRequireImage('common/scan_qr.svg')
+						"
+						width="20px"
+					/>
 				</div>
 			</template>
 		</TerminusUserHeader>
@@ -46,9 +53,9 @@
 										size="58px"
 										:thickness="0.5"
 										:color="item.color"
-										track-color="grey-1"
+										track-color="separator-2"
 									/>
-									<div class="amount text-body2 text-ink-1">
+									<div class="amount text-subtitle2 text-ink-1">
 										{{ item.ratio }}%
 									</div>
 									<div class="name text-body3 text-ink-2">
@@ -66,7 +73,7 @@
 					<terminus-item
 						v-for="(cell, index) in setting"
 						:key="index"
-						class="q-mt-xs"
+						class="q-mt-md"
 						img-bg-classes="bg-background-3"
 						:icon-name="cell.icon"
 						:whole-picture-size="32"
@@ -89,7 +96,11 @@
 										{{ t('not_backed_up') }}
 									</div>
 								</div>
-								<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+								<q-icon
+									name="sym_r_keyboard_arrow_right"
+									size="20px"
+									color="ink-3"
+								/>
 							</div>
 						</template>
 					</terminus-item>
@@ -111,7 +122,11 @@
 								<div class="app-version text-body2 text-ink-2 q-pr-xs">
 									{{ appVersion }}
 								</div>
-								<q-icon name="sym_r_keyboard_arrow_right" />
+								<q-icon
+									name="sym_r_keyboard_arrow_right"
+									size="20px"
+									color="ink-3"
+								/>
 							</div>
 						</template>
 					</terminus-item>
@@ -144,6 +159,7 @@ import BindTerminusName from '../../../components/common/BindTerminusName.vue';
 import TerminusScrollArea from '../../../components/common/TerminusScrollArea.vue';
 
 import AuthItemCard from '../items/AuthItemCard.vue';
+import { getRequireImage } from '../../../utils/imageUtils';
 
 import { useI18n } from 'vue-i18n';
 import { useTermipassStore } from '../../../stores/termipass';

@@ -1,7 +1,7 @@
 <template>
 	<terminus-title-bar :title="t('settings.themes.title')" />
 	<div class="display-root">
-		<q-list class="q-mt-lg">
+		<q-list class="q-mt-lg q-px-md">
 			<!-- <q-item dense> -->
 			<!-- <q-item-section>
 					<div class="module-sub-title text-body3">
@@ -26,7 +26,7 @@
 				</q-item-section> -->
 			<q-item>
 				<q-item-section>
-					<terminus-item :clickable="false">
+					<terminus-item :clickable="false" :borderRadius="12">
 						<template v-slot:title>
 							<div class="text-subtitle2 security-root__title">
 								{{ t('settings.themes.follow_system_theme') }}
@@ -47,18 +47,24 @@
 						settings to switch theme modes
 					</div>
 					<div
-						class="q-mt-md row items-center justify-between theme-select"
+						class="q-mt-xl row items-center justify-center theme-select"
 						:style="isThemeAuto ? 'opacity: 0.4' : ''"
 					>
 						<div
-							class="theme-item-common"
+							class="theme-item-common q-mr-xl"
 							@click="updateTheme(ThemeDefinedMode.LIGHT)"
 						>
-							<q-img
-								src="../../../assets/setting/mobile-theme-light.svg"
-								class="image"
-								:class="isThemeLight ? 'theme-item-select' : ''"
-							/>
+							<div
+								class="image-bg"
+								:class="
+									isThemeLight ? 'theme-item-select' : 'theme-item-normal'
+								"
+							>
+								<q-img
+									src="../../../assets/setting/mobile-theme-light.svg"
+									class="image"
+								/>
+							</div>
 							<div class="content row items-center justify-center q-pl-md">
 								<q-radio
 									dense
@@ -74,11 +80,15 @@
 							class="theme-item-common"
 							@click="updateTheme(ThemeDefinedMode.DARK)"
 						>
-							<q-img
-								src="../../../assets/setting/mobile-theme-dark.svg"
-								class="image"
-								:class="isThemeDark ? 'theme-item-select' : ''"
-							/>
+							<div
+								:class="isThemeDark ? 'theme-item-select' : 'theme-item-normal'"
+								class="image-bg"
+							>
+								<q-img
+									src="../../../assets/setting/mobile-theme-dark.svg"
+									class="image"
+								/>
+							</div>
 							<div class="content row items-center justify-center q-pl-md">
 								<q-radio
 									v-model="deviceStore.theme"
@@ -301,20 +311,29 @@ const updateTheme = (theme: ThemeDefinedMode) => {
 
 		.theme-item-common {
 			// height: 144px;
-			width: calc(50% - 10px);
+			width: min(calc(50% - 10px), 130px);
 
 			overflow: hidden;
 			.image {
-				border: 2px solid transparent;
 				border-radius: 12px;
 				width: 100%;
-				// height: 100px;
 			}
 			.theme-item-select {
 				border: 2px solid $yellow-default;
+			}
+
+			.theme-item-normal {
+				border: 2px solid transparent;
+			}
+
+			.image-bg {
+				width: 100%;
+				height: 100%;
+				padding: 4px;
 				border-radius: 16px;
 			}
 		}
+
 		.content {
 			width: 100%;
 			height: 44px;

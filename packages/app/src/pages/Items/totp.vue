@@ -6,7 +6,7 @@
 			:value="_age"
 			size="18px"
 			:thickness="1"
-			color="ink-2"
+			color="ink-1"
 			track-color="background-1"
 			class="q-ma-md"
 			style="margin: 0 10px"

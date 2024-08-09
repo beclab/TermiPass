@@ -4,6 +4,7 @@
 			:title="t('change_local_password')"
 			:btn-title="btnTextRef"
 			:btn-status="totalBtnStatusRef"
+			:bottomLineHide="true"
 			@on-confirm="verifyPassword"
 			@on-error="clearData"
 		>

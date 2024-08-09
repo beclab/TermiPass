@@ -12,6 +12,7 @@
 				@select="selectHandler"
 				style="width: 240px"
 				active-class="text-subtitle2 bg-yellow-soft text-ink-1"
+				class="text-ink-2"
 			>
 			</bt-menu>
 		</q-scroll-area>

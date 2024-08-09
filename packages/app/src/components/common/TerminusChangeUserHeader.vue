@@ -5,7 +5,14 @@
 			class="scan-icon row items-center justify-center"
 			@click="scanQrCode"
 		>
-			<q-img src="../../assets/common/scan_qr.svg" width="24px" />
+			<q-img
+				:src="
+					$q.dark.isActive
+						? getRequireImage('common/dark_scan_qr.svg')
+						: getRequireImage('common/scan_qr.svg')
+				"
+				width="20px"
+			/>
 		</div>
 
 		<div class="avatar q-ml-xs">
@@ -21,6 +28,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { useUserStore } from '../../stores/user';
+import { getRequireImage } from 'src/utils/imageUtils';
 
 const props = defineProps({
 	scan: {

@@ -24,7 +24,11 @@
 										<div class="text-subtitle1">{{ cell.name }}</div>
 									</template>
 									<template v-slot:side>
-										<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+										<q-icon
+											name="sym_r_keyboard_arrow_right"
+											size="20px"
+											color="ink-3"
+										/>
 									</template>
 								</terminus-item>
 								<q-separator
@@ -51,7 +55,11 @@
 										<div class="text-subtitle1">{{ cell.name }}</div>
 									</template>
 									<template v-slot:side>
-										<q-icon name="sym_r_keyboard_arrow_right" size="20px" />
+										<q-icon
+											name="sym_r_keyboard_arrow_right"
+											size="20px"
+											color="ink-3"
+										/>
 									</template>
 								</terminus-item>
 								<q-separator

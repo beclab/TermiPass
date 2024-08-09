@@ -7,7 +7,14 @@
 					class="scan-icon row items-center justify-center"
 					@click="scanQrCode"
 				>
-					<q-img src="../../../../assets/common/scan_qr.svg" width="24px" />
+					<q-img
+						:src="
+							$q.dark.isActive
+								? getRequireImage('common/dark_scan_qr.svg')
+								: getRequireImage('common/scan_qr.svg')
+						"
+						width="20px"
+					/>
 				</div>
 			</template>
 		</terminus-title-bar>
@@ -18,6 +25,7 @@
 import { useRouter } from 'vue-router';
 import TerminusTitleBar from '../../../../components/common/TerminusTitleBar.vue';
 import DomainsList from './DomainsList.vue';
+import { getRequireImage } from 'src/utils/imageUtils';
 
 const router = useRouter();
 const scanQrCode = () => {
