@@ -73,6 +73,11 @@ const desktop: RouteRecordRaw[] = [
 				component: () => import('pages/Files/FilesPage.vue')
 			},
 			{
+				path: 'Drive/:path*',
+				name: 'Drive',
+				component: () => import('pages/Files/FilesPage.vue')
+			},
+			{
 				path: 'items/',
 				component: () => import('pages/Items/ItemsPage.vue')
 			},

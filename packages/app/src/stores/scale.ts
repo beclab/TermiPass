@@ -12,7 +12,6 @@ import {
 } from '../platform/terminusCommon/terminusCommonInterface';
 import { app } from '../globals';
 import { PreAuthKey } from '@didvault/sdk/src/core/api';
-import { notifyFailed } from 'src/utils/notifyRedefinedUtil';
 import { useTermipassStore } from './termipass';
 
 export type DataState = {
@@ -153,7 +152,6 @@ export const useScaleStore = defineStore('scale', {
 					}, 30000);
 				}
 			} else {
-				notifyFailed('');
 				this.vpnStatus = TermiPassVpnStatus.off;
 			}
 		},

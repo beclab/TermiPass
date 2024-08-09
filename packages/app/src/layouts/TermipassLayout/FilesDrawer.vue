@@ -13,7 +13,7 @@
 				:modelValue="menuStore.activeMenu.id"
 				:sameActiveable="false"
 				@select="selectHandler"
-				style="width: 100%"
+				style="width: 239px"
 				class="title-norla"
 				active-class="text-subtitle2 bg-yellow-soft text-ink-1"
 			>
@@ -132,6 +132,8 @@ const selectHandler = async (value) => {
 	// 	label: value.item.label,
 	// 	id: value.item.key
 	// };
+	console.log('selectHandler value', value);
+
 	const path = await filesStore.formatRepotoPath(value.item);
 
 	console.log('pathpathpath', path);

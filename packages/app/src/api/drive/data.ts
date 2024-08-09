@@ -456,7 +456,7 @@ class Data extends Origin {
 		);
 	}
 
-	async formatPathtoUrl(path: string): Promise<string> {
+	async formatPathtoUrl(path: string, _param: string): Promise<string> {
 		return path;
 	}
 
@@ -489,6 +489,10 @@ class Data extends Origin {
 		url = url.replace('//', '/');
 
 		await files.resourceAction(url, 'post');
+	}
+
+	getAttrPath(item: FileItem): string {
+		return item.path.slice(0, item.path.indexOf(item.name));
 	}
 }
 

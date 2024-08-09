@@ -9,7 +9,8 @@
 import DriveUploader from './DriveUploader.vue';
 import SyncUploader from './SyncUploader.vue';
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+// import { useRoute } from 'vue-router';
+import { useMenuStore } from './../../../stores/files-menu';
 
 const props = defineProps({
 	dragAndDrop: {
@@ -26,11 +27,12 @@ const props = defineProps({
 	}
 });
 
-const route = useRoute();
+// const route = useRoute();
+const menuStore = useMenuStore();
 const currentProps = ref();
 
 watch(
-	() => route.path,
+	() => [props.path, props.repoID],
 	(newVal) => {
 		if (newVal) {
 			currentProps.value = {
@@ -39,6 +41,9 @@ watch(
 				repoID: props.repoID
 			};
 		}
+	},
+	{
+		immediate: true
 	}
 );
 </script>

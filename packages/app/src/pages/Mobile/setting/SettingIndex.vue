@@ -173,7 +173,9 @@ const settingMenu = [
 	{
 		label: t('account'),
 		icon: 'sym_r_account_circle',
-		path: `${route.meta.root}/setting/account`
+		path: isBex.value
+			? `${route.meta.root}/setting/account`
+			: '/setting/account'
 	},
 	{
 		label: t('Safety'),

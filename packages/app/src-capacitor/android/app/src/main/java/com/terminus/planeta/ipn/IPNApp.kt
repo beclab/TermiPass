@@ -35,6 +35,7 @@ import java.net.NetworkInterface
 import java.security.GeneralSecurityException
 import java.util.Collections
 import java.util.Locale
+import kotlin.math.log
 
 
 /**
@@ -49,7 +50,7 @@ import java.util.Locale
 class IPNApp : VaultApp() {
     private var ipnServiceConn: IPNServiceConn? = null
     private var ipnService: IPNService? = null
-    private var statusListener : OnTailscaleStatusListener? = null;
+    private var statusListener: OnTailscaleStatusListener? = null;
     private var getStatusCount = 0
 
     @JvmField
@@ -119,7 +120,7 @@ class IPNApp : VaultApp() {
             bindService(intent, ipnServiceConn!!, BIND_AUTO_CREATE)
         }
         Log.i("IPN", "init start")
-				Log.i("IPN", "${application?.cookies}")
+        Log.i("IPN", "${application?.cookies}")
         val root: String = applicationContext.filesDir.absolutePath
         Local_vpn_sdk.sdkInitFunc(
             0,
@@ -155,7 +156,7 @@ class IPNApp : VaultApp() {
 //                    } catch (e : Exception) {
 //                        Log.i("IPN", "doCallback error : ${e.message}")
 //                    }
-                  resoleSDKStatusNotify(p0)
+                    resoleSDKStatusNotify(p0)
                 }
 
                 override fun getFd(): Long {
@@ -173,8 +174,12 @@ class IPNApp : VaultApp() {
                         val msg = jsonObject.optString("msg", "")
                         val status = jsonObject.optString("status", "")
                         if (code == 0) {
-                            if (VPN_STATUS_NEEDS_LOGIN == status){
-                                Local_vpn_sdk.login()
+                            if (VPN_STATUS_NEEDS_LOGIN == status) {
+                                try {
+                                    Local_vpn_sdk.login()
+                                } catch (e: Exception) {
+                                    Log.i("IPN", "Local_vpn_sdk.login " + e.message)
+                                }
                             }
                         } else {
                             if (exitUtils?.topActivity != null) {
@@ -182,7 +187,7 @@ class IPNApp : VaultApp() {
                                     .show()
                             }
                         }
-                    } catch (e : Exception) {
+                    } catch (e: Exception) {
                         Log.i("IPN", "init error : ${e.message}")
                     }
                 }
@@ -270,7 +275,11 @@ class IPNApp : VaultApp() {
                 }
 
             })
-        Local_vpn_sdk.login()
+        try {
+            Local_vpn_sdk.login()
+        } catch (e: Exception) {
+            Log.i("IPN", "Local_vpn_sdk.login " + e.message)
+        }
     }
 
     fun ipnClose() {
@@ -283,46 +292,46 @@ class IPNApp : VaultApp() {
         }
     }
 
-    fun status() : String{
+    fun status(): String {
         Log.i("IPN", "ipnStatus")
         return Local_vpn_sdk.status()
     }
 
-		fun peersState(): String {
-			Log.i("IPN", "peersState" + Local_vpn_sdk.state())
-			return Local_vpn_sdk.state();
-		}
+    fun peersState(): String {
+        Log.i("IPN", "peersState" + Local_vpn_sdk.state())
+        return Local_vpn_sdk.state();
+    }
 
     private fun resoleSDKStatusNotify(notify: String?) {
-      Log.i("IPN ","resoleSDKStatusNotify " + notify)
+        Log.i("IPN ", "resoleSDKStatusNotify " + notify)
 
-      if (notify.isNullOrEmpty()) {
-        return
-      }
-      try {
-        val jsonObject = JSONObject(notify)
-        val code = jsonObject.optInt("code", -1)
-        val msg = jsonObject.optString("msg", "")
-        val status = jsonObject.optString("status", "")
-        if (code == 0) {
-          if (status == VPN_STATUS_STARTING) {
-            if (getStatusCount < 15) {
-              getStatusCount += 1;
-              RunnablePocket.postDelayed({
-                var statusStr = status()
-                resoleSDKStatusNotify(statusStr)
-              }, 1000)
-              return
-            }
-          }
-          getStatusCount = 0
-          statusListener?.onStatusUpdate(status)
-        } else {
-          Log.i("IPN", "doCallback error : $code $msg")
+        if (notify.isNullOrEmpty()) {
+            return
         }
-      } catch (e : Exception) {
-        Log.i("IPN", "doCallback error : ${e.message}")
-      }
+        try {
+            val jsonObject = JSONObject(notify)
+            val code = jsonObject.optInt("code", -1)
+            val msg = jsonObject.optString("msg", "")
+            val status = jsonObject.optString("status", "")
+            if (code == 0) {
+                if (status == VPN_STATUS_STARTING) {
+                    if (getStatusCount < 15) {
+                        getStatusCount += 1;
+                        RunnablePocket.postDelayed({
+                            var statusStr = status()
+                            resoleSDKStatusNotify(statusStr)
+                        }, 1000)
+                        return
+                    }
+                }
+                getStatusCount = 0
+                statusListener?.onStatusUpdate(status)
+            } else {
+                Log.i("IPN", "doCallback error : $code $msg")
+            }
+        } catch (e: Exception) {
+            Log.i("IPN", "doCallback error : ${e.message}")
+        }
     }
 
     private fun registerNetworkCallback() {
@@ -405,9 +414,9 @@ class IPNApp : VaultApp() {
         this.statusListener = statusListener;
     }
 
-    fun exportEncryptedPrefsGetString(key: String) : String{
-      val mm = encryptedPrefs.getString(key, null)
-      return mm ?: ""
+    fun exportEncryptedPrefsGetString(key: String): String {
+        val mm = encryptedPrefs.getString(key, null)
+        return mm ?: ""
     }
 
     companion object {

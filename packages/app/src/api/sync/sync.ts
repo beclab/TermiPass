@@ -1,6 +1,6 @@
 import { fetchURL } from '../utils';
 // import { dataAPI } from './index';
-import { dataAPIs } from '..';
+import { dataAPIs } from './../index';
 import { useDataStore } from '../../stores/data';
 import { axiosInstanceProxy } from '../../platform/httpProxy';
 

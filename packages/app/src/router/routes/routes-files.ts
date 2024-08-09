@@ -42,6 +42,13 @@ export default [
 				meta: {
 					requiresAuth: true
 				}
+			},
+			{
+				path: 'Drive/:path*',
+				name: 'Drive',
+				meta: {
+					requiresAuth: true
+				}
 			}
 		]
 	}

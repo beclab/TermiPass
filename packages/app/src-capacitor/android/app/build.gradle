@@ -86,7 +86,7 @@ android {
             minifyEnabled false
             resValue "string", "app_name", "TermiPass Debug"
             signingConfig signingConfigs.debug
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules-debug.pro'
         }
         release {
             minifyEnabled false

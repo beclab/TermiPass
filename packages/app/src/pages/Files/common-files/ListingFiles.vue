@@ -131,13 +131,12 @@ import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import throttle from 'lodash.throttle';
 import { useDataStore } from '../../../stores/data';
-import { files as api } from '../../../api';
 import {
 	checkConflict,
 	createCopiedFile,
-	scanFiles,
-	handleFiles
+	scanFiles
 } from '../../../utils/upload';
+import { useFilesUploadStore } from '../../../stores/files-upload';
 import { stopScrollMove, startScrollMove } from '../../../utils/utils';
 import { disabledClick } from '../../../utils/file';
 import ListingItem from '../../../components/files/ListingItem.vue';
@@ -151,9 +150,14 @@ import IndexUploader from './../uploader/IndexUploader.vue';
 import { useFilesStore } from './../../../stores/files';
 import { useMenuStore } from './../../../stores/files-menu';
 
+import { common } from './../../../api';
+import url from '../../../utils/url';
+import { detectType } from '../../../utils/utils';
+
 const store = useDataStore();
 const route = useRoute();
 const operateinStore = useOperateinStore();
+const filesUploadStore = useFilesUploadStore();
 
 const dragCounter = ref<number>(0);
 const itemWeight = ref<number>(0);
@@ -188,19 +192,16 @@ watch(
 );
 
 watch(
-	() => route.path,
+	() => menuStore.activeMenu.label,
 	() => {
-		console.log('pathpathpath', route.path);
 		menuVisible.value = false;
 		repoId.value = route.query.id;
 
 		const currentItem = menuStore.activeMenu.label;
-
-		console.log('currentItemcurrentItem', currentItem);
+		const path = decodeURIComponent(route.path);
 
 		fileUploaderPath.value =
-			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
-			'/';
+			path.slice(path.indexOf(currentItem) + currentItem.length) || '/';
 	},
 	{
 		immediate: true
@@ -371,7 +372,15 @@ const preventDefault = (event: any) => {
 };
 
 const optionAction = (event: any, type: OPERATE_ACTION) => {
-	operateinStore.handleFileOperate(event, route, type, async () => {});
+	const path = route.path;
+	const driveType = common.formatUrltoDriveType(path);
+	operateinStore.handleFileOperate(
+		event,
+		route,
+		type,
+		driveType,
+		async () => {}
+	);
 };
 
 const scrollEvent = throttle(() => {
@@ -415,6 +424,7 @@ const dragLeave = () => {
 };
 
 const drop = async (event: any) => {
+	console.log('eventevent', event);
 	event.preventDefault();
 
 	dragCounter.value = 0;
@@ -434,25 +444,10 @@ const drop = async (event: any) => {
 		}
 	}
 	let files = await scanFiles(dt);
-	let items = store.req.items;
+	let items = filesStore.currentFileList;
 	let path = route.path.endsWith('/') ? route.path : route.path + '/';
 
-	if (
-		el !== null &&
-		el.classList.contains('item') &&
-		el.dataset.dir === 'true'
-	) {
-		// Get url from ListingItem instance
-		path = el.__vue__.url;
-
-		try {
-			items = (await store.fetchList(path)).items;
-		} catch (error) {
-			//this.$showError(error);
-		}
-	}
-
-	let conflict = await checkConflict(files, items);
+	let conflict = checkConflict(files, items);
 	if (conflict) {
 		const newfile = await createCopiedFile(files, items);
 		handleFiles(newfile, path, true);
@@ -461,6 +456,42 @@ const drop = async (event: any) => {
 
 	await handleFiles(files, path);
 };
+
+async function handleFiles(files, base, overwrite = false) {
+	for (let i = 0; i < files.length; i++) {
+		let id = filesUploadStore.id;
+		let path = base;
+		let file = files[i];
+
+		if (file.fullPath !== undefined) {
+			path += url.encodePath(file.fullPath);
+		} else {
+			path += url.encodeRFC5987ValueChars(file.name);
+		}
+
+		if (file.isDir) {
+			path += '/';
+		}
+
+		const item = {
+			id,
+			path,
+			file,
+			repo_name: menuStore.activeMenu.label,
+			repo_id: '',
+			overwrite,
+			driveType: common.formatUrltoDriveType(base),
+			...(!file.isDir && { type: detectType(file.type) })
+		};
+
+		await (function () {
+			return new Promise(async function (res) {
+				await filesUploadStore.upload(item, common.formatUrltoDriveType(base));
+				res(true);
+			});
+		})();
+	}
+}
 
 const resetOpacity = () => {
 	let items = document.getElementsByClassName('item');

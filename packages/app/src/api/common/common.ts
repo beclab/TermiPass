@@ -15,6 +15,8 @@ export function formatUrltoDriveType(href: string): DriveType | undefined {
 		return DriveType.Data;
 	} else if (href.startsWith('/Cache')) {
 		return DriveType.Cache;
+	} else if (href.startsWith('/Drive')) {
+		return DriveType.CloudDrive;
 	} else {
 		return undefined;
 	}
@@ -57,6 +59,14 @@ export async function formatUrltoActiveMenu(
 			label: MenuItem.CACHE,
 			id: MenuItem.CACHE,
 			driveType: DriveType.Cache
+		};
+	} else if (href.startsWith('/Drive')) {
+		const splitHref = href.split('/')[2];
+		console.log('splitHrefsplitHref', splitHref);
+		return {
+			label: splitHref,
+			id: splitHref,
+			driveType: DriveType.CloudDrive
 		};
 	} else {
 		const label = decodeURIComponent(href).split('/')[2];
