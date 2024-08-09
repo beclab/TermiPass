@@ -13,7 +13,7 @@
 				:modelValue="menuStore.activeMenu.id"
 				:sameActiveable="false"
 				@select="selectHandler"
-				style="width: 100%"
+				style="width: 239px"
 				class="title-norla"
 				active-class="text-subtitle2 bg-yellow-soft text-ink-1"
 			>

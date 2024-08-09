@@ -44,15 +44,8 @@ export default [
 				}
 			},
 			{
-				path: 'GDrive/:path*',
-				name: 'GDrive',
-				meta: {
-					requiresAuth: true
-				}
-			},
-			{
-				path: 'Dropbox/:path*',
-				name: 'Dropbox',
+				path: 'Drive/:path*',
+				name: 'Drive',
 				meta: {
 					requiresAuth: true
 				}

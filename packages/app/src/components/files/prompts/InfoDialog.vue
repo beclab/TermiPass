@@ -80,6 +80,7 @@ import TerminusFileIcon from '../../common/TerminusFileIcon.vue';
 import { formatFileModified } from '../../../utils/file';
 import { useI18n } from 'vue-i18n';
 import { useFilesStore } from '../../../stores/files';
+import { dataAPIs, common } from './../../../api';
 
 import TerminusDialogBar from '../../common/TerminusDialogBar.vue';
 // import TerminusDialogFooter from '../../common/TerminusDialogFooter.vue';
@@ -144,13 +145,13 @@ const isDir = computed(function () {
 });
 
 const path = computed(function () {
-	const path = filesStore.currentFileList[filesStore.selected[0]].path;
+	const item = filesStore.currentFileList[filesStore.selected[0]];
 
-	if (path.startsWith('/Seahub')) {
-		return path.slice(7);
-	} else {
-		return path;
-	}
+	const driveType = common.formatUrltoDriveType(item.path);
+
+	const resPath = dataAPIs(driveType).getAttrPath(item);
+
+	return resPath;
 });
 
 const onCancel = () => {

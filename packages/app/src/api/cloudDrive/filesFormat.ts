@@ -2,9 +2,7 @@ import { FileItem, DriveType, FileResType } from './../../stores/files';
 import { getFileType } from './../../utils/utils';
 
 export function formatGd(data, url) {
-	console.log('formatGdformatGd', data);
 	const name = url.split('/')[2];
-
 	const dirent_lists = data;
 	const hasDirLen = dirent_lists.length;
 	const hasFileLen = 0;
@@ -30,12 +28,14 @@ export function formatGd(data, url) {
 		driveType: DriveType.GoogleDrive
 	};
 
+	console.log('dirent_lists', dirent_lists);
 	dirent_lists.forEach((el, index) => {
-		const itemPath = `/drive/ls/`;
+		const pathname = window.location.pathname;
+		const itemPath = `${pathname}${el.name}`;
 
 		const obj: FileItem = {
 			path: itemPath,
-			name: el.name,
+			name: el.name.endsWith('/') ? el.name.slice(0, -1) : el.name,
 			size: el.size || 0,
 			extension: '',
 			modified: Date.parse(el.last_modified) || 0,
@@ -52,7 +52,7 @@ export function formatGd(data, url) {
 			numTotalFiles: el.numTotalFiles,
 			index,
 			url: '',
-			driveType: DriveType.GoogleDrive,
+			driveType: DriveType.CloudDrive,
 			param: ''
 		};
 		seahubDir.items.push(obj);

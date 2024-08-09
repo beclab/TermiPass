@@ -192,19 +192,16 @@ watch(
 );
 
 watch(
-	() => route.path,
+	() => menuStore.activeMenu.label,
 	() => {
-		console.log('pathpathpath', route.path);
 		menuVisible.value = false;
 		repoId.value = route.query.id;
 
 		const currentItem = menuStore.activeMenu.label;
-
-		console.log('currentItemcurrentItem', currentItem);
+		const path = decodeURIComponent(route.path);
 
 		fileUploaderPath.value =
-			route.path.slice(route.path.indexOf(currentItem) + currentItem.length) ||
-			'/';
+			path.slice(path.indexOf(currentItem) + currentItem.length) || '/';
 	},
 	{
 		immediate: true

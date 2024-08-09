@@ -15,10 +15,8 @@ export function formatUrltoDriveType(href: string): DriveType | undefined {
 		return DriveType.Data;
 	} else if (href.startsWith('/Cache')) {
 		return DriveType.Cache;
-	} else if (href.startsWith('/GDrive')) {
-		return DriveType.GoogleDrive;
-	} else if (href.startsWith('/Dropbox')) {
-		return DriveType.Dropbox;
+	} else if (href.startsWith('/Drive')) {
+		return DriveType.CloudDrive;
 	} else {
 		return undefined;
 	}
@@ -62,19 +60,13 @@ export async function formatUrltoActiveMenu(
 			id: MenuItem.CACHE,
 			driveType: DriveType.Cache
 		};
-	} else if (href.startsWith('/GDrive')) {
-		const label = getParams(href, 'name');
+	} else if (href.startsWith('/Drive')) {
+		const splitHref = href.split('/')[2];
+		console.log('splitHrefsplitHref', splitHref);
 		return {
-			label: label,
-			id: label,
-			driveType: DriveType.GoogleDrive
-		};
-	} else if (href.startsWith('/Dropbox')) {
-		const label = getParams(href, 'name');
-		return {
-			label: label,
-			id: label,
-			driveType: DriveType.GoogleDrive
+			label: splitHref,
+			id: splitHref,
+			driveType: DriveType.CloudDrive
 		};
 	} else {
 		const label = decodeURIComponent(href).split('/')[2];
